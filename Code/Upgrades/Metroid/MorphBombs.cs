@@ -1,0 +1,33 @@
+﻿namespace Celeste.Mod.XaphanHelper.Upgrades
+{
+    class MorphBombs : Upgrade
+    {
+        public override int GetDefaultValue()
+        {
+            return 0;
+        }
+
+        public override int GetValue()
+        {
+            return Settings.MorphBombs ? 1 : 0;
+        }
+
+        public override void SetValue(int value)
+        {
+            Settings.MorphBombs = (value != 0);
+        }
+
+        public override void Load()
+        {
+        }
+
+        public override void Unload()
+        {
+        }
+
+        public static bool Active(Level level)
+        {
+            return XaphanModule.Settings.MorphBombs && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MorphBombsInactive.Contains(level.Session.Area.GetLevelSet());
+        }
+    }
+}

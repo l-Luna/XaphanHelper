@@ -1,0 +1,75 @@
+﻿using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
+using Microsoft.Xna.Framework;
+using Monocle;
+using System.Collections.Generic;
+
+namespace Celeste.Mod.XaphanHelper.Upgrades
+{
+    class RemoteDrone : Upgrade
+    {
+        public override int GetDefaultValue()
+        {
+            return 0;
+        }
+
+        public override int GetValue()
+        {
+            return Settings.RemoteDrone ? 1 : 0;
+        }
+
+        public override void SetValue(int value)
+        {
+            Settings.RemoteDrone = (value != 0);
+        }
+
+        public override void Load()
+        {
+            On.Celeste.Level.Update += modLevelUpdate;
+        }
+
+        public override void Unload()
+        {
+            On.Celeste.Level.Update -= modLevelUpdate;
+        }
+
+        public bool Active(Level level)
+        {
+            return Settings.RemoteDrone && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Contains(level.Session.Area.GetLevelSet());
+        }
+
+        public static bool isActive;
+
+        private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
+        {
+            orig(self);
+            if (XaphanModule.useUpgrades)
+            {
+                if (Active(self))
+                {
+                    isActive = true;
+                }
+                else
+                {
+                    isActive = false;
+                }
+                if (isActive && !XaphanModule.PlayerIsControllingRemoteDrone() && !GravityJacket.determineIfInWater())
+                {
+                    Player player = self.Tracker.GetEntity<Player>();
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    {
+                        BagDisplay bagDisplay = GetDisplay(self, "bag");
+                        if (bagDisplay != null)
+                        {
+                            int totalDrones = self.Tracker.CountEntities<Drone>();
+                            if (bagDisplay.currentSelection == 3 && totalDrones == 0)
+                            {
+                                self.Add(new Drone(player.Position, player));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

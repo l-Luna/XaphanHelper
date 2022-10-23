@@ -1,0 +1,88 @@
+local UpgradeController = {}
+
+UpgradeController.name = "XaphanHelper/UpgradeController"
+UpgradeController.depth = -100000
+UpgradeController.fieldOrder = {
+    "x", "y",
+    "startWithPowerGrip", "goldenStartWithPowerGrip",
+    "startWithClimbingKit", "goldenStartWithClimbingKit",
+    "startWithSpiderMagnet", "goldenStartWithSpiderMagnet",
+    "startWithDashBoots", "goldenStartWithDashBoots",
+    "startWithSpaceJump", "goldenStartWithSpaceJump",
+    "startWithHoverBoots", "goldenStartWithHoverBoots",
+    "startWithLightningDash", "goldenStartWithLightningDash",
+    "startWithLongBeam", "goldenStartWithLongBeam",
+    "startWithIceBeam", "goldenStartWithIceBeam",
+    "startWithWaveBeam", "goldenStartWithWaveBeam",
+    "startWithDroneTeleport", "goldenStartWithDroneTeleport",
+    "startWithVariaJacket", "goldenStartWithVariaJacket",
+    "startWithGravityJacket", "goldenStartWithGravityJacket",
+    "startWithBombs", "goldenStartWithBombs",
+    "startWithMegaBombs", "goldenStartWithMegaBombs",
+    "startWithRemoteDrone", "goldenStartWithRemoteDrone",
+    "startWithGoldenFeather", "goldenStartWithGoldenFeather",
+    "startWithEtherealDash", "goldenStartWithEtherealDash",
+    "startWithScrewAttack", "goldenStartWithScrewAttack",
+    "startWithBinoculars", "goldenStartWithBinoculars",
+    "startWithPortableStation", "goldenStartWithPortableStation",
+    "startWithPulseRadar", "goldenStartWithPulseRadar",
+    "disableStatusScreen", "onlyAllowStartingUpgrades", "upgradesAreTemporary"
+}
+UpgradeController.placements = {
+    name = "UpgradeController",
+    data = {
+        baseStamina = 110,
+        showStaminaBar = false,
+        startWithPowerGrip = false,
+        startWithClimbingKit = false,
+        startWithSpiderMagnet = false,
+        startWithBombs = false,
+        startWithMegaBombs = false,
+        startWithRemoteDrone = false,
+        startWithGoldenFeather = false,
+        startWithBinoculars = false,
+        startWithEtherealDash = false,
+        startWithPortableStation = false,
+        startWithPulseRadar = false,
+        startWithVariaJacket = false,
+        startWithGravityJacket = false,
+        startWithDroneTeleport = false,
+        startWithScrewAttack = false,
+        startWithDashBoots = false,
+        startWithSpaceJump = false,
+        startWithHoverBoots = false,
+        startWithLightningDash = false,
+        startWithLongBeam = false,
+        startWithIceBeam = false,
+        startWithWaveBeam = false,
+        goldenStartWithPowerGrip  = false,
+        goldenStartWithClimbingKit = false,
+        goldenStartWithSpiderMagnet = false,
+        goldenStartWithBombs = false,
+        goldenStartWithMegaBombs = false,
+        goldenStartWithRemoteDrone = false,
+        goldenStartWithGoldenFeather = false,
+        goldenStartWithBinoculars = false,
+        goldenStartWithEtherealDash = false,
+        goldenStartWithPortableStation = false,
+        goldenStartWithPulseRadar = false,
+        goldenStartWithVariaJacket  = false,
+        goldenStartWithGravityJacket  = false,
+        goldenStartWithDroneTeleport = false,
+        goldenStartWithScrewAttack = false,
+        goldenStartWithDashBoots = false,
+        goldenStartWithSpaceJump = false,
+        goldenStartWithHoverBoots = false,
+        goldenStartWithLightningDash = false,
+        goldenStartWithLongBeam = false,
+        goldenStartWithIceBeam = false,
+        goldenStartWithWaveBeam = false,
+        onlyAllowStartingUpgrades = false,
+        upgradesAreTemporary = false,
+        disableStatusScreen = false
+    }
+}
+
+UpgradeController.texture = "util/XaphanHelper/Loenn/upgradeController"
+
+return UpgradeController

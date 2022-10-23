@@ -1,0 +1,542 @@
+Version 1.0.48 :
+
+- Added Glow effect
+- Added the Loenn plugin for the Heat Particles effect
+- Re added the missing Ahorn and Loenn plugins for Custom End Screen Controllers
+- Laser Detectors no longer unset their flag when a laser beam is not colliding them if the flag they should set is saved in the player save file
+- Slopes now render correctly the sloped tiles when automaticaly rendered from a vanilla or custom tileset
+- Slopes no longer randomly regenerate their tiles when the player die or re-enter the room
+- Fixed a bug preventing Jump Blocks to use custom textures
+- Fixed a crash happening when the player died at the same time they dash should have been refilled
+
+Version 1.0.47 :
+
+- Added "Inverted", "Base" and "No Beam" attributes to Laser Emitters
+- Added "Flag" and "In Wall" attributes to Timed Dash Switches
+- Added "Save Data Only After Checkpoint" and "In Wall" attributes to Flag Dash Switches
+- Added "Worldmap Offset X" and "Worldmap Offset Y" attributes to In-Game Map Controllers
+- Added "Sprite Name" attribute to Custom Badeline Boss
+- Added a new ability : Binoculars, allowing the player to preview the room they are currently in
+- Added a new ability : Ethereal Dash, allowing the player to dash through thin walls (Ethereal Blocks)
+- Added a new ability : Mega Bombs, allowing the player to set bombs that can destroy some walls and push some blocks
+- Added a new ability : Long Beam, allowing the drone beam to reach distant targets
+- Added a new ability : Ice Beam, allowing the drone beam to freeze some entities
+- Added a new ability : Wave Beam, allowing the drone beam to go through solid objects
+- Added Ethereal Block
+- Added Laser Detectors
+- Added Reset Flags Trigger
+- Removed Break Block Indicators. The Break Blocks now have all attributes from Break Blocks Indicators and will automatically add the indicators in game. Old indicators and blocks still work.
+- Removed the Jump Boost ability
+- The Golden feather ability no longer need to be selected on the bag UI to be used
+- The Golden feather is now used by holding the grab button while the player is falling
+- The Golden Feather ability will no longer be used if the player is too close to a wall when pressing the grab button
+- The Hover Boots ability is now used by holding the up button while the player is falling
+- Improved the death animation and sounds of the Remote Drone
+- Improved navigation of the Status Screen
+- Improved the Bag UI to be able to have two abilities selected at the same time and display the button to use each of the abilities
+- Improved performances of Liquids with the "Can Swim" attribute set to true
+- Improved Slopes automatic rendering when they are only 1 tile height to allow more usages
+- The player can no longer jump on the surface of Liquids with the attribute "Can Swim" set to true
+- Lasers Emitters lasers now appear during room transitions
+- Lasers Emitters lasers now collide correctly with Slopes
+- Removed particles when Laser Emitters lasers were colliding with a solid entity
+- The In-Game map will now make sure the player current location is visible when it is opened
+- Added a World Map mode to the In-Game map. This display the map of every chapters of the campaign on the same map
+- Added customisable bindings to control the Bag UI and use the selected abilities
+- Added customisable bindings to change the In-Game map progress display, switch between normal and world map modes, and display or hide hints
+- Updated default bindings to open the In-Game map on controller to the Back button, and to select the equiped abilities to the Y button
+- Pressing the Menu Cancel button now close the Warp screen
+- Bombs and Remote Drone abilities can now be used while on unsafe ground
+- Custom torches no longer play their lit sprite and particles when entering a room if their corresponding flag was set, then unset before the player leave the room or die
+- Flag Dash Switches now reset their flag when the player respawn instead of when they die if they are not set to be permanent
+- Flag Dash Switches now register the current state of their flag when the player activate a Custom Checkpoint or a Change Respawn Trigger and will use this updated state when the player respawn
+- Flag Dash Switches can now be dashed into again if the flag they check is in the opposite state of what the switch set the flag state to
+- If the player dash into a Flag Dash Switch and then Save and Quit before hitting a checkpoint in the room or leaving the room, the flag will now correctly be reverted when they enter the map again
+- The player can no longer be stuck in Slopes when using the Hover Boots ability
+- Fixed a bug displaying the player edge animation when it was standing on a specific pixel on top of a Slope
+- Fixed a bug preventing Laser Emitters to behave correctly when the entity they were attached onto was destroyed
+- Fixed a bug preventing the Strawberry tracker to be displayed when the game is paused in chapters that use the In-Game map even if its progress display was disabled
+- Fixed a bug preventing the Bag UI to correctly be set on the Drone ability when destroying or teleporting to the drone and being killed while controling the drone
+- Fixed a bug preventing Flag Dash Switches with the attribute "Can Swap Flag" set to true and the attribute "Side" set to "Down" to correctly move back in position after being dashed into
+- Fixed a bug preventing the Set Stats Flags controller to work correctly
+- Fixed a bug that killed the player if they were spawning in direct line of a Laser Emitter even if a solid entity or tile should have prevented it
+- Fixed a bug preventing Elevators leading to another room of the same chapter to be used if the player has grabbed a Golden Strawberry
+- Fixed a crash happening when throwing the Remote Drone outside of the current room if it died before hitting the ground
+
+Version 1.0.46 :
+
+- Added Flag Strawberry
+- Added Teleport Strawberry
+- Custom End Screens now also works in interludes
+- Collectable Doors now show the amount required to open them on the In-Game map
+- Flag Dash Switches and Timed Dash Switches can now be activated by jellyfishes
+- Fixed an incorrect hitbox for Flag Dash Switches under specifics circonstances
+- Flag Dash Switches no longer play their push animation and particles if the flag they are supposed to set is already set when entering a room.
+- The Strawbevrry tracker will not be displayed when the game is paused in chapters that use the In-Game map if its progress display is enabled
+- The "reveal_ingamemap" debug command now immmediately update the In-Game map if used when the In-Game map is opened
+- Fixed a bug preventing the "give_upgrade" and "remove_upgrade" debug commands to respectively give and remove the Pulse Radar ability when used without specifying any ability
+- Fixed a crash happening when a Custom Collectable Door was opening during a cutscene
+
+Version 1.0.45 :
+
+- Added "LevelSet" Attribute to Global Flag Trigger
+- Added Custom End Screen Controller
+- Added a Restart Campaign option in the pause menu for campaign using a Merge Chapter Controller
+- When transitioning between chapters that are merged by a Merge Chapter Controller, strawberries, hearts and cassettes no longer reapear
+- When transitioning between chapters that are merged by a Merge Chapter Controller, the total amount of strawberries collected is now correctly updated
+- Collecting a Golden Strawberry no longer count toward the total strawberries collected for the Stat Flags Controller
+- The Set Stat Flags Controller will now set a flag each time the player enter a sub-area, completely explore a sub-area and get all strawberries in one sub-area
+- The Set Stat Flags Controller now set the correct flags for campaign that do not have an interlude
+- Improved performances of Elevators
+- Fixed a bug that could prevent the Set Stat Flags Controller to count correctly the map tiles explored
+- Fixed a bug displaying the buttons UI for the player progress on the In-Game map on a wrong position for chapters not using abilities
+- Fixed a bug preventing Liquids with the "Can Swim" attribute set to true to update correctly when waving or rising/draining
+- Fixed a bug preventing the displacement effect on Liquids to work correctly when the liquid had its "Foreground" attribute set to true
+- Fixed a bug preventing the player sprite to be visible when the player died while attached to a Magnetic Ceiling
+- Fixed a crash when the player die at the same time as activating a Custom Checkpoint
+
+Version 1.0.44 :
+
+- Added "Collect Golden Strawberry" attribute to Custom Collectable
+- Added Set Stat Flags Controller
+- Renamed the "Complete Area" atribute of Custom Collectables to "End Chapter". Previous version of this entity with the old name still works
+- Fixed the Ahorn plugin for In Game Map Room Controllers to include the Sub Area Index attribute
+- Fixed plugins for the Collectable Door not rendering the icons inside the Door accurately
+- Improved performances of Warp Stations
+- Improved description of some of the Global Flag Trigger attributes
+- Improved Slopes rendering in Lönn (by JaThePlayer)
+- The In-Game map will now display Max Helping Hand Reskinnable Crystal Hearts
+- Fixed a crash happening if trying to open the In-Game Map with map progress not disabled in a chapter with no InGameMapTilesController. The map progress is now automatically disabled in that case
+- Fixed a crash happening when a Custom Collectable Door was opening while the In-Game map was open
+- Fixed a crash related to slopes
+- Fixed a bug wilth Slopes collisions when some actor entities were in the same room as the slopes
+- Fixed a bug preventing Map Shards with different indexes to appear in the same session after one is collected
+- Fixed a bug preventing Warp Stations to work correctly if the player had collected a Golden Strawberry in the current session
+- Fixed a bug preventing disabled abilities to be immediately restaured when the player collect a Golden Strawberry
+- Fixed a bug allowing the player to dash while attached to a Magnetic Ceiling when more than one Magnetic Ceiling was present in the same room
+- Fixed a bug preventing the player to sometimes grab a Magnetic Ceiling after jumping while attached to it
+- Fixed a bug preventing the player to lose stamina while jumping quickly multiple times during the jump grace period of Magnetic Ceilings
+
+Version 1.0.43 :
+
+- Pressing the button to switch bag abilities will no longer prevent the player to grab walls
+- Grabbing being disabled when trying to open the In-Game Map or use bag abilities now only happen respectively on maps that use the In-Game map or abilities
+
+Version 1.0.42 :
+
+- Added "Can Jump Through" attribue to Slopes
+- Added "Visual Only" and "Can Swim" attributes to Liquids
+- Added a new ability : Portable Station, allowing the player to teleport to any unlocked Warp Station from anywhere
+- Added a new ability : Pulse radar, allowing the player to reveal secrets near their current position
+- Removed the Evasion ability. This ability effects have been merged with the Screw Attack ability.
+- Removed the Blazing Charm ability. This ability effects have been merged with the Varia Jacket ability.
+- Reduced the horizontal velocity granted by the Screw Attack ability to 33% instead of 50%
+- Trying to open the In-Game Map, use bag abilities or switching bag abilities near a wall will no longer make the player climb the wall instead
+- Fixed a crash that happened while trying to use a Warp Station in a room containing a Room Adjust Controller
+- Fixed a bug preventing talker components to be enabled again when destroying the Remote Drone
+- Fixed a bug allowing the player to activate a talker while trying to use a bag ability, causing unexpected behavior
+- Fixed a bug preventing the player sprite to be set to invisible by various entities when the Screw Attack ability was enabled and the player was on ground
+- Fixed a bug that allowed the player to jump indefinitely if jumping at the same time a Magnetic Ceiling that was destroyed
+- Fixed a bug preventing the player state to be correctly reverted to normal when the player was attached to a Magnetic Ceiling at high horizontal speed
+
+Version 1.0.41 :
+
+- Added "Keep Prologue Separated" attribute to Merge Chapters Controller
+- Added "Mode" attribute to Flag Dash Switches
+- Added "Start Open", "Horizontal" and "Attach Right" attributes to Flag Temple Gates
+- Added "One Use" and "Flag" attributes to Elevators
+- Added "Disable StatusScreen" attribute to Upgrade Controller
+- Added Upgrade Trigger
+- Added a "Classic" mode for Merge Chapters Controllers, allowing the player to start from unlocked checkpoints just like vanilla. The starting room of every chapters of the campaign but the first one now also automatically count as a checkpoint in this mode
+- Lasers emiteds by Laser Emitters now produce particles when they hit a solid wall or entity
+- When a Magnetic Ceiling is attached to a Move Block, the player can now control the Move block while grabbing the Magnetic Ceiling if the Move Block 'Can Steer' attribute is set to true (Horizontal Move Blocks only)
+- When two Magnetic Ceilings are adjacent, the player can now move from one to the other while grabbing them
+- Flag Dash Switches and Timed Dash Switches now attach to solid entities
+- If more than one Flag Dash Switch is present in a room, and they affect the same flag, dashing into one switch will also activate all others unless their "Can Swap Flag" attribute is true
+- The Chapter Select screen is no longer hidden when using a Merge Chapter Controller
+- When returning to map from a campaign using a Merge Chapters Controller, the stats panel is now shown instead of imediately closing itself
+- Deaths icons on the stat panel when using a Merge Chapters Controller now have the same size as vanilla chapters panels deaths icons
+- Enabling an upgrade with the debug commands now also activate it if it was deactivated
+- Debug commands can now enable or disable multiple upgrades at the same time
+- Colorgrades should now work correctly with the Heat Particle Effect
+- Fixed a crash that happened when exiting the PICO-8
+- Fixed a bug preventing the Heat Particle effect to listen correctly to flags
+- Fixed a bug preventing Cells to slot correctly in Cell Lock Statues in some situations
+- Fixed a bug preventing the hitbox of Flag Dash Swicthes to reset correctly in some situations
+- Fixed a bug preventing the player state to be correctly reverted to normal when the player was attached to a Magnetic Ceiling being disabled
+- Fixed a bug preventing the player state to be correctly reverted to normal when the player was attached to a Magnetic Ceiling while transitioning into an other room
+
+Version 1.0.40 :
+
+- Fixed a bug preventing the Chapter Select screen to be hidden correctly when exiting a campaign using a Merge Chapters Controller
+
+Version 1.0.39 :
+
+- Fixed a bug preventing the quick restart keybind to work in campaigns not using a Merge Chapters Controller
+- Fixed a bug that softlocked the game while being in the "uncategorized" section of the chapter select screen
+
+Version 1.0.38 :
+
+- Added "Open On Heart Collection" attribute to Flag Temple Gates
+- Added Teleport To Other Side Portal
+- Added Merge Chapters Controller
+- Added a new ability : Jump Boost, allowing the player to jump up to twice as high
+- Entities attached to Jump Blocks now use a lighter color when the Jump Block is not collidable
+- Fixed a bug that could prevent Jump Blocks to work correctly when the player transitioned from a room that contains Jump Blocks to an other room that also contains Jump Blocks
+- Fixed a bug that allowed the grace period of Magnetic Ceilings to work only for the first Ceiling loaded in a room
+- Fixed a bug that temporarily removed Abilities and Saved Flags when the player collided with a non-golden Strawberry. This now properly only happen when the player collide with a Golden Strawberry
+- Fixed a bug that prevented the In-Game Map to display visited rooms correctly when more than one campaign using the In-Game Map was played on the same save file
+- Fixed a bug causing TAS desyncs
+- Fixed a bug preventing the Hower Boots ability to stop correctly if the player grabbed a Golden Strawberry in a map that do not allow the Hover Boots ability to be active while carrying a Golden Strawberry
+- Fixed a bug preventing the player sprite to be visible if the player was using the Screw Attack ability while grabbing a Golden Strawberry in a map that do not allow the Screw Attack ability to be active while carrying a Golden Strawberry
+
+Version 1.0.37 :
+
+- The Cell sprites now display correctly when slotted in a Cell Lock Statue with the "Instant" attribute set to true
+- Removed the 0.1 seconds delay during which it was not possible to dash after releasing the Grab button when the player was attached on a Magnetic Ceiling
+- Fixed a bug that could prevent Cells to be slotted correctly in Cell Lock Statues
+- Fixed a bug preventing the grace period of Magnetic Ceilings to work when two or more Magnetic Ceilings were close to each other
+- Fixed a bug giving back all unlocked abilities in a campaign when the player die or enter a room in a chapter using an Upgrade Controller with it's "Only Allow Starting Upgrades" attribute set to true
+- Fixed a bug that prevented the Bag UI position to update correctly when the minimap was activated in Mod Options, but not yet unlocked in the current campaign
+- Fixed a bug that displayed the wrong wipe when the player respawned after dying while carrying a golden strawberry
+- Fixed a bug with Upgrade controllers giving the Power Grip ability instead of the Climbing Kit ability when their "Golden Start With Climbing Kit" attribute was set to true
+
+Version 1.0.36 :
+
+- Fixed a performance issue with liquids
+
+Version 1.0.35 :
+
+- Added "Directory" and "Surface Height" attributes to Liquids
+- Added "Can Interact" attribute to Teleport To Chapter Trigger
+- Increased the height the player can jump while in the quicksand Liquid to make it easier to get out
+- The quicksand liquid will now kill the player if they are completely submerged by it
+- Improved the quicksand liquid to be compatible with waving and rising attributes
+- Fixed a typo in the Slope plugins preventing the CliffsideAlt texture to work
+- The Screw Attack ability will now automatically stop when the player collide with a wall
+- Added a 0.1 seconds grace period during which it is still possible to jump after releasing the Grab button when the player was attached on a Magnetic Ceiling with the "Can Jump" attribute set to true
+- The Status Screen now display a short description of the selected ability and the controls to use it
+- Fixed a bug that moved the player sprite when pressing Left or Right while the game was paused and the player was attached on a Magnetic Ceiling
+- Fixed a bug that could drain all player stamina while holding the Jump button, but not the Grab button on top of a Magnetic Ceiling with the "Can Jump" attribute set to true
+- Fixed a bug that keept the Screw Attack horizontal velocity increase active all the time if the player returned to the level select screen while in the middle of a Screw Attack jump
+- Fixed a bug that prevented some checks to work correctly while entering a map by teleporting to it using the debug console
+- Fixed a bug that reseted liquids position after rising if they began waving before starting to rise
+- Fixed a bug that played the death effect and sound multiple time when the player died while controlling the Remote Drone under some conditions
+- Fixed a crash that could happen when the player entered Water while holding the Remote Drone
+- Fixed a bug that prevented the talk components to be active again in the current room when the player died while controlling the Remote Drone
+
+Version 1.0.34 :
+
+- Added "Drop When Dream Dash", "Throw Force Multiplier", "Throw Up Force Multiplier", "Post Throw No Gravity Timer", "Gravity Multiplier", "Friction Multiplier", "Bounce Multiplier", "Kill Player On Death", "Death Color", "Emit Light", "Light Color", "Hit Sides Sound", "Hit Ground Sound" and "Death Sound" attributes to Cells
+- Added "Hide Icons In Unexplored Rooms", "Show Progress", "Hide Map Progress", "Hide Strawberry Progress", "Hide Moonberry Progress", "Hide Upgrade Progress", "Hide Heart Progress", "Hide Cassette Progress", "Custom Collectables Progress", "Secrets Custom Collectables Progress", "Progress Color" and "Progress Complete Color" attributes to In-Game Map Controller
+- Added "Upgrades Are Temporary" and "Only Allow Starting Upgrades" attributes to Upgrade Controller
+- Upgrade Controller: All "Only Allow [Ability]" attributes have been removed and replaced by "Start With [Ability]" attributes. Old attributes are still checked in the code to not break maps that use them
+- Cells can now Activate Flag Dash Switches and Timed Dash Switches
+- The player will now get back all abilities they collected when entering a chapter configured to start with specific abilities in its Upgrade Controller unless the new "Only Allow Starting Upgrades" attribute is set
+- The In-Game map now show a different icon for moonberries
+- The In-Game map can now display player progress in the current area or sub-area on the map screen and warp screen
+- Up and Down Spikes will now correctly kill the player when grabing a Magnetic Ceiling
+- The Screw Attack ability now automatically activate when the player jump while holding left or right.
+- Reduced the horizontal velocity granted by the Screw Attack ability to 50% instead of 75% to make it easier to control
+- The Hover Boot ability is now activated by holding the Jump button instead of the Grab button
+- Fixed a bug preventing icons on the minimap to use the correct opacity
+- Fixed a bug preventing icons on the In-Game map to appear if the player visited a room, but had not visited the tile of this room were the icon is displayed
+- Fixed a bug that could set the player vertical position to a sub-pixel value after using the Hover Boots ability
+- Fixed a bug allowing the player to float indefinitely after dying while using the Hover Boots ability
+- Fixed a bug using the wrong player animation when using the Hover Boots ability while carrying an object
+- Fixed a bug preventing the player sprite to animate correctly when opening the Map and Ability screens
+
+Version 1.0.33 :
+
+- Added Collectable Door
+- Modded strawberries entities should now display on the In-Game map
+- Added 5 debug commands : clear_ingamemap, reveal_ingamemap, clear_warps, remove_upgrade and give_upgrade
+- Fixed a crash that happened if the player died inside of a Stop Adjust In-Game Map trigger
+- Fixed a bug preventing the Bag UI to be hidden while using a watchtower under certain conditions
+- Fixed a bug that could prevent the menu from Warp Stations to disapear correctly if the player selected a destination too quickly
+- Fixed a bug that applied water physics to the player when they were dashing close to the surface of acid and lava liquids
+
+Version 1.0.32 :
+
+- Added 'Map Shard Index' and 'Sub Area Index' attributes to In-Game Map Room Controllers
+- Added 'Map Shard Index' attribute to Upgrade Collectables
+- Added 'In-Game Map Sub Area Controller'
+- Added Custom Badeline Boss
+- The Hide Minimap Trigger now also hide the Bag UI
+- Improved minimap performances
+- Added the missing 'None' option for the 'EntranceXPosition' fields of the In-Game Map Room Controller in Lönn
+- Re-ordered fields for the In-Game Map Room Controller and the In-Game Map Tiles Controller plugins in Ahorn
+- Jump Blocks with different indexes will not connect together in Lönn anymore
+- Fixed a bug preventing the minimap to be hidden while using a watchtower under certain conditions
+- Fixed a crash that happened when activating a Custom Checkpoint if there was at least one other Custom Checkpoint in the room that had the 'Emit Light' attribute set to false
+
+Version 1.0.31 :
+
+- Increased performances again
+- Fixed a bug preventing saved flags to be set correctly when starting a chapter
+
+Version 1.0.30 :
+
+- Added "Switch Flag" attribute to Global Flag Trigger
+- Added a new ability : Hover Boots, allowing the player to stop their fall speed for a short time and to move left or right while doing so
+- Moved the Lightning Dash ability from the Misc category to the Boots category
+- Added a distortion effect on the player current position when teleporting to the Remote Drone
+- Added some checks in the code to increase overall performances
+- The minimap will no longer be displayed if there is not at least one In-Game Map Tiles Controller in each room that has a player spawn
+- Custom Torches now correctly turn off if the flag they listen to is no longer true
+- Flag Temple Gates now close if the flag they listen to is no longer true
+- Fixed a typo in the plugins for the Upgrade Collectable that prevented the Golden Feather ability to work correctly
+- Fixed a crash that happened when the player should have died by falling out of the screen while holding the Remote Drone
+- Fixed a bug that sometimes incorectly set the player vertical position to a sub-pixel value while throwing the Remote Drone
+- Fixed a bug that allowed the player to slide on slopes while the In-Game map or the Status Screen were opened
+- Fixed a bug preventing Global Flag Triggers to take effect immediately in the chapter they are
+- Fixed a bug preventing Liquids to start rising if their "Rise End Flag" attribute was empty
+- Fixed a bug that incorectly increased the height of Liquids while they were not rising
+
+Version 1.0.29 :
+
+- Fixed a bug that could prevent Max Helping Hand Camera Catchup Speed Triggers to work
+- Fixed the Ahorn plugin for the InGameMapHintController
+
+Version 1.0.28 :
+
+- Added InGameMapHintController
+- Added Global Flag Trigger
+- Bubble Doors are now visible on the In-Game Map
+- Updated Lönn plugins with dropdowns and depths
+- Fixed missing textures for Break Blocks Indicators
+- Fixed a bug that could prevent the player to use the 'Retry' and 'Save and Quit' options in the pause menu after destroying or teleporting to the remote drone
+- Fixed a bug that moved the player sprite when pressing Up or Down while the game was paused and the player was sliding on a slope
+
+Version 1.0.27 :
+
+- Fixed an invalid hook decreasing the gravity by 1 for all maps, causing TAS desyncs
+- Fixed a crash while closing the screen telling the player that they need to unlock more than one warp station to use them
+
+Version 1.0.26 :
+
+- Added "Rainbow" attribute to Slopes
+- Added "No Beam" attribute to Warp Stations
+- Greatly improved Slopes collision detection
+- Added a new animation for the player while sliding on Slopes
+- Improved collision detection for the Remote Drone beam particles
+- The Screw Attack sprites will no longer play for a single frame if the player is grabing a wall, release it, then immediately press again the Grab button
+- The player icon on the In-Game map now use the same hair color as the current hair color the player has when opening the map
+- If your map use abilities, the player icon on the In-Game map now update its jacket color based on your current equipped jackets
+- Custom Checkpoints now deactivate others Custom Checkpoints in the same room when they are activated, so that only the current checkpoint remain activated
+- Fixed the selection area for WarpStations in Ahorn
+- Fixed a crash that could happen if the player used the save and quit option while playing a map, and then deleted or blacklisted that map and tried to resume playing the save file that map was played on
+- Fixed a bug allowing the player to move immediately after opening the In-Game map or the Status screen, resulting in the player sprite updating incorrectly
+- Fixed a bug preventing Custom Collectables to reappear if the player collected them but hit the 'Retry' option from the pause menu while the collect animation is not finished
+
+Version 1.0.25 :
+
+- Player sprites for the Screw Attack are now distinct between the backpack and no backpack versions
+- Fixed a bug preventing the bag UI to display a custom ability icon for the Golden Feather ability
+
+Version 1.0.24 :
+
+- Added Laser Emitter
+- Added 4 decals that can be used to improve the apparence of Laser Emitters
+- Added a new type of Break Blocks Indicator : Screw Attack
+- Added a new ability : Evasion, allowing the player to dash trough some obstacles (currently, lasers from Laser Emitters)
+- Added a new Ability : Blazing Charm, allowing the player to survive in lava
+- Added a new Ability : Golden Feather, allowing the player to summon a feather to glide and ride wind currents
+- Added a new Ability : Screw Attack, allowing the player to destroy Screw Attack blocks and increase it's horizontal speed while jumping
+- Liquids placed in Ahorn with no color set should now render properly in Lönn
+- Improved the way Liquids detect the player and applies intended effects
+- Updated Lönn plugins to restrict values to be integers for fields that are intended to be integers
+- The Lightning Dash ability can now be used in water or lava only if the player also have the Gravity Jacket upgrade
+- Bombs, Remote Drone and Golden Feather Upgrades are now activated by holding up then pressing grab, instead of checking if both keys are pressed at the same time
+- Added Korean translation by Prime
+- Fixed a bug preventing some sprites to fade correctly when collecting a bag ability
+- Fixed a bug preventing the player sprite to disapear during the death animation if the player hit retry from the pause menu while attached to a Magnetic Ceiling
+
+Version 1.0.23 :
+
+- Fixed a bug preventing Bubble Doors with no flags to be active
+
+Version 1.0.22 :
+
+- Added Lönn plugins for every entities and triggers
+- Removed "Flag" attribute from Bubble Doors. Added "Flags" attribute instead. Bubble Doors can now check for multiple flags before being active.
+- Fixed a bug that prevented the Remote Drone upgrade to be correctly disabled on maps that do not use abilities
+
+Version 1.0.21 :
+
+- Added 'Rise Delay', 'Rise Distance', 'Rise Speed', 'Rise Shake', 'Rise Flag', 'Rise End Flag', and 'Rise Sound' attributes to Liquids
+- Added 'No Stamina Drain' attribute to Magnetic Ceiling
+- Added Drone Switch
+- Added Drone Gate
+- Added a new type of Break Blocks Indicator : Drone
+- Added a new ability : Remote Drone, allowing the player to summon a drone that can fit into small gaps (1 tile height), destroy certains blocks, activate Drone Switches and Drone Gates, and is immune to lava
+- Added a new ability : Drone Teleport, allowing the player to instantly teleport to the location of the Remote Drone
+- Added a new UI displaying the current bag ability equiped. Bag ability currently include the Bombs and the Remote Drone. Press V or Right Trigger to swicth between unlocked bag abilities. You can rebind this key in Mod Options
+- Updated Upgrade Collectable and Upgrade Controller with the new Remote Drone and Drone Teleport abilities
+- Updated the texture of Break Blocks Indicators indicating blocks that can be destroyed with the Lightning Dash ability
+- Updated InGameMapTilesController with 4 new tiles : "ElevatorUpSingleHorizontalLeftEdge", "ElevatorUpSingleHorizontalRightEdge", "ElevatorDownSingleHorizontalLeftEdge" and "ElevatorDownSingleHorizontalRightEdge"
+- Magnetic Ceilings will now also display their custom sprite in Ahorn
+- Added a grab sound when the player grab a Magnetic Ceiling
+- Improved Slopes collision detection
+- Fixed a bug preventing the Spider Magnet ability to be removed correctly when the player grab a golden berry
+- Fixed a bug preventing to open the In Game Map after interacting with a Warp Station when only one Warp Station has been unlocked
+
+Version 1.0.20 :
+
+- Added "Can Jump" attribute to Magnetic Ceiling
+- Magnetic Ceilings now attach to solids entities above them
+- Grabbing a Magnetic Ceiling will now trigger falling blocks they are attached onto
+- Solids entities attached to a Magnetic Ceiling will now consider the player ridding them when the player grab the Ceiling
+- Tweaked the description of the Spider Magnet upgrade for better wording
+
+Version 1.0.19 :
+
+- Added Magnetic Ceiling
+- Added a new ability : Spider Magnet, allowing the player to grab Magnetic Ceilings
+- Updated Upgrade Collectable and Upgrade Controller with the new Spider Magnet
+- Fixed a bug playing the wrong sound when closing the message displayed by Warp Stations when only one warp station is unlocked
+- Fixed a bug that reseted the flag state of Flag Dash Switch with the Can Swap Flag attribute set to true when entering a room with one or more Flag Dash Switch
+
+Version 1.0.18 :
+
+- Added 'Sticky Dash' attribute to Slopes
+- Warp Stations will now display a message indicating that the player must unlock at least a second one when interacting with it and only one Warp Station has been unlocked
+- Fixed a bug crashing the game if the player die in a room with a slope
+
+Version 1.0.17 :
+
+- Added 'Particle Color 1', 'Particle Color 2' and 'Can Swap Flag' attributes to Flag Dash Switch
+- Added 'Particle Color 1' and 'Particle Color 2' attributes to Timed Dash Switch
+- Added 'Force Locked Flag' attribute to Bubble Door
+- Added 'No Render' attribute to Slopes
+- While on top of a Slope, the player will no longer be stuck to it while dashing away from it
+- Fixed a bug affecting the player movement when upside down slopes where in the same room as any Actor entities
+
+Version 1.0.16 :
+
+- Fixed a bug preventing the player to do neutral jumps
+
+Version 1.0.15 :
+
+- Added 'Foreground' attribute to Liquids
+- Added 'Heat Effect' and 'Inactive Flag' attributes to the Heat Controller
+- Added Start Countdown Trigger
+- Added Stop Countdown Trigger
+- Added Multi Music Trigger
+- Added a new liquid type to Liquids : Quicksand
+- Bombs and Cells now collide correctly with Slopes
+- Fixed a bug preventing some In Game Map tiles to be drawn correctly
+- Fixed a bug sometimes preventing the minimap to be correctly centred when the player is a room with a negative X coordinate
+
+Version 1.0.14 :
+
+- Added 'Instant' and 'Type' attributes to Cell Lock Statue
+- The player can now carry and throw bombs from the Bomb upgrade
+- Bombs explosion timer now start when the player throw or release a bomb instead of imediately
+- Bombs are now used by holding Grab + Up instead of Grab + Down
+
+Version 1.0.13 :
+
+- Added HeatParticles effect
+- Added Timed Dash Switch
+- Added Timed Blocks
+- Added Timed Strawberry
+- Added Timed Temple Gate
+- Added Timer Refill
+- Added 'Color', 'Frame Delay' and 'Transparency' attributes to Liquids
+- Added 'Alpha', 'StartFade', 'EndFade' and 'Sound' attributes to Custom Torches
+- Added 'Sound Index' attribute to Jump Blocks
+- Updated the visual and default color of the acid liquid
+- Updated default sprites of Jump Blocks
+- Added an alternate visual for the acid liquid
+- Fixed the light of Custom Torches not being centered properly
+
+Version 1.0.12 :
+
+- SoCM credits can now be skipped after beeing seen at least once
+
+Version 1.0.11 :
+
+- Added Jump Block
+- Fixed a bug that granted back all abilities after using a warp station with a golden berry
+
+Version 1.0.10 :
+
+- Added Break Block
+- Added Break Block Indicator
+- Added Bubble Door
+- Added Cell
+- Added Cell Lock Statue
+- Added Custom Checkpoint 
+- Added Custom Collectable
+- Added Custom Exit Block
+- Added Custom Torch
+- Added Flag Dash Switch
+- Added Flag Swap Block
+- Added Flag Temple Gate
+- Added Heat Controller
+- Added Hide Mini Map Trigger
+- Added Linked Fake Wall
+- Added Liquid
+- Added Upgrade Collectable
+- Added Upgrade Controller
+- Added Teleport to chapter Trigger
+- Added 'RequireMapUpgradeToOpen' and 'HeatedRoomColor' attributes to the InGameMapController
+- Added 'Index', 'confirm Sfx', 'Wipe Type' and 'Wipe Duration' attributes to Warp Stations
+- Added 'Upside down' attribute to Slopes
+- Fixed a bug allowing the minimap to be displayed despite some conditions not beeing meet
+- Fixed an issue showing the wrong location on the In-Game Map while using a Warp Station under certain circumstances
+- Greatly improved the In-Game Map and minimap performances
+- Fixed a performance issue during screen transitions
+
+Version 1.0.9 :
+- Slopes now use the same tilesheet as tilesets do (vanilla template) to make customs tilesets easy to use
+- Fixed a typo in the Ahorn plugin of slopes (girder and deadgrass textures were misstyped)
+
+Version 1.0.8 :
+- Added Slopes
+- Chapters that use the In-Game Map now automatically get an mini-map if all rooms that should show on the map contains an InGameMapTilesController
+- Added options to change the opacity of the mini-map, or turning it off in Mods Options
+
+Version 1.0.7 :
+- Fixed a bug preventing the button UI to display correctly on the In-Game Map and Ability screens when using a controller
+- Added a small delay when switching from the In-Game Map to the Ability screens and the other way around to prevent accidental switches
+- Performance optimizations for the In-Game Map
+
+Version 1.0.6 :
+- Added Elevator
+- Added Elevator Barrier
+- Added InGameMapTilesController
+- Added 'Hidden Tiles' attribute to the InGameMapRoomAdjustController
+- Reworked how entrances positions work in the InGameMapRoomController
+
+Version 1.0.5 :
+- Fixed a crash with warp stations when used in differnts maps on the same save file
+
+Version 1.0.4 :
+- Added Warp Station
+- Added Sub Area Name trigger
+- Fixed a crash happening when the player die with a golden strawberry in maps that use the ability system
+
+Version 1.0.3 :
+- Added InGameMapController
+- Added InGameMapRoomController
+- Added InGameMapRoomAdjustController
+- Made some preparation for two new abilities
+
+Version 1.0.2 :
+- Fixed a bug preventing custom refills from other mods to work properly
+- Fixed a bug that could cause a TAS desync for maps that do not use the ability system
+- Custom Water now also increase stamina costs while grabing or climbing a wall
+
+Version 1.0.1 :
+- Added an indicator for the Space Jump upgrade
+- Fixed a crash randomly happening when reloading a map with F5 or saving in Ahorn
+- Fixed a bug with water physics when using a warp station
+- Fixed a bug preventing the correct player sprite to be used in maps not using the ability system after dying or after a room transition
+- Starting SoCM Prologue from the chapter select screen should now play the correct music during the intro
+- Made some preparation for a new ability
+
+Version 1.0.0 :
+
+Initial release

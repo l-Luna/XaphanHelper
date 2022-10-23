@@ -1,0 +1,253 @@
+﻿# NOTES:
+# The # Symbol at the start of a line counts as a Comment. To include in dialog, use a \#
+# The . Symbol will cause a pause unless escaped with \. (ex: Mr. Oshiro has a pause, Mr\. Oshiro does not)
+# Newlines automatically create a Page Break, unless there is an {n} command on the previous line
+# Commands: Anything inside of curly braces {...} is a command and should not be translated.
+
+# Inline Text Commands:
+# {~}wavy text{/~}
+# {!}impact text{/!}
+# {>> x}changes speed at which characters are displayed{>>}
+# {# 000000}this text is black{#} (uses HEX color values)
+# {+MENU_BEGIN} inserts the dialog from the MENU_BEGIN value (in English, "CLIMB")
+# {n} creates a newline, without a page break
+# {0.5} creates a 0.5 second pause
+# {big}this text is large{/big}
+
+# Gameplay Control Commands (should never change)
+# {trigger x} this triggers an in-game event
+# {anchor} controls the visual position of the textbox in-game
+
+#Infos
+	XaphanHelper_ToSelect= pour sélectionner
+	XaphanHelper_Press= Appuyez sur
+	XaphanHelper_Hold= Maintenez
+	XaphanHelper_ThenHold= puis maintenez
+	XaphanHelper_ThenPress= puis appuyez
+	XaphanHelper_AndPress= et appuyez sur
+	XaphanHelper_Or= ou
+	XaphanHelper_ClingingPress= En étant accroché à un mur, appuyez sur
+
+#Metroid Infos
+	XaphanHelper_MorphMode= en boule morphing
+	XaphanHelper_Select= Sélectionnez-le avec
+	XaphanHelper_Select_2= Sélectionnez-la avec
+	XaphanHelper_Fire= puis tirez avec
+	XaphanHelper_Set= puis placez-la avec
+
+#Celeste Upgrades
+	XaphanHelper_get_Map_Name= CARTE
+	XaphanHelper_get_Map_Desc= Permet d'ouvrir la carte du monde
+	XaphanHelper_get_Map_Desc_b= pour l'ouvrir
+	XaphanHelper_get_MapShard_Name= FRAGMENT DE CARTE
+	XaphanHelper_get_MapShard_Desc= Dévoile une partie de cette région
+	XaphanHelper_get_MapShard_Desc_b= sur votre carte
+	XaphanHelper_get_EnergyTank_Name= RÉSERVOIR D'ENERGIE
+	XaphanHelper_get_EnergyTank_Desc= Augmente l'endurance maximale
+	XaphanHelper_get_PowerGrip_Name= POIGNE DE FER
+	XaphanHelper_get_PowerGrip_Desc= Permet de s'accrocher aux murs pendant un court instant
+	XaphanHelper_get_PowerGrip_Desc_b= près d'un mur pour s'y accrocher
+	XaphanHelper_get_ClimbingKit_Name= KIT D'ESCALADE
+	XaphanHelper_get_ClimbingKit_Desc= Permet d'escalader les murs
+	XaphanHelper_get_ClimbingKit_Desc_b= en étant accroché à un mur pour l'escalader
+	XaphanHelper_get_SpiderMagnet_Name= ARACHNOAIMANT
+	XaphanHelper_get_SpiderMagnet_Desc= Permet de s'accrocher aux plafonds magnétiques
+	XaphanHelper_get_SpiderMagnet_Desc_b= sous un plafond magnétique pour s'y accrocher
+	XaphanHelper_get_Bombs_Name= BOMBES
+	XaphanHelper_get_Bombs_Desc= Permet de détruire certains murs
+	XaphanHelper_get_Bombs_Desc_b= pour poser une bombe
+	XaphanHelper_get_MegaBombs_Name= MEGA BOMBES
+	XaphanHelper_get_MegaBombs_Desc= Permet de détruire certains murs et pousser certains blocks
+	XaphanHelper_get_MegaBombs_Desc_b= pour poser une bombe
+	XaphanHelper_get_RemoteDrone_Name= DRONE TÉLÉCOMMANDÉ
+	XaphanHelper_get_RemoteDrone_Desc= Permet de prendre le contrôle d'un drone miniature
+	XaphanHelper_get_RemoteDrone_Desc_b= pour déployer le drone
+	XaphanHelper_get_GoldenFeather_Name= FEUILLE DORÉE
+	XaphanHelper_get_GoldenFeather_Desc= Permet de planer librement ou de chevaucher les courants d'air.
+	XaphanHelper_get_GoldenFeather_Desc_b= lors d'une chûte pour utiliser la feuille
+	XaphanHelper_get_Binoculars_Name= JUMELLES
+	XaphanHelper_get_Binoculars_Desc= Permet de prévisualiser la salle actuelle
+	XaphanHelper_get_Binoculars_Desc_b=  pour utliser les jumelles
+	XaphanHelper_get_EtherealDash_Name= SPRINT ETHER
+	XaphanHelper_get_EtherealDash_Desc= Permet de sprinter à travers les murs de faible épaisseur
+	XaphanHelper_get_PortableStation_Name= STATION PORTABLE
+	XaphanHelper_get_PortableStation_Desc= Permet de se téléporter aux stations de téléportation actives
+	XaphanHelper_get_PortableStation_Desc_b= pour utiliser la station
+	XaphanHelper_get_PulseRadar_Name= RADAR A IMPULSIONS
+	XaphanHelper_get_PulseRadar_Desc= Permet de révéler les passages cachés proches de vous
+	XaphanHelper_get_PulseRadar_Desc_b= pour utiliser le radar
+	XaphanHelper_get_DroneTeleport_Name= TÉLÉPORT AU DRONE
+	XaphanHelper_get_DroneTeleport_Desc= Permet de vous téléporter à votre drone
+	XaphanHelper_get_DroneTeleport_Desc_b= pendant que vous contrôlez le drone pour vous téléporter
+	XaphanHelper_get_JumpBoost_Name= BOOSTEUR DE SAUT
+	XaphanHelper_get_JumpBoost_Desc= Permet de sauter jusqu'à deux fois plus haut
+	XaphanHelper_get_JumpBoost_Desc_b= avant de sauter pour l'activer
+	XaphanHelper_get_ScrewAttack_Name= ATTAQUE EN VRILLE
+	XaphanHelper_get_ScrewAttack_Desc= Détruit certains murs, augmente la vélocité et
+	XaphanHelper_get_ScrewAttack_Desc_b= Permet de passer à travers certains obstacles lors d'un saut
+	XaphanHelper_get_DashBoots_Name= BOTTES DE SPRINT
+	XaphanHelper_get_DashBoots_Desc= Permet de sprinter dans toutes les directions
+	XaphanHelper_get_DashBoots_Desc_b= et une direction pour sprinter
+	XaphanHelper_get_SpaceJump_Name= SAUT SPACIAL
+	XaphanHelper_get_SpaceJump_Desc= Permet un saut supplémentaire dans les airs
+	XaphanHelper_get_SpaceJump_Desc_b= en l'air pour sauter à nouveau
+	XaphanHelper_get_HoverBoots_Name= BOTTES DE SURVOL
+	XaphanHelper_get_HoverBoots_Desc= Permet de flotter dans les airs un court instant
+	XaphanHelper_get_HoverBoots_Desc_b= et une direction lors d'une chûte pour flotter
+	XaphanHelper_get_LightningDash_Name= SPRINT ECLAIR
+	XaphanHelper_get_LightningDash_Desc= Permet d'effectuer un sprint horizontal infini
+	XaphanHelper_get_LightningDash_Desc_b= et la direction opposée au mur pour sprinter
+
+#Metroid Upgrades
+	XaphanHelper_get_Spazer_Name= SPAZER
+	XaphanHelper_get_Spazer_Desc= Permet de tirer trois rayons à la fois
+	XaphanHelper_get_PlasmaBeam_Name= RAYON PLASMA
+	XaphanHelper_get_PlasmaBeam_Desc= Permet aux rayons de transpercer les ennemis
+	XaphanHelper_get_Met_VariaJacket_Name= COSTUME VARIA
+	XaphanHelper_get_Met_VariaJacket_Desc= Permet de survivre aux températures extrêmes
+	XaphanHelper_get_Met_GravityJacket_Name= COSTUME DE GRAVITE
+	XaphanHelper_get_Met_GravityJacket_Desc= Permet de se déplacer librement dans les liquides et protège de la lave
+	XaphanHelper_get_MorphingBall_Name= BOULE MORPHING
+	XaphanHelper_get_MorphingBall_Desc= Permet de franchir les passages étroits
+	XaphanHelper_get_MorphingBall_Desc_b= pour se transformer
+	XaphanHelper_get_MorphBombs_Name= BOMBES
+	XaphanHelper_get_MorphBombs_Desc= Permet de détruire certains murs
+	XaphanHelper_get_MorphBombs_Desc_b= en boule morphing pour placer
+	XaphanHelper_get_SpringBall_Name= BOULE DE SAUT
+	XaphanHelper_get_SpringBall_Desc= Permet de sauter en boule morphing
+	XaphanHelper_get_SpringBall_Desc_b= en boule morphing pour sauter
+	XaphanHelper_get_Met_ScrewAttack_Name= ATTAQUE EN VRILLE
+	XaphanHelper_get_Met_ScrewAttack_Desc= Blesse les ennemis lors d'un saut périlleux
+	XaphanHelper_get_HighJumpBoots_Name= BOTES DE SAUT
+	XaphanHelper_get_HighJumpBoots_Desc= Augmente la hauteur maximale de saut
+	XaphanHelper_get_Met_SpaceJump_Name= SAUT SPACIAL
+	XaphanHelper_get_Met_SpaceJump_Desc= Permet de sauter continuellement en l'air
+	XaphanHelper_get_Met_SpaceJump_Desc_b= lors d'un saut périlleux pour sauter à nouveau
+	XaphanHelper_get_SpeedBooster_Name= ACCELERATEUR
+	XaphanHelper_get_SpeedBooster_Desc= Augmente la vitesse de course. Détruit certains blocs
+	XaphanHelper_get_SpeedBooster_Desc_b= et courez pendant un moment pour activer
+	XaphanHelper_get_Missile_Name= MISSILE
+	XaphanHelper_get_Missile_Name_b= RÉSERVE DE MISSILES
+	XaphanHelper_get_Missile_Desc= Inflige des dégats accrus - Ouvre les portes rouges
+	XaphanHelper_get_SuperMissile_Name= SUPER MISSILE
+	XaphanHelper_get_SuperMissile_Name_b= RÉSERVE DE SUPER MISSILES
+	XaphanHelper_get_SuperMissile_Desc= Inflige des dégats massifs - Ouvre les portes vertes
+	XaphanHelper_get_PowerBomb_Name= BOMBE DE PUISSANCE
+	XaphanHelper_get_PowerBomb_Name_b= RÉSERVE DE BOMBES DE PUISSANCE
+	XaphanHelper_get_PowerBomb_Desc= Libère une puissante explosion - Ouvre les portes jaunes
+	XaphanHelper_get_Met_EnergyTank_Name= RÉSERVOIR D'ENERGIE
+	XaphanHelper_get_Met_EnergyTank_Desc= Energie maximale augmentée
+	XaphanHelper_Increase_Missile= Quantité de missiles accrue
+	XaphanHelper_Increase_SuperMissile= Quantité de super missiles accrue
+	XaphanHelper_Increase_PowerBomb= Quantité de bombes de puissance accrue
+
+#Common Upgrades
+	XaphanHelper_get_VariaJacket_Name= VESTE VARIA
+	XaphanHelper_get_VariaJacket_Desc= Permet de survivre dans la lave
+	XaphanHelper_get_VariaJacket_Desc_b= et protège des températures extrêmes
+	XaphanHelper_get_GravityJacket_Name= VESTE DE GRAVITÉ
+	XaphanHelper_get_GravityJacket_Desc= Permet de se déplacer librement dans les liquides
+	XaphanHelper_get_LongBeam_Name= RAYON LONG
+	XaphanHelper_get_LongBeam_Desc= Permet aux rayons d'atteindre les cibles éloignées
+	XaphanHelper_get_LongBeam_Desc_drone= Permet au rayon du drone d'atteindre les cibles éloignées
+	XaphanHelper_get_IceBeam_Name= RAYON A GLACE
+	XaphanHelper_get_IceBeam_Desc= Permet aux rayons de geler les ennemis
+	XaphanHelper_get_IceBeam_Desc_drone= Permet au rayon du drone de geler les ennemis
+	XaphanHelper_get_WaveBeam_Name= RAYON A VAGUES
+	XaphanHelper_get_WaveBeam_Desc= Permet aux rayons de traverser les objets solides
+	XaphanHelper_get_WaveBeam_Desc_drone= Permet au rayon du drone de traverser les objets solides
+
+#Warps
+	XaphanHelper_Warp_Select_Destination= - Selectionnez votre destination -
+	XaphanHelper_Warp_Stay= Rester ici
+	XaphanHelper_Warp_None= Vous devez débloquer au moins une autre{n}station de téléportation avant de pouvoir les utiliser
+	XaphanHelper_Warp_Lobby_None= Vous devez trouver au moins un autre{n}banc avant de pouvoir voyager rapidement
+
+
+#Mod Options Menu
+	ModOptions_XaphanModule_ShowMiniMap= Afficher la mini carte
+	ModOptions_XaphanModule_ShowMiniMap_Desc= Seulement pour les chapitres compatibles
+	ModOptions_XaphanModule_MiniMapOpacity= Opacité de la mini carte
+	ModOptions_XaphanModule_10= 10%
+	ModOptions_XaphanModule_20= 20%
+	ModOptions_XaphanModule_30= 30%
+	ModOptions_XaphanModule_40= 40%
+	ModOptions_XaphanModule_50= 50%
+	ModOptions_XaphanModule_60= 60%
+	ModOptions_XaphanModule_70= 70%
+	ModOptions_XaphanModule_80= 80%
+	ModOptions_XaphanModule_90= 90%
+	ModOptions_XaphanModule_100= 100%
+	ModOptions_XaphanModule_ShowHeatLevel= Afficher le niveau de chaleur
+	ModOptions_XaphanModule_ShowHeatLevel_Desc= Affiche le temps restant avant de mourrir dû à la chaleur dans les salles chauffées
+	ModOptions_XaphanModule_SpaceJumpIndicator= Indicateur du Saut Spacial
+	ModOptions_XaphanModule_SpaceJumpIndicator_None= Aucun
+	ModOptions_XaphanModule_SpaceJumpIndicator_Small= Petit
+	ModOptions_XaphanModule_SpaceJumpIndicator_Large= Grand 
+
+#Bindings
+	ModOptions_XaphanModule_OpenMap= Ouvrir la carte / l'écran de status
+	ModOptions_XaphanModule_SelectItem= Sélectionner la capacité équipée
+	ModOptions_XaphanModule_UseBagItemSlot= Utiliser la capacité équipée dans l'emplacement Sac
+	ModOptions_XaphanModule_UseMiscItemSlot= Utiliser la capacité équipée dans l'emplacement Divers
+	ModOptions_XaphanModule_MapScreenShowProgressDisplay= Écran carte - Séléctionner type de progression
+	ModOptions_XaphanModule_MapScreenShowMapOrWorldMap= Écran carte - Permuter entre carte de la zone et carte du monde
+	ModOptions_XaphanModule_MapScreenShowHints= Écran carte - Afficher / chacher les indices
+
+#UI
+	XaphanHelper_UI_ActiveCM_title= ACTIVER LE MODE DEFI ?
+	XaphanHelper_UI_CM_note1= Le mode défi permet de rejouer cette rencontre de boss{n}dans une version plus difficile
+	XaphanHelper_UI_CM_note2= Vous pouvez abandonner le mode défi dans le menu Pause{n}tant que la rencontre n'a pas commencé
+	XaphanHelper_UI_CM_note3= Attention! Les capacités qui ne sont normalement pas accessibles{n}lors de cette rencontre seront temporairement désactivées
+	XaphanHelper_UI_GiveUpCM_title= ABANDONNER LE MODE DEFI ?
+	XaphanHelper_UI_GiveUpCM= Abandonner le mode défi
+	XaphanHelper_UI_GiveUpBSide_title= ABANDONNER LA FACE B ?
+	XaphanHelper_UI_GiveUpCSide_title= ABANDONNER LA FACE C ?
+	XaphanHelper_UI_GiveUpBSide= Abandonner la Face B
+	XaphanHelper_UI_GiveUpCSide= Abandonner la Face C
+	XaphanHelper_UI_GiveUpBSide_info= Tu perdras ta progression dans cette Face B{n}et sera renvoyé dans la Face A.
+	XaphanHelper_UI_GiveUpCSide_info= Tu perdras ta progression dans cette Face C{n}et sera renvoyé dans la Face A.
+	XaphanHelper_UI_RestartCampaign_title= REDEMARRER LA CAMPAGNE ?
+	XaphanHelper_UI_RestartCampaign= Redémarrer la campagne
+	XaphanHelper_UI_RestartCampaign_info= Tu perdras ta progression dans cette campagne{n}et recommencera au début.
+	XaphanHelper_UI_close= Fermer
+	XaphanHelper_UI_map= Carte
+	XaphanHelper_UI_mapExplored= Carte explorée :
+	XaphanHelper_UI_itemsCollected= Items collectés :
+	XaphanHelper_UI_items= Items
+	XaphanHelper_UI_skip= Passer
+	XaphanHelper_UI_abilities= Capacités
+	XaphanHelper_UI_activate= Activer
+	XaphanHelper_UI_deactivate= Désactiver
+	XaphanHelper_UI_showhints= Afficher indices
+	XaphanHelper_UI_hidehints= Cacher indices
+	XaphanHelper_UI_showProgress= Afficher progression
+	XaphanHelper_UI_changeProgress= Changer progression
+	XaphanHelper_UI_hideProgress= Cacher progression
+	XaphanHelper_UI_progress_allareas= Progression  Toutes les zones
+	XaphanHelper_UI_progress_area= Progression : zone actuelle
+	XaphanHelper_UI_progress_subarea= Progression : sous-zone actuelle
+	XaphanHelper_UI_showWorldMap= Afficher carte du monde
+	XaphanHelper_UI_showAreaMap= Afficher carte de la zone
+	XaphanHelper_UI_changeDestination= Changer destination
+	XaphanHelper_UI_changeLobby= Changer difficulté
+	XaphanHelper_UI_fastTravel= Voyage rapide
+	XaphanHelper_UI_zoom= Changer le zoom
+	XaphanHelper_UI_confirm= Confirmer
+	Xaphanhelper_UI_Arms= BRAS
+	Xaphanhelper_UI_Legs= JAMBES
+	Xaphanhelper_UI_Drone= DRONE
+	Xaphanhelper_UI_Jacket= VESTE
+	Xaphanhelper_UI_Bag= SAC
+	Xaphanhelper_UI_Misc= DIVERS
+	Xaphanhelper_UI_Time= TEMPS
+	XaphanHelper_UI_Currently_In= Actuellement dans :
+	XaphanHelper_UI_ReturnToMap_Rooms= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à ton point de départ actuel.
+	XaphanHelper_UI_ReturnToMap_Warps= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à la dernière station de téléportation où tu t'es arrêté.
+
+#Metroid UI
+	XaphanHelper_UI_Save_Game= SOUHAITEZ-VOUS SAUVEGARDER ?
+	Xaphanhelper_UI_Metroid_Beams= RAYONS
+	Xaphanhelper_UI_Metroid_Suits= COSTUMES
+	Xaphanhelper_UI_Metroid_Misc= DIVERS
+	Xaphanhelper_UI_Metroid_Boots= BOTTES

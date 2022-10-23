@@ -1,0 +1,3493 @@
+﻿using Celeste.Mod.XaphanHelper.Controllers;
+using Celeste.Mod.XaphanHelper.Cutscenes;
+using Celeste.Mod.XaphanHelper.Effects;
+using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.Managers;
+using Celeste.Mod.XaphanHelper.Triggers;
+using Celeste.Mod.XaphanHelper.UI_Elements;
+using Celeste.Mod.XaphanHelper.Upgrades;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Monocle;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Data;
+using MonoMod.Utils;
+using Celeste.Mod.Meta;
+using System.Xml;
+using On.Celeste;
+
+namespace Celeste.Mod.XaphanHelper
+{
+    public class XaphanModule : EverestModule
+    {
+        public static SpriteBank SpriteBank;
+
+        public static XaphanModule Instance;
+
+        public static List<TeleportToOtherSideData> TeleportToOtherSideData = new List<TeleportToOtherSideData>();
+
+        private FieldInfo OuiChapterSelect_icons = typeof(OuiChapterSelect).GetField("icons", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo OuiChapterPanel_modes = typeof(OuiChapterPanel).GetField("modes", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo OuiChapterPanel_instantClose = typeof(OuiChapterPanel).GetField("instantClose", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo OuiChapterSelectIcon_tween = typeof(OuiChapterSelectIcon).GetField("tween", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo OuiChapterSelectIcon_front = typeof(OuiChapterSelectIcon).GetField("front", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo OuiChapterSelectIcon_back = typeof(OuiChapterSelectIcon).GetField("back", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private FieldInfo Overworld_transitioning = typeof(Overworld).GetField("transitioning", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private Type OuiChapterPanel_T_Option = typeof(OuiChapterPanel).GetNestedType("Option", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+
+        private bool hasOldExtendedVariants = false;
+
+        private bool hasAchievementHelper = false;
+
+        private bool displayedOldExtVariantsPostcard = false;
+
+        private bool displayedAchievementHelperPostcard = false;
+
+        public static bool startedAnyChapter = false;
+
+        public static bool startedAnySoCMChapter = false;
+
+        public static bool onSlope;
+
+        public static bool ChangingSide;
+
+        private Postcard oldExtVariantsPostcard;
+
+        private Postcard achievementHelperPostcard;
+
+        public static bool useMergeChaptersControllerCheck;
+
+        public static bool useMergeChaptersController;
+
+        public static string MergeChaptersControllerMode;
+
+        public static bool MergeChaptersControllerKeepPrologue;
+
+        private string MergeChaptersControllerLevelSet;
+
+        private string lastLevelSet;
+
+        public static bool CanOpenMap(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;
+        }
+
+        public enum Upgrades
+        {
+            // Celeste Upgrades
+
+            PowerGrip,
+            ClimbingKit,
+            SpiderMagnet,
+            DroneTeleport,
+            //JumpBoost,
+            Bombs,
+            MegaBombs,
+            RemoteDrone,
+            GoldenFeather,
+            Binoculars,
+            EtherealDash,
+            PortableStation,
+            PulseRadar,
+            DashBoots,
+            HoverBoots,
+            LightningDash,
+
+            // Metroid Upgrades
+
+            Spazer,
+            PlasmaBeam,
+            MorphingBall,
+            MorphBombs,
+            SpringBall,
+            HighJumpBoots,
+            SpeedBooster,
+
+            //Common Upgrades
+
+            LongBeam,
+            IceBeam,
+            WaveBeam,
+            VariaJacket,
+            GravityJacket,
+            ScrewAttack,
+            SpaceJump
+        }
+
+        // Celeste Upgrades
+
+        public static bool PowerGripCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PowerGrip");
+        }
+
+        public static bool ClimbingKitCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ClimbingKit");
+        }
+
+        public static bool SpiderMagnetCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpiderMagnet");
+        }
+
+        public static bool DroneTeleportCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DroneTeleport");
+        }
+
+        /*public static bool JumpBoostCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_JumpBoost");
+        }*/
+
+        public static bool BombsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Bombs");
+        }
+
+        public static bool MegaBombsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MegaBombs");
+        }
+
+        public static bool RemoteDroneCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_RemoteDrone");
+        }
+
+        public static bool GoldenFeatherCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GoldenFeather");
+        }
+
+        public static bool BinocularsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Binoculars");
+        }
+
+        public static bool EtherealDashCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_EtherealDash");
+        }
+
+        public static bool PortableStationCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PortableStation");
+        }
+
+        public static bool PulseRadarCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PulseRadar");
+        }
+
+        public static bool DashBootsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
+        }
+
+        public static bool HoverBootsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HoverBoots");
+        }
+
+        public static bool LightningDashCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LightningDash");
+        }
+
+        // Metroid Upgrades
+
+        public static bool SpazerCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Spazer");
+        }
+
+        public static bool PlasmaBeamCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PlasmaBeam");
+        }
+
+        public static bool MorphingBallCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphingBall");
+        }
+
+        public static bool MorphBombsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphBombs");
+        }        
+
+        public static bool SpringBallCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpringBall");
+        }
+
+        public static bool HighJumpBootsCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HighJumpBoots");
+        }
+
+        public static bool SpeedBoosterCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpeedBooster");
+        }
+
+        // Common Upgrades
+
+        public static bool LongBeamCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LongBeam");
+        }
+
+        public static bool IceBeamCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_IceBeam");
+        }
+
+        public static bool WaveBeamCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_WaveBeam");
+        }
+
+        public static bool VariaJacketCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_VariaJacket");
+        }
+
+        public static bool GravityJacketCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GravityJacket");
+        }
+
+        public static bool ScrewAttackCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ScrewAttack");
+        }
+
+        public static bool SpaceJumpCollected(Level level)
+        {
+            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
+        }
+
+        public static void useIngameMapCheck(Level level)
+        {
+            AreaKey area = level.Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/InGameMapController")
+                    {
+                        useIngameMap = true;
+                        inGameMapProgressDisplayMode = entity.Attr("showProgress");
+                        break;
+                    }
+                }
+                if (useIngameMap)
+                {
+                    break;
+                }
+            }
+        }
+
+        public static void allRoomsUseTileControllerCheck(Level level)
+        {
+            AreaKey area = level.Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                if (levelData.Spawns.Count != 0)
+                {
+                    allRoomsUseTileController = false;
+                    foreach (EntityData entity in levelData.Entities)
+                    {
+                        if (entity.Name == "XaphanHelper/InGameMapTilesController")
+                        {
+                            allRoomsUseTileController = true;
+                            break;
+                        }
+                    }
+                    if (!allRoomsUseTileController)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        public static void useUpgradesCheck(Level level)
+        {
+            if (useMetroidGameplay)
+            {
+                useUpgrades = true;
+            }
+            else
+            {
+                AreaKey area = level.Session.Area;
+                MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+                foreach (LevelData levelData in MapData.Levels)
+                {
+                    foreach (EntityData entity in levelData.Entities)
+                    {
+                        if (entity.Name == "XaphanHelper/UpgradeController")
+                        {
+                            useUpgrades = true;
+                            DisableStatusScreen = entity.Bool("disableStatusScreen", false);
+                            break;
+                        }
+                    }
+                    if (useUpgrades)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        public static void useMetroidGameplayCheck(Level level)
+        {
+            AreaKey area = level.Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/MetroidGameplayController")
+                    {
+                        useMetroidGameplay = true;
+                        level.Tracker.GetEntity<Player>().ResetSprite(PlayerSpriteMode.Madeline);
+                        break;
+                    }
+                }
+                if (useMetroidGameplay)
+                {
+                    break;
+                }
+            }
+        }
+
+        public static bool useMetroidGameplaySessionCheck(Session session)
+        {
+            AreaKey area = session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/MetroidGameplayController")
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool PlayerIsControllingRemoteDrone()
+        {
+            if (Engine.Scene is Level)
+            {
+                Level level = (Level)Engine.Scene;
+                Drone drone = level.Tracker.GetEntity<Drone>();
+                if (drone != null && !Drone.Hold.IsHeld)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool useIngameMap;
+
+        public static string inGameMapProgressDisplayMode;
+
+        public static bool allRoomsUseTileController;
+
+        public static bool useUpgrades;
+
+        public static bool DisableStatusScreen;
+
+        public static bool forceStartingUpgrades;
+
+        public static bool useMetroidGameplay;
+
+        public Dictionary<Upgrades, Upgrade> UpgradeHandlers = new Dictionary<Upgrades, Upgrade>();
+
+        public static bool PlayerHasGolden;
+
+        public bool PlayerLostGolden;
+
+        private bool CanLoadPlayer;
+
+        public float cassetteAlpha;
+
+        public bool cassetteWaitForKeyPress;
+
+        public float cassetteTimer;
+
+        public XaphanModule()
+        {
+            Instance = this;
+
+            // Celeste Upgrades
+
+            UpgradeHandlers[Upgrades.PowerGrip] = new PowerGrip();
+            UpgradeHandlers[Upgrades.ClimbingKit] = new ClimbingKit();
+            UpgradeHandlers[Upgrades.SpiderMagnet] = new SpiderMagnet();
+            UpgradeHandlers[Upgrades.DroneTeleport] = new DroneTeleport();
+            //UpgradeHandlers[Upgrades.JumpBoost] = new JumpBoost();
+            UpgradeHandlers[Upgrades.Bombs] = new Bombs();
+            UpgradeHandlers[Upgrades.MegaBombs] = new MegaBombs();
+            UpgradeHandlers[Upgrades.RemoteDrone] = new RemoteDrone();
+            UpgradeHandlers[Upgrades.GoldenFeather] = new GoldenFeather();
+            UpgradeHandlers[Upgrades.Binoculars] = new Binoculars();
+            UpgradeHandlers[Upgrades.EtherealDash] = new EtherealDash();
+            UpgradeHandlers[Upgrades.PortableStation] = new PortableStation();
+            UpgradeHandlers[Upgrades.PulseRadar] = new PulseRadar();
+            UpgradeHandlers[Upgrades.DashBoots] = new DashBoots();
+            UpgradeHandlers[Upgrades.HoverBoots] = new HoverBoots();
+            UpgradeHandlers[Upgrades.LightningDash] = new LightningDash();
+
+            //Metroid Upgrades
+
+            UpgradeHandlers[Upgrades.Spazer] = new Spazer();
+            UpgradeHandlers[Upgrades.PlasmaBeam] = new PlasmaBeam();
+            UpgradeHandlers[Upgrades.MorphingBall] = new MorphingBall();
+            UpgradeHandlers[Upgrades.MorphBombs] = new MorphBombs();
+            UpgradeHandlers[Upgrades.SpringBall] = new SpringBall();
+            UpgradeHandlers[Upgrades.HighJumpBoots] = new HighJumpBoots();
+            UpgradeHandlers[Upgrades.SpeedBooster] = new SpeedBooster();
+
+            // Common Upgrades
+
+            UpgradeHandlers[Upgrades.LongBeam] = new LongBeam();
+            UpgradeHandlers[Upgrades.IceBeam] = new IceBeam();
+            UpgradeHandlers[Upgrades.WaveBeam] = new WaveBeam();
+            UpgradeHandlers[Upgrades.VariaJacket] = new VariaJacket();
+            UpgradeHandlers[Upgrades.GravityJacket] = new GravityJacket();
+            UpgradeHandlers[Upgrades.ScrewAttack] = new ScrewAttack();
+            UpgradeHandlers[Upgrades.SpaceJump] = new SpaceJump();
+        }
+
+        // If you need to store settings:
+        public override Type SettingsType => typeof(XaphanModuleSettings);
+        public static XaphanModuleSettings Settings => (XaphanModuleSettings)Instance._Settings;
+
+        // If you need to store save data:
+        public override Type SaveDataType => typeof(XaphanModuleSaveData);
+        public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
+
+        // Set up any hooks, event handlers and your mod in general here.
+        // Load runs before Celeste itself has initialized properly.
+        public override void Load()
+        {
+            DecalRegistry.AddPropertyHandler("BGdepth", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["value"] != null && decal.Depth == 9000)
+                    decal.Depth = int.Parse(attrs["value"].Value);
+            });
+            foreach (Upgrades upgrade in UpgradeHandlers.Keys)
+            {
+                UpgradeHandlers[upgrade].Load();
+            }
+            Everest.Events.Level.OnLoadBackdrop += OnLoadBackdrop;
+            Everest.Events.Level.OnLoadLevel += onLevelLoad;
+            Everest.Events.Level.OnExit += onLevelExit;
+            Everest.Events.Level.OnCreatePauseMenuButtons += onCreatePauseMenuButtons;
+            On.Celeste.Cassette.UnlockedBSide.EaseIn += modCassetteUnlockedBSideEaseIn;
+            On.Celeste.Cassette.UnlockedBSide.EaseOut += modCassetteUnlockedBSideEaseOut;
+            On.Celeste.Cassette.UnlockedBSide.Render += modCassetteUnlockedBSideRender;
+            On.Celeste.GameplayStats.Render += onGameplayStatsRender;
+            On.Celeste.HeartGem.IsCompleteArea += modHeartGemIsCompleteArea;
+            On.Celeste.LevelEnter.Routine += modLevelEnterRoutine;
+            On.Celeste.LevelEnter.BeforeRender += modLevelEnterBeforeRender;
+            On.Celeste.LevelEnter.Go += onLevelEnterGo;
+            On.Celeste.Level.Pause += onLevelPause;
+            On.Celeste.Level.Update += onLevelUpdate;
+            On.Celeste.OuiChapterSelect.GetMinMaxArea += modOuiChapterSelectGetMinMaxArea;
+            On.Celeste.OuiChapterSelect.Update += modOuiChapterSelectUpdate;
+            On.Celeste.OuiChapterSelectIcon.Update += modOuiChapterSelectIconUpdate;
+            On.Celeste.OuiChapterPanel.Enter += modOuiChapterPanelEnter;
+            On.Celeste.OuiChapterPanel.Leave += modOuiChapterPanelLeave;
+            On.Celeste.OuiChapterPanel.GetModeHeight += modOuiChapterPanelGetModeHeight;
+            On.Celeste.OuiChapterPanel.IncrementStats += modOuiChapterPanelIncrementStats;
+            On.Celeste.OuiChapterPanel.IncrementStatsDisplay += modOuiChapterPanelIncrementStatsDisplay;
+            On.Celeste.OuiChapterPanel.IsStart += modOuiChapterPanelIsStart;
+            On.Celeste.OuiChapterPanel.UpdateStats += modOuiChapterPanelUpdateStats;
+            On.Celeste.OuiChapterPanel.Reset += modOuiChapterPanelReset;
+            On.Celeste.OuiChapterPanel.Start += modOuiChapterPanelStart;
+            On.Celeste.OuiChapterPanel.StartRoutine += modOuiChapterPanelStartRoutine;
+            On.Celeste.Overworld.SetNormalMusic += modOverworldSetNormalMusic;
+            On.Celeste.Player.CallDashEvents += modPlayerCallDashEvents;
+            On.Celeste.Player.Render += onPlayerRender;
+            On.Celeste.PlayerDeadBody.Render += onPlayerDeadBodyRender;
+            On.Celeste.ReturnMapHint.Render += onReturnMapHintRender;
+            On.Celeste.SaveData.FoundAnyCheckpoints += modSaveDataFoundAnyCheckpoints;
+            On.Celeste.Session.Restart += onSessionRestart;
+            On.Celeste.SpeedrunTimerDisplay.DrawTime += onSpeedrunTimerDisplayDrawTime;
+            On.Celeste.Strawberry.OnPlayer += modStrawberryOnPlayer;
+            On.Celeste.Strawberry.Update += modStrawberryUpdate;
+            On.Celeste.Strawberry.OnLoseLeader += modStrawberryOnLoseLeader;
+            On.Celeste.Strawberry.CollectRoutine += onStrawberryCollectRoutine;
+            On.Celeste.Mod.UI.OuiMapSearch.Inspect += modOuiMapSearchInspect;
+            On.Celeste.Mod.UI.OuiMapList.Inspect += modOuiMapListInspect;
+            MetroidGameplayController.Load();
+            ScrewAttackManager.Load();
+            MapDisplay.Load();
+            PlayerPlatform.Load();
+            ActorBarrier.Load();
+            CameraBlocker.Load();
+            HeatController.Load();
+            JumpBlock.Load();
+            TimeManager.Load();
+            TimedStrawberry.Load();
+            CountdownDisplay.Load();
+            Liquid.Load();
+            MagneticCeiling.Load();
+            Drone.Load();
+            FlagDashSwitch.Load();
+            TimedDashSwitch.Load();
+            BagDisplay.Load();
+            StatsFlags.Load();
+            CustomEndScreenController.Load();
+            Binocular.Load();
+            EtherealBlock.Load();
+            UI_Elements.StaminaDisplay.Load();
+        }
+
+        // Optional, do anything requiring either the Celeste or mod content here.
+        public override void LoadContent(bool firstLoad)
+        {
+            SpriteBank = new SpriteBank(GFX.Game, "Graphics/Xaphan/CustomSprites.xml");
+        }
+
+        // Unload the entirety of your mod's content. Free up any native resources.
+        public override void Unload()
+        {
+            foreach (Upgrades upgrade in UpgradeHandlers.Keys)
+            {
+                UpgradeHandlers[upgrade].Unload();
+            }
+            Everest.Events.Level.OnLoadBackdrop -= OnLoadBackdrop;
+            Everest.Events.Level.OnLoadLevel -= onLevelLoad;
+            Everest.Events.Level.OnExit -= onLevelExit;
+            Everest.Events.Level.OnCreatePauseMenuButtons -= onCreatePauseMenuButtons;
+            On.Celeste.Cassette.UnlockedBSide.EaseIn -= modCassetteUnlockedBSideEaseIn;
+            On.Celeste.Cassette.UnlockedBSide.EaseOut -= modCassetteUnlockedBSideEaseOut;
+            On.Celeste.Cassette.UnlockedBSide.Render -= modCassetteUnlockedBSideRender;
+            On.Celeste.GameplayStats.Render -= onGameplayStatsRender;
+            On.Celeste.HeartGem.IsCompleteArea -= modHeartGemIsCompleteArea;
+            On.Celeste.LevelEnter.Routine -= modLevelEnterRoutine;
+            On.Celeste.LevelEnter.BeforeRender -= modLevelEnterBeforeRender;
+            On.Celeste.LevelEnter.Go -= onLevelEnterGo;
+            On.Celeste.Level.Pause -= onLevelPause;
+            On.Celeste.Level.Update -= onLevelUpdate;
+            On.Celeste.OuiChapterSelect.GetMinMaxArea -= modOuiChapterSelectGetMinMaxArea;
+            On.Celeste.OuiChapterSelect.Update -= modOuiChapterSelectUpdate;
+            On.Celeste.OuiChapterSelectIcon.Update -= modOuiChapterSelectIconUpdate;
+            On.Celeste.OuiChapterPanel.GetModeHeight -= modOuiChapterPanelGetModeHeight;
+            On.Celeste.OuiChapterPanel.IncrementStats -= modOuiChapterPanelIncrementStats;
+            On.Celeste.OuiChapterPanel.IncrementStatsDisplay -= modOuiChapterPanelIncrementStatsDisplay;
+            On.Celeste.OuiChapterPanel.IsStart -= modOuiChapterPanelIsStart;
+            On.Celeste.OuiChapterPanel.UpdateStats -= modOuiChapterPanelUpdateStats;
+            On.Celeste.OuiChapterPanel.Reset -= modOuiChapterPanelReset;
+            On.Celeste.OuiChapterPanel.Start -= modOuiChapterPanelStart;
+            On.Celeste.OuiChapterPanel.StartRoutine -= modOuiChapterPanelStartRoutine;
+            On.Celeste.Overworld.SetNormalMusic -= modOverworldSetNormalMusic;
+            On.Celeste.Player.CallDashEvents -= modPlayerCallDashEvents;
+            On.Celeste.Player.Render -= onPlayerRender;
+            On.Celeste.PlayerDeadBody.Render -= onPlayerDeadBodyRender;
+            On.Celeste.ReturnMapHint.Render -= onReturnMapHintRender;
+            On.Celeste.SaveData.FoundAnyCheckpoints -= modSaveDataFoundAnyCheckpoints;
+            On.Celeste.Session.Restart -= onSessionRestart;
+            On.Celeste.SpeedrunTimerDisplay.DrawTime -= onSpeedrunTimerDisplayDrawTime;
+            On.Celeste.Strawberry.OnPlayer -= modStrawberryOnPlayer;
+            On.Celeste.Strawberry.Update -= modStrawberryUpdate;
+            On.Celeste.Strawberry.OnLoseLeader -= modStrawberryOnLoseLeader;
+            On.Celeste.Strawberry.CollectRoutine -= onStrawberryCollectRoutine;
+            On.Celeste.Mod.UI.OuiMapSearch.Inspect -= modOuiMapSearchInspect;
+            On.Celeste.Mod.UI.OuiMapList.Inspect -= modOuiMapListInspect;
+            MetroidGameplayController.Unload();
+            ScrewAttackManager.Unload();
+            MapDisplay.Unload();
+            PlayerPlatform.Unload();
+            ActorBarrier.Unload();
+            CameraBlocker.Unload();
+            HeatController.Unload();
+            JumpBlock.Unload();
+            TimeManager.Unload();
+            TimedStrawberry.Unload();
+            CountdownDisplay.Unload();
+            Liquid.Unload();
+            MagneticCeiling.Unload();
+            Drone.Unload();
+            FlagDashSwitch.Unload();
+            TimedDashSwitch.Unload();
+            BagDisplay.Unload();
+            StatsFlags.Unload();
+            CustomEndScreenController.Unload();
+            Binocular.Unload();
+            EtherealBlock.Unload();
+            UI_Elements.StaminaDisplay.Unload();
+        }
+
+        private void onGameplayStatsRender(On.Celeste.GameplayStats.orig_Render orig, GameplayStats self)
+        {
+            AreaKey area = self.SceneAs<Level>().Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+            if (!useIngameMap || (useIngameMap && inGameMapProgressDisplayMode == "Never"))
+            {
+                orig(self);
+            }
+        }
+
+        private void modOuiChapterSelectIconUpdate(On.Celeste.OuiChapterSelectIcon.orig_Update orig, OuiChapterSelectIcon self)
+        {
+            if (useMergeChaptersController && SaveData.Instance != null && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                orig(self);
+                if (!MergeChaptersControllerKeepPrologue || (MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset))
+                {
+                    if (SaveData.Instance == null)
+                    {
+                        return;
+                    }
+                    self.sizeEase = Calc.Approach(self.sizeEase, 1f, Engine.DeltaTime * 4f);
+                    if (SaveData.Instance.LastArea_Safe.ID == self.Area)
+                    {
+                        self.Depth = -50;
+                    }
+                    else
+                    {
+                        self.Depth = -45;
+                    }
+                    if (OuiChapterSelectIcon_tween.GetValue(self) == null)
+                    {
+                        if (self.IsSelected)
+                        {
+                            CustomOuiChapterPanel uI = (self.Scene as Overworld).GetUI<CustomOuiChapterPanel>();
+                            if (uI != null)
+                            {
+                                self.Position = ((!uI.EnteringChapter) ? uI.OpenPosition : uI.Position) + uI.IconOffset;
+                            }
+                        }
+                        else if (!self.IsHidden)
+                        {
+                            self.Position = Calc.Approach(self.Position, self.IdlePosition, 2400f * Engine.DeltaTime);
+                        }
+                    }
+                    if (self.Area > SaveData.Instance.GetLevelSetStats().AreaOffset + (MergeChaptersControllerKeepPrologue ? 1 : 0) && self.Area <= (SaveData.Instance.GetLevelSetStats().AreaOffset + SaveData.Instance.GetLevelSetStats().MaxArea))
+                    {
+                        if (MergeChaptersControllerKeepPrologue && self.Area > SaveData.Instance.GetLevelSetStats().AreaOffset)
+                        {
+                            OuiChapterSelectIcon_front.SetValue(self, GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset + 1].Icon]);
+                            OuiChapterSelectIcon_back.SetValue(self, GFX.Gui.Has(AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset + 1].Icon + "_back") ? GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset + 1].Icon + "_back"] : GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset + 1].Icon]);
+                        }
+                        else
+                        {
+                            OuiChapterSelectIcon_front.SetValue(self, GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset].Icon]);
+                            OuiChapterSelectIcon_back.SetValue(self, GFX.Gui.Has(AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset].Icon + "_back") ? GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset].Icon + "_back"] : GFX.Gui[AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset].Icon]);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private void modOuiChapterSelectGetMinMaxArea(On.Celeste.OuiChapterSelect.orig_GetMinMaxArea orig, OuiChapterSelect self, out int areaOffs, out int areaMax)
+        {
+            foreach (OuiChapterSelectIcon icon in (List<OuiChapterSelectIcon>)OuiChapterSelect_icons.GetValue(self))
+            {
+                icon.Visible = true;
+            }
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                if (MergeChaptersControllerKeepPrologue)
+                {
+                    areaOffs = SaveData.Instance.GetLevelSetStats().AreaOffset;
+                    int areaOffsRaw = SaveData.Instance.GetLevelSetStats().AreaOffset;
+                    int areaMaxRaw = Math.Max(areaOffsRaw, SaveData.Instance.UnlockedAreas_Safe);
+                    do
+                    {
+                        areaMax = ((List<OuiChapterSelectIcon>)OuiChapterSelect_icons.GetValue(self)).FindLastIndex((OuiChapterSelectIcon i) => (i != null && i.Area == areaMaxRaw) || i.AssistModeUnlockable);
+                    }
+                    while (areaMax == -1 && --areaMaxRaw < areaOffsRaw);
+                    if (areaMax == -1)
+                    {
+                        areaMax = areaMaxRaw;
+                    }
+                    if (areaMax > areaOffs + 1)
+                    {
+                        areaMax = areaOffs + 1;
+                    }
+                }
+                else
+                {
+                    areaMax = areaOffs = SaveData.Instance.GetLevelSetStats().AreaOffset;
+                }
+                foreach (OuiChapterSelectIcon icon in (List<OuiChapterSelectIcon>)OuiChapterSelect_icons.GetValue(self))
+                {
+                    if (icon.Area > areaMax)
+                    {
+                        icon.Hide();
+                        icon.Visible = false;
+                    }
+                }
+            }
+            else
+            {
+                orig(self, out areaOffs, out areaMax);
+            }
+        }
+
+        private IEnumerator modOuiChapterPanelIncrementStats(On.Celeste.OuiChapterPanel.orig_IncrementStats orig, OuiChapterPanel self, bool shouldAdvance)
+        {
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                shouldAdvance = false;
+            }
+            yield return new SwapImmediately(orig(self, shouldAdvance));
+        }
+
+        private void modOuiMapSearchInspect(On.Celeste.Mod.UI.OuiMapSearch.orig_Inspect orig, UI.OuiMapSearch self, AreaData area, AreaMode mode)
+        {
+            MergeChaptersControllerCheck(area);
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                self.Focused = false;
+                Audio.Play("event:/ui/world_map/icon/select");
+                SaveData.Instance.LastArea_Safe = area.ToKey(mode);
+                if (self.OuiIcons != null && area.ID < self.OuiIcons.Count)
+                {
+                    self.OuiIcons[area.ID > SaveData.Instance.GetLevelSetStats().AreaOffset + 1 ? SaveData.Instance.GetLevelSetStats().AreaOffset + 1 : area.ID].Select();
+                }
+                self.Overworld.Mountain.Model.EaseState(area.MountainState);
+                MergeChaptersControllerCheck(area);
+                if (MergeChaptersControllerKeepPrologue && area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
+                {
+                    SaveData.Instance.LastArea_Safe.ID = SaveData.Instance.GetLevelSetStats().AreaOffset;
+                    self.Overworld.Goto<OuiChapterPanel>();
+                }
+                else
+                {
+                    self.Overworld.Goto<CustomOuiChapterPanel>();
+                }
+            }
+            else
+            {
+                orig(self, area, mode);
+            }
+        }
+
+        private void modOuiMapListInspect(On.Celeste.Mod.UI.OuiMapList.orig_Inspect orig, UI.OuiMapList self, AreaData area, AreaMode mode)
+        {
+            MergeChaptersControllerCheck(area);
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                self.Focused = false;
+                Audio.Play("event:/ui/world_map/icon/select");
+                SaveData.Instance.LastArea_Safe = area.ToKey(mode);
+                if (self.OuiIcons != null && area.ID < self.OuiIcons.Count)
+                {
+                    self.OuiIcons[area.ID > SaveData.Instance.GetLevelSetStats().AreaOffset + 1 ? SaveData.Instance.GetLevelSetStats().AreaOffset + 1 : area.ID].Select();
+                }
+                self.Overworld.Mountain.Model.EaseState(area.MountainState);
+                MergeChaptersControllerCheck(area);
+                if (MergeChaptersControllerKeepPrologue && area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
+                {
+                    SaveData.Instance.LastArea_Safe.ID = SaveData.Instance.GetLevelSetStats().AreaOffset;
+                    self.Overworld.Goto<OuiChapterPanel>();
+                }
+                else
+                {
+                    self.Overworld.Goto<CustomOuiChapterPanel>();
+                }
+            }
+            else
+            {
+                orig(self, area, mode);
+            }
+        }
+
+        private IEnumerator modOuiChapterPanelLeave(On.Celeste.OuiChapterPanel.orig_Leave orig, OuiChapterPanel self, Oui next)
+        {
+            if (!useMergeChaptersController || (useMergeChaptersController && MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID == SaveData.Instance.GetLevelSetStats().AreaOffset) || (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : false))
+            {
+                yield return new SwapImmediately(orig(self, next));
+            }
+        }
+
+        private IEnumerator modOuiChapterPanelEnter(On.Celeste.OuiChapterPanel.orig_Enter orig, OuiChapterPanel self, Oui from)
+        {
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                if (MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
+                {
+                    yield return new SwapImmediately(orig(self, from));
+                }
+                else
+                {
+                    self.Overworld.Goto<CustomOuiChapterPanel>();
+                    self.Visible = false;
+                    yield break;
+                }
+            }
+            else
+            {
+                yield return new SwapImmediately(orig(self, from));
+            }
+        }
+
+        private void modOverworldSetNormalMusic(On.Celeste.Overworld.orig_SetNormalMusic orig, Overworld self)
+        {
+            if (!useMergeChaptersController || SaveData.Instance == null || self.IsCurrent<OuiMainMenu>())
+            {
+                orig(self);
+            }
+            else
+            {
+                AreaData areaData = AreaData.Get(SaveData.Instance.LastArea_Safe);
+                MapMetaMountain mapMetaMountain = areaData?.GetMeta()?.Mountain;
+                Audio.SetMusic(mapMetaMountain?.BackgroundMusic ?? "event:/music/menu/level_select");
+                Audio.SetAmbience(mapMetaMountain?.BackgroundAmbience ?? "event:/env/amb/worldmap");
+                foreach (KeyValuePair<string, float> item in mapMetaMountain?.BackgroundMusicParams ?? new Dictionary<string, float>())
+                {
+                    Audio.SetMusicParam(item.Key, item.Value);
+                }
+            }
+        }
+
+        private IEnumerator modCassetteUnlockedBSideEaseIn(On.Celeste.Cassette.UnlockedBSide.orig_EaseIn orig, Entity self)
+        {
+            if (startedAnySoCMChapter)
+            {
+                while ((cassetteAlpha += Engine.DeltaTime / 0.5f) < 1f)
+                {
+                    yield return null;
+                }
+                cassetteAlpha = 1f;
+                yield return 1.5f;
+                cassetteWaitForKeyPress = true;
+            }
+            else
+            {
+                yield return new SwapImmediately(orig(self));
+            }
+        }
+
+        private IEnumerator modCassetteUnlockedBSideEaseOut(On.Celeste.Cassette.UnlockedBSide.orig_EaseOut orig, Entity self)
+        {
+            if (startedAnySoCMChapter)
+            {
+                cassetteWaitForKeyPress = false;
+                while ((cassetteAlpha -= Engine.DeltaTime / 0.5f) > 0f)
+                {
+                    yield return null;
+                }
+                cassetteAlpha = 0f;
+                cassetteTimer = 0f;
+                self.RemoveSelf();
+            }
+            else
+            {
+                yield return new SwapImmediately(orig(self));
+            }
+        }
+
+        private void modCassetteUnlockedBSideRender(On.Celeste.Cassette.UnlockedBSide.orig_Render orig, Entity self)
+        {
+            if (startedAnySoCMChapter)
+            {
+                cassetteTimer += Engine.DeltaTime;
+                float num = Ease.CubeOut(cassetteAlpha);
+                string text = Dialog.Clean("Xaphan_0_PortalAppeared");
+                Vector2 position = Celeste.TargetCenter + new Vector2(0f, 64f);
+                Vector2 adjust = Vector2.UnitY * 64f * (1f - num);
+                Draw.Rect(-10f, -10f, 1940f, 1100f, Color.Black * num * 0.8f);
+                GFX.Gui["collectables/cassette"].DrawJustified(position - adjust + new Vector2(0f, 32f), new Vector2(0.5f, 1f), Color.White * num);
+                ActiveFont.Draw(text, position + adjust, new Vector2(0.5f, 0f), Vector2.One, Color.White * num);
+                if (cassetteWaitForKeyPress)
+                {
+                    GFX.Gui["textboxbutton"].DrawCentered(new Vector2(1824f, 984 + ((cassetteTimer % 1f < 0.25f) ? 6 : 0)));
+                }
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private void onSpeedrunTimerDisplayDrawTime(On.Celeste.SpeedrunTimerDisplay.orig_DrawTime orig, Vector2 position, string timeString, float scale, bool valid, bool finished, bool bestTime, float alpha)
+        {
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                valid = true;
+            }
+            orig(position, timeString, scale, valid, finished, bestTime, alpha);
+        }
+
+        private Session onSessionRestart(On.Celeste.Session.orig_Restart orig, Session self, string intoLevel)
+        {
+            if (useMergeChaptersController && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                Session session = new Session(self.Area, self.StartCheckpoint, self.OldStats)
+                {
+                    Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L,
+                    UnlockedCSide = self.UnlockedCSide
+                };
+                if (intoLevel != null)
+                {
+                    session.Level = intoLevel;
+                    if (intoLevel != self.MapData.StartLevel().Name)
+                    {
+                        session.StartedFromBeginning = false;
+                    }
+                }
+                return session;
+            }
+            else
+            {
+                return orig(self, intoLevel);
+            }
+        }
+
+        private bool modHeartGemIsCompleteArea(On.Celeste.HeartGem.orig_IsCompleteArea orig, HeartGem self, bool value)
+        {
+            if ((SaveData.Instance.CurrentSession.Area.Mode == AreaMode.BSide || SaveData.Instance.CurrentSession.Area.Mode == AreaMode.CSide) && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode && SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0"))
+            {
+                return true;
+            }
+            return orig(self, value);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            hasOldExtendedVariants = Everest.Modules.Any(module => module.Metadata.Name == "ExtendedVariantMode" && module.Metadata.Version < new Version(0, 15, 9));
+            hasAchievementHelper = Everest.Modules.Any(module => module.Metadata.Name == "AchievementHelper" && module.Metadata.Version >= new Version(1, 0, 3));
+        }
+
+        private void onLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset)
+        {
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                if (quickReset)
+                {
+                    return;
+                }
+            }
+            orig(self, startIndex, minimal, quickReset);
+        }
+
+        private void onReturnMapHintRender(On.Celeste.ReturnMapHint.orig_Render orig, ReturnMapHint self)
+        {
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && SaveData.Instance.CurrentSession.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+            {
+                MTexture mTexture = GFX.Gui["checkpoint"];
+                string text = "";
+                if (MergeChaptersControllerMode == "Rooms")
+                {
+                    text = Dialog.Clean("XaphanHelper_UI_ReturnToMap_Rooms");
+                }
+                else if (MergeChaptersControllerMode == "Warps")
+                {
+                    text = Dialog.Clean("XaphanHelper_UI_ReturnToMap_Warps");
+                }
+                float width = ActiveFont.Measure(text).X * 0.75f;
+                float textureWidth = mTexture.Width * 0.75f;
+                Vector2 value2 = new Vector2((1920f - width - textureWidth - 64f) / 2f, 730f);
+                ActiveFont.DrawOutline(text, value2 + new Vector2(width / 2f, 0f), new Vector2(0.5f, 0.5f), Vector2.One * 0.75f, Color.LightGray, 2f, Color.Black);
+                value2.X += width + 64f;
+                mTexture.DrawCentered(value2 + new Vector2(textureWidth * 0.5f, 0f), Color.White, 0.75f);
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private bool modSaveDataFoundAnyCheckpoints(On.Celeste.SaveData.orig_FoundAnyCheckpoints orig, SaveData self, AreaKey area)
+        {
+            if (area.LevelSet == MergeChaptersControllerLevelSet && MergeChaptersControllerMode != "Classic" && (self.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                return false;
+            }
+            return orig(self, area);
+        }
+
+        private int modOuiChapterPanelGetModeHeight(On.Celeste.OuiChapterPanel.orig_GetModeHeight orig, OuiChapterPanel self)
+        {
+            if (SaveData.Instance != null)
+            {
+                AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
+                if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+                {
+                    AreaModeStats areaModeStats = self.RealStats.Modes[2];
+                    bool flag = areaModeStats.Strawberries.Count <= 0;
+                    if (!self.Data.Interlude_Safe && ((areaModeStats.Deaths > 0 && self.Area.Mode != 0) || areaModeStats.Completed || areaModeStats.HeartGem))
+                    {
+                        flag = false;
+                    }
+                    if (!flag)
+                    {
+                        return 540;
+                    }
+                    return 300;
+                }
+            }
+            return orig(self);
+        }
+
+        private bool modOuiChapterPanelIsStart(On.Celeste.OuiChapterPanel.orig_IsStart orig, OuiChapterPanel self, Overworld overworld, Overworld.StartMode start)
+        {
+            if ((useMergeChaptersController && !MergeChaptersControllerKeepPrologue) || (useMergeChaptersController && MergeChaptersControllerKeepPrologue && SaveData.Instance.CurrentSession.Area.ChapterIndex > 0))
+            {
+                self.Position += new Vector2(10000, 0);
+                return false;
+            }
+            if (SaveData.Instance != null && !SaveData.Instance.DebugMode)
+            {
+                AreaStats areaStats = SaveData.Instance.Areas_Safe[SaveData.Instance.LastArea_Safe.ID];
+                bool unlockedBSide = false;
+                bool unlockedCSide = false;
+                if (areaStats.Cassette)
+                {
+                    unlockedBSide = true;
+                }
+                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + SaveData.Instance.LastArea_Safe.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
+                {
+                    unlockedCSide = true;
+                }
+                if (!unlockedBSide && unlockedCSide)
+                {
+                    if (SaveData.Instance != null && SaveData.Instance.LastArea_Safe.ID == AreaKey.None.ID)
+                    {
+                        SaveData.Instance.LastArea_Safe = AreaKey.Default;
+                        OuiChapterPanel_instantClose.SetValue(self, true);
+                    }
+                    if (start == Overworld.StartMode.AreaComplete || start == Overworld.StartMode.AreaQuit)
+                    {
+                        AreaData areaData = AreaData.Get(SaveData.Instance.LastArea_Safe.ID);
+                        areaData = (AreaDataExt.Get(areaData?.GetMeta()?.Parent) ?? areaData);
+                        if (areaData != null)
+                        {
+                            SaveData.Instance.LastArea_Safe.ID = areaData.ID;
+                        }
+                    }
+                    bool num = self.orig_IsStart(overworld, start);
+                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide == 0)
+                    {
+                        self.Area.Mode = AreaMode.Normal;
+                    }
+                    else
+                    {
+                        self.Area.Mode = AreaMode.BSide;
+                    }
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide = 0;
+                    return num;
+                }
+                else
+                {
+                    return orig(self, overworld, start);
+                }
+            }
+            return orig(self, overworld, start);
+        }
+
+        private void modOuiChapterPanelUpdateStats(On.Celeste.OuiChapterPanel.orig_UpdateStats orig, OuiChapterPanel self, bool wiggle, bool? overrideStrawberryWiggle, bool? overrideDeathWiggle, bool? overrideHeartWiggle)
+        {
+            DynData<OuiChapterPanel> OuiChapterPanelData = new DynData<OuiChapterPanel>(self);
+            DeathsCounter deaths = OuiChapterPanelData.Get<DeathsCounter>("deaths");
+            HeartGemDisplay heart = OuiChapterPanelData.Get<HeartGemDisplay>("heart");
+            StrawberriesCounter strawberries = OuiChapterPanelData.Get<StrawberriesCounter>("strawberries");
+            AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+            {
+                AreaModeStats areaModeStats = self.DisplayedStats.Modes[2];
+                AreaData areaData = AreaData.Get(self.Area);
+                deaths.Visible = (areaModeStats.Deaths > 0 && (self.Area.Mode != 0 || self.RealStats.Modes[2].Completed) && !AreaData.Get(self.Area).Interlude_Safe);
+                deaths.Amount = areaModeStats.Deaths;
+                deaths.SetMode(AreaMode.CSide);
+                heart.Visible = (areaModeStats.HeartGem && !areaData.Interlude_Safe && areaData.CanFullClear);
+                heart.SetCurrentMode(self.Area.Mode, areaModeStats.HeartGem);
+                strawberries.Visible = false;
+                strawberries.Golden = true;
+                if (wiggle)
+                {
+                    if (strawberries.Visible && (!overrideStrawberryWiggle.HasValue || overrideStrawberryWiggle.Value))
+                    {
+                        strawberries.Wiggle();
+                    }
+                    if (heart.Visible && (!overrideHeartWiggle.HasValue || overrideHeartWiggle.Value))
+                    {
+                        heart.Wiggle();
+                    }
+                    if (deaths.Visible && (!overrideDeathWiggle.HasValue || overrideDeathWiggle.Value))
+                    {
+                        deaths.Wiggle();
+                    }
+                }
+            }
+            else
+            {
+                orig(self, wiggle, overrideStrawberryWiggle, overrideDeathWiggle, overrideHeartWiggle);
+            }
+
+        }
+
+        private void modOuiChapterPanelReset(On.Celeste.OuiChapterPanel.orig_Reset orig, OuiChapterPanel self)
+        {
+            orig(self);
+            if (!SaveData.Instance.DebugMode)
+            {
+                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
+                {
+                    object CSideOption;
+                    ((IList)OuiChapterPanel_modes.GetValue(self)).Add(
+                        CSideOption = DynamicData.New(OuiChapterPanel_T_Option)(new
+                        {
+                            Label = Dialog.Clean("overworld_remix2"),
+                            Icon = GFX.Gui["menu/rmx2"],
+                            ID = "C"
+                        })
+                    );
+                }
+            }
+        }
+
+        private void MergeChaptersControllerCheck(AreaData data = null)
+        {
+            useMergeChaptersController = false;
+            lastLevelSet = SaveData.Instance.GetLevelSetStats().Name;
+            int areaOffset = SaveData.Instance.GetLevelSetStats().AreaOffset;
+            if (data != null)
+            {
+                areaOffset = AreaData.Areas.FindIndex((AreaData area) => area.GetLevelSet() == data.LevelSet);
+            }
+            MapData MapData = AreaData.Areas[areaOffset].Mode[0].MapData;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/MergeChaptersController")
+                    {
+                        useMergeChaptersController = true;
+                        MergeChaptersControllerLevelSet = SaveData.Instance.GetLevelSetStats().Name;
+                        MergeChaptersControllerMode = entity.Attr("mode");
+                        MergeChaptersControllerKeepPrologue = entity.Bool("keepPrologueSeparated") && AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset].Interlude_Safe;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void modOuiChapterSelectUpdate(On.Celeste.OuiChapterSelect.orig_Update orig, OuiChapterSelect self)
+        {
+            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData) != null)
+            {
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+            }
+            if (SaveData.Instance != null)
+            {
+                if (lastLevelSet != SaveData.Instance.GetLevelSetStats().Name)
+                {
+                    MergeChaptersControllerCheck();
+                    self.Overworld.Maddy.Hide();
+                }
+            }
+            orig(self);
+        }
+
+        private IEnumerator modOuiChapterPanelStartRoutine(On.Celeste.OuiChapterPanel.orig_StartRoutine orig, OuiChapterPanel self, string checkpoint)
+        {
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                self.EnteringChapter = true;
+                self.Overworld.Maddy.Hide(down: false);
+                self.Overworld.Mountain.EaseCamera(self.Area.ID, self.Data.MountainZoom, 1f, true);
+                self.Add(new Coroutine(self.EaseOut(removeChildren: false)));
+                yield return 0.2f;
+                ScreenWipe.WipeColor = Color.Black;
+                AreaData.Get(self.Area).Wipe(self.Overworld, false, null);
+                Audio.SetMusic(null);
+                Audio.SetAmbience(null);
+                yield return 0.5f;
+                if (MergeChaptersControllerKeepPrologue && self.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
+                {
+                    LevelEnter.Go(new Session(self.Area, checkpoint)
+                    {
+                        Time = 0L
+                    }
+                    , fromSaveData: false);
+                }
+                else
+                {
+                    LevelEnter.Go(new Session(self.Area, checkpoint)
+                    {
+                        Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
+                    }
+                    , fromSaveData: false);
+
+                }
+            }
+            else
+            {
+                yield return new SwapImmediately(orig(self, checkpoint));
+            }
+        }
+
+        private void modOuiChapterPanelStart(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
+        {
+            AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && !SaveData.Instance.DebugMode)
+            {
+                self.Focused = false;
+                Audio.Play("event:/ui/world_map/chapter/checkpoint_start");
+                self.Add(new Coroutine(StartChapterCSideRoutine(self, checkpoint)));
+            }
+            else
+            {
+                orig(self, checkpoint);
+                self.Overworld.ShowInputUI = false;
+            }
+        }
+
+        private IEnumerator modOuiChapterPanelIncrementStatsDisplay(On.Celeste.OuiChapterPanel.orig_IncrementStatsDisplay orig, OuiChapterPanel self, AreaModeStats modeStats, AreaModeStats newModeStats, bool doHeartGem, bool doStrawberries, bool doDeaths, bool doRemixUnlock)
+        {
+            AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Data.ID];
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+            {
+                modeStats = self.DisplayedStats.Modes[2];
+                newModeStats = areaStats.Modes[2];
+                doStrawberries = newModeStats.TotalStrawberries > modeStats.TotalStrawberries;
+                doHeartGem = newModeStats.HeartGem && !modeStats.HeartGem;
+                doDeaths = newModeStats.Deaths > modeStats.Deaths && (self.Area.Mode != 0 || newModeStats.Completed);
+            }
+            yield return new SwapImmediately(orig(self, modeStats, newModeStats, doHeartGem, doStrawberries, doDeaths, doRemixUnlock));
+        }
+
+        private IEnumerator StartChapterCSideRoutine(OuiChapterPanel chapterPanel, string checkpoint = null)
+        {
+            int num = checkpoint?.IndexOf('|') ?? (-1);
+            if (num >= 0)
+            {
+                chapterPanel.Area = (AreaDataExt.Get(checkpoint.Substring(0, num))?.ToKey(chapterPanel.Area.Mode) ?? chapterPanel.Area);
+                checkpoint = checkpoint.Substring(num + 1);
+            }
+            chapterPanel.EnteringChapter = true;
+            chapterPanel.Overworld.Maddy.Hide(down: false);
+            chapterPanel.Overworld.Mountain.EaseCamera(chapterPanel.Area.ID, chapterPanel.Data.MountainZoom, 1f, false, true);
+            chapterPanel.Add(new Coroutine(chapterPanel.EaseOut(removeChildren: false)));
+            yield return 0.2f;
+            ScreenWipe.WipeColor = Color.Black;
+            AreaData.Get(chapterPanel.Area).Wipe(chapterPanel.Overworld, false, null);
+            Audio.SetMusic(null);
+            Audio.SetAmbience(null);
+            yield return 0.5f;
+            LevelEnter.Go(new Session(new AreaKey(chapterPanel.Area.ID, AreaMode.CSide), checkpoint), fromSaveData: false);
+        }
+
+        private void getTeleportToOtherSidePortalsData(Level level)
+        {
+            TeleportToOtherSideData.Clear();
+            HashSet<int> Modes = new HashSet<int>();
+            Modes.Add(0);
+            if (AreaData.Areas[level.Session.Area.ID].HasMode(AreaMode.BSide))
+            {
+                Modes.Add(1);
+            }
+            if (AreaData.Areas[level.Session.Area.ID].HasMode(AreaMode.CSide))
+            {
+                Modes.Add(2);
+            }
+            foreach (int mode in Modes)
+            {
+                MapData MapData = AreaData.Areas[level.Session.Area.ID].Mode[mode].MapData;
+                if (MapData != null)
+                {
+                    foreach (LevelData levelData in MapData.Levels)
+                    {
+                        foreach (EntityData entity in levelData.Entities)
+                        {
+                            if (entity.Name == "XaphanHelper/TeleportToOtherSidePortal")
+                            {
+                                TeleportToOtherSideData.Add(new TeleportToOtherSideData(mode, levelData.Name, entity.Position, entity.Attr("side")));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void onLevelLoad(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
+        {
+            string room = level.Session.Level;
+            string Prefix = level.Session.Area.GetLevelSet();
+            int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
+            AreaKey area = level.Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+
+            // Define current side played
+
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide = (int)level.Session.Area.Mode;
+
+            // Reset all checks
+
+            useIngameMap = false;
+            allRoomsUseTileController = false;
+            useMetroidGameplay = false;
+            useUpgrades = false;
+
+            // Checks controllers
+
+            useIngameMapCheck(level);
+            allRoomsUseTileControllerCheck(level);
+            useMetroidGameplayCheck(level);
+            useUpgradesCheck(level);
+            getTeleportToOtherSidePortalsData(level);
+
+
+            // In-game Map stuff
+
+            if (useIngameMap)
+            {
+                // Check for backward compatibility. Restaure explored tiles if needed.
+
+                foreach (string visitedRoom in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms)
+                {
+                    if (visitedRoom.Contains(Prefix + "/Ch" + chapterIndex + "/"))
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Count == 0)
+                        {
+                            MapDisplay.RestaureExploredTiles(Prefix, chapterIndex, level);
+                            break;
+                        }
+                        else
+                        {
+                            bool skipRestaure = false;
+                            foreach (string tile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles)
+                            {
+                                if (tile.Contains(Prefix + "/Ch" + chapterIndex + "/"))
+                                {
+                                    skipRestaure = true;
+                                }
+                            }
+                            if (!skipRestaure)
+                            {
+                                MapDisplay.RestaureExploredTiles(Prefix, chapterIndex, level);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Add current room to the in-game map
+
+                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
+                }
+                if (level.Session.GetFlag("Map_Opened"))
+                {
+                    level.Session.SetFlag("Map_Opened", false);
+                }
+            }
+
+            // Activate Speedrun Mode if needed
+
+            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode)
+            {
+                Settings.SpeedrunMode = true;
+                level.Session.SetFlag("Map_Collected");
+                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected"))
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected");
+                }
+            }
+
+            // Upgrades stuff
+
+            if (useUpgrades)
+            {
+                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Contains(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode))
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Add(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Sort();
+                }
+                GiveUpgradesToPlayer(MapData, level);
+            }
+            else // Set upgrades to default values if the map is not using upgrades
+            {
+                Settings.PowerGrip = true;
+                Settings.ClimbingKit = true;
+                Settings.SpiderMagnet = false;
+                Settings.DroneTeleport = false;
+                //Settings.JumpBoost = false;
+                Settings.ScrewAttack = false;
+                Settings.VariaJacket = false;
+                Settings.GravityJacket = false;
+                Settings.Bombs = false;
+                Settings.MegaBombs = false;
+                Settings.RemoteDrone = false;
+                Settings.GoldenFeather = false;
+                Settings.Binoculars = false;
+                Settings.EtherealDash = false;
+                Settings.PortableStation = false;
+                Settings.PulseRadar = false;
+                Settings.DashBoots = true;
+                Settings.SpaceJump = 1;
+                Settings.HoverBoots = false;
+                Settings.LightningDash = false;
+                Settings.LongBeam = false;
+                Settings.IceBeam = false;
+                Settings.WaveBeam = false;
+                Settings.Spazer = false;
+                Settings.PlasmaBeam = false;
+                Settings.MorphingBall = false;
+                Settings.MorphBombs = false;
+                Settings.SpringBall = false;
+                Settings.HighJumpBoots = false;
+                Settings.SpeedBooster = false;
+            }
+
+            // Set flags based on previous player progress
+
+            if (!PlayerHasGolden && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_teleporting"))
+            {
+                if (!Settings.SpeedrunMode) // Normal mode only
+                {
+                    foreach (string savedFlag in (Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    {
+                        if (forceStartingUpgrades)
+                        {
+                            if (savedFlag.Contains("Upgrade_"))
+                            {
+                                continue;
+                            }
+                        }
+                        string[] savedFlags = savedFlag.Split('_');
+                        if (savedFlags[0] == Prefix && savedFlags[1] == "Ch" + chapterIndex)
+                        {
+                            string flagPrefix = savedFlags[0] + "_" + savedFlags[1] + "_";
+                            string flag = string.Empty;
+                            int num = savedFlag.IndexOf(flagPrefix);
+                            if (num >= 0)
+                            {
+                                flag = savedFlag.Remove(num, flagPrefix.Length);
+                            }
+                            level.Session.SetFlag(flag);
+                        }
+                    }
+                    foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    {
+                        if (forceStartingUpgrades)
+                        {
+                            if (flag.Contains("Upgrade_"))
+                            {
+                                continue;
+                            }
+                        }
+                        if (flag.Contains(Prefix))
+                        {
+                            string toRemove = Prefix + "_";
+                            string result = string.Empty;
+                            int i = flag.IndexOf(toRemove);
+                            if (i >= 0)
+                            {
+                                result = flag.Remove(i, toRemove.Length);
+                            }
+                            level.Session.SetFlag(result, true);
+                        }
+                    }
+                    foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags)
+                    {
+                        if (flag.Contains(Prefix))
+                        {
+                            string toRemove = Prefix + "_";
+                            string result = string.Empty;
+                            int i = flag.IndexOf(toRemove);
+                            if (i >= 0)
+                            {
+                                result = flag.Remove(i, toRemove.Length);
+                            }
+                            level.Session.SetFlag(result, true);
+                        }
+                    }
+                }
+            }
+
+            if (level.Session.Area.GetLevelSet() == "Xaphan/0")
+            {
+                startedAnySoCMChapter = true;
+            }
+            startedAnyChapter = true;
+        }
+
+        private static void GiveUpgradesToPlayer(MapData MapData, Level level)
+        {
+            // Remove all upgrades
+
+            Settings.PowerGrip = false;
+            Settings.ClimbingKit = false;
+            Settings.SpiderMagnet = false;
+            Settings.DroneTeleport = false;
+            //Settings.JumpBoost = false;
+            Settings.ScrewAttack = false;
+            Settings.VariaJacket = false;
+            Settings.GravityJacket = false;
+            Settings.Bombs = false;
+            Settings.MegaBombs = false;
+            Settings.RemoteDrone = false;
+            Settings.GoldenFeather = false;
+            Settings.Binoculars = false;
+            Settings.EtherealDash = false;
+            Settings.PortableStation = false;
+            Settings.PulseRadar = false;
+            Settings.DashBoots = false;
+            Settings.SpaceJump = 1;
+            Settings.HoverBoots = false;
+            Settings.LightningDash = false;
+            Settings.LongBeam = false;
+            Settings.IceBeam = false;
+            Settings.WaveBeam = false;
+            Settings.Spazer = false;
+            Settings.PlasmaBeam = false;
+            Settings.MorphingBall = false;
+            Settings.MorphBombs = false;
+            Settings.SpringBall = false;
+            Settings.HighJumpBoots = false;
+            Settings.SpeedBooster = false;
+            level.Session.SetFlag("Using_Elevator", false);
+
+            // Get upgrades info from the Upgrade Controller
+
+            bool setPowerGrip = false;
+            bool setClimbingKit = false;
+            bool setSpiderMagnet = false;
+            bool setDroneTeleport = false;
+            //bool setJumpBoost = false;
+            bool setScrewAttack = false;
+            bool setVariaJacket = false;
+            bool setGravityJacket = false;
+            bool setBombs = false;
+            bool setMegaBombs = false;
+            bool setRemoteDrone = false;
+            bool setGoldenFeather = false;
+            bool setBinoculars = false;
+            bool setEtherealDash = false;
+            bool setPortableStation = false;
+            bool setPulseRadar = false;
+            bool setDashBoots = false;
+            bool setSpaceJump = false;
+            bool setHoverBoots = false;
+            bool setLightningDash = false;
+            bool setLongBeam = false;
+            bool setIceBeam = false;
+            bool setWaveBeam = false;
+            bool hasStartingUpgrades = false;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/UpgradeController")
+                    {
+                        setPowerGrip = entity.Bool("onlyAllowPowerGrip") || entity.Bool("startWithPowerGrip");
+                        setClimbingKit = entity.Bool("onlyAllowClimbingKit") || entity.Bool("startWithClimbingKit");
+                        setSpiderMagnet = entity.Bool("onlyAllowSpiderMagnet") || entity.Bool("startWithSpiderMagnet");
+                        setDroneTeleport = entity.Bool("onlyAllowDroneTeleport") || entity.Bool("startWithDroneTeleport");
+                        //setJumpBoost = entity.Bool("onlyAllowJumpBoost") || entity.Bool("startWithJumpBoost");
+                        setScrewAttack = entity.Bool("onlyAllowScrewAttack") || entity.Bool("startWithScrewAttack");
+                        setVariaJacket = entity.Bool("onlyAllowVariaJacket") || entity.Bool("startWithVariaJacket");
+                        setGravityJacket = entity.Bool("onlyAllowGravityJacket") || entity.Bool("startWithGravityJacket");
+                        setBombs = entity.Bool("onlyAllowBombs") || entity.Bool("startWithBombs");
+                        setMegaBombs = entity.Bool("onlyAllowMegaBombs") || entity.Bool("startWithMegaBombs");
+                        setRemoteDrone = entity.Bool("onlyAllowRemoteDrone") || entity.Bool("startWithRemoteDrone");
+                        setGoldenFeather = entity.Bool("onlyAllowGoldenFeather") || entity.Bool("startWithGoldenFeather");
+                        setBinoculars = entity.Bool("onlyAllowBinoculars") || entity.Bool("startWithBinoculars");
+                        setEtherealDash = entity.Bool("onlyAllowEtherealDash") || entity.Bool("startWithEtherealDash");
+                        setPortableStation = entity.Bool("onlyAllowPortableStation") || entity.Bool("startWithPortableStation");
+                        setPulseRadar = entity.Bool("onlyAllowPulseRadar") || entity.Bool("startWithPulseRadar");
+                        setDashBoots = entity.Bool("onlyAllowDashBoots") || entity.Bool("startWithDashBoots");
+                        setSpaceJump = entity.Bool("onlyAllowSpaceJump") || entity.Bool("startWithSpaceJump");
+                        setHoverBoots = entity.Bool("onlyAllowHoverBoots") || entity.Bool("startWithHoverBoots");
+                        setLightningDash = entity.Bool("onlyAllowLightningDash") || entity.Bool("startWithLightningDash");
+                        setLongBeam = entity.Bool("onlyAllowLongBeam") || entity.Bool("startWithLongBeam");
+                        setIceBeam = entity.Bool("onlyAllowIceBeam") || entity.Bool("startWithIceBeam");
+                        setWaveBeam = entity.Bool("onlyAllowWaveBeam") || entity.Bool("startWithWaveBeam");
+                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs ||  setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam;
+                        forceStartingUpgrades = entity.Bool("onlyAllowStartingUpgrades", hasStartingUpgrades ? true : false);
+                        break;
+                    }
+                }
+            }
+
+            // Check specified upgrades for the golden berry and speedrun mode
+
+            bool goldenPowerGrip = false;
+            bool goldenClimbingKit = false;
+            bool goldenSpiderMagnet = false;
+            bool goldenDroneTeleport = false;
+            //bool goldenJumpBoost = false;
+            bool goldenScrewAttack = false;
+            bool goldenVariaJacket = false;
+            bool goldenGravityJacket = false;
+            bool goldenBinoculars = false;
+            bool goldenEtherealDash = false;
+            bool goldenBombs = false;
+            bool goldenMegaBombs = false;
+            bool goldenRemoteDrone = false;
+            bool goldenGoldenFeather = false;
+            bool goldenPortableStation = false;
+            bool goldenPulseRadar = false;
+            bool goldenDashBoots = false;
+            bool goldenSpaceJump = false;
+            bool goldenHoverBoots = false;
+            bool goldenLightningDash = false;
+            bool goldenLongBeam = false;
+            bool goldenIceBeam = false;
+            bool goldenWaveBeam = false;
+            foreach (LevelData levelData in MapData.Levels)
+            {
+                foreach (EntityData entity in levelData.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/UpgradeController")
+                    {
+                        goldenPowerGrip = entity.Bool("goldenStartWithPowerGrip");
+                        goldenClimbingKit = entity.Bool("goldenStartWithClimbingKit");
+                        goldenSpiderMagnet = entity.Bool("goldenStartWithSpiderMagnet");
+                        goldenDroneTeleport = entity.Bool("goldenStartWithDroneTeleport");
+                        //goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
+                        goldenScrewAttack = entity.Bool("goldenStartWithScrewAttack");
+                        goldenVariaJacket = entity.Bool("goldenStartWithVariaJacket");
+                        goldenGravityJacket = entity.Bool("goldenStartWithGravityJacket");
+                        goldenBombs = entity.Bool("goldenStartWithBombs");
+                        goldenMegaBombs = entity.Bool("goldenStartWithMegaBombs");
+                        goldenRemoteDrone = entity.Bool("goldenStartWithRemoteDrone");
+                        goldenGoldenFeather = entity.Bool("goldenStartWithGoldenFeather");
+                        goldenBinoculars = entity.Bool("goldenStartWithBinoculars");
+                        goldenEtherealDash = entity.Bool("goldenStartWithEtherealDash");
+                        goldenPortableStation = entity.Bool("goldenStartWithPortableStation");
+                        goldenPulseRadar = entity.Bool("goldenStartWithPulseRadar");
+                        goldenDashBoots = entity.Bool("goldenStartWithDashBoots");
+                        goldenSpaceJump = entity.Bool("goldenStartWithSpaceJump");
+                        goldenHoverBoots = entity.Bool("goldenStartWithHoverBoots");
+                        goldenLightningDash = entity.Bool("goldenStartWithLightningDash");
+                        goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
+                        goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
+                        goldenWaveBeam = entity.Bool("goldenStartWithWaveBeam");
+                        break;
+                    }
+                }
+            }
+
+            // Give specified upgrades
+
+            if (hasStartingUpgrades)
+            {
+                if (setPowerGrip || level.Session.GetFlag("Upgrade_PowerGrip"))
+                {
+                    Settings.PowerGrip = true;
+                    level.Session.SetFlag("Upgrade_PowerGrip", true);
+                }
+                if (setClimbingKit || level.Session.GetFlag("Upgrade_ClimbingKit"))
+                {
+                    Settings.ClimbingKit = true;
+                    level.Session.SetFlag("Upgrade_ClimbingKit", true);
+                }
+                if (setSpiderMagnet || level.Session.GetFlag("Upgrade_SpiderMagnet"))
+                {
+                    Settings.SpiderMagnet = true;
+                    level.Session.SetFlag("Upgrade_SpiderMagnet", true);
+                }
+                if (setDroneTeleport || level.Session.GetFlag("Upgrade_DroneTeleport"))
+                {
+                    Settings.DroneTeleport = true;
+                    level.Session.SetFlag("Upgrade_DroneTeleport", true);
+                }
+                /*if (setJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
+                {
+                    Settings.JumpBoost = true;
+                    level.Session.SetFlag("Upgrade_JumpBoost", true);
+                }*/
+                if (setScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
+                {
+                    Settings.ScrewAttack = true;
+                    level.Session.SetFlag("Upgrade_ScrewAttack", true);
+                }
+                if (setVariaJacket || level.Session.GetFlag("Upgrade_VariaJacket"))
+                {
+                    Settings.VariaJacket = true;
+                    level.Session.SetFlag("Upgrade_VariaJacket", true);
+                }
+                if (setGravityJacket || level.Session.GetFlag("Upgrade_GravityJacket"))
+                {
+                    Settings.GravityJacket = true;
+                    level.Session.SetFlag("Upgrade_GravityJacket", true);
+                }
+                if (setBombs || level.Session.GetFlag("Upgrade_Bombs"))
+                {
+                    Settings.Bombs = true;
+                    level.Session.SetFlag("Upgrade_Bombs", true);
+                }
+                if (setMegaBombs || level.Session.GetFlag("Upgrade_MegaBombs"))
+                {
+                    Settings.MegaBombs = true;
+                    level.Session.SetFlag("Upgrade_MegaBombs", true);
+                }
+                if (setRemoteDrone || level.Session.GetFlag("Upgrade_RemoteDrone"))
+                {
+                    Settings.RemoteDrone = true;
+                    level.Session.SetFlag("Upgrade_RemoteDrone", true);
+                }
+                if (setGoldenFeather || level.Session.GetFlag("Upgrade_GoldenFeather"))
+                {
+                    Settings.GoldenFeather = true;
+                    level.Session.SetFlag("Upgrade_GoldenFeather", true);
+                }
+                if (setBinoculars || level.Session.GetFlag("Upgrade_Binoculars"))
+                {
+                    Settings.Binoculars = true;
+                    level.Session.SetFlag("Upgrade_Binoculars", true);
+                }
+                if (setEtherealDash || level.Session.GetFlag("Upgrade_EtherealDash"))
+                {
+                    Settings.EtherealDash = true;
+                    level.Session.SetFlag("Upgrade_EtherealDash", true);
+                }
+                if (setPortableStation || level.Session.GetFlag("Upgrade_PortableStation"))
+                {
+                    Settings.PortableStation = true;
+                    level.Session.SetFlag("Upgrade_PortableStation", true);
+                }
+                if (setPulseRadar || level.Session.GetFlag("Upgrade_PulseRadar"))
+                {
+                    Settings.PulseRadar = true;
+                    level.Session.SetFlag("Upgrade_PulseRadar", true);
+                }
+                if (setDashBoots || level.Session.GetFlag("Upgrade_DashBoots"))
+                {
+                    Settings.DashBoots = true;
+                    level.Session.SetFlag("Upgrade_DashBoots", true);
+                }
+                if (setSpaceJump || level.Session.GetFlag("Upgrade_SpaceJump"))
+                {
+                    Settings.SpaceJump = 2;
+                    level.Session.SetFlag("Upgrade_SpaceJump", true);
+                }
+                if (setHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
+                {
+                    Settings.HoverBoots = true;
+                    level.Session.SetFlag("Upgrade_HoverBoots", true);
+                }
+                if (setLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
+                {
+                    Settings.LightningDash = true;
+                    level.Session.SetFlag("Upgrade_LightningDash", true);
+                }
+                if (setLongBeam || level.Session.GetFlag("Upgrade_LongBeam"))
+                {
+                    Settings.LongBeam = true;
+                    level.Session.SetFlag("Upgrade_LongBeam", true);
+                }
+                if (setIceBeam || level.Session.GetFlag("Upgrade_IceBeam"))
+                {
+                    Settings.IceBeam = true;
+                    level.Session.SetFlag("Upgrade_IceBeam", true);
+                }
+                if (setWaveBeam || level.Session.GetFlag("Upgrade_WaveBeam"))
+                {
+                    Settings.WaveBeam = true;
+                    level.Session.SetFlag("Upgrade_WaveBeam", true);
+                }
+            }
+            else
+            {
+                // Give back upgrades the player has unlocked
+
+                if (!forceStartingUpgrades && !PlayerHasGolden && !Settings.SpeedrunMode)
+                {
+                    // Celeste Upgrades
+
+                    if (PowerGripCollected(level))
+                    {
+                        Settings.PowerGrip = true;
+                        level.Session.SetFlag("Upgrade_PowerGrip", true);
+                    }
+                    if (ClimbingKitCollected(level))
+                    {
+                        Settings.ClimbingKit = true;
+                        level.Session.SetFlag("Upgrade_ClimbingKit", true);
+                    }
+                    if (SpiderMagnetCollected(level))
+                    {
+                        Settings.SpiderMagnet = true;
+                        level.Session.SetFlag("Upgrade_SpiderMagnet", true);
+                    }
+                    if (DroneTeleportCollected(level))
+                    {
+                        Settings.DroneTeleport = true;
+                        level.Session.SetFlag("Upgrade_DroneTeleport", true);
+                    }
+                    /*if (JumpBoostCollected(level))
+                    {
+                        Settings.JumpBoost = true;
+                        level.Session.SetFlag("Upgrade_JumpBoost", true);
+                    }*/
+                    if (BombsCollected(level))
+                    {
+                        Settings.Bombs = true;
+                        level.Session.SetFlag("Upgrade_Bombs", true);
+                    }
+                    if (MegaBombsCollected(level))
+                    {
+                        Settings.MegaBombs = true;
+                        level.Session.SetFlag("Upgrade_MegaBombs", true);
+                    }
+                    if (RemoteDroneCollected(level))
+                    {
+                        Settings.RemoteDrone = true;
+                        level.Session.SetFlag("Upgrade_RemoteDrone", true);
+                    }
+                    if (GoldenFeatherCollected(level))
+                    {
+                        Settings.GoldenFeather = true;
+                        level.Session.SetFlag("Upgrade_GoldenFeather", true);
+                    }
+                    if (BinocularsCollected(level))
+                    {
+                        Settings.Binoculars = true;
+                        level.Session.SetFlag("Upgrade_Binoculars", true);
+                    }
+                    if (EtherealDashCollected(level))
+                    {
+                        Settings.EtherealDash = true;
+                        level.Session.SetFlag("Upgrade_EtherealDash", true);
+                    }
+                    if (PortableStationCollected(level))
+                    {
+                        Settings.PortableStation = true;
+                        level.Session.SetFlag("Upgrade_PortableStation", true);
+                    }
+                    if (PulseRadarCollected(level))
+                    {
+                        Settings.PulseRadar = true;
+                        level.Session.SetFlag("Upgrade_PulseRadar", true);
+                    }
+                    if (DashBootsCollected(level))
+                    {
+                        Settings.DashBoots = true;
+                        level.Session.SetFlag("Upgrade_DashBoots", true);
+                    }
+                    if (HoverBootsCollected(level))
+                    {
+                        Settings.HoverBoots = true;
+                        level.Session.SetFlag("Upgrade_HoverBoots", true);
+                    }
+                    if (LightningDashCollected(level))
+                    {
+                        Settings.LightningDash = true;
+                        level.Session.SetFlag("Upgrade_LightningDash", true);
+                    }
+
+                    //Metroid Upgrades
+
+                    if (SpazerCollected(level))
+                    {
+                        Settings.Spazer = true;
+                        level.Session.SetFlag("Upgrade_Spazer", true);
+                    }
+                    if (PlasmaBeamCollected(level))
+                    {
+                        Settings.PlasmaBeam = true;
+                        level.Session.SetFlag("Upgrade_PlasmaBeam", true);
+                    }
+                    if (MorphingBallCollected(level))
+                    {
+                        Settings.MorphingBall = true;
+                        level.Session.SetFlag("Upgrade_MorphingBall", true);
+                    }
+                    if (MorphBombsCollected(level))
+                    {
+                        Settings.MorphBombs = true;
+                        level.Session.SetFlag("Upgrade_MorphBombs", true);
+                    }
+                    if (SpringBallCollected(level))
+                    {
+                        Settings.SpringBall = true;
+                        level.Session.SetFlag("Upgrade_SpringBall", true);
+                    }
+                    if (HighJumpBootsCollected(level))
+                    {
+                        Settings.HighJumpBoots = true;
+                        level.Session.SetFlag("Upgrade_HighJumpBoots", true);
+                    }
+                    if (SpeedBoosterCollected(level))
+                    {
+                        Settings.SpeedBooster = true;
+                        level.Session.SetFlag("Upgrade_SpeedBooster", true);
+                    }
+
+                    // Common Upgrades
+
+                    if (LongBeamCollected(level))
+                    {
+                        Settings.LongBeam = true;
+                        level.Session.SetFlag("Upgrade_LongBeam", true);
+                    }
+                    if (IceBeamCollected(level))
+                    {
+                        Settings.IceBeam = true;
+                        level.Session.SetFlag("Upgrade_IceBeam", true);
+                    }
+                    if (WaveBeamCollected(level))
+                    {
+                        Settings.WaveBeam = true;
+                        level.Session.SetFlag("Upgrade_WaveBeam", true);
+                    }
+                    if (VariaJacketCollected(level))
+                    {
+                        Settings.VariaJacket = true;
+                        level.Session.SetFlag("Upgrade_VariaJacket", true);
+                    }
+                    if (GravityJacketCollected(level))
+                    {
+                        Settings.GravityJacket = true;
+                        level.Session.SetFlag("Upgrade_GravityJacket", true);
+                    }
+                    if (ScrewAttackCollected(level))
+                    {
+                        Settings.ScrewAttack = true;
+                        level.Session.SetFlag("Upgrade_ScrewAttack", true);
+                    }
+                    if (SpaceJumpCollected(level))
+                    {
+                        Settings.SpaceJump = !useMetroidGameplay ? 2 : 6;
+                        level.Session.SetFlag("Upgrade_SpaceJump", true);
+                    }
+                }
+                else if (PlayerHasGolden || Settings.SpeedrunMode) // If the player has the golden berry or is in speedrun mode
+                {
+                    if (goldenPowerGrip || level.Session.GetFlag("Upgrade_PowerGrip"))
+                    {
+                        Settings.PowerGrip = true;
+                    }
+                    if (goldenClimbingKit || level.Session.GetFlag("Upgrade_ClimbingKit"))
+                    {
+                        Settings.ClimbingKit = true;
+                    }
+                    if (goldenSpiderMagnet || level.Session.GetFlag("Upgrade_SpiderMagnet"))
+                    {
+                        Settings.SpiderMagnet = true;
+                    }
+                    if (goldenDroneTeleport || level.Session.GetFlag("Upgrade_DroneTeleport"))
+                    {
+                        Settings.DroneTeleport = true;
+                    }
+                    /*if (goldenJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
+                    {
+                        Settings.JumpBoost = true;
+                    }*/
+                    if (goldenScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
+                    {
+                        Settings.ScrewAttack = true;
+                    }
+                    if (goldenVariaJacket || level.Session.GetFlag("Upgrade_VariaJacket"))
+                    {
+                        Settings.VariaJacket = true;
+                    }
+                    if (goldenGravityJacket || level.Session.GetFlag("Upgrade_GravityJacket"))
+                    {
+                        Settings.GravityJacket = true;
+                    }
+                    if (goldenBombs || level.Session.GetFlag("Upgrade_Bombs"))
+                    {
+                        Settings.Bombs = true;
+                    }
+                    if (goldenMegaBombs || level.Session.GetFlag("Upgrade_MegaBombs"))
+                    {
+                        Settings.MegaBombs = true;
+                    }
+                    if (goldenRemoteDrone || level.Session.GetFlag("Upgrade_RemoteDrone"))
+                    {
+                        Settings.RemoteDrone = true;
+                    }
+                    if (goldenGoldenFeather || level.Session.GetFlag("Upgrade_GoldenFeather"))
+                    {
+                        Settings.GoldenFeather = true;
+                    }
+                    if (goldenBinoculars || level.Session.GetFlag("Upgrade_Binoculars"))
+                    {
+                        Settings.Binoculars = true;
+                    }
+                    if (goldenEtherealDash || level.Session.GetFlag("Upgrade_EtherealDash"))
+                    {
+                        Settings.EtherealDash = true;
+                    }
+                    if (goldenPortableStation || level.Session.GetFlag("Upgrade_PortableStation"))
+                    {
+                        Settings.PortableStation = true;
+                    }
+                    if (goldenPulseRadar || level.Session.GetFlag("Upgrade_PulseRadar"))
+                    {
+                        Settings.PulseRadar = true;
+                    }
+                    if (goldenDashBoots || level.Session.GetFlag("Upgrade_DashBoots"))
+                    {
+                        Settings.DashBoots = true;
+                    }
+                    if (goldenSpaceJump || level.Session.GetFlag("Upgrade_SpaceJump"))
+                    {
+                        Settings.SpaceJump = 2;
+                    }
+                    if (goldenHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
+                    {
+                        Settings.HoverBoots = true;
+                    }
+                    if (goldenLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
+                    {
+                        Settings.LightningDash = true;
+                    }
+                    if (goldenLongBeam || level.Session.GetFlag("Upgrade_LongBeam"))
+                    {
+                        Settings.LongBeam = true;
+                    }
+                    if (goldenIceBeam || level.Session.GetFlag("Upgrade_IceBeam"))
+                    {
+                        Settings.IceBeam = true;
+                    }
+                    if (goldenWaveBeam || level.Session.GetFlag("Upgrade_WaveBeam"))
+                    {
+                        Settings.WaveBeam = true;
+                    }
+                }
+            }
+        }
+
+        private void onLevelExit(Level level, LevelExit exit, LevelExit.Mode mode, Session session, HiresSnow snow)
+        {
+            // Remove checks;
+
+            useIngameMap = false;
+            allRoomsUseTileController = false;
+            useUpgrades = false;
+            useMetroidGameplay = false;
+
+            // Remove Speedrun Mode
+
+            if (Settings.SpeedrunMode)
+            {
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+                Settings.SpeedrunMode = false;
+            }
+
+            // Remove PickedGolden flag from save
+
+            PlayerHasGolden = false;
+
+            // Reset Variables
+
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = "";
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = -1;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = false;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = false;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = "";
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = -1;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = "";
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = new Vector2();
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe = false;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles.Clear();
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles2.Clear();
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1 = 0;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2 = 0;
+            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+            startedAnySoCMChapter = false;
+            minimapEnabled = false;
+            SaveSettings();
+        }
+
+        private static void onCreatePauseMenuButtons(Level level, TextMenu menu, bool minimal)
+        {
+            if (useMetroidGameplay)
+            {
+                // Find the "Retry" item and remove it from the menu if it exist
+                int retryIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RETRY"));
+                if (retryIndex != -1)
+                {
+                    menu.Remove(menu.Items[retryIndex]);
+                }
+            }
+            if (level.Session.GetFlag("boss_Challenge_Mode") && !level.Session.GetFlag("In_bossfight"))
+            {
+                // Find the position of "Retry"
+                int retryIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RETRY"));
+
+                if (retryIndex == -1)
+                {
+                    // Top of the menu if "Retry" is not found
+                    retryIndex = 0;
+                }
+
+                // add the "Giveup Challenge Mode" button
+                TextMenu.Button GiveUpCMButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_GiveUpCM"));
+                GiveUpCMButton.Pressed(() => {
+                    level.PauseMainMenuOpen = false;
+                    menu.RemoveSelf();
+                    confirmGiveUpCMMenu(level, menu.Selection);
+                });
+                GiveUpCMButton.ConfirmSfx = "event:/ui/main/message_confirm";
+                menu.Insert(retryIndex + 1, GiveUpCMButton);
+            }
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (level.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                // Find the "Restart chapter" button and remove it from the menu if it exist
+                int restartAreaIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RESTARTAREA"));
+                if (restartAreaIndex != -1)
+                {
+                    menu.Remove(menu.Items[restartAreaIndex]);
+                }
+
+                // add the "Restart campaign" button
+                TextMenu.Button RestartCampaignButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_RestartCampaign"));
+                RestartCampaignButton.Pressed(() => {
+                    level.PauseMainMenuOpen = false;
+                    menu.RemoveSelf();
+                    confirmRestartCampaign(level, menu.Selection);
+                });
+                RestartCampaignButton.ConfirmSfx = "event:/ui/main/message_confirm";
+                menu.Insert(restartAreaIndex, RestartCampaignButton);
+            }
+            if (useMergeChaptersController && (level.Session.Area.Mode == AreaMode.BSide || level.Session.Area.Mode == AreaMode.CSide) && (level.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                // Find the position of "Return to map"
+                int returnToMapIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RETURN"));
+
+                if (returnToMapIndex == -1)
+                {
+                    // Bottm of the menu if "Return to map" is not found
+                    returnToMapIndex = menu.GetItems().Count - 1;
+                }
+
+                // remove "Return to map" from the menu
+                if (returnToMapIndex != -1)
+                {
+                    menu.Remove(menu.Items[returnToMapIndex]);
+                }
+
+                // add the "Exit X-Side" button
+                TextMenu.Button ExitSideButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_GiveUp" + (level.Session.Area.Mode == AreaMode.BSide ? "B" : "C") + "Side"));
+                ExitSideButton.Pressed(() => {
+                    level.PauseMainMenuOpen = false;
+                    menu.RemoveSelf();
+                    confirmExitSideMenu(level, menu.Selection);
+                });
+                ExitSideButton.ConfirmSfx = "event:/ui/main/message_confirm";
+                menu.Insert(returnToMapIndex, ExitSideButton);
+            }
+        }
+
+        private static void confirmGiveUpCMMenu(Level level, int returnIndex)
+        {
+            ChallengeMote CMote = level.Tracker.GetEntity<ChallengeMote>();
+            if (CMote != null)
+            {
+                level.Paused = true;
+                TextMenu menu = new TextMenu();
+                menu.AutoScroll = false;
+                menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
+                menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_GiveUpCM_title")));
+                menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_continue")).Pressed(delegate
+                {
+                    menu.RemoveSelf();
+                    CMote.ManageUpgrades(level, true);
+                    level.Session.SetFlag("boss_Challenge_Mode_Given_Up", true);
+                    level.Session.SetFlag("Boss_Defeated", true);
+                    level.Session.SetFlag("boss_Challenge_Mode", false);
+                    level.Paused = false;
+                    Engine.FreezeTimer = 0.15f;
+                }));
+                menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_cancel")).Pressed(delegate
+                {
+                    menu.OnCancel();
+                }));
+                menu.OnPause = (menu.OnESC = delegate
+                {
+                    menu.RemoveSelf();
+                    level.Paused = false;
+                    Engine.FreezeTimer = 0.15f;
+                    Audio.Play("event:/ui/game/unpause");
+                });
+                menu.OnCancel = delegate
+                {
+                    Audio.Play("event:/ui/main/button_back");
+                    menu.RemoveSelf();
+                    level.Pause(returnIndex, minimal: false);
+                };
+                level.Add(menu);
+            }
+        }
+
+        private static void confirmExitSideMenu(Level level, int returnIndex)
+        {
+            level.Paused = true;
+            ReturnToASideHint returnHint = null;
+            level.Add(returnHint = new ReturnToASideHint());
+            TextMenu menu = new TextMenu();
+            menu.AutoScroll = false;
+            menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
+            menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_GiveUp" + (level.Session.Area.Mode == AreaMode.BSide ? "B" : "C") + "Side_title")));
+            menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_continue")).Pressed(delegate
+            {
+                menu.RemoveSelf();
+                returnHint.RemoveSelf();
+                PlayerHasGolden = false;
+                ChangingSide = true;
+                Audio.SetMusic(null);
+                Audio.SetAmbience(null);
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                level.DoScreenWipe(false, delegate
+                {
+                    LevelEnter.Go(new Session(new AreaKey(level.Session.Area.ID, AreaMode.Normal))
+                    {
+                        Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(level.Session.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[level.Session.Area.LevelSet] : 0L
+                    }
+                    , fromSaveData: false);
+                });              
+            }));
+            menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_cancel")).Pressed(delegate
+            {
+                menu.OnCancel();
+            }));
+            menu.OnPause = (menu.OnESC = delegate
+            {
+                menu.RemoveSelf();
+                returnHint.RemoveSelf();
+                level.Paused = false;
+                Engine.FreezeTimer = 0.15f;
+                Audio.Play("event:/ui/game/unpause");
+            });
+            menu.OnCancel = delegate
+            {
+                Audio.Play("event:/ui/main/button_back");
+                menu.RemoveSelf();
+                returnHint.RemoveSelf();
+                level.Pause(returnIndex, minimal: false);
+            };
+            level.Add(menu);
+        }
+
+        private static void confirmRestartCampaign(Level level, int returnIndex)
+        {
+            level.Paused = true;
+            RestartCampaignHint returnHint = null;
+            level.Add(returnHint = new RestartCampaignHint());
+            TextMenu menu = new TextMenu();
+            menu.AutoScroll = false;
+            menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
+            menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_RestartCampaign_title")));
+            menu.Add(new TextMenu.Button(Dialog.Clean("menu_restart_continue")).Pressed(delegate
+            {
+                returnHint.RemoveSelf();
+                Engine.TimeRate = 1f;
+                menu.Focused = false;
+                level.Session.InArea = false;
+                Audio.SetMusic(null);
+                Audio.BusStopAll("bus:/gameplay_sfx", immediate: true);
+                level.DoScreenWipe(false, delegate
+                {
+                    Commands.Cmd_Clear_InGameMap(true, true);
+                    Commands.Cmd_Clear_Warps();
+                    Commands.Cmd_Remove_Upgrades();
+
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.Remove(level.Session.Area.LevelSet);
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
+                    List<string> FlagsToRemove = new List<string>();
+                    List<string> CutscenesToRemove = new List<string>();
+                    List<string> StaminaUpgradesToRemove = new List<string>();
+                    List<string> GlobalFlagsToRemove = new List<string>();
+                    foreach (string savedFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    {
+                        if (savedFlag.Contains(level.Session.Area.LevelSet) && savedFlag != "Xaphan/0_Skip_Vignette")
+                        {
+                            FlagsToRemove.Add(savedFlag);
+                        }
+                    }
+                    foreach (string cutscene in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes)
+                    {
+                        if (cutscene.Contains(level.Session.Area.LevelSet))
+                        {
+                            CutscenesToRemove.Add(cutscene);
+                        }
+                    }
+                    foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
+                    {
+                        if (staminaUpgrade.Contains(level.Session.Area.LevelSet))
+                        {
+                            StaminaUpgradesToRemove.Add(staminaUpgrade);
+                        }
+                    }
+                    foreach (string globalFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags)
+                    {
+                        if (globalFlag.Contains(level.Session.Area.LevelSet))
+                        {
+                            GlobalFlagsToRemove.Add(globalFlag);
+                        }
+                    }
+                    foreach (string value in FlagsToRemove)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(value);
+                    }
+                    foreach (string value in CutscenesToRemove)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Remove(value);
+                    }
+                    foreach (string value in StaminaUpgradesToRemove)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Remove(value);
+                    }
+                    foreach (string value in GlobalFlagsToRemove)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Remove(value);
+                    }
+                    LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (MergeChaptersControllerKeepPrologue ? 1 : 0), AreaMode.Normal)), fromSaveData: false);
+                });
+                foreach (LevelEndingHook component in level.Tracker.GetComponents<LevelEndingHook>())
+                {
+                    if (component.OnEnd != null)
+                    {
+                        component.OnEnd();
+                    }
+                }
+            }));
+            menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_cancel")).Pressed(delegate
+            {
+                menu.OnCancel();
+            }));
+            menu.OnPause = (menu.OnESC = delegate
+            {
+                menu.RemoveSelf();
+                returnHint.RemoveSelf();
+                level.Paused = false;
+                Engine.FreezeTimer = 0.15f;
+                Audio.Play("event:/ui/game/unpause");
+            });
+            menu.OnCancel = delegate
+            {
+                returnHint.RemoveSelf();
+                Audio.Play("event:/ui/main/button_back");
+                menu.RemoveSelf();
+                level.Pause(returnIndex, minimal: false);
+            };
+            level.Add(menu);
+        }
+
+        private IEnumerator modLevelEnterRoutine(On.Celeste.LevelEnter.orig_Routine orig, LevelEnter self)
+        {
+            if (startedAnySoCMChapter)
+            {
+                if (hasOldExtendedVariants && !displayedOldExtVariantsPostcard)
+                {
+                    self.Add(oldExtVariantsPostcard = new Postcard(Dialog.Get("postcard_Xaphan_OldExtVariants")));
+                    yield return oldExtVariantsPostcard.DisplayRoutine();
+                    displayedOldExtVariantsPostcard = true;
+                    oldExtVariantsPostcard = null;
+                }
+                if (!hasAchievementHelper && !displayedAchievementHelperPostcard)
+                {
+                    self.Add(achievementHelperPostcard = new Postcard(Dialog.Get("postcard_Xaphan_AchievementHelper")));
+                    yield return achievementHelperPostcard.DisplayRoutine();
+                    displayedAchievementHelperPostcard = true;
+                    achievementHelperPostcard = null;
+                }
+            }
+            IEnumerator origEnum = orig(self);
+            while (origEnum.MoveNext()) yield return origEnum.Current;
+        }
+
+        private void modLevelEnterBeforeRender(On.Celeste.LevelEnter.orig_BeforeRender orig, LevelEnter self)
+        {
+            orig(self);
+            if (oldExtVariantsPostcard != null) oldExtVariantsPostcard.BeforeRender();
+            if (achievementHelperPostcard != null) achievementHelperPostcard.BeforeRender();
+        }
+
+        private void onLevelEnterGo(On.Celeste.LevelEnter.orig_Go orig, Session session, bool fromSaveData)
+        {
+            if (!fromSaveData && session.StartedFromBeginning && session.Area.Mode == AreaMode.Normal && session.Area.GetSID() == "Xaphan/0/0-Prologue" && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Skip_Vignette"))
+            {
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Skip_Vignette");
+                Engine.Scene = new SoCMIntroVignette(session);
+            }
+            else
+            {
+                orig.Invoke(session, fromSaveData);
+            }
+        }
+
+        private void modPlayerCallDashEvents(On.Celeste.Player.orig_CallDashEvents orig, Player self)
+        {
+            if (GravityJacket.determineIfInWater())
+            {
+                Audio.Play("event:/char/madeline/water_dash_gen");
+            }
+            orig(self);
+        }
+
+        public static bool minimapEnabled;
+
+        private void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
+        {
+            orig(self);
+            Player player = self.Tracker.GetEntity<Player>();
+            AreaKey area = self.Session.Area;
+            MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+
+            if (useMergeChaptersController && MergeChaptersControllerMode == "Classic")
+            {
+                if (self.Session.Level == MapData.StartLevel().Name)
+                {
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex) && area.ID != SaveData.Instance.GetLevelSetStats().AreaOffset)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Add(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex);
+                        self.AutoSave();
+                    }
+                }
+            }
+
+            // Redo the MergeChaptersController check to prevent issues if the helper is hot re-loaded
+            // This should never occur in normal circonstances
+
+            if (!useMergeChaptersControllerCheck)
+            {
+                MergeChaptersControllerCheck();
+                useMergeChaptersControllerCheck = true;
+            }
+
+            // Add Metroid UI if using Metroid gameplay
+
+            if (useMetroidGameplay)
+            {
+                if (self.Tracker.GetEntity<HealthDisplay>() == null)
+                {
+                    self.Add(new HealthDisplay(new Vector2(22f, 22f)));
+                }               
+                if (self.Tracker.GetEntity<AmmoDisplay>() == null)
+                {
+                    self.Add(new AmmoDisplay(new Vector2(22f, 31f)));
+                }
+            }            
+
+            // Resume the countdown started from an other chapter when entering a chapter from the start
+
+            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime != -1)
+            {
+                if (self.Tracker.GetEntity<CountdownDisplay>() == null)
+                {
+                    self.Add(new CountdownDisplay((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode, true, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag)
+                    {
+                        PauseTimer = true
+                    });
+                }
+            }
+
+            // Add or remove the minimap if the chapter use the in-game Map and conditions are meet
+
+            if (useIngameMap)
+            {
+                if (self.Tracker.CountEntities<MiniMap>() == 0 && minimapEnabled)
+                {
+                    minimapEnabled = false;
+                }
+                if (allRoomsUseTileController && Settings.ShowMiniMap && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(self.Session.Area.GetLevelSet() + "_Can_Open_Map") || (self.Session.Area.LevelSet == "Xaphan/0" ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : false)) && !minimapEnabled)
+                {
+                    if (self.Tracker.GetEntity<MiniMap>() == null)
+                    {
+                        self.Add(new MiniMap(self));
+                        minimapEnabled = true;
+                    }
+                }
+                else
+                {
+                    if (!Settings.ShowMiniMap)
+                    {
+                        MiniMap minimap = self.Tracker.GetEntity<MiniMap>();
+                        if (minimap != null)
+                        {
+                            minimapEnabled = false;
+                            minimap.RemoveSelf();
+                        }
+                    }
+                }
+            }
+
+            // Check if the chapter use the in-game Map or upgrades and allows to open the corresponding screen
+
+            if (useIngameMap || useUpgrades)
+            {
+                string Prefix = self.Session.Area.GetLevelSet();
+                int chapterIndex = self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex;
+                string room = self.Session.Level;
+                if (self.CanPause && (self.CanRetry || PlayerIsControllingRemoteDrone()) && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && Settings.OpenMap.Pressed && !self.Session.GetFlag("Map_Opened"))
+                {
+                    if (useIngameMap && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room) && CanOpenMap(self))
+                    {
+                        player.StateMachine.State = Player.StDummy;
+                        player.DummyAutoAnimate = false;
+                        if (!player.Sprite.CurrentAnimationID.Contains("idle") && !player.Sprite.CurrentAnimationID.Contains("edge"))
+                        {
+                            player.Sprite.Play("idle");
+                        }
+                        self.Add(new MapScreen(self, false));
+                    }
+                    else if (useUpgrades && !DisableStatusScreen)
+                    {
+                        player.StateMachine.State = Player.StDummy;
+                        player.DummyAutoAnimate = false;
+                        if (!player.Sprite.CurrentAnimationID.Contains("idle") && !player.Sprite.CurrentAnimationID.Contains("edge"))
+                        {
+                            player.Sprite.Play("idle");
+                        }
+                        self.Add(new StatusScreen(self, false));
+                    }
+                }
+            }
+
+            // Change starting chapter and room if using a Merge Chapter Controller
+
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && self.Session.Area.Mode == AreaMode.Normal && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            {
+                if (((XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer || self.Session.GetFlag("XaphanHelper_Loaded_Player")) && !CanLoadPlayer) // If for some reason thoses value are true when entering the level, reset them to false. May happen if the game is not exited correctly
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                    self.Session.SetFlag("XaphanHelper_Loaded_Player", false);
+                }
+                CanLoadPlayer = true;
+                if (!self.Session.GetFlag("XaphanHelper_Loaded_Player") && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer && !self.Paused)
+                {
+                    self.Session.SetFlag("XaphanHelper_Loaded_Player", true);
+                    self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet)
+                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
+                    }
+                    else if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] == self.Session.Area.ChapterIndex)
+                    {
+                        string[] sessionFlags = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet].Split(',');
+                        self.Session.FirstLevel = false;
+                        self.Session.LightingAlphaAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet];
+                        self.Session.BloomBaseAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet];
+                        self.Session.CoreMode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet];
+                        self.Session.DoNotLoad = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet];
+                        self.Session.Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet];
+                        self.Session.StartedFromBeginning = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet];
+                        if (SaveData.Instance != null)
+                        {
+                            SaveData.Instance.CurrentSession.LightingAlphaAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet];
+                            SaveData.Instance.CurrentSession.BloomBaseAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet];
+                            SaveData.Instance.CurrentSession.CoreMode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet];
+                        }
+                        self.Session.Audio.Music.Event = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet];
+                        self.Session.Audio.Ambience.Event = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet];
+                        self.Session.Audio.Apply(forceSixteenthNoteHack: false);
+                        foreach (string flag in sessionFlags)
+                        {
+                            if (!flag.Contains("XaphanHelper_StatFlag_") || (flag.Contains("XaphanHelper_StatFlag_") && flag.Contains("-Visited")))
+                            {
+                                self.Session.SetFlag(flag, true);
+                            }
+                        }
+                        self.Session.Strawberries = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet];
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
+                        self.Add(new TeleportCutscene(player, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet], (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet], 0, 0, true, 0f, "Fade", skipFirstWipe: true, respawnAnim: true, useLevelWipe: true));
+                    }
+                    else
+                    {
+                        LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet])))
+                        {
+                            Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] : 0L
+                        }, fromSaveData: false);
+                    }
+                }
+
+                // Save the room as the one that the player must load into when starting the campaign if using a MergeChaptersController with mode set to Rooms
+
+                else if (useMergeChaptersController && MergeChaptersControllerMode == "Rooms" && !self.Session.GrabbedGolden && !self.Frozen && self.Tracker.GetEntity<CountdownDisplay>() == null && self.Tracker.GetEntity<Player>() != null && self.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !PlayerIsControllingRemoteDrone() && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Add(self.Session.Area.LevelSet, self.Session.Area.ChapterIndex);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] != self.Session.Area.ChapterIndex)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] = self.Session.Area.ChapterIndex;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Add(self.Session.Area.LevelSet, self.Session.Level);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet] != self.Session.Level)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet] = self.Session.Level;
+                        }
+                    }
+                    if (self.Session.RespawnPoint == null)
+                    {
+                        self.Session.RespawnPoint = Vector2.Zero;
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.Add(self.Session.Area.LevelSet, (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top));
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet] != (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top))
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet] = (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top);
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.Add(self.Session.Area.LevelSet, self.Lighting.Alpha - self.BaseLightingAlpha);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet] != self.Lighting.Alpha - self.BaseLightingAlpha)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet] = self.Lighting.Alpha - self.BaseLightingAlpha;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.Add(self.Session.Area.LevelSet, self.Bloom.Base - AreaData.Get(self).BloomBase);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet] != self.Bloom.Base - AreaData.Get(self).BloomBase)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet] = self.Bloom.Base - AreaData.Get(self).BloomBase;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.Add(self.Session.Area.LevelSet, self.Session.CoreMode);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet] != self.Session.CoreMode)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet] = self.Session.CoreMode;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.Add(self.Session.Area.LevelSet, self.Session.Audio.Music.Event);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet] != self.Session.Audio.Music.Event)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet] = self.Session.Audio.Music.Event;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.Add(self.Session.Area.LevelSet, self.Session.Audio.Ambience.Event);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet] != self.Session.Audio.Ambience.Event)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet] = self.Session.Audio.Ambience.Event;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.Add(self.Session.Area.LevelSet, self.Session.DoNotLoad);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet] != self.Session.DoNotLoad)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet] = self.Session.DoNotLoad;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.Add(self.Session.Area.LevelSet, self.Session.StartedFromBeginning);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet] != self.Session.StartedFromBeginning)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet] = self.Session.StartedFromBeginning;
+                        }
+                    }
+                    string sessionFlags = "";
+                    foreach (string flag in self.Session.Flags)
+                    {
+                        if (sessionFlags == "")
+                        {
+                            sessionFlags += flag;
+                        }
+                        else
+                        {
+                            sessionFlags += "," + flag;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.Add(self.Session.Area.LevelSet, sessionFlags);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet] != sessionFlags)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet] = sessionFlags;
+                        }
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.Add(self.Session.Area.LevelSet, self.Session.Strawberries);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet] != self.Session.Strawberries)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet] = self.Session.Strawberries;
+                        }
+                    }
+                }
+
+                if (XaphanModule.useMergeChaptersController && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+                {
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.Add(self.Session.Area.LevelSet, self.Session.Time);
+                    }
+                    else
+                    {
+                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] != self.Session.Time)
+                        {
+                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] = self.Session.Time;
+                        }
+                    }
+                }
+            }
+
+            // Change chapter starting room if player used a warp or elevator
+
+            if (!self.Session.GetFlag("XaphanHelper_Changed_Start_Room"))
+            {
+                self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
+                if (self.Wipe != null && self.Session.StartedFromBeginning && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe != "")
+                {
+                    self.Wipe.Cancel();
+                }
+                if (Settings.SpeedrunMode) // Clear Speedrun Mode stuff
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+                }
+                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom == "")
+                {
+                    if (self.Session.StartedFromBeginning)
+                    {
+                        ScreenWipe Wipe = null;
+                        string currentRoom = self.Session.Level;
+                        foreach (LevelData level in MapData.Levels)
+                        {
+                            if (level.Name == currentRoom)
+                            {
+                                foreach (EntityData entity in level.Entities)
+                                {
+                                    if (entity.Name == "XaphanHelper/Elevator")
+                                    {
+                                        Wipe = new FadeWipe(self, true)
+                                        {
+                                            Duration = 1.35f
+                                        };
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if (Wipe != null)
+                        {
+                            self.Add(Wipe);
+                        }
+                        else
+                        {
+                            if (PlayerLostGolden)
+                            {
+                                self.DoScreenWipe(true);
+                                PlayerLostGolden = false;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    self.Add(GetWipe(self, true));
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ConsiderBeginning && !useMergeChaptersController)
+                    {
+                        self.Session.StartedFromBeginning = false;
+                    }
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ConsiderBeginning = false;
+                    string destinationRoom = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom;
+                    Vector2 spawn = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn;
+                    string wipe = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe;
+                    float wipeDuration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration;
+                    bool fromElevator = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).TeleportFromElevator;
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = "";
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2();
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "";
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = 0f;
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).TeleportFromElevator = false;
+                    if ((self = (Engine.Scene as Level)) != null)
+                    {
+                        if (string.IsNullOrEmpty(destinationRoom))
+                        {
+                            self.Add(new MiniTextbox("XaphanHelper_room_name_empty"));
+                            return;
+                        }
+                        if (self.Session.MapData.Get(destinationRoom) == null)
+                        {
+                            self.Add(new MiniTextbox("XaphanHelper_room_not_exist"));
+                            return;
+                        }
+                    }
+                    self.Add(new TeleportCutscene(player, destinationRoom, spawn, 0, 0, true, 0f, wipe, wipeDuration, fromElevator, true, useLevelWipe: (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe));
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe = false;
+                }
+            }
+
+            // Change level Wipe
+
+            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe != "")
+            {
+                if (self.Wipe != null && self.Tracker.GetEntities<WarpScreen>().Count == 0)
+                {
+                    self.Wipe.Cancel();
+                    self.Add(GetWipe(self, true));
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "";
+                }
+            }
+
+            // Check tiles player has visited
+
+            if (useIngameMap)
+            {
+                string Prefix = self.Session.Area.GetLevelSet();
+                int chapterIndex = self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex;
+                if (player != null && !self.Paused && !self.Transitioning)
+                {
+                    Vector2 playerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - self.Bounds.X) / 320f), (float)Math.Round(self.Bounds.Width / 320f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - self.Bounds.Y) / 184f), (float)Math.Round(self.Bounds.Height / 184f, MidpointRounding.AwayFromZero) + 1));
+                    if (playerPosition.X < 0)
+                    {
+                        playerPosition.X = 0;
+                    }
+                    if (playerPosition.Y < 0)
+                    {
+                        playerPosition.Y = 0;
+                    }
+                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y))
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Add(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y);
+                        InGameMapRoomController roomController = self.Tracker.GetEntity<InGameMapRoomController>();
+                        List<Entity> tilesControllers = self.Tracker.GetEntities<InGameMapTilesController>();
+                        if (CheckIfTileIsValid(self.Session.Level, playerPosition, tilesControllers))
+                        {
+                            if (StatsFlags.CurrentTiles != null)
+                            {
+                                StatsFlags.CurrentTiles[chapterIndex] += 1;
+                            }
+                            if (StatsFlags.CurrentSubAreaTiles != null)
+                            {
+                                if (StatsFlags.CurrentSubAreaTiles != null && roomController != null)
+                                {
+                                    int subAreaIndex = roomController.Data.Int("subAreaIndex");
+                                    if (StatsFlags.CurrentSubAreaTiles[chapterIndex].ContainsKey(subAreaIndex))
+                                    {
+                                        StatsFlags.CurrentSubAreaTiles[chapterIndex][subAreaIndex]++;
+                                    }
+                                    else
+                                    {
+                                        StatsFlags.CurrentSubAreaTiles[chapterIndex].Add(subAreaIndex, 1);
+                                    }
+                                }
+                            }
+                        }
+                        if (Settings.ShowMiniMap)
+                        {
+                            MapDisplay mapDisplay = self.Tracker.GetEntity<MapDisplay>();
+                            if (mapDisplay != null)
+                            {
+                                mapDisplay.GenerateTiles();
+                                mapDisplay.GenerateIcons();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Detect if player is on top of a slope
+
+            foreach (PlayerPlatform playerPlatform in self.Tracker.GetEntities<PlayerPlatform>())
+            {
+                if (player != null && playerPlatform.HasPlayerOnTop())
+                {
+                    onSlope = true;
+                    break;
+                }
+                else
+                {
+                    onSlope = false;
+                }
+            }
+        }
+
+        private bool CheckIfTileIsValid(string room, Vector2 playerPosition, List<Entity> TilesControllers)
+        {
+            bool isValid = false;
+            List<InGameMapTilesControllerData> TilesControllerData = new List<InGameMapTilesControllerData>();
+            foreach (Entity tileController in TilesControllers)
+            {
+                InGameMapTilesController controller = tileController as InGameMapTilesController;
+                TilesControllerData.Add(new InGameMapTilesControllerData(0, room, controller.Data.Attr("tile0Cords"), controller.Data.Attr("tile0"), controller.Data.Attr("tile1Cords"), controller.Data.Attr("tile1"), controller.Data.Attr("tile2Cords"), controller.Data.Attr("tile2"),
+                                            controller.Data.Attr("tile3Cords"), controller.Data.Attr("tile3"), controller.Data.Attr("tile4Cords"), controller.Data.Attr("tile4"), controller.Data.Attr("tile5Cords"), controller.Data.Attr("tile5"), controller.Data.Attr("tile6Cords"), controller.Data.Attr("tile6"),
+                                            controller.Data.Attr("tile7Cords"), controller.Data.Attr("tile7"), controller.Data.Attr("tile8Cords"), controller.Data.Attr("tile8"), controller.Data.Attr("tile9Cords"), controller.Data.Attr("tile9")));
+            }
+            foreach (InGameMapTilesControllerData tileControllerData in TilesControllerData)
+            {
+                for (int i = 0; i <= 9; i++)
+                {
+                    string tileCords = tileControllerData.GetTileCords(i);
+                    if (tileCords == (playerPosition.X + "-" + playerPosition.Y))
+                    {
+                        string tile = tileControllerData.GetTile(i);
+                        if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                        {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return isValid;
+        }
+
+        private void modStrawberryOnPlayer(On.Celeste.Strawberry.orig_OnPlayer orig, Strawberry self, Player player)
+        {
+            if (!PlayerHasGolden)
+            {
+                Level level = player.SceneAs<Level>();
+                if (self.Golden)
+                {
+                    foreach (Strawberry item in level.Entities.FindAll<Strawberry>())
+                    {
+                        if (item.Golden && item.Follower.Leader != null)
+                        {
+                            PlayerHasGolden = true;
+                            break;
+                        }
+                    }
+                }
+                if (useUpgrades)
+                {
+                    if (PlayerHasGolden) // When the player grab a golden berry
+                    {
+                        // Reset upgrades
+
+                        level.Session.SetFlag("Upgrade_PowerGrip", false);
+                        Settings.PowerGrip = false;
+                        level.Session.SetFlag("Upgrade_ClimbingKit", false);
+                        Settings.ClimbingKit = false;
+                        level.Session.SetFlag("Upgrade_SpiderMagnet", false);
+                        Settings.SpiderMagnet = false;
+                        level.Session.SetFlag("Upgrade_DroneTeleport", false);
+                        Settings.DroneTeleport = false;
+                        /*level.Session.SetFlag("Upgrade_JumpBoost", false);
+                        Settings.JumpBoost = false;*/
+                        level.Session.SetFlag("Upgrade_ScrewAttack", false);
+                        Settings.ScrewAttack = false;
+                        level.Session.SetFlag("Upgrade_VariaJacket", false);
+                        Settings.VariaJacket = false;
+                        level.Session.SetFlag("Upgrade_GravityJacket", false);
+                        Settings.GravityJacket = false;
+                        level.Session.SetFlag("Upgrade_Bombs", false);
+                        Settings.Bombs = false;
+                        level.Session.SetFlag("Upgrade_MegaBombs", false);
+                        Settings.MegaBombs = false;
+                        level.Session.SetFlag("Upgrade_RemoteDrone", false);
+                        Settings.RemoteDrone = false;
+                        level.Session.SetFlag("Upgrade_GoldenFeather", false);
+                        Settings.GoldenFeather = false;
+                        level.Session.SetFlag("Upgrade_Binoculars", false);
+                        Settings.Binoculars = false;
+                        level.Session.SetFlag("Upgrade_EtherealDash", false);
+                        Settings.EtherealDash = false;
+                        level.Session.SetFlag("Upgrade_PortableStation", false);
+                        Settings.PortableStation = false;
+                        level.Session.SetFlag("Upgrade_PulseRadar", false);
+                        Settings.PulseRadar = false;
+                        level.Session.SetFlag("Upgrade_DashBoots", false);
+                        Settings.DashBoots = false;
+                        level.Session.SetFlag("Upgrade_SpaceJump", false);
+                        Settings.SpaceJump = 1;
+                        level.Session.SetFlag("Upgrade_HoverBoots", false);
+                        Settings.HoverBoots = false;
+                        level.Session.SetFlag("Upgrade_LightningDash", false);
+                        Settings.LightningDash = false;
+                        level.Session.SetFlag("Upgrade_LongBeam", false);
+                        Settings.LongBeam = false;
+                        level.Session.SetFlag("Upgrade_IceBeam", false);
+                        Settings.IceBeam = false;
+                        level.Session.SetFlag("Upgrade_WaveBeam", false);
+                        Settings.WaveBeam = false;
+
+                        foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                        {
+                            string Prefix = level.Session.Area.GetLevelSet();
+                            int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
+                            string[] str = flag.Split('_');
+                            if (str[0] == Prefix && str[1] == "Ch" + chapterIndex)
+                            {
+                                string toRemove = str[0] + "_" + str[1] + "_";
+                                string result = string.Empty;
+                                int i = flag.IndexOf(toRemove);
+                                if (i >= 0)
+                                {
+                                    result = flag.Remove(i, toRemove.Length);
+                                }
+                                level.Session.SetFlag(result, false);
+                            }
+                        }
+
+                        // Give allowed starting upgrades
+
+                        AreaKey area = level.Session.Area;
+                        MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+                        bool goldenPowerGrip = false;
+                        bool goldenClimbingKit = false;
+                        bool goldenSpiderMagnet = false;
+                        bool goldenDroneTeleport = false;
+                        //bool goldenJumpBoost = false;
+                        bool goldenScrewAttack = false;
+                        bool goldenVariaJacket = false;
+                        bool goldenGravityJacket = false;
+                        bool goldenBombs = false;
+                        bool goldenMegaBombs = false;
+                        bool goldenRemoteDrone = false;
+                        bool goldenGoldenFeather = false;
+                        bool goldenBinoculars = false;
+                        bool goldenEtherealDash = false;
+                        bool goldenPortableStation = false;
+                        bool goldenPulseRadar = false;
+                        bool goldenDashBoots = false;
+                        bool goldenSpaceJump = false;
+                        bool goldenHoverBoots = false;
+                        bool goldenLightningDash = false;
+                        bool goldenLongBeam = false;
+                        bool goldenIceBeam = false;
+                        bool goldenWaveBeam = false;
+                        foreach (LevelData levelData in MapData.Levels)
+                        {
+                            foreach (EntityData entity in levelData.Entities)
+                            {
+                                if (entity.Name == "XaphanHelper/UpgradeController")
+                                {
+                                    goldenPowerGrip = entity.Bool("goldenStartWithPowerGrip");
+                                    goldenClimbingKit = entity.Bool("goldenStartWithClimbingKit");
+                                    goldenSpiderMagnet = entity.Bool("goldenStartWithSpiderMagnet");
+                                    goldenDroneTeleport = entity.Bool("goldenStartWithDroneTeleport");
+                                    //goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
+                                    goldenScrewAttack = entity.Bool("goldenStartWithScrewAttack");
+                                    goldenVariaJacket = entity.Bool("goldenStartWithVariaJacket");
+                                    goldenGravityJacket = entity.Bool("goldenStartWithGravityJacket");
+                                    goldenBombs = entity.Bool("goldenStartWithBombs");
+                                    goldenMegaBombs = entity.Bool("goldenStartWithMegaBombs");
+                                    goldenRemoteDrone = entity.Bool("goldenStartWithRemoteDrone");
+                                    goldenGoldenFeather = entity.Bool("goldenStartWithGoldenFeather");
+                                    goldenBinoculars = entity.Bool("goldenStartWithBinoculars");
+                                    goldenEtherealDash = entity.Bool("goldenStartWithEtherealDash");
+                                    goldenPortableStation = entity.Bool("goldenStartWithPortableStation");
+                                    goldenPulseRadar = entity.Bool("goldenStartWithPulseRadar");
+                                    goldenDashBoots = entity.Bool("goldenStartWithDashBoots");
+                                    goldenSpaceJump = entity.Bool("goldenStartWithSpaceJump");
+                                    goldenHoverBoots = entity.Bool("goldenStartWithHoverBoots");
+                                    goldenLightningDash = entity.Bool("goldenStartWithLightningDash");
+                                    goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
+                                    goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
+                                    goldenWaveBeam = entity.Bool("goldenStartWithWaveBeam");
+                                    break;
+                                }
+                            }
+                        }
+                        if (goldenPowerGrip)
+                        {
+                            Settings.PowerGrip = true;
+                            level.Session.SetFlag("Upgrade_PowerGrip", true);
+                        }
+                        if (goldenClimbingKit)
+                        {
+                            Settings.ClimbingKit = true;
+                            level.Session.SetFlag("Upgrade_ClimbingKit", true);
+                        }
+                        if (goldenSpiderMagnet)
+                        {
+                            Settings.SpiderMagnet = true;
+                            level.Session.SetFlag("Upgrade_SpiderMagnet", true);
+                        }
+                        if (goldenDroneTeleport)
+                        {
+                            Settings.DroneTeleport = true;
+                            level.Session.SetFlag("Upgrade_DroneTeleport", true);
+                        }
+                        /*if (goldenJumpBoost)
+                        {
+                            Settings.JumpBoost = true;
+                            level.Session.SetFlag("Upgrade_JumpBoost", true);
+                        }*/
+                        if (goldenScrewAttack)
+                        {
+                            Settings.ScrewAttack = true;
+                            level.Session.SetFlag("Upgrade_ScrewAttack", true);
+                        }
+                        if (goldenVariaJacket)
+                        {
+                            Settings.VariaJacket = true;
+                            level.Session.SetFlag("Upgrade_VariaJacket", true);
+                        }
+                        if (goldenGravityJacket)
+                        {
+                            Settings.GravityJacket = true;
+                            level.Session.SetFlag("Upgrade_GravityJacket", true);
+                        }
+                        if (goldenBombs)
+                        {
+                            Settings.Bombs = true;
+                            level.Session.SetFlag("Upgrade_Bombs", true);
+                        }
+                        if (goldenMegaBombs)
+                        {
+                            Settings.MegaBombs = true;
+                            level.Session.SetFlag("Upgrade_MegaBombs", true);
+                        }
+                        if (goldenRemoteDrone)
+                        {
+                            Settings.RemoteDrone = true;
+                            level.Session.SetFlag("Upgrade_RemoteDrone", true);
+                        }
+                        if (goldenGoldenFeather)
+                        {
+                            Settings.GoldenFeather = true;
+                            level.Session.SetFlag("Upgrade_GoldenFeather", true);
+                        }
+                        if (goldenBinoculars)
+                        {
+                            Settings.Binoculars = true;
+                            level.Session.SetFlag("Upgrade_Binoculars", true);
+                        }
+                        if (goldenEtherealDash)
+                        {
+                            Settings.EtherealDash = true;
+                            level.Session.SetFlag("Upgrade_EtherealDash", true);
+                        }
+                        if (goldenPortableStation)
+                        {
+                            Settings.PortableStation = true;
+                            level.Session.SetFlag("Upgrade_PortableStation", true);
+                        }
+                        if (goldenPulseRadar)
+                        {
+                            Settings.PulseRadar = true;
+                            level.Session.SetFlag("Upgrade_PulseRadar", true);
+                        }
+                        if (goldenDashBoots)
+                        {
+                            Settings.DashBoots = true;
+                            level.Session.SetFlag("Upgrade_DashBoots", true);
+                        }
+                        if (goldenSpaceJump)
+                        {
+                            Settings.SpaceJump = 2;
+                            level.Session.SetFlag("Upgrade_SpaceJump", true);
+                        }
+                        if (goldenHoverBoots)
+                        {
+                            Settings.HoverBoots = true;
+                            level.Session.SetFlag("Upgrade_HoverBoots", true);
+                        }
+                        if (goldenLightningDash)
+                        {
+                            Settings.LightningDash = true;
+                            level.Session.SetFlag("Upgrade_LightningDash", true);
+                        }
+                        if (goldenLongBeam)
+                        {
+                            Settings.LongBeam = true;
+                            level.Session.SetFlag("Upgrade_LongBeam", true);
+                        }
+                        if (goldenIceBeam)
+                        {
+                            Settings.IceBeam = true;
+                            level.Session.SetFlag("Upgrade_IceBeam", true);
+                        }
+                        if (goldenWaveBeam)
+                        {
+                            Settings.WaveBeam = true;
+                            level.Session.SetFlag("Upgrade_WaveBeam", true);
+                        }
+                    }
+                }
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+            }
+            orig(self, player);
+        }
+
+        private void modStrawberryUpdate(On.Celeste.Strawberry.orig_Update orig, Strawberry self)
+        {
+            if (useUpgrades)
+            {
+                if (self.Golden && PlayerHasGolden && self.Follower.Leader == null)
+                {
+                    self.RemoveSelf();
+                }
+                else
+                {
+                    orig(self);
+                }
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private void modStrawberryOnLoseLeader(On.Celeste.Strawberry.orig_OnLoseLeader orig, Strawberry self)
+        {
+            if (self.Golden)
+            {
+                PlayerLostGolden = true;
+            }
+            if (useUpgrades && self.Golden)
+            {
+                PlayerHasGolden = false;
+                orig(self);
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private static IEnumerator onStrawberryCollectRoutine(On.Celeste.Strawberry.orig_CollectRoutine orig, Strawberry self, int collectIndex)
+        {
+            yield return new SwapImmediately(orig(self, collectIndex));
+            if (self.Golden)
+            {
+                PlayerHasGolden = false;
+                if (useUpgrades)
+                {
+                    AreaKey area = self.SceneAs<Level>().Session.Area;
+                    MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
+                    GiveUpgradesToPlayer(MapData, self.SceneAs<Level>());
+                }
+            }
+        }
+
+        private ScreenWipe GetWipe(Level level, bool wipeIn)
+        {
+            ScreenWipe Wipe = null;
+            switch ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe)
+            {
+                case "Spotlight":
+                    Wipe = new SpotlightWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Curtain":
+                    Wipe = new CurtainWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Mountain":
+                    Wipe = new MountainWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Dream":
+                    Wipe = new DreamWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Starfield":
+                    Wipe = new StarfieldWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Wind":
+                    Wipe = new WindWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Drop":
+                    Wipe = new DropWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Fall":
+                    Wipe = new FallWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "KeyDoor":
+                    Wipe = new KeyDoorWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Angled":
+                    Wipe = new AngledWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Heart":
+                    Wipe = new HeartWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Fade":
+                    Wipe = new FadeWipe(level, wipeIn)
+                    {
+                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                    };
+                    break;
+                case "Level":
+                    level.DoScreenWipe(wipeIn);
+                    break;
+            }
+            return Wipe;
+        }
+
+        private void onPlayerRender(On.Celeste.Player.orig_Render orig, Player self)
+        {
+            if (useUpgrades && (VariaJacket.Active(self.SceneAs<Level>()) || GravityJacket.Active(self.SceneAs<Level>())))
+            {
+                string id = "";
+                if (GravityJacket.Active(self.SceneAs<Level>()))
+                {
+                    id = !useMetroidGameplay ? "gravity" : "samus_gravity";
+                }
+                else if (VariaJacket.Active(self.SceneAs<Level>()))
+                {
+                    id = !useMetroidGameplay ? "varia" : "samus_varia";
+                }
+                Effect fxColorGrading = GFX.FxColorGrading;
+                fxColorGrading.CurrentTechnique = fxColorGrading.Techniques["ColorGradeSingle"];
+                Engine.Graphics.GraphicsDevice.Textures[1] = GFX.ColorGrades[id].Texture.Texture_Safe;
+                Draw.SpriteBatch.End();
+                Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, fxColorGrading, (self.Scene as Level).GameplayRenderer.Camera.Matrix);
+                orig(self);
+                Draw.SpriteBatch.End();
+                Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, (self.Scene as Level).GameplayRenderer.Camera.Matrix);
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private void onPlayerDeadBodyRender(On.Celeste.PlayerDeadBody.orig_Render orig, PlayerDeadBody self)
+        {
+            if (useUpgrades && (VariaJacket.Active(self.SceneAs<Level>()) || GravityJacket.Active(self.SceneAs<Level>())))
+            {
+                string id = "";
+                if (GravityJacket.Active(self.SceneAs<Level>()))
+                {
+                    id = !useMetroidGameplay ? "gravity" : "samus_gravity";
+                }
+                else if (VariaJacket.Active(self.SceneAs<Level>()))
+                {
+                    id = !useMetroidGameplay ? "varia" : "samus_varia";
+                }
+                Effect fxColorGrading = GFX.FxColorGrading;
+                fxColorGrading.CurrentTechnique = fxColorGrading.Techniques["ColorGradeSingle"];
+                Engine.Graphics.GraphicsDevice.Textures[1] = GFX.ColorGrades[id].Texture.Texture_Safe;
+                Draw.SpriteBatch.End();
+                Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, fxColorGrading, (self.Scene as Level).GameplayRenderer.Camera.Matrix);
+                orig(self);
+                Draw.SpriteBatch.End();
+                Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, (self.Scene as Level).GameplayRenderer.Camera.Matrix);
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private Backdrop OnLoadBackdrop(MapData map, BinaryPacker.Element child, BinaryPacker.Element super)
+        {
+            if (child.Name.Equals("XaphanHelper/HeatParticles", StringComparison.OrdinalIgnoreCase))
+            {
+                return new HeatParticles(child.Attr("particlesColors"), child.AttrInt("particlesAmount"), child.AttrBool("noMist"));
+            }
+            if (child.Name.Equals("XaphanHelper/Glow", StringComparison.OrdinalIgnoreCase))
+            {
+                return new Glow(child.Attr("color"));
+            }
+            return null;
+        }
+    }
+}

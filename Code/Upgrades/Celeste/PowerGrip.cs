@@ -1,0 +1,109 @@
+﻿using Monocle;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using System;
+using Microsoft.Xna.Framework;
+using Celeste.Mod.XaphanHelper.UI_Elements;
+using On.Celeste;
+
+namespace Celeste.Mod.XaphanHelper.Upgrades
+{
+    class PowerGrip : Upgrade
+    {
+        public static bool isActive;
+
+        public override int GetDefaultValue()
+        {
+            return 1;
+        }
+
+        public override int GetValue()
+        {
+            return Settings.PowerGrip ? 1 : 0;
+        }
+
+        public override void SetValue(int value)
+        {
+            Settings.PowerGrip = (value != 0);
+        }
+
+        public override void Load()
+        {
+            On.Celeste.Level.Update += modLevelUpdate;
+            On.Celeste.Player.ClimbBoundsCheck += PlayerOnClimbBoundsCheck;
+            IL.Celeste.Player.ClimbUpdate += onPlayerClimbUpdate;
+        }
+
+        public override void Unload()
+        {
+            On.Celeste.Level.Update -= modLevelUpdate;
+            On.Celeste.Player.ClimbBoundsCheck -= PlayerOnClimbBoundsCheck;
+            IL.Celeste.Player.ClimbUpdate -= onPlayerClimbUpdate;
+        }
+
+        public bool Active(Level level)
+        {
+            if (XaphanModule.useUpgrades)
+            {
+                return Settings.PowerGrip && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PowerGripInactive.Contains(level.Session.Area.GetLevelSet());
+            }
+            return true;
+        }
+
+        private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
+        {
+            orig(self);
+            if (XaphanModule.useUpgrades)
+            {
+                if (Active(self))
+                {
+                    isActive = true;
+                }
+                else
+                {
+                    isActive = false;
+                }
+            }
+        }
+
+        private bool PlayerOnClimbBoundsCheck(On.Celeste.Player.orig_ClimbBoundsCheck orig, Player self, int dir)
+        {
+            if (Active(self.SceneAs<Level>()) && !self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && !XaphanModule.PlayerIsControllingRemoteDrone())
+            {
+                BagDisplay display = self.SceneAs<Level>().Tracker.GetEntity<BagDisplay>();
+                if (self.OnGround() && self.Speed == Vector2.Zero && (((Input.MenuUp.Check && Input.Grab.Check && display != null && XaphanModule.useUpgrades) || (Settings.OpenMap.Pressed && XaphanModule.useIngameMap)) && self.StateMachine.State == 0))
+                {
+                    return false;
+                }
+                return orig(self, dir);
+            }
+            return false;
+        }
+
+        private void onPlayerClimbUpdate(ILContext il)
+        {
+            ILCursor cursor = new ILCursor(il);
+
+            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<VirtualButton>("get_Pressed")))
+            {
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.Emit(OpCodes.Ldfld, typeof(Player).GetField("moveX", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance));
+                cursor.EmitDelegate<Func<bool, Player, int, bool>>(modJumpButtonCheck);
+            }
+        }
+
+        private bool modJumpButtonCheck(bool actualValue, Player self, int moveX)
+        {
+            if (Active(self.SceneAs<Level>()) && !XaphanModule.PlayerIsControllingRemoteDrone())
+            {
+                return actualValue;
+            }
+            if (moveX == 0 - self.Facing)
+            {
+                return actualValue;
+            }
+            return false;
+        }
+    }
+}

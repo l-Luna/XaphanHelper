@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+
+  <!--<ToogleSwitch path="objects/XaphanHelper/ToogleSwitch/" start="off">
+    <Loop id="off" path="off" delay="0.8" frames="0-1"/>
+    <Loop id="on" path="on" delay="0.8" frames="0-1"/>
+  </ToogleSwitch>
+
+  <ToogleSwitchBlocks path="objects/XaphanHelper/ToogleSwitchBlocks/" start="off">
+    <Anim id="off" path="off" delay="0.8" frames="0"/>
+    <Anim id="on" path="on" delay="0.8" frames="0"/>
+  </ToogleSwitchBlocks>-->
+
+  <XaphanHelper_PipeGate path="objects/XaphanHelper/pipeGate/" start="closed">
+    <Justify x=".5" y=".5" />
+    <Anim id="closed" path="closed" delay="0.08" frames="0"/>
+    <Anim id="open" path="open" delay="0.08" frames="0-2" goto="opened"/>
+    <Anim id="opened" path="opened" delay="0.08" frames="0"/>
+    <Anim id="close" path="close" delay="0.08" frames="0-2" goto="closed"/>
+    <Anim id="closedFrontGate" path="closed" delay="0.08" frames="0"/>
+    <Anim id="openFrontGate" path="open" delay="0.08" frames="0-2" goto="opened"/>
+    <Anim id="openedFrontGate" path="opened" delay="0.08" frames="0"/>
+    <Anim id="closeFrontGate" path="close" delay="0.08" frames="0-2" goto="closed"/>
+  </XaphanHelper_PipeGate>
+
+  <XaphanHelper_Custom_boss_Monster path="characters/Xaphan/monster/" start="idle">
+    <Justify x="0.5" y=".64" />
+    <Loop id="idle" path="idle" delay="0.1" frames="0-4"/>
+    
+    <Anim id="attack1Begin" path="attack" delay="0.06" frames="0-4" goto="attack1Loop"/>
+    <Anim id="attack1Loop" path="attack" delay="0.06" frames="5-8" goto="attack1Loop"/>
+    <Anim id="attack1Recoil" path="attack" delay="0.06" frames="9-11" goto="idle"/>
+   
+    <Anim id="getHit" path="hit" delay="0.06" frames="0-5" goto="star"/>
+    <Loop id="star" path="hit" delay="0.06" frames="0-5"/>
+    <Anim id="recoverHit" path="hit" delay="0.06" frames="6-7" goto="idle"/>
+  </XaphanHelper_Custom_boss_Monster>
+
+</Sprites>

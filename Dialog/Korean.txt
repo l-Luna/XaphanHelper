@@ -1,0 +1,113 @@
+﻿﻿# NOTES:
+The # Symbol at the start of a line counts as a Comment. To include in dialog, use a \#
+The . Symbol will cause a pause unless escaped with \. (ex: Mr. Oshiro has a pause, Mr\. Oshiro does not)
+Newlines automatically create a Page Break, unless there is an {n} command on the previous line
+Commands: Anything inside of curly braces {...} is a command and should not be translated.
+Inline Text Commands:
+{~}wavy text{/~}
+{!}impact text{/!}
+{>> x}changes speed at which characters are displayed{>>}
+{# 000000}this text is black{#} (uses HEX color values)
+{+MENU_BEGIN} inserts the dialog from the MENU_BEGIN value (in English, "CLIMB")
+{n} creates a newline, without a page break
+{0.5} creates a 0.5 second pause
+{big}this text is large{/big}
+Gameplay Control Commands (should never change)
+{trigger x} this triggers an in-game event
+{anchor} controls the visual position of the textbox in-game
+#Items
+XaphanHelper_GroundSelect= 선택하세요:
+XaphanHelper_AirSelect= 선택하세요:
+XaphanHelper_Press= 누르세요:
+XaphanHelper_Hold= 꾹 누르세요:
+XaphanHelper_ThenHold= , 그리고 꾹 누르세요:
+XaphanHelper_AndPress= , 그리고 누르세요:
+XaphanHelper_Or= 또는
+XaphanHelper_ClingingPress= 벽에 매달려 있을 때, 누르세요:
+XaphanHelper_get_Map_Name= 지도
+XaphanHelper_get_Map_Desc= 월드 맵을 열 수 있습니다
+XaphanHelper_get_Map_Desc_b= . 지도를 열 수 있습니다
+XaphanHelper_get_MapShard_Name= 지도 조각
+XaphanHelper_get_MapShard_Desc= 지도에 이 지역을
+XaphanHelper_get_MapShard_Desc_b= 드러냅니다
+XaphanHelper_get_PowerGrip_Name= 파워 그립
+XaphanHelper_get_PowerGrip_Desc= 약간의 시간 동안 벽에 매달릴 수 있습니다
+XaphanHelper_get_PowerGrip_Desc_b= . 벽에 닿은 상태여야 합니다
+XaphanHelper_get_ClimbingKit_Name= 등산 키트
+XaphanHelper_get_ClimbingKit_Desc= 벽을 오를 수 있습니다
+XaphanHelper_get_ClimbingKit_Desc_b= . 벽에 매달린 상태여야 합니다
+XaphanHelper_get_SpiderMagnet_Name= 거미 자석
+XaphanHelper_get_SpiderMagnet_Desc= 자석 천장에 매달릴 수 있습니다
+XaphanHelper_get_SpiderMagnet_Desc_b= . 자석 천장 아래에 있어야 합니다
+XaphanHelper_get_LightningDash_Name= 번개 대시
+XaphanHelper_get_LightningDash_Desc= 멈추지 않는 수평 대시를 할 수 있습니다
+XaphanHelper_get_LightningDash_Desc_b= , 동시에 벽의 반대 방향 키를 누르세요
+XaphanHelper_get_DroneTeleport_Name= 드론 순간이동
+XaphanHelper_get_DroneTeleport_Desc= 드론이 있는 곳으로 순간이동합니다
+XaphanHelper_get_DroneTeleport_Desc_b= . 순간이동할 드론을 조종하고 있어야 합니다
+XaphanHelper_get_VariaJacket_Name= 방열복
+XaphanHelper_get_VariaJacket_Desc= 극한의 기온에서 살아남을 수 있습니다
+XaphanHelper_get_GravityJacket_Name= 중력 슈트
+XaphanHelper_get_GravityJacket_Desc= 액체 안에서 자유로운 움직임이 가능합니다
+XaphanHelper_get_Bombs_Name= 폭탄
+XaphanHelper_get_Bombs_Desc= 특정한 벽을 파괴할 수 있습니다
+XaphanHelper_get_Bombs_Desc_b= . 폭탄을 놓을 수 있습니다
+XaphanHelper_get_RemoteDrone_Name= 무선 드론
+XaphanHelper_get_RemoteDrone_Desc= 미니 드론을 조종할 수 있게 됩니다
+XaphanHelper_get_RemoteDrone_Desc_b= . 드론을 가동시킬 수 있습니다
+XaphanHelper_get_DashBoots_Name= 대시 부츠
+XaphanHelper_get_DashBoots_Desc= 모든 방향으로 대시할 수 있습니다
+XaphanHelper_get_DashBoots_Desc_b= , 동시에 대시할 방향의 키를 누르세요
+XaphanHelper_get_SpaceJump_Name= 공중 점프
+XaphanHelper_get_SpaceJump_Desc= 공중에서 한 번 더 점프할 수 있습니다
+XaphanHelper_get_SpaceJump_Desc_b= . 공중에서 점프할 수 있습니다
+#Warps
+XaphanHelper_Warp_Select_Destination= - 목적지를 선택하세요 -
+XaphanHelper_Warp_Stay= 여기에 머무르기
+XaphanHelper_Warp_None= 워프 정거장을 사용하려면{n}적어도 다른 하나의 정거장을 해금해야 합니다
+#Mod Options Menu
+ModOptions_XaphanModule_ShowMiniMap= 미니맵 보기
+ModOptions_XaphanModule_ShowMiniMap_Desc= 호환되는 챕터에서만 가능합니다
+ModOptions_XaphanModule_MiniMapOpacity= 미니맵 불투명도
+ModOptions_XaphanModule_10= 10%
+ModOptions_XaphanModule_20= 20%
+ModOptions_XaphanModule_30= 30%
+ModOptions_XaphanModule_40= 40%
+ModOptions_XaphanModule_50= 50%
+ModOptions_XaphanModule_60= 60%
+ModOptions_XaphanModule_70= 70%
+ModOptions_XaphanModule_80= 80%
+ModOptions_XaphanModule_90= 90%
+ModOptions_XaphanModule_100= 100%
+ModOptions_XaphanModule_ShowHeatLevel= 열 수준 보기
+ModOptions_XaphanModule_ShowHeatLevel_Desc= 뜨거운 방에서 죽기 전까지의 시간을 표시합니다
+ModOptions_XaphanModule_SpaceJumpIndicator= 공중 점프 표시
+ModOptions_XaphanModule_SpaceJumpIndicator_None= 없음
+ModOptions_XaphanModule_SpaceJumpIndicator_Small= 작게
+ModOptions_XaphanModule_SpaceJumpIndicator_Large= 크게
+#Bindings
+ModOptions_XaphanModule_OpenMap= 지도 열기 / 스탯 창
+ModOptions_XaphanModule_SelectItem= 장비 능력 선택
+#UI
+XaphanHelper_UI_ActiveCM_title= 챌린지 모드에 도전하시겠습니까?
+XaphanHelper_UI_CM_note1= 챌린지 모드에서는 이 보스를 더 어려운 버전으로{n}플레이할 수 있습니다
+XaphanHelper_UI_CM_note2= 전투가 시작되지 않은 상태에서 일시정지 메뉴를 눌러{n}챌린지 모드를 중단할 수 있습니다
+XaphanHelper_UI_CM_note3= 경고! 새로 추가된 능력들은{n}전투 동안 일시적으로 비활성화됩니다
+XaphanHelper_UI_GiveUpCM_title= 챌린지 모드를 포기하시겠습니까?
+XaphanHelper_UI_GiveUpCM= 챌린지 모드 포기하기
+XaphanHelper_UI_close= 닫기
+XaphanHelper_UI_map= 지도
+XaphanHelper_UI_skip= 스킵
+XaphanHelper_UI_abilities= 능력
+XaphanHelper_UI_activate= 활성화
+XaphanHelper_UI_deactivate= 비활성화
+XaphanHelper_UI_showhints= 힌트 보기
+XaphanHelper_UI_hidehints= 힌트 숨기기
+XaphanHelper_UI_zoom= 줌
+XaphanHelper_UI_confirm= 확인
+Xaphanhelper_UI_Arms= 팔
+Xaphanhelper_UI_Bag= 가방
+Xaphanhelper_UI_Jacket= 자켓
+Xaphanhelper_UI_Misc= 기타
+Xaphanhelper_UI_Legs= 다리
+Xaphanhelper_UI_Time= 시간

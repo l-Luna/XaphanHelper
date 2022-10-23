@@ -1,0 +1,193 @@
+﻿using Celeste.Mod.Entities;
+using FMOD.Studio;
+using Microsoft.Xna.Framework;
+using Monocle;
+using System;
+using System.Collections;
+
+namespace Celeste.Mod.XaphanHelper.Entities
+{
+    [Tracked(true)]
+    [CustomEntity("XaphanHelper/CustomCheckpoint")]
+    class CustomCheckpoint : Entity
+    {
+        private Vector2 respawn;
+
+        public bool Activated;
+
+        public bool animated;
+
+        public bool removeBackgroundWhenActive;
+
+        public bool emitLight;
+
+        private string sound;
+
+        private string sprite;
+
+        private float activatedSpriteX;
+
+        private float activatedSpriteY;
+
+        private Sprite bgSprite;
+
+        private Sprite activatedSprite;
+
+        private VertexLight light;
+
+        private BloomPoint bloom;
+
+        private string lightColor;
+
+        public CustomCheckpoint(EntityData data, Vector2 position) : base(data.Position + position)
+        {
+            removeBackgroundWhenActive = data.Bool("removeBackgroundWhenActive", false);
+            sound = data.Attr("sound", "");
+            activatedSpriteX = data.Float("activatedSpriteX", 0f);
+            activatedSpriteY = data.Float("activatedSpriteY", 0f);
+            sprite = data.Attr("sprite");
+            emitLight = data.Bool("emitLight");
+            lightColor = data.Attr("lightColor");
+            if (lightColor == "")
+            {
+                lightColor = "FFFFFF";
+            }
+            if (sprite == "")
+            {
+                sprite = "objects/XaphanHelper/CustomCheckpoint/ruins";
+            }
+            Add(bgSprite = new Sprite(GFX.Game, sprite + "/"));
+            bgSprite.AddLoop("bgSprite", "bg", 0.08f);
+            bgSprite.CenterOrigin();
+            bgSprite.Play("bgSprite");
+            Add(activatedSprite = new Sprite(GFX.Game, sprite + "/"));
+            activatedSprite.Justify = new Vector2(-activatedSpriteX + 0.5f, activatedSpriteY + 0.5f);
+            activatedSprite.AddLoop("activatedSprite", "active", 0.08f);
+            activatedSprite.CenterOrigin();
+            Collider = new Hitbox(bgSprite.Width, bgSprite.Height, -17f, -19f);
+            Depth = 8999;
+            Add(light = new VertexLight(Calc.HexToColor(lightColor), 1f, 48, 64));
+            Add(bloom = new BloomPoint(0.5f, 8f));
+            bloom.Visible = false;
+            light.Visible = false;
+        }
+
+        public override void Added(Scene scene)
+        {
+            base.Added(scene);
+            respawn = SceneAs<Level>().GetSpawnPoint(Position);
+        }
+
+        public override void Awake(Scene scene)
+        {
+            base.Awake(scene);
+            if (!Activated && CollideCheck<Player>())
+            {
+                Activated = true;
+                Level level = Scene as Level;
+                level.Session.RespawnPoint = respawn;
+            }
+        }
+
+        public void RemoveBGSprite()
+        {
+            if (removeBackgroundWhenActive)
+            {
+                bgSprite.RemoveSelf();
+            }
+            activatedSprite.Visible = true;
+            activatedSprite.Play(("activatedSprite"), restart: true);
+        }
+
+        public void RestaureBGSprite()
+        {
+            if (removeBackgroundWhenActive)
+            {
+                Add(bgSprite = new Sprite(GFX.Game, sprite + "/"));
+                bgSprite.AddLoop("bgSprite", "bg", 0.08f);
+                bgSprite.CenterOrigin();
+                bgSprite.Play("bgSprite");
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            Level level = Scene as Level;
+            if (!level.Session.GrabbedGolden)
+            {
+                if (!Activated)
+                {
+                    Player player = CollideFirst<Player>();
+                    if (player != null && player.OnGround() && player.Speed.Y >= 0f)
+                    {
+                        Activated = true;
+                        level.Session.RespawnPoint = respawn;
+                        level.Session.UpdateLevelStartDashes();
+                        level.Session.HitCheckpoint = true;
+                        Audio.Play(sound == "" ? "event:/game/07_summit/checkpoint_confetti" : sound, Position);
+                        if (emitLight)
+                        {
+                            bloom.Visible = true;
+                            light.Visible = true;
+                        }
+                        RemoveBGSprite();
+                        foreach (FlagDashSwitch flagDashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
+                        {
+                            if (!string.IsNullOrEmpty(flagDashSwitch.flag))
+                            {
+                                flagDashSwitch.startSpawnPoint = respawn;
+                                flagDashSwitch.flagState = SceneAs<Level>().Session.GetFlag(flagDashSwitch.flag);
+                                int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
+                                SceneAs<Level>().Session.SetFlag("Ch" + chapterIndex + "_" + flagDashSwitch.flag + "_true", false);
+                                SceneAs<Level>().Session.SetFlag("Ch" + chapterIndex + "_" + flagDashSwitch.flag + "_false", false);
+                                if (flagDashSwitch.wasPressed && flagDashSwitch.registerInSaveData && flagDashSwitch.saveDataOnlyAfterCheckpoint)
+                                {
+                                    string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+                                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag))
+                                    {
+                                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag);
+                                    }
+                                }
+                            }
+                        }
+                        foreach (CustomCheckpoint customCheckpoint in SceneAs<Level>().Tracker.GetEntities<CustomCheckpoint>())
+                        {
+                            if (customCheckpoint != this)
+                            {
+                                customCheckpoint.Activated = false;
+                                customCheckpoint.activatedSprite.Stop();
+                                customCheckpoint.activatedSprite.Visible = false;
+                                customCheckpoint.RestaureBGSprite();
+                                customCheckpoint.bloom.Visible = false;
+                                customCheckpoint.light.Visible = false;
+                            }
+                        }
+                    }
+                }
+                else if (Activated && !animated)
+                {
+                    if (emitLight)
+                    {
+                        bloom.Visible = true;
+                        light.Visible = true;
+                    }
+                    RemoveBGSprite();
+                    animated = true;
+                }
+            }
+        }
+
+        public override void Render()
+        {
+            if (bgSprite != null)
+            {
+                bgSprite.Render();
+            }
+            if (activatedSprite != null && activatedSprite.Visible)
+            {
+                activatedSprite.Render();
+            }
+        }
+    }
+}

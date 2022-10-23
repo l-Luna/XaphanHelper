@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+
+  <XaphanHelper_samus path="characters/Xaphan/samus/" start="idle">
+    <Origin x="16" y="32" />
+
+    <Loop id="idle_carry" path="idle_carry" delay="0.1" />
+    <Anim id="runSlow_carry" path="run_carry" delay="0.07" />
+    <Loop id="jumpSlow_carry" path="jump_carry" delay="0.1" frames="0,1" />
+    <Anim id="fallSlow_carry" path="jump_carry" delay="0.1" frames="2,3" />
+    <Anim id="pickUp" path="pickup" delay="0.06" />
+    <Anim id="throw" path="throw" delay="0.06" goto="idle" />
+
+    <Anim id="idle" path="idle" delay="0.1" goto="idle"/>
+    <Anim id="idleAim" path="idle_aim" delay="0.1" goto="idleAim"/>
+    <Anim id="front" path="front" delay="0.1" goto="front"/>
+    
+    <Anim id="idleA" path="idle" frames="0" delay="0.2" goto="idle"/>
+    <Anim id="idleB" path="idle" frames="0" delay="0.2" goto="idle"/>
+    <Anim id="idleC" path="idle" frames="0" delay="0.2" goto="idle"/>
+
+    <Anim id="lookUp" path="lookUp" delay="0.06" frames="0-2" />
+    <Loop id="walk" path="walk" delay="0.06" />
+    <Loop id="push" path="push" delay="0.1" />
+    <Loop id="run" path="run" delay="0.05" />
+    <Anim id="runStumble" path="run" delay="0.06" frames="0-11" goto="run"/>
+    <Loop id="runWind" path="run_wind" delay="0.09" frames="0-11"/>
+    <Loop id="runAimH" path="run_aim" delay="0.05"/>
+    <Loop id="dash" path="dash" frames="0-2,1" delay="0.04"/>
+    <Loop id="dashUp" path="dashUp" frames="0-2,1" delay="0.04"/>
+    <Anim id="dashImpact" path="dash" frames="3" delay="0.04"/>
+    <Anim id="dreamDashIn" path="dreamDash" frames="0-3" delay="0.02" goto="dreamDashLoop"/>
+    <Loop id="dreamDashLoop" path="dreamDash" frames="2-16" delay="0.03" />
+    <Anim id="dreamDashOut" path="dreamDash" frames="17-20" delay="0.03" />
+    <Loop id="jumpSlow" path="jumpSlow" delay="0.1" frames="0,1" />
+    <Loop id="jumpFast" path="jumpFast" delay="0.04" frames="0-7" />
+    <Loop id="jumpFastSpace" path="jumpFast" delay="0.015" frames="0-7" />
+    <Loop id="jumpLookUp" path="jump_lookUp" delay="0.1" frames="0,1" />
+    <Anim id="jumpLookDown" path="jump_lookDown" delay="0.1" frames="0,1" />
+    <Loop id="jumpAim" path="jump_aim" delay="0.1" frames="0,1" />
+    <Anim id="fallSlow" path="jumpSlow" delay="0.1" frames="2,3" />
+    <Anim id="fallFast" path="jumpFast" delay="0.05" frames="0-10" />
+    <Anim id="fallLookUp" path="jump_lookUp" delay="0.1" frames="2,3" />
+    <Anim id="fallLookDown" path="jump_lookDown" delay="0.1" frames="2,3" />
+    <Loop id="fallAim" path="jump_aim" delay="0.1" frames="2,3" />
+    <Anim id="climbLookBackStart" path="climb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
+    <Loop id="climbLookBack" path="climb" frames="8" />
+    <Loop id="climbup" path="climb" delay="0.04" frames="0-5" />
+    <Anim id="duck" path="duck" delay="0.05" goto="morphLoop"/>
+    <Loop id="morphLoop" path ="ball" delay="0.05"/>
+    <Loop id="edge" path="edge" delay="0.25" frames="0-13" />
+    <Loop id="edgeBack" path="edge_back" delay="0.25"/>
+    <Anim id="flip" path="flip" delay="0.04" frames="0-7" goto="runFast"/>
+    <Loop id="skid" path="flip" delay="0.04" frames="8"/>
+    <Loop id="dangling" path="dangling" delay="0.11" frames="0-9" />
+  </XaphanHelper_samus>
+
+  <lookout path="objects/lookout/" start="idle">
+    <Justify x=".5" y="1" />
+    
+    <Loop id="idle" path="lookout" delay="0.1" frames="5*9,6"/>
+    <Anim id="lookRight" path="lookout" delay="0.08" frames="0-4" goto="looking"/>
+    <Anim id="lookLeft" path="lookout" delay="0.08" frames="15-17,3,4" goto="looking"/>
+    <Loop id="looking" path="lookout" delay="0.08" frames="4"/>
+    <Loop id="lookingUp" path="lookout" frames="7"/>
+    <Loop id="lookingUpRight" path="lookout" frames="8"/>
+    <Loop id="lookingRight" path="lookout" frames="9"/>
+    <Loop id="lookingDownRight" path="lookout" frames="10"/>
+    <Loop id="lookingDown" path="lookout" frames="11"/>
+    <Loop id="lookingDownLeft" path="lookout" frames="12"/>
+    <Loop id="lookingLeft" path="lookout" frames="13"/>
+    <Loop id="lookingUpLeft" path="lookout" frames="14"/>
+
+    <Loop id="badeline_idle" path="badeline" delay="0.1" frames="5*9,6"/>
+    <Anim id="badeline_lookRight" path="badeline" delay="0.08" frames="0-4" goto="badeline_looking"/>
+    <Anim id="badeline_lookLeft" path="badeline" delay="0.08" frames="15-17,3,4" goto="badeline_looking"/>
+    <Loop id="badeline_looking" path="badeline" delay="0.08" frames="4"/>
+    <Loop id="badeline_lookingUp" path="badeline" frames="7"/>
+    <Loop id="badeline_lookingUpRight" path="badeline" frames="8"/>
+    <Loop id="badeline_lookingRight" path="badeline" frames="9"/>
+    <Loop id="badeline_lookingDownRight" path="badeline" frames="10"/>
+    <Loop id="badeline_lookingDown" path="badeline" frames="11"/>
+    <Loop id="badeline_lookingDownLeft" path="badeline" frames="12"/>
+    <Loop id="badeline_lookingLeft" path="badeline" frames="13"/>
+    <Loop id="badeline_lookingUpLeft" path="badeline" frames="14"/>
+
+    <Loop id="nobackpack_idle" path="nobackpack" delay="0.1" frames="5*9,6"/>
+    <Anim id="nobackpack_lookRight" path="nobackpack" delay="0.08" frames="0-4" goto="nobackpack_looking"/>
+    <Anim id="nobackpack_lookLeft" path="nobackpack" delay="0.08" frames="15-17,3,4" goto="nobackpack_looking"/>
+    <Loop id="nobackpack_looking" path="nobackpack" delay="0.08" frames="4"/>
+    <Loop id="nobackpack_lookingUp" path="nobackpack" frames="7"/>
+    <Loop id="nobackpack_lookingUpRight" path="nobackpack" frames="8"/>
+    <Loop id="nobackpack_lookingRight" path="nobackpack" frames="9"/>
+    <Loop id="nobackpack_lookingDownRight" path="nobackpack" frames="10"/>
+    <Loop id="nobackpack_lookingDown" path="nobackpack" frames="11"/>
+    <Loop id="nobackpack_lookingDownLeft" path="nobackpack" frames="12"/>
+    <Loop id="nobackpack_lookingLeft" path="nobackpack" frames="13"/>
+    <Loop id="nobackpack_lookingUpLeft" path="nobackpack" frames="14"/>
+
+    <Loop id="varia_idle" path="XaphanHelper/varia" delay="0.1" frames="5*9,6"/>
+    <Anim id="varia_lookRight" path="XaphanHelper/varia" delay="0.08" frames="0-4" goto="varia_looking"/>
+    <Anim id="varia_lookLeft" path="XaphanHelper/varia" delay="0.08" frames="15-17,3,4" goto="varia_looking"/>
+    <Loop id="varia_looking" path="XaphanHelper/varia" delay="0.08" frames="4"/>
+    <Loop id="varia_lookingUp" path="XaphanHelper/varia" frames="7"/>
+    <Loop id="varia_lookingUpRight" path="XaphanHelper/varia" frames="8"/>
+    <Loop id="varia_lookingRight" path="XaphanHelper/varia" frames="9"/>
+    <Loop id="varia_lookingDownRight" path="XaphanHelper/varia" frames="10"/>
+    <Loop id="varia_lookingDown" path="XaphanHelper/varia" frames="11"/>
+    <Loop id="varia_lookingDownLeft" path="XaphanHelper/varia" frames="12"/>
+    <Loop id="varia_lookingLeft" path="XaphanHelper/varia" frames="13"/>
+    <Loop id="varia_lookingUpLeft" path="XaphanHelper/varia" frames="14"/>
+
+    <Loop id="gravity_idle" path="XaphanHelper/gravity" delay="0.1" frames="5*9,6"/>
+    <Anim id="gravity_lookRight" path="XaphanHelper/gravity" delay="0.08" frames="0-4" goto="gravity_looking"/>
+    <Anim id="gravity_lookLeft" path="XaphanHelper/gravity" delay="0.08" frames="15-17,3,4" goto="gravity_looking"/>
+    <Loop id="gravity_looking" path="XaphanHelper/gravity" delay="0.08" frames="4"/>
+    <Loop id="gravity_lookingUp" path="XaphanHelper/gravity" frames="7"/>
+    <Loop id="gravity_lookingUpRight" path="XaphanHelper/gravity" frames="8"/>
+    <Loop id="gravity_lookingRight" path="XaphanHelper/gravity" frames="9"/>
+    <Loop id="gravity_lookingDownRight" path="XaphanHelper/gravity" frames="10"/>
+    <Loop id="gravity_lookingDown" path="XaphanHelper/gravity" frames="11"/>
+    <Loop id="gravity_lookingDownLeft" path="XaphanHelper/gravity" frames="12"/>
+    <Loop id="gravity_lookingLeft" path="XaphanHelper/gravity" frames="13"/>
+    <Loop id="gravity_lookingUpLeft" path="XaphanHelper/gravity" frames="14"/>    
+  </lookout>
+
+  <XaphanHelper_player_ceiling path="characters/Xaphan/" start="idleBackpack">
+    <Loop id="idleBackpack" path="player/ceilingIdle" delay="0.1"/>
+    <Loop id="moveBackpack" path="player/ceilingMove" delay="0.05"/>
+    <Loop id="idleNoBackpack" path="player_no_backpack/ceilingIdle" delay="0.1"/>
+    <Loop id="moveNoBackpack" path="player_no_backpack/ceilingMove" delay="0.05"/>
+  </XaphanHelper_player_ceiling>
+
+  <XaphanHelper_player_spinJump path="characters/Xaphan/" start="spinBackpack">
+    <Loop id="spinBackpack" path="player/spinJump" delay="0.04"/>
+    <Loop id="spinNoBackpack" path="player_no_backpack/spinJump" delay="0.04"/>
+    <Loop id="hairBackpack" path="player/spinJumpHair" delay="0.04"/>
+    <Loop id="hairNoBackpack" path="player_no_backpack/spinJumpHair" delay="0.04"/>
+  </XaphanHelper_player_spinJump>
+
+  <XaphanHelper_player_slide path="characters/Xaphan/" start="slideBackpack">
+    <Loop id="slideBackpack" path="player/slopeSlide" delay="0.01"/>
+    <Loop id="slideNoBackpack" path="player_no_backpack/slopeSlide" delay="0.01"/>
+    <Loop id="hairBackpack" path="player/slopeSlideHair" delay="0.01"/>
+    <Loop id="hairNoBackpack" path="player_no_backpack/slopeSlideHair" delay="0.01"/>
+  </XaphanHelper_player_slide>
+
+</Sprites>

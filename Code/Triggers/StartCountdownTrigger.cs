@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
+using Microsoft.Xna.Framework;
+using Monocle;
+using Celeste.Mod.XaphanHelper.Entities;
+
+namespace Celeste.Mod.XaphanHelper.Triggers
+{
+    [Tracked(true)]
+    [CustomEntity("XaphanHelper/StartCountdownTrigger")]
+    class StartCountdownTrigger : Trigger
+    {
+        public float time;
+
+        public float messageTimer;
+
+        public string startFlag;
+
+        public string activeFlag;
+
+        public string dialogID;
+
+        public bool shake;
+
+        public bool explode;
+
+        public bool CrossChapter;
+
+        public bool HasStartingText;
+
+        public bool HasBeenTriggered;
+
+        public bool fastMessageDisplay;
+
+        public string startRoom;
+
+        public string MessageColor;
+
+        public CountdownDisplay display;
+
+        public IntroText message;
+
+        public EntityID eid;
+
+        public bool Canceled;
+
+        public StartCountdownTrigger(EntityData data, Vector2 offset, EntityID ID) : base(data, offset)
+        {
+            Tag = Tags.Global;
+            eid = ID;
+            time = data.Float("time");
+            startFlag = data.Attr("startFlag");
+            activeFlag = data.Attr("activeFlag");
+            shake = data.Bool("shake");
+            explode = data.Bool("explosions");
+            CrossChapter = data.Bool("crossChapter");
+            dialogID = data.Attr("dialogID");
+            if (!string.IsNullOrEmpty(dialogID))
+            {
+                HasStartingText = true;
+            }
+            messageTimer = data.Float("messageTimer");
+            if (string.IsNullOrEmpty(dialogID))
+            {
+                messageTimer = 0;
+            }
+            fastMessageDisplay = data.Bool("fastMessageDisplay");
+            MessageColor = data.Attr("messageColor");
+            if (string.IsNullOrEmpty(MessageColor))
+            {
+                MessageColor = "FFFFFF";
+            }
+        }
+
+        public override void Added(Scene scene)
+        {
+            base.Added(scene);
+            startRoom = SceneAs<Level>().Session.Level;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (message != null && (SceneAs<Level>().Session.Level != startRoom))
+            {
+                message.RemoveSelf();
+                if (!Canceled)
+                {
+                    DisplayTimer(true);
+                }
+            }
+        }
+
+        public override void OnStay(Player player)
+        {
+            base.OnStay(player);
+            if ((string.IsNullOrEmpty(startFlag) ? true : SceneAs<Level>().Session.GetFlag(startFlag)) && display == null && !HasBeenTriggered)
+            {
+                HasBeenTriggered = true;
+                if (shake && !SceneAs<Level>().Session.GetFlag("Countdown_" + eid.Key))
+                {
+                    Add(new Coroutine(ShakeLevel()));
+                }
+                if (explode && !SceneAs<Level>().Session.GetFlag("Countdown_" + eid.Key))
+                {
+                    Add(new Coroutine(DisplayExplosions()));
+                }
+                if (HasStartingText && messageTimer > 0 && !SceneAs<Level>().Session.GetFlag("Countdown_" + eid.Key))
+                {
+                    Add(new Coroutine(DisplayStartingText()));
+                }
+                else
+                {
+                    DisplayTimer(false);
+                }
+            }
+        }
+
+        public void CancelTimer()
+        {
+            Canceled = true;
+        }
+
+        public void DisplayTimer(bool immediate)
+        {
+            display = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
+            if (display == null)
+            {
+                SceneAs<Level>().Add(new CountdownDisplay(this, CrossChapter, Center, immediate));
+            }
+        }
+
+        private IEnumerator ShakeLevel()
+        {
+            while (messageTimer > 0)
+            {
+                SceneAs<Level>().DirectionalShake(new Vector2(0.5f, 0), 0.05f);
+                Input.Rumble(RumbleStrength.Light, RumbleLength.Short);
+                yield return 0.05f;
+            }
+        }
+
+        private IEnumerator DisplayExplosions()
+        {
+            var randX = new Random();
+            yield return 0.05f;
+            var randY = new Random();
+            while (messageTimer > 0)
+            {
+                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(randX.Next(0, 320), randY.Next(0, 184)));
+                SceneAs<Level>().Add(explosion);
+                yield return 0.05f;
+            }
+        }
+
+        private IEnumerator DisplayStartingText()
+        {
+            SceneAs<Level>().Session.SetFlag("Countdown_" + eid.Key, true);
+            SceneAs<Level>().Add(message = new IntroText(dialogID, "Middle", 340, Calc.HexToColor(MessageColor), 1.2f, true, true, fastMessageDisplay, false, true));
+            message.Show = true;
+            while (messageTimer > 2.5f)
+            {
+                yield return null;
+                messageTimer -= Engine.DeltaTime;
+            }
+            DisplayTimer(true);
+            while (messageTimer > 0)
+            {
+                yield return null;
+                messageTimer -= Engine.DeltaTime;
+            }
+            if (message != null)
+            {
+                message.RemoveSelf();
+            }
+        }
+    }
+}

@@ -1,0 +1,671 @@
+# -- Mod Names --
+# mods.modName.*
+mods.XaphanHelper.name=Xaphan Helper
+
+# -- Entities --
+# entities.entityName.name.*
+# entities.entityName.description.*
+# entities.entityName.attributes.description.name.*
+# entities.entityName.attributes.description.description.*
+
+# BreakBlock
+entities.XaphanHelper/BreakBlock.placements.name.BreakBlock=Break Block
+entities.XaphanHelper/BreakBlock.attributes.description.mode=Block: The break block will not try to merge with nearby solid tiles.\nWall: The break block will try to merge with nearby solid tiles.
+entities.XaphanHelper/BreakBlock.attributes.description.tiletype=Change the visual apparence of the block.
+entities.XaphanHelper/BreakBlock.attributes.description.type=Detemine what will trigger the break sequence.\nBomb: The player must use the Bomb upgrade close to this block.\nDrone: The player must use the Remote Drone upgrade and shoot this block.\nLightningDash: The player must collide with this block while using the Lightning Dash upgrade.\nMegaBomb: The player must use the Mega Bomb upgrade close to this block.\nRedBooster: The player must collide with this block while using a red booster.\nScrewAttack: The player must collide with this block while using the ScrewA ttack upgrade.
+entities.XaphanHelper/BreakBlock.attributes.description.color=Hexadecimal code of the tint color of the indicators. FFFFFF (white) means no color.
+entities.XaphanHelper/BreakBlock.attributes.description.startRevealed=If true, the indicators will be visible without the player needing to dash into the block first.
+entities.XaphanHelper/BreakBlock.attributes.description.directory=The directory from which the sprites are taken for the indicators, relative to Atlases/Gameplay/.
+
+# BubbleDoor
+entities.XaphanHelper/BubbleDoor.placements.name.BubbleDoor=Bubble Door
+entities.XaphanHelper/BubbleDoor.attributes.description.side=The side of the screen the door will be attached to.
+entities.XaphanHelper/BubbleDoor.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.\nThis directory must contain a sub-directory for each color. (name of sub-directory =name of color)
+entities.XaphanHelper/BubbleDoor.attributes.description.color=The color of the door.
+entities.XaphanHelper/BubbleDoor.attributes.description.flags=The flags that must be set for the door to be active, separated by a comma (,). Leave blank to make the door always active.
+entities.XaphanHelper/BubbleDoor.attributes.description.openSound=Sound event that play when the door open.
+entities.XaphanHelper/BubbleDoor.attributes.description.closeSound=Sound event that play when the door close.
+entities.XaphanHelper/BubbleDoor.attributes.description.unlockSound=Sound event that play when the door unlock. (when the flag switch from false to true while the player is in the same room)
+entities.XaphanHelper/BubbleDoor.attributes.description.lockSound=Sound event that play when the door lock. (when the door closes behind the player but the flag is not set)
+entities.XaphanHelper/BubbleDoor.attributes.description.forceLockedFlag=If this flag is set, the door will be locked and use the Grey color, regardless of other settings.
+
+# Cell
+entities.XaphanHelper/Cell.placements.name.Cell=Cell
+entities.XaphanHelper/Cell.attributes.description.tutorial=Whether the entity should show the usage tutorial.
+entities.XaphanHelper/Cell.attributes.description.flag=If this flag is set, the Cell will not spawn.
+entities.XaphanHelper/Cell.attributes.description.sprite=The directory from which the sprite is taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/Cell.attributes.description.dropWhenDreamDash=If true, the player will automatically drop the Cell if trying to dreamdash when holding the Cell.
+entities.XaphanHelper/Cell.attributes.description.throwForceMultiplier=Multiply the horizontal force when the player throw the Cell by this amount.
+entities.XaphanHelper/Cell.attributes.description.throwUpForceMultiplier=Control the force at wich the Cell will be going upward when the player throw it.
+entities.XaphanHelper/Cell.attributes.description.postThrowNoGravityTimer=Time (in seconds) after the player throws the Cell that gravity will not be applied.
+entities.XaphanHelper/Cell.attributes.description.gravityMultiplier=Multiply the gravity applied to the Cell by this amount.
+entities.XaphanHelper/Cell.attributes.description.frictionMultiplier=Multiply the friction aplpied to the Cell by this amount.
+entities.XaphanHelper/Cell.attributes.description.bounceMultiplier=Control the speed that will be applied to the Cell when it bounce off walls or the ground.
+entities.XaphanHelper/Cell.attributes.description.killPlayerOnDeath=If true, when the Cell die, the player will die as well.
+entities.XaphanHelper/Cell.attributes.description.deathColor=Hexadecimal code for the color of the death effect when the Cell die.
+entities.XaphanHelper/Cell.attributes.description.emitLight=If true, the Cell will emit a light around it.
+entities.XaphanHelper/Cell.attributes.description.lightColor=Hexadecimal code for the color of the light emited by the Cell. (Only if Emit Light is true)
+entities.XaphanHelper/Cell.attributes.description.hitSidesSound=Sound event that play when the Cell hit a wall.
+entities.XaphanHelper/Cell.attributes.description.hitGroundSound=Sound event that play when the Cell hit the ground.
+entities.XaphanHelper/Cell.attributes.description.deathSound=Sound event that play when the Cell die.
+
+# CellLock
+entities.XaphanHelper/CellLock.placements.name.CellLock=Cell Lock
+entities.XaphanHelper/CellLock.attributes.description.sprite=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/CellLock.attributes.description.color=The color of the lock.
+entities.XaphanHelper/CellLock.attributes.description.flag=The flag to set once the player activate the lock.
+entities.XaphanHelper/CellLock.attributes.description.registerInSaveData=If true, the flag will be registered in the player Save file and will be set forever.
+entities.XaphanHelper/CellLock.attributes.description.sound=The sound event that play when the player activate the lock.
+entities.XaphanHelper/CellLock.attributes.description.cellInside=If true, the lock will already have a Cell slotted in it and just need to be activated.
+entities.XaphanHelper/CellLock.attributes.description.keepCell=If true, the Cell will stay inside the lock even after leaving the room and the corresponding Cell will no longer spawn.
+entities.XaphanHelper/CellLock.attributes.description.slotSound=The sound event that play when the player place a Cell into the lock.
+entities.XaphanHelper/CellLock.attributes.description.instant=If true, the flag will be set as soon as a cell is sloted without requireing the player to interact first.
+entities.XaphanHelper/CellLock.attributes.description.type=Determine the sprite that will be used from the directory set in the Sprite field. Aviable types : "Normal", "Floating".
+
+# CollectableDoor
+entities.XaphanHelper/CollectableDoor.placements.name.CollectableDoor=Collectable Door
+entities.XaphanHelper/CollectableDoor.attributes.description.orientation=Orientation of the door. Vertical will check if the player is to the left or the right of the door. Horizontal wil check if the player is above or bellow the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.mode=Determine what the door will check.\nTotalHearts: Amount of hearts collected in this campaign.\nCurrentChapterHeart: Is the heart in this chapter collected ?\nCurrentSessionHeart: Is the heart of this chapter collected during this session ?\nTotalCassettes: Amount of cassettes collected in this campaign.\nCurrentChapterCassette: Is the cassette in this chapter collected ?\nCurrentSessionCassette: Is the cassette in this chapter collected during this session ?\nTotalStrawberries: Amount of strawberries collected in this campaign.\nCurrentChapterStrawberries: Amount of strawberries collected in this chapter.\nCurrentSessionStrawberries: Amount of strawberries collected in this chapter during this session.\nGoldenStrawberry: Doses the player currently have a golden strawberry ?\nFlags: Is the required amount of flags defined in the 'Flags' field meet ?
+entities.XaphanHelper/CollectableDoor.attributes.description.edges=Determine the edges that will be visible.
+entities.XaphanHelper/CollectableDoor.attributes.description.edgesAnimationMode=Determine how the edges will animate.\nClockwise: The edges will rotate clockwise.\nCounterClockwise: The edges will rotate counter-clockwise.\nStatic: The edges will not be animated.
+entities.XaphanHelper/CollectableDoor.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.\nLeave empty to use default sprites based on the 'Mode' field.
+entities.XaphanHelper/CollectableDoor.attributes.description.mapIcon=Name of the sprite that will be displayed on the In-game map.\nMust be in Atlases/Gui/maps/(yourname)/(yourcampaignname)/.
+entities.XaphanHelper/CollectableDoor.attributes.description.interiorColor=Hexadecimal code for the color of the interior of the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.mistColor=Hexadecimal code for the color of the mist inside of the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.iconsColor=Hexadecimal code for the color of the icons of the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.edgesColor=Hexadecimal code for the color of the edges of the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.interiorParticlesColor=Hexadecimal code for the color of the particles inside of the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.openingParticlesColor1=Hexadecimal code for the first color of the particles emited when the door open.
+entities.XaphanHelper/CollectableDoor.attributes.description.openingParticlesColor2=Hexadecimal code for the second color of the particles emited when the door open.
+entities.XaphanHelper/CollectableDoor.attributes.description.sliceColor=Hexadecimal code for the color of the slice when the door open.
+entities.XaphanHelper/CollectableDoor.attributes.description.sliceParticlesColor1=Hexadecimal code for the first color of the particles emited by the slice.
+entities.XaphanHelper/CollectableDoor.attributes.description.sliceParticlesColor2=Hexadecimal code for the second color of the particles emited by the slice.
+entities.XaphanHelper/CollectableDoor.attributes.description.requires=Amount of collectables or flags required to open the door.\nIf 'Mode' is set to 'GoldenStrawberry', this is ignored.
+entities.XaphanHelper/CollectableDoor.attributes.description.flags=Only if 'Mode' is set to 'Flags'. The flags the door will check, separated by a comma (,).
+entities.XaphanHelper/CollectableDoor.attributes.description.openSpeedMultiplier=Increases or decreases the speed at wich the door open. 1 =normal speed.
+entities.XaphanHelper/CollectableDoor.attributes.description.beforeSliceDelay=The delay (in seconds) between the end of the collectables check and the start of the opening sequence. (slice)
+entities.XaphanHelper/CollectableDoor.attributes.description.afterSliceDelay=The delay (in seconds) after the start of the opening sequence. (slice)
+entities.XaphanHelper/CollectableDoor.attributes.description.checkDistance=The maximum distance (in tiles) the player must be from the sides of the door for it to start checking the collectables.
+entities.XaphanHelper/CollectableDoor.attributes.description.checkDisplaySpeed=The speed at wich the door check if the player has the required collectables.
+entities.XaphanHelper/CollectableDoor.attributes.description.unlockSound=The sound event that play when the door open.
+entities.XaphanHelper/CollectableDoor.attributes.description.fillSound=The soud event that play each time a collectable check is meet.
+entities.XaphanHelper/CollectableDoor.attributes.description.soundIndex=Sound that play when the player land or walk on the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.registerInSaveData=If true, the door ID will be registered in the player save file and will stay open forever once the requirements are meet and the player opened the door.
+
+# CustomBadelineBoss
+entities.XaphanHelper/CustomBadelineBoss.placements.name.CustomBadelineBoss=Custom Badeline Boss
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.startHit=Determines whether or not Badeline waits to attack until the first hit or upon room entry.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.patternIndex=Determines what pattern of attack Badeline uses.\n0 - Badeline transforms into the boss after being hit once\n1 - Shoots orbs\n2 - Shoots laser followed by one orb\n3 - Shoots five streams of two orbs\n4 - Shoots five streams of two orbs followed by one laser\n5 - Shoots laser followed by three streams of two orbs\n6 - Shoots lasers\n7 - Shoots orbs with less delay\n8 - Shoots lasers with less delay\n9 - Shoots streams of two orbs\n10 - Does nothing\n11 - Shoots orbs with more delay\n12 - Does nothing\n13 - Shoots orbs after getting hit once\n14 - Shoots lasers with very short delay\n15 - Shoots lasers with more delay
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.cameraLockY=Whether the camera should be locked vertically, functioning similarly as a killbox.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.hitParticleColor1=Hexadecimal code for the first color of the particles appearing when the boss is hit.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.hitParticleColor2=Hexadecimal code for the second color of the particles appearing when the boss is hit.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.shotTrailParticleColor1=Hexadecimal code for the first color of the particles appearing behind the boss shots.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.shotTrailParticleColor2=Hexadecimal code for the second color of the particles appearing behind the boss shots.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.MoveParticleColor1=Hexadecimal code for the first color of the particles appearing behind the boss when he moves.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.MoveParticleColor2=Hexadecimal code for the second color of the particles appearing behind the boss when he moves.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.trailColor=Hexadecimal code for the color of the trail when the boss move.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.beamDissipateParticleColor=Hexadecimal code for the color of the particles appearing when the boss beam dissipate.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml.
+
+# CustomCheckpoint
+entities.XaphanHelper/CustomCheckpoint.placements.name.CustomCheckpoint=Custom Checkpoint
+entities.XaphanHelper/CustomCheckpoint.attributes.description.sprite=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.activatedSpriteX=The X position for the sprite that apear when the checkpoint is activated.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.activatedSpriteY=The Y position for the sprite that apear when the checkpoint is activated.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.removeBackgroundWhenActive=If true, the sprite of the inactive checkpoint is removed when the checkpoint is activated.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.sound=Sound event that play when the checkpoint is activated.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.emitLight=If true, the checkpoint will emit light when activated.
+entities.XaphanHelper/CustomCheckpoint.attributes.description.lightColor=Hexadecimal code for the color of the light when the checkpoint is activated.
+
+# CustomCollectable
+entities.XaphanHelper/CustomCollectable.placements.name.CustomCollectable=Custom Collectable
+entities.XaphanHelper/CustomCollectable.attributes.description.sprite=The full path to the sprite, relative to Atlases/Gameplay/.
+entities.XaphanHelper/CustomCollectable.attributes.description.collectSound=Sound event that play when the player collect this collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.changeMusic=If true, the current music will stop while the collectSound play when the collectable has been collected.
+entities.XaphanHelper/CustomCollectable.attributes.description.newMusic=Only if changeMusic is set.\nThe music event that play after the collectable has been collected. Leave blank to use the same music as the one that played before the collectable was collected.
+entities.XaphanHelper/CustomCollectable.attributes.description.flag=The flag that will be set once the player collect the collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.mapIcon=Name of the sprite that will be displayed on the In-game map.\nMust be in Atlases/Gui/maps/(yourname)/(yourcampaignname)/.
+entities.XaphanHelper/CustomCollectable.attributes.description.mustDash=If true, the player must dash to collect the collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.collectGoldenStrawberry=If true, the golden strawberry will collect when the player collect the collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.endChapter=If true, the chapter will end when the player collect the collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.completeSpeedrun=Only used in SoCM. Leave not set.
+entities.XaphanHelper/CustomCollectable.attributes.description.registerInSaveData=If true, the flag will be registered in the player Save file and will be set forever.
+entities.XaphanHelper/CustomCollectable.attributes.description.ignoreGolden=If true, the collectable will not re-appear when the player carry a golden berry if it has already been collected.
+
+#CustomEndScreenController
+entities.XaphanHelper/CustomEndScreenController.placements.name.CustomEndScreenController=Custom End Screen Controller
+entities.XaphanHelper/CustomEndScreenController.attributes.description.atlas=The full path to the images used by this End Screen, relative to Atlases/.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.images=The name of each image displayed, separated by a comma (,), in the order they will be drawn.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.title=Dialog ID for the title displayed as the top of the End Screen. Leave blank to use default titles based on the Side of this chapter.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.showTitle=If true, the title will be visible. Set to false to hide it.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.subText1=Dialog ID for the text that will appear at the bottom of the End Screen, above item and map percent if you use those.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.subText1Color=Hexadecimal code for the color of the text that will appear at the bottom of the End Screen, above item and map percent if you use those.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.subText2=Dialog ID for the text that will appear at the bottom of the End Screen, above item and map percent if you use those.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.subText2Color=Hexadecimal code for the color of the text that will appear at the bottom of the End Screen, above item and map percent if you use those.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.music=The music event that play when this End Screen appear. Leave blank to use default music based on the Side of this chapter.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.hideVanillaTimer=If true, hide the vanilla timer at the bottom left of the End Screen.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requiredTime=The maximum time allowed for this End Screen to appear, in seconds.\nLeave to 0 for no time requirement.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.showTime=If true, the clear time will be displayed at the bottom of the End Screen.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requiredStrawberries=The minimum amount of strawberries the player must have collected for this End Screen to appear.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.showStrawberries=If true, the amount of strawberries collected by the player will be displayed at the bottom of the End Screen.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.strawberriesColor=Hexadecimal code for the color of the strawberries display, when not equal to the maximum number of strawberries.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.strawberriesMaxColor=Hexadecimal code for the color of the strawberries display, when equal to the maximum number of strawberries.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requiredItemPercent=The minimum percentage of items the player must have collected for this End Screen to appear.\nItems include Strawberries, Hearts and Cassettes.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.showItemPercent=If true, the percentage of items collected by the player will be displayed at the bottom of the End Screen.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.itemPercentColor=Hexadecimal code for the color of the item percentage display, when bellow 100%.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.itemPercentMaxColor=Hexadecimal code for the color of the item percentage display, when at 100%.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requiredMapPercent=The minimum percentage of map the player must have explored on the In-Game map for this End Screen to appear.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.showMapPercent=If true, the percentage of map explored by the player will be displayed at the bottom of the End Screen.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.mapPercentColor=Hexadecimal code for the color of the map percentage display, when bellow 100%.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.mapPercentMaxColor=Hexadecimal code for the color of the map percentage display, when at 100%.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requiredFlags=The flags that must be set for this End Screen to appear, separated by a comma (,).
+entities.XaphanHelper/CustomEndScreenController.attributes.description.requirementsCheck=Chapter: The requirements (Time, Strawberries, Item Percent and Map Percent) will be calculated with values from this chapter only.\nCampaign: The requirements (Time, Strawberries, Item Percent and Map Percent) will be calculated with values from the whole campaign.\nThis also determine if the values shown on the End Screen are the Chapter or Campaign values.
+entities.XaphanHelper/CustomEndScreenController.attributes.description.priority=The order the game will check if conditions for this End Screen to appear are true.\nThe first End Screen found with all its conditions true will be displayed.
+
+# CustomExitBlock
+entities.XaphanHelper/CustomExitBlock.placements.name.CustomExitBlock=Custom Exit Block
+entities.XaphanHelper/CustomExitBlock.attributes.description.tiletype=Change the visual apparence of the block.
+entities.XaphanHelper/CustomExitBlock.attributes.description.closeSound=If true, the close behind sound will play when the player is no longer inside any CustomExitBlock with the same group number as this one.
+entities.XaphanHelper/CustomExitBlock.attributes.description.group=All CustomExitBlocks with the same group number will turn solid once the player is outside all of them.
+
+# CustomTorch
+entities.XaphanHelper/CustomTorch.placements.name.CustomTorch=Custom Torch
+entities.XaphanHelper/CustomTorch.attributes.description.playLitSound=If true, play a sound when the torch is activated.
+entities.XaphanHelper/CustomTorch.attributes.description.startLit=Change wether the light will start lit, or have the player's touch activate it.
+entities.XaphanHelper/CustomTorch.attributes.description.flag=The flag that must be set to activate the torch.
+entities.XaphanHelper/CustomTorch.attributes.description.color=Hexadecimal code for the color of the light and particles emmited when the torch is activated.
+entities.XaphanHelper/CustomTorch.attributes.description.sprite=The full path to the sprite, relative to Atlases/Gameplay/.
+entities.XaphanHelper/CustomTorch.attributes.description.alpha=Strenght of the light. (minimum 0 (invisible), maximum 1)
+entities.XaphanHelper/CustomTorch.attributes.description.startFade=Radius value where the light will start to fade.
+entities.XaphanHelper/CustomTorch.attributes.description.endFade=Radius value where the light will end.
+entities.XaphanHelper/CustomTorch.attributes.description.sound=Sound event that play when the torch is activated (if Play Lit Sound is set).
+
+# DroneGate
+entities.XaphanHelper/DroneGate.placements.name.DroneGate=Drone Gate
+entities.XaphanHelper/DroneGate.attributes.description.side=The side the gate will face.
+entities.XaphanHelper/DroneGate.attributes.description.flag=The flag that must be set forthis gat to open when the drone is nearby.
+entities.XaphanHelper/DroneGate.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+
+# DroneSwitch
+entities.XaphanHelper/DroneSwitch.placements.name.DroneSwitch=Drone Switch
+entities.XaphanHelper/DroneSwitch.attributes.description.side=The side the switch will face.
+entities.XaphanHelper/DroneSwitch.attributes.description.flag=The flag that will be set/unset when the drone shoot this switch.
+
+# Elevator
+entities.XaphanHelper/Elevator.placements.name.Elevator=Elevator
+entities.XaphanHelper/Elevator.attributes.description.sprite=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/Elevator.attributes.description.endPosition=Number of pixels the elevator will travel when used.\nPositive values move the elevator downward, and negative values move it upward. (1 tile in game is 8x8 pixels)
+entities.XaphanHelper/Elevator.attributes.description.canTalk=Can the player interact with the elevator to activate it? Must be set for the elevator to transport the player to an other room or chapter. If not set, the elevator will activate as soon as the player step on it.
+entities.XaphanHelper/Elevator.attributes.description.usableInSpeedrunMode=Only used in SoCM. Leave not set.
+entities.XaphanHelper/Elevator.attributes.description.timer=Time to wait between elevator activation and it actually moving.
+entities.XaphanHelper/Elevator.attributes.description.endAreaEntrance=Only used in SoCM. Leave not set.
+entities.XaphanHelper/Elevator.attributes.description.toChapter=Wich chapter this elevator will transport the player into. 0 =interlude.\nSet this to the current chapter to transport the player in an other room of the current chapter instead.
+entities.XaphanHelper/Elevator.attributes.description.destinationRoom=Name of the room the player will be transported into. If empty, the starting room of the corresponding chapter will be used.
+entities.XaphanHelper/Elevator.attributes.description.spawnRoomX=X position of the spawn point the player will appear in the destination room.
+entities.XaphanHelper/Elevator.attributes.description.spawnRoomY=Y position of the spawn point the player will appear in the destination room.
+entities.XaphanHelper/Elevator.attributes.description.oneUse=If true, the player will not be able to use the elevator again after using it once.
+entities.XaphanHelper/Elevator.attributes.description.flag=The flag that must be set for this elevator to be usable by the player. Leave empty if you want the elevator to always be usable.
+
+# ElevatorBarrier
+entities.XaphanHelper/ElevatorBarrier.placements.name.ElevatorBarrier=Elevator Barrier
+
+# EtherealBlock
+entities.XaphanHelper/EtherealBlock.placements.name.EtherealBlock=Ethereal Block
+entities.XaphanHelper/EtherealBlock.attributes.description.tiletype=Change the visual apparence of the block.
+
+# FlagDashSwitch
+entities.XaphanHelper/FlagDashSwitch.placements.name.FlagDashSwitch=Flag Dash Switch
+entities.XaphanHelper/FlagDashSwitch.attributes.description.side=The side the switch will face.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.persistent=Once turned on, it will stay activated even if the player die. (No effect if Can Swap Flag is true)
+entities.XaphanHelper/FlagDashSwitch.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml. (minus dashSwitch_)
+entities.XaphanHelper/FlagDashSwitch.attributes.description.flag=The flag that will be affected once the player dash into the switch.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.registerInSaveData=If true, the flag will be registered in the player Save file and will be set forever. (No effect if Can Swap Flag is true and Mode is not set to SetTrue)
+entities.XaphanHelper/FlagDashSwitch.attributes.description.saveDataOnlyAfterCheckpoint=If true, the flag will be registered in the player Save file and will be set forever only after they get to a checkpoint in the current room or exit the room.\n(Register In Save Data must be set to true. No effect if Can Swap Flag is true and Mode is not set to SetTrue)
+entities.XaphanHelper/FlagDashSwitch.attributes.description.canSwapFlag=If true, the player will be able to dash into this switch multiple times, each time inverting the state of the flag.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.particleColor1=Hexadecimal code of the first color of particles emited when the player dash into the switch.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.particleColor2=Hexadecimal code of the second color of particles emited when the player dash into the switch.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.mode=SetTrue: The flag will be set to true when the player dash into the switch.\nSetFalse: The flag will be set to false when the player dash into the switch.\nSetInverted: The flag state will be inverted when the player dash into the switch.
+entities.XaphanHelper/FlagDashSwitch.attributes.description.inWall=If true, move the switch 4 pixels toward the wall. If Side is set to Left or Right, prevent the player to stand on it. If Side is set to Up or Down, prevent the player to grab it.
+
+# FlagStrawberry
+entities.XaphanHelper/FlagStrawberry.placements.name.FlagStrawberry=Flag Strawberry
+entities.XaphanHelper/FlagStrawberry.attributes.description.flag=The flag that will be set once this strawberry is collected.
+entities.XaphanHelper/FlagStrawberry.attributes.description.order=Manually determine what order strawberries are visually placed in on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/FlagStrawberry.attributes.description.checkpointID=Manually determine what the checkpoint section strawberries are visually grouped up in, showing up on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/FlagStrawberry.attributes.description.moon=Makes the strawberry render as a space berry.
+entities.XaphanHelper/FlagStrawberry.attributes.description.winged=The strawberry attempts to verticaly rise offscreen when the player dashes.
+
+# FlagSwapBlock
+entities.XaphanHelper/FlagSwapBlock.placements.name.FlagSwapBlock=Flag Swap Block
+entities.XaphanHelper/FlagSwapBlock.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/FlagSwapBlock.attributes.description.speed=Speed of the block, going from stating position to end position.
+entities.XaphanHelper/FlagSwapBlock.attributes.description.flag=The flag that must be set once for the swap block to react to the player dash.
+entities.XaphanHelper/FlagSwapBlock.attributes.description.toggle=If true, the swap block will not return to the starting position on it's own, and will do so only when the player dash again.
+entities.XaphanHelper/FlagSwapBlock.attributes.description.particleColor1=Hexadecimal code of the first color of particles emited when the block move from one side to the other.
+entities.XaphanHelper/FlagSwapBlock.attributes.description.particleColor2=Hexadecimal code of the second color of particles emited when the block move from one side to the other.
+
+# FlagTempleGate
+entities.XaphanHelper/FlagTempleGate.placements.name.FlagTempleGate=Flag Temple Gate
+entities.XaphanHelper/FlagTempleGate.attributes.description.flag=The flag that need to be set for the gate to open.
+entities.XaphanHelper/FlagTempleGate.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml. (minus templegate_)
+entities.XaphanHelper/FlagTempleGate.attributes.description.openOnHeartCollection=If true, the gate will open when the heart is collected by the player in the current session (regardless of the flag state)
+entities.XaphanHelper/FlagTempleGate.attributes.description.startOpen=If true, the gate will be open when the player enter the room, and will close when the flag is true.
+entities.XaphanHelper/FlagTempleGate.attributes.description.horizontal=If true, the gate will be horizontal instead of vertical.
+entities.XaphanHelper/FlagTempleGate.attributes.description.attachRight=If true, the gate will be attached to the right. (only if Horizontal is true)
+
+# HeatController
+entities.XaphanHelper/HeatController.placements.name.HeatController=Heat Controller
+entities.XaphanHelper/HeatController.attributes.description.maxDuration=Duration (in seconds) before the player die due to overheating.
+entities.XaphanHelper/HeatController.attributes.description.heatEffect=If true, add a heat effect to the room.
+entities.XaphanHelper/HeatController.attributes.description.inactiveFlag=While this flag is set, the controller will have no effect (the Heat Effect will still be shown if it's set).
+
+# InGameMapController
+entities.XaphanHelper/InGameMapController.placements.name.InGameMapController=In-Game Map Controller
+entities.XaphanHelper/InGameMapController.attributes.description.exploredRoomColor=Hexadecimal code for the color of rooms the player has explored.
+entities.XaphanHelper/InGameMapController.attributes.description.unexploredRoomColor=Hexadecimal code for the color of rooms the player has not yet explored.
+entities.XaphanHelper/InGameMapController.attributes.description.secretRoomColor=Hexadecimal code for the color of secret rooms.
+entities.XaphanHelper/InGameMapController.attributes.description.heatedRoomColor=Hexadecimal code for the color of heated rooms.
+entities.XaphanHelper/InGameMapController.attributes.description.roomBorderColor=Hexadecimal code for the color of the rooms borders.
+entities.XaphanHelper/InGameMapController.attributes.description.elevatorColor=Hexadecimal code for the color of the elevator and elevator shaft in elevator rooms.
+entities.XaphanHelper/InGameMapController.attributes.description.gridColor=Hexadecimal code for the color of the grid.
+entities.XaphanHelper/InGameMapController.attributes.description.mapName=Dialog ID used to display the name at the top of the map. If empty, the chapter name will be displayed instead.
+entities.XaphanHelper/InGameMapController.attributes.description.revealUnexploredRooms=If true, unexplored rooms will be revealed immediately.
+entities.XaphanHelper/InGameMapController.attributes.description.requireMapUpgradeToOpen=If true, the player need to collect the Map upgrade before being able to open the In-Game map.
+entities.XaphanHelper/InGameMapController.attributes.description.showProgress=Determine when the map will show the player progress.\nAlways: The player progress is allways shown.\nAfterChapterComplete: The player progress is shown once the player has completed the current chapter.\nAfterCampaignComplete: The player progress is shown once the player completed all chapters part of the campaign.\nNever: The player progress is never shown.
+entities.XaphanHelper/InGameMapController.attributes.description.hideMapProgress=If true, the player progress will not display the percentage of the map explored by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideStrawberryProgress=If true, the player progress wil not display the amount of strawberries collected by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideMoonberryProgress=If true, the player progress wil not display the amount of moonberries collected by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideUpgradeProgress=If true, the player progress wil not display the amount of upgrades collected by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideHeartProgress=If true, the player progress wil not display if the heart is collected by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideCassetteProgress=If true, the player progress wil not display if the cassette is collected by the player.
+entities.XaphanHelper/InGameMapController.attributes.description.hideIconsInUnexploredRooms=If true, icons will not be displayed on the map for unexplored rooms.
+entities.XaphanHelper/InGameMapController.attributes.description.customCollectablesProgress=Custom collectables that should be shown in the player progress, separated by a comma (,).\nEach Custom Collectable that has the value of their 'Map Icon' attribute listed here will be displayed.\nThe icon that will represent each Custom Collectable must be in Atlases/Gui/maps/(yourname)/(yourcampaignname)/keys/(Map Icon attribute)\nThe order you list the collectables here determine the order the player progress will display them.
+entities.XaphanHelper/InGameMapController.attributes.description.secretsCustomCollectablesProgress=Custom collectables from the 'Custom Collectables Progress' attribute that should be considered as secret, separated by a comma (,).\nFor each collectable listed here, the player progres will only display the collectable once the player have collected at least one.
+entities.XaphanHelper/InGameMapController.attributes.description.progressColor=Hexadecimal code for the color of the player progress values.
+entities.XaphanHelper/InGameMapController.attributes.description.progressCompleteColor=Hexadecimal code for the color of the player progress values when the player has collected every collectable of the same type in a Chapter or Sub Area.
+
+# InGameMapHintController
+entities.XaphanHelper/InGameMapHintController.placements.name.InGameMapHintController=In-Game Map Hint Controller
+entities.XaphanHelper/InGameMapHintController.attributes.description.displayFlags=The flags that must be true for this hint to be visible, separated by a comma (,).
+entities.XaphanHelper/InGameMapHintController.attributes.description.hideFlag=The flag that must be true for this hint to no longer be visible.
+entities.XaphanHelper/InGameMapHintController.attributes.description.tileCords=Coordinates of the tile where the hint will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapHintController.attributes.description.removeWhenReachedByPlayer=If true, the hint will no longer appear once the player reached the tile where the hint is drawn.
+entities.XaphanHelper/InGameMapHintController.attributes.description.type=Type of the hint. 'Target' can be used to indicate a position in a room, while 'Arrow' ideally indicate a transition to an other chapter via an Elevator or a TeleportToChapter trigger.
+entities.XaphanHelper/InGameMapHintController.attributes.description.direction=Direction the arrow will point toward if type is set to Arrow. Ignored if type is set to Target.
+
+# InGameMapRoomAdjustController
+entities.XaphanHelper/InGameMapRoomAdjustController.placements.name.InGameMapRoomAdjustController=In-Game Map Room Adjust Controller
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.positionX=Moves the room horizontally on the map.\nPositive values move the room to the right, and negative values move it to the left. (in tiles)
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.positionY=Moves the room vertically on the map.\nPositive values move the room downward, and negative values move it upward. (in tiles)
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.sizeX=Increases or decreases the horizontal size of the room. (in tiles, only if the room doses not contain an InGameMapTilesController)
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.sizeY=Increases or decreases the vertical size of the room. (in tiles, only if the room doses not contain an InGameMapTilesController)
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance0=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance1=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance2=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance3=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance4=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance5=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance6=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance7=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance8=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.removeEntrance9=Hide this entrance on the map.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.ignoreIcons=If true, icons used in this room will not move if the room is moved via this controller.
+entities.XaphanHelper/InGameMapRoomAdjustController.attributes.description.hiddenTiles=Coordinates of tiles that won't be displayed when the player unlock this chapter map or if 'revealUnexploredRooms' is set in the InGameMapController.\n(Format: X-Y, separated by a comma. Example: 0-0,0-1,2-3 (0-0 is top left tile))
+
+# InGameMapRoomController
+entities.XaphanHelper/InGameMapRoomController.placements.name.InGameMapRoomController=In-Game Map Room Controller
+entities.XaphanHelper/InGameMapRoomController.attributes.description.showUnexplored=If true, this room will be visible when the player unlock this chapter map or if 'revealUnexploredRooms' is set in the InGameMapController.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.secret=If true, this room will be treated as a secret room and use the secret room color.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance0Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance0Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance1Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance1Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance2Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance2Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance3Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance3Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance4Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance4Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance5Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance5Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance6Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance6Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance7Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance7Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance8Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance8Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance9Position=The border of the tile where this entrance will be drawn. Can be set to Left, Right, Top or Bottom. None =no entrance.
+entities.XaphanHelper/InGameMapRoomController.attributes.description.entrance9Cords=Coordinates of the tile where the entrance will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapRoomController.attributes.description.mapShardIndex=Index of the MapShard upgrade the player must collect for this room to be revealed. (only if Show Unexplored is true)
+entities.XaphanHelper/InGameMapRoomController.attributes.description.subAreaIndex=Index of the Sub Area this room is part of.
+
+# InGameMapSubAreaController
+entities.XaphanHelper/InGameMapSubAreaController.placements.name.InGameMapSubAreaController=In-Game Map Sub Area Controller
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.subAreaName=Dialog ID used to display the name at the top of the map when the player is in this Sub Area. If empty, the Sub Area name will not be shown.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.subAreaIndex=Index of this Sub Area. All rooms that have the same Sub Area Index as this one in their In-Game Map Room Controller will be part of this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.exploredRoomColor=Hexadecimal code for the color of rooms the player has explored in this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.unexploredRoomColor=Hexadecimal code for the color of rooms the player has not yet explored in this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.secretRoomColor=Hexadecimal code for the color of secret rooms in this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.heatedRoomColor=Hexadecimal code for the color of heated rooms in this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.roomBorderColor=Hexadecimal code for the color of the rooms borders in this Sub Area.
+entities.XaphanHelper/InGameMapSubAreaController.attributes.description.elevatorColor=Hexadecimal code for the color of the elevator and elevator shaft in elevator rooms in this Sub Area.
+
+# InGameMapTilesController
+entities.XaphanHelper/InGameMapTilesController.placements.name.InGameMapTilesController=In-Game Map Tiles Controller
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile0=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile0Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile1=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile1Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile2=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile2Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile3=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile3Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile4=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile4Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile5=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile5Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile6=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile6Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile7=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile7Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile8=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile8Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile9=Tile to draw. None =No tile.
+entities.XaphanHelper/InGameMapTilesController.attributes.description.tile9Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+
+# JumpBlock
+entities.XaphanHelper/JumpBlock.placements.name.JumpBlock=Jump Block
+entities.XaphanHelper/JumpBlock.attributes.description.index=Index of the block.\nThe blocks with the smallest index will start solid when the player enter the room.\nEach time the player jump, all blocks with the next index in chronological order will turn solid and other blocks will not be collidable anymore.\nIf all blocks in the room have the same index, they will switch from solid to air and vice versa each time the player jumps.
+entities.XaphanHelper/JumpBlock.attributes.description.color=Hexadecimal code for the color of the block.
+entities.XaphanHelper/JumpBlock.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/JumpBlock.attributes.description.soundIndex=Sound that play when the player grab, land or walk on the block.
+
+# LaserDetector
+entities.XaphanHelper/LaserDetector.placements.name.LaserDetector=Laser Detector
+entities.XaphanHelper/LaserDetector.attributes.description.flag=The flag that will be set as long as a laser beam collide with this detector.
+entities.XaphanHelper/LaserDetector.attributes.description.sides=The sides of this detector that will check for collision with a laser beam.
+entities.XaphanHelper/LaserDetector.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+
+# LaserEmitter
+entities.XaphanHelper/LaserEmitter.placements.name.LaserEmitter=Laser Emitter
+entities.XaphanHelper/LaserEmitter.attributes.description.flag=The flag that must be set for the laser to be active. If empty, the laser will always be active.
+entities.XaphanHelper/LaserEmitter.attributes.description.side=The direction the emitter will shoot the laser.
+entities.XaphanHelper/LaserEmitter.attributes.description.type=Kill: Kill the player when they touch the laser. If your map use upgrades, the player can dash trough it if they use the Screw Attack upgrade.\nNo Dash: Kill the player if they dash trough the laser.\nMust Dash: Kill the player if they do not dash trough the laser.
+entities.XaphanHelper/LaserEmitter.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/LaserEmitter.attributes.description.inverted=If true, the flag must not be set for the laser to be active. (No effect if flag is empty)
+entities.XaphanHelper/LaserEmitter.attributes.description.base=If true, add a base to the laser emitter.
+entities.XaphanHelper/LaserEmitter.attributes.description.noBeam=If true, this laser emitter will not shoot any laser.
+
+# LinkedFakeWall
+entities.XaphanHelper/LinkedFakeWall.placements.name.LinkedFakeWall=Linked Fake Wall
+entities.XaphanHelper/LinkedFakeWall.attributes.description.mode=Block: The fake wall will not try to merge with nearby solid tiles.\nWall: The fake wall will try to merge with nearby solid tiles.
+entities.XaphanHelper/LinkedFakeWall.attributes.description.tiletype=Change the visual apparence of the wall.
+entities.XaphanHelper/LinkedFakeWall.attributes.description.playTransitionReveal=If true, play the secret revealed sound if the player enter this fake wall during a screen transition.
+
+# Liquid
+entities.XaphanHelper/Liquid.placements.name.Liquid=Liquid
+entities.XaphanHelper/Liquid.attributes.description.lowPosition=Number of pixels bellow the current position of the liquid that it will wave to. (moving down, then up again, and so on...) 8 pixels =1 game tile.
+entities.XaphanHelper/Liquid.attributes.description.liquidType=Type of the liquid.\nAcid and Acid_b: Liquid that kill the player on contact.\nLava: Bubbling liquid that emit sound and kill the player on contact.\nQuicksand: Liquid in which the player sinks slowly and heavyly slown down it's movements and jump height. Also prevent the player to climb and dash. \nWater: Liquid that slow down player movement while inside of it, unless they have the GravityJacket upgrade.
+entities.XaphanHelper/Liquid.attributes.description.frameDelay=Delay between each frame of the animation of the liquid.
+entities.XaphanHelper/Liquid.attributes.description.color=Hexadecimal code for the color of the liquid. Leave blank to use the default liquid color.
+entities.XaphanHelper/Liquid.attributes.description.transparency=Transparency of the liquid. Values can be 0.01 to 1. The closest to 1, the more opaque the liquid will be.\nSetting this to 0 will use the default value.
+entities.XaphanHelper/Liquid.attributes.description.foreground=If true, the liquid will render on top of foreground tiles as well.
+entities.XaphanHelper/Liquid.attributes.description.riseDelay=Time (in seconds) the liquid will wait before rising.
+entities.XaphanHelper/Liquid.attributes.description.riseDistance=Number of pixels this liquid will rise before stoping. Negative values will drain the liquid instead. 8 pixels =1 game tile.\nIf left at 0, the liquid will nor raise or drain and other 'Rise' attributes will be ignored.
+entities.XaphanHelper/Liquid.attributes.description.riseSpeed=Speed at wich the liquid will rise.
+entities.XaphanHelper/Liquid.attributes.description.riseShake=If true, the screen will be shaking while the liquid is rising (and during the Rise Delay as well).
+entities.XaphanHelper/Liquid.attributes.description.riseFlag=The flag that must be set for the liquid to start rising. Leave blank for no flag.
+entities.XaphanHelper/Liquid.attributes.description.riseEndFlag=If this flag is set, the liquid will immediately be at the position it would be when it stop rising when entering the room, and it will not rise anymore.
+entities.XaphanHelper/Liquid.attributes.description.riseSound=If true, a sound will play while the liquid is rising (and during the Rise Delay as well).
+entities.XaphanHelper/Liquid.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.\nThis directory must contain a sub-directory for the liquid type. (name of sub-directory =name of the liquid type)\nIf empty, default sprites will be used.
+entities.XaphanHelper/Liquid.attributes.description.surfaceHeight=Number of tiles in your custom sprites for the height of the surface of the liquid.\nThis correspond to the number of tiles at the top of your custom sprites that will be drawn only once.\nIf not using custom sprites, leave this to 0 to use default values based on the liquid type.
+entities.XaphanHelper/Liquid.attributes.description.visualOnly=If true, the liquid will have no effect on the player physics nor will be able to kill them.
+entities.XaphanHelper/Liquid.attributes.description.canSwim=If true, the player will be able to swim in the liquid just like vanilla water.
+
+# MagneticCeiling
+entities.XaphanHelper/MagneticCeiling.placements.name.MagneticCeiling=Magnetic Ceiling
+entities.XaphanHelper/MagneticCeiling.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/MagneticCeiling.attributes.description.animationSpeed=Delay between each frame of the animation.
+entities.XaphanHelper/MagneticCeiling.attributes.description.canJump=If true, the player can jump while grabing the ceiling.
+entities.XaphanHelper/MagneticCeiling.attributes.description.noStaminaDrain=If true, the player will not use stamina while grabing the ceiling.
+
+# MergeChaptersController
+entities.XaphanHelper/MergeChaptersController.placements.name.MergeChaptersController=Merge Chapters Controller
+entities.XaphanHelper/MergeChaptersController.attributes.description.mode=Classic: The player will start at the checkpoint they selected (same as vanilla).\nRooms: The player will start in the same room they were when they left the campaign.\nWarps: The player will start at the location of the last activated Warp Station they stood on.
+entities.XaphanHelper/MergeChaptersController.attributes.description.keepPrologueSeparated=If true, the starting chapter of the campaign will not be merged.\nNo effect if the starting chapter of the campaign is not set as an interlude.
+
+# SetStatsFlagsController
+entities.XaphanHelper/SetStatsFlagsController.placements.name.SetStatsFlagsController=Set Stats Flags Controller
+
+# Slope
+entities.XaphanHelper/Slope.placements.name.Slope=Slope
+entities.XaphanHelper/Slope.attributes.description.side=Side of the slope.
+entities.XaphanHelper/Slope.attributes.description.gentle=If true, the slope will take 2 tiles per tile up or down instead of one.
+entities.XaphanHelper/Slope.attributes.description.soundIndex=Sound that play when the player land or walk on the slope.
+entities.XaphanHelper/Slope.attributes.description.slopeHeight=Height od the slope. This will also increase it's width automatically.
+entities.XaphanHelper/Slope.attributes.description.tilesTop=Tile pattern at the top of the slope. Use this to 'connect' the slope to nearby solid tiles.
+entities.XaphanHelper/Slope.attributes.description.tilesBottom=Tile pattern at the bottom of the slope. Use this to 'connect' the slope to nearby solid tiles.
+entities.XaphanHelper/Slope.attributes.description.customDirectory=Leave the default value or empty if using vanilla textures. Specify the directory your custom texture is located at here, relative to Atlases/Gameplay/.
+entities.XaphanHelper/Slope.attributes.description.texture=Texture of the slope. Type your custom texture name here if you have set a custom directory.
+entities.XaphanHelper/Slope.attributes.description.canSlide=If true, the player can slide on the slope by holding down on it.
+entities.XaphanHelper/Slope.attributes.description.upsideDown=Flip the slope so that it can be used on ceilings instead of the ground.
+entities.XaphanHelper/Slope.attributes.description.noRender=If true, the slope will be invisible.
+entities.XaphanHelper/Slope.attributes.description.stickyDash=If true, the player will stick to the slope while dashing away from it.
+entities.XaphanHelper/Slope.attributes.description.rainbow=If true, the slope will have a rainbow effect. (No effect if No Render is true)
+entities.XaphanHelper/Slope.attributes.description.canJumpThrough=If true, the player can jump through the slope.
+
+# TeleportStrawberry
+entities.XaphanHelper/TeleportStrawberry.placements.name.TeleportStrawberry=Teleport Strawberry
+entities.XaphanHelper/TeleportStrawberry.attributes.description.destinationRoom=Name of the room the player will be transported into.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.spawnRoomX=X position of the spawn point the player will appear in the destination room.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.spawnRoomY=Y position of the spawn point the player will appear in the destination room.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.wipeType=Wipe effect to use during the teleportation.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.wipeDuration=Duration of the wipe effect (in seconds).
+entities.XaphanHelper/TeleportStrawberry.attributes.description.requiredStarwberriesToTeleport=Number of strawberries (including this one) that must have been collected in the current chapter to trigger the teleport.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.order=Manually determine what order strawberries are visually placed in on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/TeleportStrawberry.attributes.description.checkpointID=Manually determine what the checkpoint section strawberries are visually grouped up in, showing up on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/TeleportStrawberry.attributes.description.moon=Makes the strawberry render as a space berry.
+entities.XaphanHelper/TeleportStrawberry.attributes.description.winged=The strawberry attempts to verticaly rise offscreen when the player dashes.
+
+# TeleportToOtherSidePortal
+entities.XaphanHelper/TeleportToOtherSidePortal.placements.name.TeleportToOtherSidePortal=Teleport To Other Side Portal
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.side=The side of the current chapter the player will be teleported to, when entering the portal.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.requireCassetteCollected=If true, the cassette of the current chapter must have been collected first before the portal can appear.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.wipeDuration=Duration of the wipe effect (in seconds).
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.wipeType=Wipe effect to use during the teleportation.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.warpSfx=Sound event that play when the player is teleported.\nLeave empty to use the default sound.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.teleportToStartingSpawnOfChapter=If true, the player will be telported at the normal starting spawn instead of the closest spawn of the portal in the destination side if there is one.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.requireCSideUnlocked=If true, the C-Side for the current chapter must be unlocked first before the portal can appear.
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.flags=The flags that must be true before the portal can appear, separated by a comma (,).
+entities.XaphanHelper/TeleportToOtherSidePortal.attributes.description.registerCurrentSideAsCompelete=If true, the side will be considered complete before teleporting the player.\nUsefull when ending a B or C side with a portal instead of a heart.
+
+# TimedBlock
+entities.XaphanHelper/TimedBlock.placements.name.TimedBlock=Timed Block
+entities.XaphanHelper/TimedBlock.attributes.description.startPressed=If true, the block will not be solid when the player enter the room, and will turn solid when a Timed Dash Switch is pressed.
+entities.XaphanHelper/TimedBlock.attributes.description.color=Hexadecimal code for the color of the block.
+entities.XaphanHelper/TimedBlock.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/TimedBlock.attributes.description.soundIndex=Sound that play when the player grab, land or walk on the block.
+
+# TimedDashSwitch
+entities.XaphanHelper/TimedDashSwitch.placements.name.TimedDashSwitch=Timed Dash Switch
+entities.XaphanHelper/TimedDashSwitch.attributes.description.side=The side the switch will face.\nAvaiable sides : Up, Down, Left and Right.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml. (minus dashSwitch_)
+entities.XaphanHelper/TimedDashSwitch.attributes.description.mode=Add: If a Timed Dash Switch has already been pressed and the timer is still ticking, the timer of this switch will be added to the current time remaining, rounded to the nearest second.\nSet: If a Timed Dash Switch has already been pressed and the timer is still ticking, the timer of this switch will replace the current time remaining.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.timer=Time (in seconds) of the timer that will start once this switch is pressed. Minimum 3 seconds.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.tickingType=On Top: The ticking sound will play on top of the current music.\nTick only: The ticking sound will replace the current music.\nNone: No ticking sound will play.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.particleColor1=Hexadecimal code of the first color of particles emited when the player dash into the switch.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.particleColor2=Hexadecimal code of the second color of particles emited when the player dash into the switch.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.flag=The flag that will be set while the timer is ticking.
+entities.XaphanHelper/TimedDashSwitch.attributes.description.inWall=If true, move the switch 4 pixels toward the wall. If Side is set to Left or Right, prevent the player to stand on it. If Side is set to Up or Down, prevent the player to grab it.
+
+# TimedStrawberry
+entities.XaphanHelper/TimedStrawberry.placements.name.TimedStrawberry=Timed Strawberry
+entities.XaphanHelper/TimedStrawberry.attributes.description.keepEvenIfTimerRunOut=If true, the strawberry will not disapear if the player grabbed it before the timer ran out, but has not collected it.
+entities.XaphanHelper/TimedStrawberry.attributes.description.order=Manually determine what order strawberries are visually placed in on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/TimedStrawberry.attributes.description.checkpointID=Manually determine what the checkpoint section strawberries are visually grouped up in, showing up on the start menu during gameplay and level select. Overrides Everest's automatic berry IDs. (Default =-1)
+entities.XaphanHelper/TimedStrawberry.attributes.description.moon=Makes the strawberry render as a space berry.
+
+# TimedTempleGate
+entities.XaphanHelper/TimedTempleGate.placements.name.TimedTempleGate=Timed Temple Gate
+entities.XaphanHelper/TimedTempleGate.attributes.description.startOpen=If true, the gate will be open when the player enter the room, and will close while a timer is ticking.
+entities.XaphanHelper/TimedTempleGate.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml. (minus templegate_)
+
+# TimerRefill
+entities.XaphanHelper/TimerRefill.placements.name.TimerRefill=Timer Refill
+entities.XaphanHelper/TimerRefill.attributes.description.oneUse=If true, the refill disapear after the player collected it.
+entities.XaphanHelper/TimerRefill.attributes.description.timer=Time (in seconds) that will be added or replace the current timer once this refill is collected based on the mode. Minimum 3 seconds.
+entities.XaphanHelper/TimerRefill.attributes.description.mode=Add: The timer of this refill will be added to the current time remaining, rounded to the nearest second.\nSet: The timer of this refill will replace the current time remaining.
+entities.XaphanHelper/TimerRefill.attributes.description.respawnTime=Time (in seconds) after collecting this refill before it can be collected again.
+
+# UpgradeCollectable
+entities.XaphanHelper/UpgradeCollectable.placements.name.UpgradeCollectable=Upgrade Collectable
+entities.XaphanHelper/UpgradeCollectable.attributes.description.collectSound=Sound event that play when the player collect this upgrade.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.newMusic=The music event that play after the upgrade has been collected. Leave blank to use the same music as the one that played before the upgrade was collected.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.upgrade=The upgrade that will be granted to the player.\nMap: Allow the player to open the In-Game map (if your chapter use it) and display the mini-map.\nMapShard: Reveal all rooms set as 'Show Unexplored' (and with the same MapShardIndex as the one defined in this upgrade MapShardIndex) in their respective InGameMapRoomController on the In-Game map for the current chapter.\nBinoculars: Allows the player to use binoculars to preview the room at any time.\nBombs: Allow the player to set bombs that can destroy some walls.\nClimbingKit: Allow the player to climb walls. (requires PowerGrip)\nDashBoots: Allow the player to dash.\nDroneTeleport: Allows the player to teleport to the location of the drone. (requires RemoteDrone)\nEtherealDash: Allow the player to dash trough Ethereal Blocks.\nGoldenFeather: Allow the player to use a feather to glide and ride wind currents.\nGravityJacket: Allow the player to move freely in water and lava. (Liquid entity only)\nHoverBoots: Allow the player to stop their falling speed and float for a short time.\nIceBeam: Allow the remote drone beam to freeze some entities. (requires RemoteDrone)\nLightningDash: Allow the player to horizontally dash in the opposite direction of the wall they are grabbing until they hit a solid wall or entity.\nLongBeam: Allows the remote drone beam to reach futher targets. (requires RemoteDrone)\nMegaBombs: Allows the player to set powerfull bombs that can destroy some walls and activate some blocks.\nPortableStation: Allow the player to teleport to any unlocked Warp Station from anywhere.\nPowerGrip: Allow the player to grab.\nRemoteDrone: Allow the player to control a small drone.\nScrewAttack: Allow the player to destroy some walls, increases it's horizontal speed and allow it to go trough some obstacles without dying while jumping.\nSpaceJump: Allow the player to jump again once in mid-air.\nSpiderMagnet: Allow the player to grab magnetic ceilings.\nVariaJacket: Allow the player to survive in heated rooms and in lava. (Liquid entity only).\nWaveBeam: Allows the remote drone beam to go trough solids. (requires RemoteDrone)
+entities.XaphanHelper/UpgradeCollectable.attributes.description.nameColor=Hexadecimal code for the color of the upgrade name displayed when the player collect it.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.descColor=Hexadecimal code for the color of the upgrade description displayed when the player collect it.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.particleColor=Hexadecimal code for the color of the background particles when the player collect this upgrade.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.customName=Dialog ID to use for the name of this upgrade, instead of the default one. Leave blank to use default name.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.customSprite=The directory from which the sprites are taken instead of the default ones, relative to Atlases/Gameplay/ and Atlases/Gui/.\nYou need 2 sprites:\n-The one in Atlases/Gameplay/ is the one visible in game and should be 16x16 pixels.\n-The one in Atlases/Gui/ is the one displayed in the background when the player colllect this upgrade and in the Status screen and should be 480x480 pixels.\nThe sprites names should be the same as the default name of the upgrade you have selected (As seen in the Upgrade attribute).\nLeave blank to use default sprites.
+entities.XaphanHelper/UpgradeCollectable.attributes.description.mapShardIndex=Only used if Upgrade is set to MapShard. The index of this MapShard that will determine wich rooms it reveal.
+
+# UpgradeController
+entities.XaphanHelper/UpgradeController.placements.name.UpgradeController=Upgrade Controller
+entities.XaphanHelper/UpgradeController.attributes.description.startWithBombs=If true, the player will start with the Bombs upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithClimbingKit=If true, the player will start with the Climbing Kit upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithDashBoots=If true, the player will start with the Dash Boots upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithDroneTeleport=If true, the player will start with the Drone Teleport upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithGoldenFeather=If true, the player will start with the Golden Feather upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithBinoculars=If true, the player will start with the Binoculars upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithEtherealDash=If true, the player will start with the Ethereal Dash upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithGravityJacket=If true, the player will start with the Gravity Jacket upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithHoverBoots=If true, the player will start with the Hover Boots upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithLightningDash=If true, the player will start with the Lightning Dash upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithPortableStation=If true, the player will start with the Portable Station upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithPowerGrip=If true, the player will start with the Power Grip upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithRemoteDrone=If true, the player will start with the Remote Drone upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithScrewAttack=If true, the player will start with the Screw Attack upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithSpaceJump=If true, the player will start with the SpaceJ ump upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithSpiderMagnet=If true, the player will start with the Spider Magnet upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithVariaJacket=If true, the player will start with the Varia Jacket upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithMegaBombs=If true, the player will start with the Mega Bombs upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithLongBeam=If true, the player will start with the Long Beam upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithIceBeam=If true, the player will start with the Ice Beam upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.startWithWaveBeams=If true, the player will start with the Wave Beam upgrade.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithBombs=If true, the player will temporary lost all upgrades but the Bombs when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithClimbingKit=If true, the player will temporary lost all upgrades but the Climbing Kit when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithDashBoots=If true, the player will temporary lost all upgrades but the Dash Boots when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithDroneTeleport=If true, the player will temporary lost all upgrades but the Drone Teleport when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithGoldenFeather=If true, the player will temporary lost all upgrades but the Golden Feather when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithBinoculars=If true, the player will temporary lost all upgrades but the Binoculars when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithEtherealDash=If true, the player will temporary lost all upgrades but the Ethereal Dash when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithGravityJacket=If true, the player will temporary lost all upgrades but the Gravity Jacket when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithHoverBoots=If true, the player will temporary lost all upgrades but the Hover Boots when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithLightningDash=If true, the player will temporary lost all upgrades but the Lightning Dash when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithPortableStation=If true, the player will temporary lost all upgrades but the Portable Station when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithPowerGrip=If true, the player will temporary lost all upgrades but the Power Grip when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithRemoteDrone=If true, the player will temporary lost all upgrades but the Remote Drone when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithScrewAttack=If true, the player will temporary lost all upgrades but the Screw Attack when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithSpaceJump=If true, the player will temporary lost all upgrades but the Space Jump when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithSpiderMagnet=If true, the player will temporary lost all upgrades but the Spider Magnet when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithVariaJacket=If true, the player will temporary lost all upgrades but the Varia Jacket when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithMegaBombs=If true, the player will temporary lost all upgrades but the Mega Bombs when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithLongBeam=If true, the player will temporary lost all upgrades but the Long Beam when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithIceBeam=If true, the player will temporary lost all upgrades but the Ice Beam when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.goldenStartWithWaveBeam=If true, the player will temporary lost all upgrades but the Wave Beam when carrying the golden berry.
+entities.XaphanHelper/UpgradeController.attributes.description.onlyAllowStartingUpgrades=If true, any upgrades except those defined here will be deactivated when entering the chapter.
+entities.XaphanHelper/UpgradeController.attributes.description.upgradesAreTemporary=If true, the player will lose all upgrades aquiered in this chapter when they leave it, and upgrades will be collectable again when they re-enter the chapter.
+entities.XaphanHelper/UpgradeController.attributes.description.disableStatusScreen=If true, the status screen cannot be opened.
+
+# WarpStation
+entities.XaphanHelper/WarpStation.placements.name.WarpStation=Warp Station
+entities.XaphanHelper/WarpStation.attributes.description.beamColor=Hexadecimal code for the color of the beam that appear when the warp is activated.
+entities.XaphanHelper/WarpStation.attributes.description.confirmSfx=Sound event that play when the player is teleported to an other Warp Station.\nLeave empty to use the default sound
+entities.XaphanHelper/WarpStation.attributes.description.flag=This flag must be set to allow the player to activate the warp.\nLeave empty to make this warp always activable.
+entities.XaphanHelper/WarpStation.attributes.description.index=Leave at 0 if this is the only Warp Station in this room.\nIf more than one Warp Station is in this room, set this to anything other than 0 and to a different value for each Warp Station in this room.
+entities.XaphanHelper/WarpStation.attributes.description.sprite=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
+entities.XaphanHelper/WarpStation.attributes.description.wipeDuration=Duration of the wipe effect (in seconds).
+entities.XaphanHelper/WarpStation.attributes.description.wipeType=Wipe effect to use during the teleportation.
+entities.XaphanHelper/WarpStation.attributes.description.noBeam=If true, the beam will not appear when the warp is activated.
+
+# -- Triggers -- 
+
+# GlobalFlagTrigger
+triggers.XaphanHelper/GlobalFlagTrigger.placements.name.GlobalFlagTrigger=Global Flag
+triggers.XaphanHelper/GlobalFlagTrigger.attributes.description.flag=The flag affected when the player enter this trigger.\nThis flag will be automatically prefixed by 'Ch[chapterIndex]_' where [chapterIndex] is the chapter index of the chapter this trigger is in.\nIf the chapter is set as an Interlude, [chapterIndex] will be 0.\nExample: If you type 'Flag' here and this trigger is in the first chapter of this campaign, the flag 'Ch1_Flag' will be set for all chapters of this campaign.
+triggers.XaphanHelper/GlobalFlagTrigger.attributes.description.state=If true, the flag will be set when the player enter the trigger, else the flag will be unset instead.
+triggers.XaphanHelper/GlobalFlagTrigger.attributes.description.switchFlag=If true, the flag will switch between being set and not set each time the player enter the trigger.
+triggers.XaphanHelper/GlobalFlagTrigger.attributes.description.levelSet=The levelSet this flag will affect. Leave blank to use the levelSet corresponding to the current chapter.
+
+# HideMiniMapTrigger
+triggers.XaphanHelper/HideMiniMapTrigger.placements.name.HideMiniMapTrigger=Hide MiniMap
+
+# MultiMusicTrigger
+triggers.XaphanHelper/MultiMusicTrigger.placements.name.MultiMusicTrigger=Multi Music
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.flagA=The first flag this trigger will check. If empty, the trigger will have no effect.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.flagB=The second flag this trigger will check. Ignored if Flag A is empty.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackA=The music event that play when the player enter this trigger and ONLY the flag in Flag A is set.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackB=The music event that play when the player enter this trigger and ONLY the flag in Flag B is set.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackBoth=The music event that play when the player enter this trigger and both flags in Flag A AND Flag B are set.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackNone=The music event that play when the player enter this trigger and both flags in Flag A AND Flag B are NOT set.
+
+# ResetFlagsTrigger
+triggers.XaphanHelper/ResetFlagsTrigger.placements.name.ResetFlagsTrigger=Reset Flags
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.setTrueFlags=The flags that will be set when entering the trigger, separated by a comma (,).
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.setFalseFlags=The flags that will be unset when entering the trigger, separated by a comma (,).
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.transitionUpdate=If true, the trigger will also work during room transitions.
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.removeWhenOutside=If true, the trigger is removed if the player spawn or move outside of it.
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.registerInSaveData=If true, the flags in "Set True Flags" will be registered in the player save file and will be true forever. The flags in "Set False Flags" will be removed from the player save file.
+
+# StartCountdownTrigger
+triggers.XaphanHelper/StartCountdownTrigger.placements.name.StartCountdownTrigger=Start Countdown
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.time=Time (in seconds) of the countdown that will start once the player enter the trigger.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.startFlag=This flag must be set for the countdown to start. Leave empty to not require any flag.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.activeFlag=This flag will be set to true while the countdown is ticking.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.shake=If true, the screen will be shaking while the countdown is ticking.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.explosions=If true, explosions will apear randomly on the screen while the countdown is ticking.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.crossChapter=If true, the countdown will transfert from chapter to chapter if the player use a Warp Station, an Elevator or enter a Teleport to Chapter Trigger.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.dialogID=Dialog ID of the message that will be draw on screen before the countdown start.\nLeave empty for no message.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.messageTimer=Time (in seconds) while the message will be shown on screen (including the time needed to write the message).\nThe countdown will start 2.5 seconds before this time end.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.fastMessageDisplay=If true, the message will be drawn on screen faster.
+triggers.XaphanHelper/StartCountdownTrigger.attributes.description.messageColor=Hexadecimal code for the color of the message.
+
+# StopAdjustInGameMapTrigger
+triggers.XaphanHelper/StopAdjustInGameMapTrigger.placements.name.StopAdjustInGameMapTrigger=Stop Adjust In-Game Map
+
+# StopCountdownTrigger
+triggers.XaphanHelper/StopCountdownTrigger.placements.name.StopCountdownTrigger=Stop Countdown
+
+# SubAreaNameTrigger
+triggers.XaphanHelper/SubAreaNameTrigger.placements.name.SubAreaNameTrigger=Sub-Area Name
+triggers.XaphanHelper/SubAreaNameTrigger.attributes.description.dialogID=Dialog ID used to display the name of the area.
+triggers.XaphanHelper/SubAreaNameTrigger.attributes.description.timer=How long the text stay on screen.
+triggers.XaphanHelper/SubAreaNameTrigger.attributes.description.textPositionX=X position of the text.
+triggers.XaphanHelper/SubAreaNameTrigger.attributes.description.textPositionY=Y position of the text. (between 80 for top of the screen and 1080 for bottom of the screen)
+
+# TeleportToChapterTrigger
+triggers.XaphanHelper/TeleportToChapterTrigger.placements.name.TeleportToChapterTrigger=Teleport To Chapter
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.destinationRoom=Name of the room the player will be transported into. If empty, the starting room of the corresponding chapter will be used.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.spawnRoomX=X position of the spawn point the player will appear in the destination room.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.spawnRoomY=Y position of the spawn point the player will appear in the destination room.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.toChapter=Wich chapter the player will be teleported to. 0 =interlude.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.wipeDuration=Duration of the wipe effect (in seconds).
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.wipeType=Wipe effect to use during the teleportation.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.registerCurrentChapterAsCompelete=If true, the chapter will be considered complete before teleporting the player.
+triggers.XaphanHelper/TeleportToChapterTrigger.attributes.description.canInteract=If true, the player will need to interact with the trigger to get teleported instead of just entering the trigger.
+
+# UpgradeTrigger
+triggers.XaphanHelper/UpgradeTrigger.placements.name.UpgradeTrigger=Upgrade
+triggers.XaphanHelper/UpgradeTrigger.attributes.description.upgrade=The upgrade that will be granted to the player.\nBinoculars: Allows the player to use binoculars to preview the room at any time.\nBombs: Allow the player to set bombs that can destroy some walls.\nClimbingKit: Allow the player to climb walls. (requires PowerGrip)\nDashBoots: Allow the player to dash.\nDroneTeleport: Allows the player to teleport to the location of the drone. (requires RemoteDrone)\nEtherealDash: Allow the player to dash trough Ethereal Blocks.\nGoldenFeather: Allow the player to use a feather to glide and ride wind currents.\nGravityJacket: Allow the player to move freely in water and lava. (Liquid entity only)\nHoverBoots: Allow the player to stop their falling speed and float for a short time.\nIceBeam: Allow the remote drone beam to freeze some entities. (requires RemoteDrone)\nLightningDash: Allow the player to horizontally dash in the opposite direction of the wall they are grabbing until they hit a solid wall or entity.\nLongBeam: Allows the remote drone beam to reach futher targets. (requires RemoteDrone)\nMegaBombs: Allows the player to set powerfull bombs that can destroy some walls and activate some blocks.\nPortableStation: Allow the player to teleport to any unlocked Warp Station from anywhere.\nPowerGrip: Allow the player to grab.\nRemoteDrone: Allow the player to control a small drone.\nScrewAttack: Allow the player to destroy some walls, increases it's horizontal speed and allow it to go trough some obstacles without dying while jumping.\nSpaceJump: Allow the player to jump again once in mid-air.\nSpiderMagnet: Allow the player to grab magnetic ceilings.\nVariaJacket: Allow the player to survive in heated rooms and in lava. (Liquid entity only).\nWaveBeam: Allows the remote drone beam to go trough solids. (requires RemoteDrone)
+triggers.XaphanHelper/UpgradeTrigger.attributes.description.disable=If true, disable the specified upgrade if the player has it.
+
+# -- Effects -- 
+
+# Glow
+style.effects.XaphanHelper/Glow.name=Glow
+style.effects.XaphanHelper/Glow.description.color=Color of the glow.
+
+# HeatParticles
+style.effects.XaphanHelper/HeatParticles.name=Heat Particles
+style.effects.XaphanHelper/HeatParticles.description.particlesColors=The two hexadecimal code for the colors of the particle, separated by a comma (,).
+style.effects.XaphanHelper/HeatParticles.description.particlesAmount=Number of particles to display.
