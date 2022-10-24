@@ -337,13 +337,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                     }
                 }
-                if (!UpsideDown && player.Left >= Left && player.Right <= Right && player.Top < Bottom && player.Bottom > Top)
+                if (Collidable)
                 {
-                    player.Position -= Vector2.UnitY;
-                }
-                if (UpsideDown && player.Left >= Left && player.Right <= Right && player.Bottom > Top && player.Top < Bottom)
-                {
-                    player.Position += Vector2.UnitY;
+                    if (!UpsideDown && player.Left >= Left && player.Right <= Right && player.Top < Bottom && player.Bottom > Top)
+                    {
+                        player.Position -= Vector2.UnitY;
+                    }
+                    if (UpsideDown && player.Left >= Left && player.Right <= Right && player.Bottom > Top && player.Top < Bottom)
+                    {
+                        player.Position += Vector2.UnitY;
+                    }
                 }
             }
         }
