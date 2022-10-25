@@ -952,7 +952,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalStaminaUpgrades(getSubAreaIndex()) != 0 : getTotalStaminaUpgrades() != 0)
                 {
                     Image staminaUpgradeIcon = new Image(GFX.Gui["maps/keys/energyTank"]);
-                    staminaUpgradeIcon.Position = new Vector2(Position.X - 4f, Position.Y + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4);
+                    staminaUpgradeIcon.Position = new Vector2(Position.X - 2f, Position.Y - 2f + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4);
                     staminaUpgradeIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4) + (staminaUpgradeIcon.Height - characterImageHeight) / 2));
                     iconYPos++;
