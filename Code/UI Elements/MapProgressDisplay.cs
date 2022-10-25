@@ -520,9 +520,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int CurrentStaminaUpgradesCount = 0;
             if (subAreaIndex == -1)
             {
-                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
                 {
-                    if (entityData.Type == "energyTank" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                    if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                     {
                         CurrentStaminaUpgradesCount++;
                     }
@@ -537,9 +537,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (room == entityData.Room)
                         {
-                            if (entityData.Type == "energyTank" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                            if (entityData.Type == "energyTank")
                             {
-                                CurrentStaminaUpgradesCount++;
+                                foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
+                                {
+                                    if (staminaUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
+                                    {
+                                        CurrentStaminaUpgradesCount++;
+                                    }
+                                }
                             }
                         }
                     }
@@ -586,9 +592,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int CurrentFireRateUpgradesCount = 0;
             if (subAreaIndex == -1)
             {
-                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                foreach (string droneFireRateUpgradeUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
                 {
-                    if (entityData.Type == "fireRateModule" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                    if (droneFireRateUpgradeUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                     {
                         CurrentFireRateUpgradesCount++;
                     }
@@ -603,9 +609,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (room == entityData.Room)
                         {
-                            if (entityData.Type == "fireRateModule" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                            if (entityData.Type == "fireRateModule")
                             {
-                                CurrentFireRateUpgradesCount++;
+                                foreach (string droneFireRateUpgradeUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
+                                {
+                                    if (droneFireRateUpgradeUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
+                                    {
+                                        CurrentFireRateUpgradesCount++;
+                                    }
+                                }
                             }
                         }
                     }
