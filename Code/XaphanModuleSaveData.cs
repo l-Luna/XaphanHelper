@@ -108,6 +108,10 @@ namespace Celeste.Mod.XaphanHelper
 
         public HashSet<string> SpeedrunModeStaminaUpgrades = new HashSet<string>();
 
+        public HashSet<string> DroneFireRateUpgrades = new HashSet<string>();
+
+        public HashSet<string> SpeedrunModeDroneFireRateUpgrades = new HashSet<string>();
+
         // Countdown
 
         public long CountdownCurrentTime = -1;

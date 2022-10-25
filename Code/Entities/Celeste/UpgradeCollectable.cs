@@ -165,7 +165,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (!haveGolden || (haveGolden && (upgrade == "MapShard" || upgrade == "Map")))
             {
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade) || (upgrade == "EnergyTank" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade) || (upgrade == "EnergyTank" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || (upgrade == "FireRateModule" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
                 {
                     RemoveSelf();
                 }
@@ -180,7 +180,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             oldMusic = Audio.CurrentMusic;
             session.Audio.Music.Event = SFX.EventnameByHandle(collectSound);
             session.Audio.Apply(forceSixteenthNoteHack: false);
-            if (upgrade != "EnergyTank")
+            if (upgrade != "EnergyTank" && upgrade != "FireRateModule")
             {
                 session.DoNotLoad.Add(ID);
             }
@@ -230,6 +230,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     inputActionA = "XaphanHelper_Press";
                     break;
                 case "EnergyTank":
+                    poemTextC = null;
+                    break;
+                case "FireRateModule":
                     poemTextC = null;
                     break;
                 case "PowerGrip":
@@ -341,7 +344,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
             }
             sfx.Source.Param("end", 1f);
-            if (upgrade != "Map" && upgrade != "MapShard" && upgrade != "EnergyTank")
+            if (upgrade != "Map" && upgrade != "MapShard" && upgrade != "EnergyTank" && upgrade != "FireRateModule")
             {   
                 setUpgrade(upg);
             }
@@ -352,6 +355,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
                 {
                     (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                }
+            }
+            else if (upgrade == "FireRateModule")
+            {
+                int chapterIndex = area.ChapterIndex;
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                {
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
                 }
             }
             else

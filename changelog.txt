@@ -1,3 +1,14 @@
+Version 1.0.49 :
+
+- Reduced fire rate of the Remote Drone
+- Multiple Lasers Detectors in the same room affecting the same flag will now set the flag to true if at least one of them detect a laser
+- Slightly increased Bombs explosion radius
+- Decreased Mega Bombs explosion radius
+- Bombs and Mega Bombs are now correctly affected by the momentum of moving solids entities
+- Slopes should no longer prevent the player from falling after throwing the Remote Drone
+- Slopes should no longer create collisions issues with nearby solids entities
+- Slopes will now try to move the player out of them if the player manage to get stuck into them
+
 Version 1.0.48 :
 
 - Added Glow effect

@@ -44,6 +44,8 @@
 	XaphanHelper_get_MapShard_Desc_b= sur votre carte
 	XaphanHelper_get_EnergyTank_Name= RÉSERVOIR D'ENERGIE
 	XaphanHelper_get_EnergyTank_Desc= Augmente l'endurance maximale
+	XaphanHelper_get_FireRateModule_Name= MODULE DE CADENCE DE TIR
+	XaphanHelper_get_FireRateModule_Desc= Augmente la cadence de tir du drone
 	XaphanHelper_get_PowerGrip_Name= POIGNE DE FER
 	XaphanHelper_get_PowerGrip_Desc= Permet de s'accrocher aux murs pendant un court instant
 	XaphanHelper_get_PowerGrip_Desc_b= près d'un mur pour s'y accrocher

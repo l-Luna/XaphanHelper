@@ -2094,6 +2094,7 @@ namespace Celeste.Mod.XaphanHelper
             {
                 (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
                 (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
                 Settings.SpeedrunMode = false;
             }
 
@@ -2331,6 +2332,7 @@ namespace Celeste.Mod.XaphanHelper
                     List<string> FlagsToRemove = new List<string>();
                     List<string> CutscenesToRemove = new List<string>();
                     List<string> StaminaUpgradesToRemove = new List<string>();
+                    List<string> DroneFireRateUpgradesToRemove = new List<string>();
                     List<string> GlobalFlagsToRemove = new List<string>();
                     foreach (string savedFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
                     {
@@ -2353,6 +2355,13 @@ namespace Celeste.Mod.XaphanHelper
                             StaminaUpgradesToRemove.Add(staminaUpgrade);
                         }
                     }
+                    foreach (string droneFireRateUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
+                    {
+                        if (droneFireRateUpgrade.Contains(level.Session.Area.LevelSet))
+                        {
+                            DroneFireRateUpgradesToRemove.Add(droneFireRateUpgrade);
+                        }
+                    }
                     foreach (string globalFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags)
                     {
                         if (globalFlag.Contains(level.Session.Area.LevelSet))
@@ -2371,6 +2380,10 @@ namespace Celeste.Mod.XaphanHelper
                     foreach (string value in StaminaUpgradesToRemove)
                     {
                         (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Remove(value);
+                    }
+                    foreach (string value in DroneFireRateUpgradesToRemove)
+                    {
+                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Remove(value);
                     }
                     foreach (string value in GlobalFlagsToRemove)
                     {
@@ -2826,6 +2839,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
                     (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
                 }
                 if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom == "")
                 {
@@ -3282,6 +3296,7 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
                 (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
+                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
             }
             orig(self, player);
         }

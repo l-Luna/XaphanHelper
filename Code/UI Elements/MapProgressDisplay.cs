@@ -581,6 +581,72 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return TotalStaminaUpgradesCount;
         }
 
+        public int getCurrentDroneFireRateUpgrades(int subAreaIndex = -1)
+        {
+            int CurrentFireRateUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                {
+                    if (entityData.Type == "fireRateModule" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                    {
+                        CurrentFireRateUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "fireRateModule" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex))
+                            {
+                                CurrentFireRateUpgradesCount++;
+                            }
+                        }
+                    }
+                }
+            }
+            return CurrentFireRateUpgradesCount;
+        }
+
+        public int getTotalDroneFireRateUpgrades(int subAreaIndex = -1)
+        {
+            int TotalFireRateUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                {
+                    if (entityData.Type == "fireRateModule")
+                    {
+                        TotalFireRateUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "fireRateModule")
+                            {
+                                TotalFireRateUpgradesCount++;
+                            }
+                        }
+                    }
+                }
+            }
+            return TotalFireRateUpgradesCount;
+        }
+
         public int getCurrentHeart(int subAreaIndex = -1)
         {
             AreaKey area = Level.Session.Area;
@@ -957,6 +1023,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4) + (staminaUpgradeIcon.Height - characterImageHeight) / 2));
                     iconYPos++;
                 }
+                if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalDroneFireRateUpgrades(getSubAreaIndex()) != 0 : getTotalDroneFireRateUpgrades() != 0)
+                {
+                    Image fireRateUpgradeIcon = new Image(GFX.Gui["maps/keys/fireRateModule"]);
+                    fireRateUpgradeIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + fireRateUpgradeIcon.Height / 4);
+                    fireRateUpgradeIcon.Render();
+                    linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + fireRateUpgradeIcon.Height / 4) + (fireRateUpgradeIcon.Height - characterImageHeight) / 2));
+                    iconYPos++;
+                }
                 for (int i = 0; i < InGameMapControllerData.CustomCollectablesProgress.Split(',').Length; i++)
                 {
                     if (!InGameMapControllerData.SecretsCustomCollectablesProgress.Contains(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]))
@@ -1099,6 +1173,29 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentStaminaUpgrades() == getTotalStaminaUpgrades() ? Color.Gold : Color.White;
+                            characterImage.Render();
+                            valueWidth += (int)characterImage.Width;
+                        }
+                        valueWidth = 0;
+                        iconYPos++;
+                    }
+
+                    if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneFireRateUpgrades() != 0)
+                    {
+                        string FireRateUpgradeDisplay = (getCurrentDroneFireRateUpgrades() + "/" + getTotalDroneFireRateUpgrades()).ToString();
+                        for (int i = 0; i < FireRateUpgradeDisplay.Length; i++)
+                        {
+                            if (FireRateUpgradeDisplay[i] == '/')
+                            {
+                                character = "slash";
+                            }
+                            else
+                            {
+                                character = FireRateUpgradeDisplay[i].ToString();
+                            }
+                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                            characterImage.Color = getCurrentDroneFireRateUpgrades() == getTotalDroneFireRateUpgrades() ? Color.Gold : Color.White;
                             characterImage.Render();
                             valueWidth += (int)characterImage.Width;
                         }
@@ -1320,6 +1417,29 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentStaminaUpgrades(getSubAreaIndex()) == getTotalStaminaUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
+                                characterImage.Render();
+                                valueWidth += (int)characterImage.Width;
+                            }
+                            valueWidth = 0;
+                            iconYPos++;
+                        }
+
+                        if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneFireRateUpgrades(getSubAreaIndex()) != 0)
+                        {
+                            string FireRateUpgradeDisplay = (getCurrentDroneFireRateUpgrades(getSubAreaIndex()) + "/" + getTotalDroneFireRateUpgrades(getSubAreaIndex())).ToString();
+                            for (int i = 0; i < FireRateUpgradeDisplay.Length; i++)
+                            {
+                                if (FireRateUpgradeDisplay[i] == '/')
+                                {
+                                    character = "slash";
+                                }
+                                else
+                                {
+                                    character = FireRateUpgradeDisplay[i].ToString();
+                                }
+                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                                characterImage.Color = getCurrentDroneFireRateUpgrades(getSubAreaIndex()) == getTotalDroneFireRateUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
                                 valueWidth += (int)characterImage.Width;
                             }
