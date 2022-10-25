@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (XaphanModule.useUpgrades)
             {
-                return Settings.PowerGrip && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PowerGripInactive.Contains(level.Session.Area.GetLevelSet());
+                return Settings.PowerGrip && !XaphanModule.ModSaveData.PowerGripInactive.Contains(level.Session.Area.GetLevelSet());
             }
             return true;
         }

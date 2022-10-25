@@ -329,7 +329,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         private void ActivateSpeedrunMode()
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode = true;
+            XaphanModule.ModSaveData.SpeedrunMode = true;
             StartGame();
         }
 

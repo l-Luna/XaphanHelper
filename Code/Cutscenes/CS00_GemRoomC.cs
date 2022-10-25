@@ -28,9 +28,9 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             {
                 level.Session.SetFlag("CS_Ch0_Gem_Room_Activeate_Gems");
             }
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_End_Area_Open"))
+            if (XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_End_Area_Open"))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_C");
+                XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_C");
                 level.Session.SetFlag("CS_Ch0_Gem_Room_C");
             }
             player.StateMachine.State = 0;
@@ -39,10 +39,10 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
         public IEnumerator Cutscene(Level level)
         {
             player.StateMachine.State = 11;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch0_Gem_Room_First_Time"))
+            if (!XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch0_Gem_Room_First_Time"))
             {
                 player.Facing = Facings.Right;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Ch0_Gem_Room_First_Time");
+                XaphanModule.ModSaveData.SavedFlags.Add("Xaphan/0_Ch0_Gem_Room_First_Time");
                 yield return Textbox.Say("Xaphan_Ch0_A_Gem_Room_C");
             }
             yield return player.DummyWalkToExact((int)gemController.X);
@@ -50,7 +50,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             int missingGems = 0;
             for (int i = 1; i <= 4; i++)
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch" + i + "_Gem_Sloted"))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + i + "_Gem_Sloted"))
                 {
                     missingGems++;
                 }
@@ -61,18 +61,18 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             }
             if (missingGems == 3)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
             }
             else if (missingGems == 2)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch2_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch2_Gem_Sloted");
             }
             else if (missingGems == 3)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch2_Gem_Sloted");
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add("Xaphan/0_Ch0_Ch3_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch1_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch2_Gem_Sloted");
+                XaphanModule.ModSaveData.GlobalFlags.Add("Xaphan/0_Ch0_Ch3_Gem_Sloted");
             }
             EndCutscene(Level);
         }

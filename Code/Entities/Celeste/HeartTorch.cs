@@ -63,9 +63,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             SceneAs<Level>().Session.SetFlag(activeFlag, true);
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + activeFlag))
+            if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + activeFlag))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + activeFlag);
+                XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + activeFlag);
             }
         }
     }

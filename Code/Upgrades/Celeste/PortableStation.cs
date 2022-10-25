@@ -34,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.PortableStation && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PortableStationInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.PortableStation && !XaphanModule.ModSaveData.PortableStationInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;

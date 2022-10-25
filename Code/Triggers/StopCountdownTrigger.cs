@@ -20,13 +20,13 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             if (timer != null)
             {
                 SceneAs<Level>().Session.SetFlag(timer.activeFlag, false);
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = -1;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = false;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = false;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = "";
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = -1;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = "";
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = new Vector2();
+                XaphanModule.ModSaveData.CountdownCurrentTime = -1;
+                XaphanModule.ModSaveData.CountdownShake = false;
+                XaphanModule.ModSaveData.CountdownExplode = false;
+                XaphanModule.ModSaveData.CountdownActiveFlag = "";
+                XaphanModule.ModSaveData.CountdownStartChapter = -1;
+                XaphanModule.ModSaveData.CountdownStartRoom = "";
+                XaphanModule.ModSaveData.CountdownSpawn = new Vector2();
                 SceneAs<Level>().SaveQuitDisabled = false;
                 timer.RemoveSelf();
                 StartCountdownTrigger startTrigger = SceneAs<Level>().Tracker.GetEntity<StartCountdownTrigger>();

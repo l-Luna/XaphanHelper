@@ -22,11 +22,11 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex == -1 ? 0 : SceneAs<Level>().Session.Area.ChapterIndex;
             string room = SceneAs<Level>().Session.Level;
-            if (inverted ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag) : (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+            if (inverted ? !XaphanModule.ModSaveData.GlobalFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag) : XaphanModule.ModSaveData.GlobalFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
             {
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
+                if (XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Remove(Prefix + "_Ch" + chapterIndex + "_" + room);
+                    XaphanModule.ModSaveData.VisitedRooms.Remove(Prefix + "_Ch" + chapterIndex + "_" + room);
                 }
             }
         }

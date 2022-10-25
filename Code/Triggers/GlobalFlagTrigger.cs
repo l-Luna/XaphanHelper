@@ -31,11 +31,11 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                 levelSet = Prefix;
             }
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex == -1 ? 0 : SceneAs<Level>().Session.Area.ChapterIndex;
-            if ((!switchFlag && state) || (switchFlag && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag)))
+            if ((!switchFlag && state) || (switchFlag && !XaphanModule.ModSaveData.GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag)))
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag))
+                if (!XaphanModule.ModSaveData.GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Add(levelSet + "_Ch" + chapterIndex + "_" + flag);
+                    XaphanModule.ModSaveData.GlobalFlags.Add(levelSet + "_Ch" + chapterIndex + "_" + flag);
                     if (levelSet == Prefix)
                     {
                         SceneAs<Level>().Session.SetFlag("Ch" + chapterIndex + "_" + flag, true);
@@ -44,9 +44,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             }
             else
             {
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag))
+                if (XaphanModule.ModSaveData.GlobalFlags.Contains(levelSet + "_Ch" + chapterIndex + "_" + flag))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Remove(levelSet + "_Ch" + chapterIndex + "_" + flag);
+                    XaphanModule.ModSaveData.GlobalFlags.Remove(levelSet + "_Ch" + chapterIndex + "_" + flag);
                     if (levelSet == Prefix)
                     {
                         SceneAs<Level>().Session.SetFlag("Ch" + chapterIndex + "_" + flag, false);

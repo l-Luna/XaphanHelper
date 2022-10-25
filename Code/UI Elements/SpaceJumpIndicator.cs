@@ -32,7 +32,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public bool isActive(Level level)
         {
-            return Settings.SpaceJump == 2 && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpaceJumpInactive.Contains(level.Session.Area.GetLevelSet());
+            return Settings.SpaceJump == 2 && !XaphanModule.ModSaveData.SpaceJumpInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public override void Render()

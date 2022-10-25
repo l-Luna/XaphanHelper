@@ -203,7 +203,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            foreach (string VisitedChapter in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters)
+            foreach (string VisitedChapter in XaphanModule.ModSaveData.VisitedChapters)
             {
                 string[] str = VisitedChapter.Split('_');
                 if (str[0] == level.Session.Area.GetLevelSet())
@@ -216,7 +216,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Sprite.AddLoop("bombs", getCustomSpritePath("Bombs") + "/bombs", 0.08f, 0);
                 Sprite.AddLoop("megaBombs", getCustomSpritePath("MegaBombs") + "/megaBombs", 0.08f, 0);
                 Sprite.AddLoop("remoteDrone", getCustomSpritePath("RemoteDrone") + "/remoteDrone", 0.08f, 0);
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1 == 0)
+                if (XaphanModule.ModSaveData.BagUIId1 == 0)
                 {
                     if (Bombs.isActive)
                     {
@@ -233,7 +233,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 else
                 {
-                    currentSelection = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1;
+                    currentSelection = XaphanModule.ModSaveData.BagUIId1;
                 }
             }
             else
@@ -241,7 +241,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Sprite.AddLoop("binoculars", getCustomSpritePath("Binoculars") + "/binoculars", 0.08f, 0);
                 Sprite.AddLoop("portableStation", getCustomSpritePath("PortableStation") + "/portableStation", 0.08f, 0);
                 Sprite.AddLoop("pulseRadar", getCustomSpritePath("PulseRadar") + "/pulseRadar", 0.08f, 0);
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2 == 0)
+                if (XaphanModule.ModSaveData.BagUIId2 == 0)
                 {
                     if (Binoculars.isActive)
                     {
@@ -258,7 +258,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 else
                 {
-                    currentSelection = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2;
+                    currentSelection = XaphanModule.ModSaveData.BagUIId2;
                 }
             }
         }
@@ -351,11 +351,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         currentSelection = nextSelection;
                         if (type == "bag")
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1 = nextSelection;
+                            XaphanModule.ModSaveData.BagUIId1 = nextSelection;
                         }
                         else
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2 = nextSelection;
+                            XaphanModule.ModSaveData.BagUIId2 = nextSelection;
                         }
                         Audio.Play("event:/ui/main/rollover_up");
                     }
@@ -416,7 +416,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (bombActive || megaBombActive || droneActive)
                 {
                     currentSelection = nextSelection;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1 = nextSelection;
+                    XaphanModule.ModSaveData.BagUIId1 = nextSelection;
                 }
             }
             else
@@ -445,7 +445,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (binocularsActive || teleporterActive || radarActive)
                 {
                     currentSelection = nextSelection;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2 = nextSelection;
+                    XaphanModule.ModSaveData.BagUIId2 = nextSelection;
                 }
             }
         }

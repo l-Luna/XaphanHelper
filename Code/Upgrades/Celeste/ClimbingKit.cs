@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (XaphanModule.useUpgrades)
             {
-                return Settings.ClimbingKit && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ClimbingKitInactive.Contains(level.Session.Area.GetLevelSet());
+                return Settings.ClimbingKit && !XaphanModule.ModSaveData.ClimbingKitInactive.Contains(level.Session.Area.GetLevelSet());
             }
             return true;
         }

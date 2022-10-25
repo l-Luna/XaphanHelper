@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int chapterIndex = session.Area.ChapterIndex;
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag);
+                return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag);
             }
             else
             {
@@ -150,9 +150,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
+                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                 }
             }
         }
@@ -247,9 +247,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
                     int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
+                        XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                     }
                 }
             }

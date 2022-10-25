@@ -136,12 +136,12 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         {
             if (!fromSaveData && XaphanModule.useMetroidGameplaySessionCheck(session))
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).IgnoreSavedChapter)
+                if (!XaphanModule.ModSaveData.IgnoreSavedChapter)
                 {
                     AreaKey area = session.Area;
                     int currentChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                     int toChapter = 1;
-                    foreach (KeyValuePair<string, int> savedChapter in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter)
+                    foreach (KeyValuePair<string, int> savedChapter in XaphanModule.ModSaveData.SavedChapter)
                     {
                         if (savedChapter.Key == area.LevelSet)
                         {
@@ -162,17 +162,17 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             if (XaphanModule.useMetroidGameplay)
             {
                 Player player = self.Tracker.GetEntity<Player>();
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet) && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet))
+                if (!XaphanModule.ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet) && !XaphanModule.ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Add(self.Session.Area.LevelSet, self.Session.MapData.StartLevel().Name);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Add(self.Session.Area.LevelSet, self.Session.Area.ChapterIndex);
+                    XaphanModule.ModSaveData.SavedRoom.Add(self.Session.Area.LevelSet, self.Session.MapData.StartLevel().Name);
+                    XaphanModule.ModSaveData.SavedChapter.Add(self.Session.Area.LevelSet, self.Session.Area.ChapterIndex);
                 }
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet) && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet) && !self.Session.GetFlag("XaphanHelper_Changed_Start_Room"))
+                if (XaphanModule.ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet) && XaphanModule.ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet) && !self.Session.GetFlag("XaphanHelper_Changed_Start_Room"))
                 {
                     IsLoadingFromSave(true);
                     self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
-                    string DestinationRoom = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet];
-                    int chapterIndex = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet];
+                    string DestinationRoom = XaphanModule.ModSaveData.SavedRoom[self.Session.Area.LevelSet];
+                    int chapterIndex = XaphanModule.ModSaveData.SavedChapter[self.Session.Area.LevelSet];
                     if (chapterIndex == (self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex))
                     {
                         if (DestinationRoom != self.Session.Level)
@@ -212,7 +212,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                     {
                         int chapterOffset = chapterIndex - (self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex);
                         int currentChapterID = self.Session.Area.ID;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = DestinationRoom;
+                        XaphanModule.ModSaveData.DestinationRoom = DestinationRoom;
                         AreaKey area = self.Session.Area;
                         MapData MapData = AreaData.Areas[currentChapterID + chapterOffset].Mode[(int)area.Mode].MapData;
                         foreach (LevelData levelData in MapData.Levels)
@@ -223,14 +223,14 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                                 {
                                     if (entity.Name == "XaphanHelper/WarpStation")
                                     {
-                                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2(entity.Position.X, entity.Position.Y);
+                                        XaphanModule.ModSaveData.Spawn = new Vector2(entity.Position.X, entity.Position.Y);
                                     }
                                 }
                                 break;
                             }
                         }
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "Fade";
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = 1.35f;
+                        XaphanModule.ModSaveData.Wipe = "Fade";
+                        XaphanModule.ModSaveData.WipeDuration = 1.35f;
                         self.Add(new FadeWipe(self, false, () => LevelEnter.Go(new Session(new AreaKey(currentChapterID + chapterOffset)), fromSaveData: false))
                         {
                             Duration = 1.35f

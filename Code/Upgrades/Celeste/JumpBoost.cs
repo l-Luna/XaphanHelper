@@ -51,7 +51,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.JumpBoost && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).JumpBoostInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.JumpBoost && !XaphanModule.ModSaveData.JumpBoostInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private static void ilPlayerJump(ILContext il)

@@ -144,9 +144,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 if (flagDashSwitch.wasPressed && flagDashSwitch.registerInSaveData && flagDashSwitch.saveDataOnlyAfterCheckpoint)
                                 {
                                     string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-                                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag))
+                                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag))
                                     {
-                                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag);
+                                        XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flagDashSwitch.flag);
                                     }
                                 }
                             }

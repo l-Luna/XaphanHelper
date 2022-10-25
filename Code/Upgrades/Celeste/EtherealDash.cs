@@ -33,7 +33,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.EtherealDash && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).EtherealDashInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.EtherealDash && !XaphanModule.ModSaveData.EtherealDashInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;

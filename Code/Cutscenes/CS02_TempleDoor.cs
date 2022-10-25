@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch2_TempleDoor");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch2_TempleDoor");
             level.Session.SetFlag("CS_Ch2_TempleDoor");
         }
 

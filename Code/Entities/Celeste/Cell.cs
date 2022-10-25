@@ -132,7 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Level = SceneAs<Level>();
             string Prefix = Level.Session.Area.GetLevelSet();
             int chapterIndex = Level.Session.Area.ChapterIndex;
-            if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+            if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
             {
                 RemoveSelf();
             }

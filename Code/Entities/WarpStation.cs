@@ -177,7 +177,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            foreach (string warp in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps)
+            foreach (string warp in XaphanModule.ModSaveData.UnlockedWarps)
             {
                 if (warp.Contains(level.Session.Area.GetLevelSet()))
                 {
@@ -236,7 +236,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         tutorialGui.Open = (tutorialTimer > 0.25f);
                     }
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps.Contains(prefix + "_Ch" + LobbyMapController.lobbyIndex + "_" + room + (index != 0 ? "_" + index : "")))
+                    if (XaphanModule.ModSaveData.UnlockedWarps.Contains(prefix + "_Ch" + LobbyMapController.lobbyIndex + "_" + room + (index != 0 ? "_" + index : "")))
                     {
                         activated = true;
                         if (!noBeam)
@@ -249,7 +249,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 else
                 {
-                    if (!Settings.SpeedrunMode && !XaphanModule.PlayerHasGolden ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")) : (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")))
+                    if (!Settings.SpeedrunMode && !XaphanModule.PlayerHasGolden ? XaphanModule.ModSaveData.UnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")) : XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")))
                     {
                         activated = true;
                         if (!noBeam)
@@ -263,7 +263,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                if (XaphanModule.PlayerHasGolden && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")))
+                if (XaphanModule.PlayerHasGolden && !XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + chapterIndex + "_" + room + (index != 0 ? "_" + index : "")))
                 {
                     activated = false;
                     if (talk != null)
@@ -296,119 +296,119 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Activate();
                 }
             }
-            if (XaphanModule.useMergeChaptersController && XaphanModule.MergeChaptersControllerMode == "Warps" && HasPlayerOnTop() && !XaphanModule.PlayerHasGolden && !level.Frozen && level.Tracker.GetEntity<CountdownDisplay>() == null && level.Tracker.GetEntity<Player>() != null && level.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !XaphanModule.PlayerIsControllingRemoteDrone() && activated && (level.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !ShouldSave && !((XaphanModule.MergeChaptersControllerKeepPrologue && level.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+            if (XaphanModule.useMergeChaptersController && XaphanModule.MergeChaptersControllerMode == "Warps" && HasPlayerOnTop() && !XaphanModule.PlayerHasGolden && !level.Frozen && level.Tracker.GetEntity<CountdownDisplay>() == null && level.Tracker.GetEntity<Player>() != null && level.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !XaphanModule.PlayerIsControllingRemoteDrone() && activated && (level.Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true) && !ShouldSave && !((XaphanModule.MergeChaptersControllerKeepPrologue && level.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedChapter.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Add(prefix, level.Session.Area.ChapterIndex);
+                    XaphanModule.ModSaveData.SavedChapter.Add(prefix, level.Session.Area.ChapterIndex);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[prefix] != level.Session.Area.ChapterIndex)
+                    if (XaphanModule.ModSaveData.SavedChapter[prefix] != level.Session.Area.ChapterIndex)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[prefix] = level.Session.Area.ChapterIndex;
+                        XaphanModule.ModSaveData.SavedChapter[prefix] = level.Session.Area.ChapterIndex;
                         ShouldSave = true;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedRoom.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Add(prefix, level.Session.Level);
+                    XaphanModule.ModSaveData.SavedRoom.Add(prefix, level.Session.Level);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[prefix] != level.Session.Level)
+                    if (XaphanModule.ModSaveData.SavedRoom[prefix] != level.Session.Level)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[prefix] = level.Session.Level;
+                        XaphanModule.ModSaveData.SavedRoom[prefix] = level.Session.Level;
                         ShouldSave = true;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedSpawn.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.Add(prefix, spawnPoint);
+                    XaphanModule.ModSaveData.SavedSpawn.Add(prefix, spawnPoint);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[prefix] != spawnPoint)
+                    if (XaphanModule.ModSaveData.SavedSpawn[prefix] != spawnPoint)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[prefix] = spawnPoint;
+                        XaphanModule.ModSaveData.SavedSpawn[prefix] = spawnPoint;
                         ShouldSave = true;
                     }                    
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedLightingAlphaAdd.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.Add(prefix, level.Lighting.Alpha - level.BaseLightingAlpha);
+                    XaphanModule.ModSaveData.SavedLightingAlphaAdd.Add(prefix, level.Lighting.Alpha - level.BaseLightingAlpha);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[prefix] != level.Lighting.Alpha - level.BaseLightingAlpha)
+                    if (XaphanModule.ModSaveData.SavedLightingAlphaAdd[prefix] != level.Lighting.Alpha - level.BaseLightingAlpha)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[prefix] = level.Lighting.Alpha - level.BaseLightingAlpha;
+                        XaphanModule.ModSaveData.SavedLightingAlphaAdd[prefix] = level.Lighting.Alpha - level.BaseLightingAlpha;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedBloomBaseAdd.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.Add(prefix, level.Bloom.Base - AreaData.Get(level).BloomBase);
+                    XaphanModule.ModSaveData.SavedBloomBaseAdd.Add(prefix, level.Bloom.Base - AreaData.Get(level).BloomBase);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[prefix] != level.Bloom.Base - AreaData.Get(level).BloomBase)
+                    if (XaphanModule.ModSaveData.SavedBloomBaseAdd[prefix] != level.Bloom.Base - AreaData.Get(level).BloomBase)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[prefix] = level.Bloom.Base - AreaData.Get(level).BloomBase;
+                        XaphanModule.ModSaveData.SavedBloomBaseAdd[prefix] = level.Bloom.Base - AreaData.Get(level).BloomBase;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedCoreMode.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.Add(prefix, level.Session.CoreMode);
+                    XaphanModule.ModSaveData.SavedCoreMode.Add(prefix, level.Session.CoreMode);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[prefix] != level.Session.CoreMode)
+                    if (XaphanModule.ModSaveData.SavedCoreMode[prefix] != level.Session.CoreMode)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[prefix] = level.Session.CoreMode;
+                        XaphanModule.ModSaveData.SavedCoreMode[prefix] = level.Session.CoreMode;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedMusic.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.Add(prefix, level.Session.Audio.Music.Event);
+                    XaphanModule.ModSaveData.SavedMusic.Add(prefix, level.Session.Audio.Music.Event);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[prefix] != level.Session.Audio.Music.Event)
+                    if (XaphanModule.ModSaveData.SavedMusic[prefix] != level.Session.Audio.Music.Event)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[prefix] = level.Session.Audio.Music.Event;
+                        XaphanModule.ModSaveData.SavedMusic[prefix] = level.Session.Audio.Music.Event;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedAmbience.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.Add(prefix, level.Session.Audio.Ambience.Event);
+                    XaphanModule.ModSaveData.SavedAmbience.Add(prefix, level.Session.Audio.Ambience.Event);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[prefix] != level.Session.Audio.Ambience.Event)
+                    if (XaphanModule.ModSaveData.SavedAmbience[prefix] != level.Session.Audio.Ambience.Event)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[prefix] = level.Session.Audio.Ambience.Event;
+                        XaphanModule.ModSaveData.SavedAmbience[prefix] = level.Session.Audio.Ambience.Event;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedNoLoadEntities.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.Add(prefix, level.Session.DoNotLoad);
+                    XaphanModule.ModSaveData.SavedNoLoadEntities.Add(prefix, level.Session.DoNotLoad);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[prefix] != level.Session.DoNotLoad)
+                    if (XaphanModule.ModSaveData.SavedNoLoadEntities[prefix] != level.Session.DoNotLoad)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[prefix] = level.Session.DoNotLoad;
+                        XaphanModule.ModSaveData.SavedNoLoadEntities[prefix] = level.Session.DoNotLoad;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedFromBeginning.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.Add(prefix, level.Session.StartedFromBeginning);
+                    XaphanModule.ModSaveData.SavedFromBeginning.Add(prefix, level.Session.StartedFromBeginning);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[prefix] != level.Session.StartedFromBeginning)
+                    if (XaphanModule.ModSaveData.SavedFromBeginning[prefix] != level.Session.StartedFromBeginning)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[prefix] = level.Session.StartedFromBeginning;
+                        XaphanModule.ModSaveData.SavedFromBeginning[prefix] = level.Session.StartedFromBeginning;
                     }
                 }
                 string sessionFlags = "";
@@ -423,26 +423,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         sessionFlags += "," + flag;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedSesionFlags.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.Add(prefix, sessionFlags);
+                    XaphanModule.ModSaveData.SavedSesionFlags.Add(prefix, sessionFlags);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[prefix] != sessionFlags)
+                    if (XaphanModule.ModSaveData.SavedSesionFlags[prefix] != sessionFlags)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[prefix] = sessionFlags;
+                        XaphanModule.ModSaveData.SavedSesionFlags[prefix] = sessionFlags;
                     }
                 }
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.ContainsKey(prefix))
+                if (!XaphanModule.ModSaveData.SavedSessionStrawberries.ContainsKey(prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.Add(prefix, level.Session.Strawberries);
+                    XaphanModule.ModSaveData.SavedSessionStrawberries.Add(prefix, level.Session.Strawberries);
                 }
                 else
                 {
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[prefix] != level.Session.Strawberries)
+                    if (XaphanModule.ModSaveData.SavedSessionStrawberries[prefix] != level.Session.Strawberries)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[prefix] = level.Session.Strawberries;
+                        XaphanModule.ModSaveData.SavedSessionStrawberries[prefix] = level.Session.Strawberries;
                     }
                 }
                 if (ShouldSave)
@@ -522,16 +522,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex == -1 ? 0 : SceneAs<Level>().Session.Area.ChapterIndex;
             string room = SceneAs<Level>().Session.Level;
             LobbyMapController LobbyMapController = level.Tracker.GetEntity<LobbyMapController>();
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps.Contains(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : "")))
+            if (!XaphanModule.ModSaveData.UnlockedWarps.Contains(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : "")))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps.Add(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : ""));
+                XaphanModule.ModSaveData.UnlockedWarps.Add(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : ""));
                 warpStationSprite.Play("active");
             }
             if (Settings.SpeedrunMode || XaphanModule.PlayerHasGolden)
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : "")))
+                if (!XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps.Contains(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : "")))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Add(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : ""));
+                    XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps.Add(prefix + "_Ch" + ((LobbyMapController != null && LobbyMapController.lobbyIndex != 0) ? LobbyMapController.lobbyIndex : chapterIndex) + "_" + room + (index != 0 ? "_" + index : ""));
                     warpStationSprite.Play("active");
                 }
             }

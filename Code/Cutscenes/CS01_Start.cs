@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch1_Start");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch1_Start");
             level.Session.SetFlag("CS_Ch1_Start");
             player.StateMachine.Locked = false;
             player.StateMachine.State = 0;

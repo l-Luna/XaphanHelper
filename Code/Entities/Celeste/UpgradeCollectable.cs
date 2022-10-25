@@ -99,18 +99,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (mapShardIndex == 0)
                     {
-                        return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard");
+                        return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard");
                     }
                     else
                     {
-                        return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex);
+                        return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex);
                     }
                 }
                 if (upgrade == "Map")
                 {
-                    return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Can_Open_Map");
+                    return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Can_Open_Map");
                 }
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade);
+                return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade);
             }
             else
             {
@@ -165,7 +165,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (!haveGolden || (haveGolden && (upgrade == "MapShard" || upgrade == "Map")))
             {
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade) || (upgrade == "EnergyTank" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade) || (upgrade == "EnergyTank" && XaphanModule.ModSaveData.StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
                 {
                     RemoveSelf();
                 }
@@ -348,10 +348,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (upgrade == "EnergyTank")
             {
                 int chapterIndex = area.ChapterIndex;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                XaphanModule.ModSaveData.StaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
                 if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                    XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
                 }
             }
             else
@@ -390,24 +390,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (mapShardIndex == 0)
                 {
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard"))
+                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard"))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard");
+                        XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard");
                     }
                 }
                 else
                 {
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex))
+                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex);
+                        XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard_" + mapShardIndex);
                     }
                 }
             }
             else if (upgrade == "Map")
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Can_Open_Map"))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Can_Open_Map"))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Can_Open_Map");
+                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Can_Open_Map");
                 }
             }
             else
@@ -428,9 +428,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (!temporary)
                 {
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade))
+                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Upgrade_" + upgrade);
+                        XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Upgrade_" + upgrade);
                     }
                 }
             }

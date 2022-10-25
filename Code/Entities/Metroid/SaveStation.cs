@@ -230,9 +230,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     if (MetroidGameplayController.isLoadingFromSave)
                     {
                         string LoadRoom = "";
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(SceneAs<Level>().Session.Area.LevelSet))
+                        if (XaphanModule.ModSaveData.SavedRoom.ContainsKey(SceneAs<Level>().Session.Area.LevelSet))
                         {
-                            LoadRoom = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[SceneAs<Level>().Session.Area.LevelSet];
+                            LoadRoom = XaphanModule.ModSaveData.SavedRoom[SceneAs<Level>().Session.Area.LevelSet];
                         }
 
                         if (SceneAs<Level>().Session.Level == LoadRoom && !GameLoadCoroutine.Active && !Saving)
@@ -532,21 +532,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void SavePosition(string prefix)
         {
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(prefix))
+            if (!XaphanModule.ModSaveData.SavedChapter.ContainsKey(prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Add(prefix, level.Session.Area.ChapterIndex);
+                XaphanModule.ModSaveData.SavedChapter.Add(prefix, level.Session.Area.ChapterIndex);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[prefix] = level.Session.Area.ChapterIndex;
+                XaphanModule.ModSaveData.SavedChapter[prefix] = level.Session.Area.ChapterIndex;
             }
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(prefix))
+            if (!XaphanModule.ModSaveData.SavedRoom.ContainsKey(prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Add(prefix, level.Session.Level);
+                XaphanModule.ModSaveData.SavedRoom.Add(prefix, level.Session.Level);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[prefix] = level.Session.Level;
+                XaphanModule.ModSaveData.SavedRoom[prefix] = level.Session.Level;
             }
         }
     }

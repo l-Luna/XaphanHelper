@@ -336,7 +336,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int chapterIndex = session.Area.ChapterIndex;
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID);
+                return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID);
             }
             else
             {
@@ -680,9 +680,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID))
+            if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID);
+                XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_Opened_Collectable_Door_" + doorID);
             }
         }
 

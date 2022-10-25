@@ -50,9 +50,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                         SceneAs<Level>().Session.SetFlag(flag, true);
                         if (registerInSaveData)
                         {
-                            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+                            if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                             {
-                                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
+                                XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                             }
                         }
                         foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
@@ -72,15 +72,15 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                 {
                     if (SceneAs<Level>().Session.GetFlag(flag))
                     {
-                        if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + SceneAs<Level>().Session.Area.ChapterIndex + "_" + flag))
+                        if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + SceneAs<Level>().Session.Area.ChapterIndex + "_" + flag))
                         {
                             SceneAs<Level>().Session.SetFlag(flag, false);
                         }
                         if (registerInSaveData)
                         {
-                            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+                            if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                             {
-                                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(Prefix + "_Ch" + chapterIndex + "_" + flag);
+                                XaphanModule.ModSaveData.SavedFlags.Remove(Prefix + "_Ch" + chapterIndex + "_" + flag);
                             }
                         }
                         foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())

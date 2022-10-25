@@ -289,15 +289,15 @@ namespace Celeste.Mod.XaphanHelper
 
                     if (Prefix == "Xaphan/0")
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + i + "_Gem_Collected"))
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Gem_Collected"))
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_GemCh" + i);
                         }
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + i + "_Boss_Defeated"))
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Boss_Defeated"))
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_BossCh" + i);
                         }
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + i + "_Boss_Defeated_CM"))
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Boss_Defeated_CM"))
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_BossCMCh" + i);
                         }
@@ -519,7 +519,7 @@ namespace Celeste.Mod.XaphanHelper
                     string tile = tilesControllerData.GetTile(i);
                     if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
+                        if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                         {
                             currentTiles++;
                         }
@@ -565,7 +565,7 @@ namespace Celeste.Mod.XaphanHelper
                                 {
                                     tiles++;
                                 }
-                                else if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
+                                else if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                 {
                                     tiles++;
                                 }

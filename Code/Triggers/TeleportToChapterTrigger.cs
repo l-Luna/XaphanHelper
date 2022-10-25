@@ -80,7 +80,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public IEnumerator onEnterRoutine(Player player)
         {
             player.StateMachine.State = Player.StDummy;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = wipeDuration;
+            XaphanModule.ModSaveData.WipeDuration = wipeDuration;
             switch (wipeType)
             {
                 case "Spotlight":
@@ -165,25 +165,25 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public void ExitChapter(Player player)
         {
             int currentChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = DestinationRoom;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2(SpawnRoomX, SpawnRoomY);
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = wipeType;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = wipeDuration;
+            XaphanModule.ModSaveData.DestinationRoom = DestinationRoom;
+            XaphanModule.ModSaveData.Spawn = new Vector2(SpawnRoomX, SpawnRoomY);
+            XaphanModule.ModSaveData.Wipe = wipeType;
+            XaphanModule.ModSaveData.WipeDuration = wipeDuration;
             CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
             if (timerDisplay != null)
             {
                 if (timerDisplay.SaveTimer)
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = timerDisplay.GetRemainingTime();
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = timerDisplay.Shake;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = timerDisplay.Explode;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = timerDisplay.activeFlag;
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter == -1)
+                    XaphanModule.ModSaveData.CountdownCurrentTime = timerDisplay.GetRemainingTime();
+                    XaphanModule.ModSaveData.CountdownShake = timerDisplay.Shake;
+                    XaphanModule.ModSaveData.CountdownExplode = timerDisplay.Explode;
+                    XaphanModule.ModSaveData.CountdownActiveFlag = timerDisplay.activeFlag;
+                    if (XaphanModule.ModSaveData.CountdownStartChapter == -1)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
+                        XaphanModule.ModSaveData.CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                     }
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = timerDisplay.startRoom;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = timerDisplay.SpawnPosition;
+                    XaphanModule.ModSaveData.CountdownStartRoom = timerDisplay.startRoom;
+                    XaphanModule.ModSaveData.CountdownSpawn = timerDisplay.SpawnPosition;
                 }
             }
             int chapterOffset = ToChapter - currentChapter;
@@ -192,14 +192,14 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             {
                 SceneAs<Level>().RegisterAreaComplete();
             }
-            if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true))
             {
                 long currentTime = SceneAs<Level>().Session.Time;
                 LevelEnter.Go(new Session(new AreaKey(currentChapterID + chapterOffset))
                 {
                     Time = currentTime,
-                    DoNotLoad = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
-                    Strawberries = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
+                    DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
+                    Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
                 }
                 , fromSaveData: false);
             }

@@ -90,13 +90,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (upgrade == "MapShard")
                 {
-                    return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + upgrade);
+                    return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + upgrade);
                 }
                 if (upgrade == "Map")
                 {
-                    return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Can_Open_Map");
+                    return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Can_Open_Map");
                 }
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade);
+                return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade);
             }
             else
             {
@@ -291,23 +291,23 @@ namespace Celeste.Mod.XaphanHelper.Entities
             string Prefix = session.Area.GetLevelSet();
             if (upgrade == "MapShard")
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard"))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard"))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard");
+                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_MapShard");
                 }
             }
             else if (upgrade == "Map")
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Can_Open_Map"))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Can_Open_Map"))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Can_Open_Map");
+                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Can_Open_Map");
                 }
             }
             else
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + upgrade))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Upgrade_" + upgrade);
+                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Upgrade_" + upgrade);
                 }
             }
         }

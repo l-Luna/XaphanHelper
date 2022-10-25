@@ -52,9 +52,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                         Commands.ReActivateUpgrade(Upgrade);
                         if (!temporary)
                         {
-                            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
+                            if (!XaphanModule.ModSaveData.SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
                             {
-                                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(prefix + "_Upgrade_" + upgrade.ToString());
+                                XaphanModule.ModSaveData.SavedFlags.Add(prefix + "_Upgrade_" + upgrade.ToString());
                             }
                         }
                         break;
@@ -80,9 +80,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                         {
 
                         }
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(prefix + "_Upgrade_" + upgrade.ToString());
+                            XaphanModule.ModSaveData.SavedFlags.Remove(prefix + "_Upgrade_" + upgrade.ToString());
                         }
                         break;
                     }

@@ -35,7 +35,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.PulseRadar && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PulseRadarInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.PulseRadar && !XaphanModule.ModSaveData.PulseRadarInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;

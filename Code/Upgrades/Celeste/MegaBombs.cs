@@ -44,7 +44,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public bool Active(Level level)
         {
-            return Settings.MegaBombs && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MegaBombsInactive.Contains(level.Session.Area.GetLevelSet());
+            return Settings.MegaBombs && !XaphanModule.ModSaveData.MegaBombsInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)

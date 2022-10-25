@@ -449,7 +449,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             yield return 0.5f;
             LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + ((XaphanModule.MergeChaptersControllerKeepPrologue && chapterIndex == 0) ? 1 : 0) + chapterIndex, Area.Mode), checkpoint)
             {
-               Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
+               Time = XaphanModule.ModSaveData.SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? XaphanModule.ModSaveData.SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
             }, fromSaveData: false);
         }
 
@@ -564,9 +564,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public override void Update()
         {
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData) != null)
+            if (XaphanModule.ModSaveData != null)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                XaphanModule.ModSaveData.LoadedPlayer = false;
             }
             if (Selected && Focused && Input.QuickRestart.Pressed)
             {
@@ -652,10 +652,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 bool FoundCheckpoints = false;
                                 for (int i = 0; i <= SaveData.Instance.GetLevelSetStats().MaxArea; i++)
                                 {
-                                    if (SaveData.Instance.FoundAnyCheckpoints(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + i)) || (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i))
+                                    if (SaveData.Instance.FoundAnyCheckpoints(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + i)) || XaphanModule.ModSaveData.Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i))
                                     {
                                         FoundCheckpoints = true;
-                                        if (XaphanModule.MergeChaptersControllerKeepPrologue && i == 1 && !SaveData.Instance.FoundAnyCheckpoints(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + i)) && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i))
+                                        if (XaphanModule.MergeChaptersControllerKeepPrologue && i == 1 && !SaveData.Instance.FoundAnyCheckpoints(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + i)) && XaphanModule.ModSaveData.Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i))
                                         {
                                             FoundCheckpoints = false;
                                         }
@@ -1210,7 +1210,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private MTexture GetCheckpointPreview(AreaKey area, string level, int chapterIndex = -1)
         {
             string checkpointPreviewName = GetCheckpointPreviewName(area, level);
-            if (chapterIndex != -1 && checkpointPreviewName.Contains(AreaData.Areas[area.ID + chapterIndex].Mode[(int)area.Mode].MapData.StartLevel().Name) && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + chapterIndex) || SaveData.Instance.DebugMode || SaveData.Instance.CheatMode))
+            if (chapterIndex != -1 && checkpointPreviewName.Contains(AreaData.Areas[area.ID + chapterIndex].Mode[(int)area.Mode].MapData.StartLevel().Name) && (XaphanModule.ModSaveData.Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + chapterIndex) || SaveData.Instance.DebugMode || SaveData.Instance.CheatMode))
             {
                 checkpointPreviewName = checkpointPreviewName.Replace(AreaData.Areas[area.ID + chapterIndex].Mode[(int)area.Mode].MapData.StartLevel().Name, "start");
             }
@@ -1313,7 +1313,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (mode.Checkpoints != null)
                 {
                     CheckpointData[] array = mode.Checkpoints;
-                    if (i > 0 && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i) || SaveData.Instance.DebugMode || SaveData.Instance.CheatMode))
+                    if (i > 0 && (XaphanModule.ModSaveData.Checkpoints.Contains(SaveData.Instance.GetLevelSetStats().Name + "|" + i) || SaveData.Instance.DebugMode || SaveData.Instance.CheatMode))
                     {
                         if (!XaphanModule.MergeChaptersControllerKeepPrologue || (XaphanModule.MergeChaptersControllerKeepPrologue && i > 1))
                         {

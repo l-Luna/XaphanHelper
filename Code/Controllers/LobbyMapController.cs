@@ -62,13 +62,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 if (player != null && !level.Paused && !level.Transitioning)
                 {
                     PlayerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - level.Bounds.X) / 8f), (float)Math.Round(level.Bounds.Width / 8f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - level.Bounds.Y) / 8f), (float)Math.Round(level.Bounds.Height / 8f, MidpointRounding.AwayFromZero) + 1));
-                    if (PlayerPosition.X >= 0 && PlayerPosition.X < Math.Floor((float)CustomImage.Width / CustomImagesTilesSizeX) && PlayerPosition.Y >= 0 && PlayerPosition.Y < Math.Floor((float)CustomImage.Height / CustomImagesTilesSizeY) && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles2.Contains(new Vector2(PlayerPosition.X, PlayerPosition.Y)))
+                    if (PlayerPosition.X >= 0 && PlayerPosition.X < Math.Floor((float)CustomImage.Width / CustomImagesTilesSizeX) && PlayerPosition.Y >= 0 && PlayerPosition.Y < Math.Floor((float)CustomImage.Height / CustomImagesTilesSizeY) && !XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles2.Contains(new Vector2(PlayerPosition.X, PlayerPosition.Y)))
                     {
                         List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new List<Vector2>();
                         List<Vector2> Tmp2GeneratedVisitedLobbyMapTiles = new List<Vector2>();
                         List<Vector2> Tmp3GeneratedVisitedLobbyMapTiles = new List<Vector2>();
                         List<Vector2> Tmp4GeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedLobbyMapTiles.Add(Prefix + "/Ch" + (lobbyIndex != 0 ? lobbyIndex : chapterIndex) + "/" + level.Session.Level + "/" + PlayerPosition.X + "-" + PlayerPosition.Y);
+                        XaphanModule.ModSaveData.VisitedLobbyMapTiles.Add(Prefix + "/Ch" + (lobbyIndex != 0 ? lobbyIndex : chapterIndex) + "/" + level.Session.Level + "/" + PlayerPosition.X + "-" + PlayerPosition.Y);
                         Circle circle = new Circle(15, PlayerPosition.X, PlayerPosition.Y);
                         for (int i = Math.Max(0, (int)(PlayerPosition.X - circle.Radius)); i < Math.Min((int)(PlayerPosition.X + circle.Radius), CustomImage.Width / 4); i++)
                         {
@@ -84,13 +84,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                                 }
                             }
                         }
-                        Tmp2GeneratedVisitedLobbyMapTiles.AddRange((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles);
+                        Tmp2GeneratedVisitedLobbyMapTiles.AddRange(XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles);
                         Tmp2GeneratedVisitedLobbyMapTiles.AddRange(TmpGeneratedVisitedLobbyMapTiles.Distinct().ToList());
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles = Tmp2GeneratedVisitedLobbyMapTiles.Distinct().ToList();
+                        XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles = Tmp2GeneratedVisitedLobbyMapTiles.Distinct().ToList();
 
-                        Tmp4GeneratedVisitedLobbyMapTiles.AddRange((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles2);
+                        Tmp4GeneratedVisitedLobbyMapTiles.AddRange(XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles2);
                         Tmp4GeneratedVisitedLobbyMapTiles.AddRange(Tmp3GeneratedVisitedLobbyMapTiles.Distinct().ToList());
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles2 = Tmp4GeneratedVisitedLobbyMapTiles.Distinct().ToList();
+                        XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles2 = Tmp4GeneratedVisitedLobbyMapTiles.Distinct().ToList();
                     }
                 }
             }
@@ -125,12 +125,12 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public void GenerateLobbyTiles(string directory, int lobbyIndex)
         {
             CustomImage = GFX.Gui[directory];
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles.Count == 0)
+            if (XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Count == 0)
             {
                 Level level = SceneAs<Level>();
                 string Prefix = level.Session.Area.GetLevelSet();
                 List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                foreach (string tile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedLobbyMapTiles)
+                foreach (string tile in XaphanModule.ModSaveData.VisitedLobbyMapTiles)
                 {
                     string[] str = tile.Split('/');
                     if (Prefix == str[0] + "/" + str[1] && str[2] == "Ch" + lobbyIndex)
@@ -158,7 +158,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                         }
                     }
                 }
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles = TmpGeneratedVisitedLobbyMapTiles.Distinct().ToList();
+                XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles = TmpGeneratedVisitedLobbyMapTiles.Distinct().ToList();
             }
         }
     }

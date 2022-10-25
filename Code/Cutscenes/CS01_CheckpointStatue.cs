@@ -19,7 +19,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch1_Checkpoint_Statue");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch1_Checkpoint_Statue");
             level.Session.SetFlag("CS_Ch1_Checkpoint_Statue");
             player.StateMachine.State = 0;
         }
