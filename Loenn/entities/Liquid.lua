@@ -13,7 +13,7 @@ Liquid.depth = function(room, entity)
     return depth
 end
 Liquid.fieldOrder = {
-    "x", "y", "width", "height", "liquidType", "directory", "surfaceHeight", "lowPosition", "color", "transparency", "foreground", "frameDelay", "riseDistance", "riseDelay", "riseSpeed", "riseShake", "riseFlag", "riseEndFlag", "riseSound", "canSwim", "visualOnly"
+    "x", "y", "width", "height", "liquidType", "directory", "surfaceHeight", "lowPosition", "color", "transparency", "frameDelay", "riseDistance", "riseDelay", "riseSpeed", "riseFlag", "riseEndFlag", "removeFlags", "riseShake", "riseSound", "canSwim", "visualOnly", "foreground"
 }
 Liquid.fieldInformation = {
     lowPosition = {
@@ -58,7 +58,8 @@ Liquid.placements = {
         directory = "objects/XaphanHelper/liquid",
         surfaceHeight = 0,
         canSwim = false,
-        visualOnly = false
+        visualOnly = false,
+        removeFlags = ""
     }
 }
 
