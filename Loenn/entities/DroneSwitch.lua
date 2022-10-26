@@ -7,7 +7,7 @@ DroneSwitch.depth = 0
 DroneSwitch.canResize = {false, false}
 DroneSwitch.fieldInformation = {
     side = {
-        options = {"Left", "Right", "Bottom"},
+        options = {"Left", "Right", "Down"},
         editable = false
     }
 }
