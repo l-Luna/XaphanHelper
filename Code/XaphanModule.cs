@@ -19,6 +19,7 @@ using MonoMod.Utils;
 using Celeste.Mod.Meta;
 using System.Xml;
 using On.Celeste;
+using System.ComponentModel.Design;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -497,7 +498,24 @@ namespace Celeste.Mod.XaphanHelper
             DecalRegistry.AddPropertyHandler("BGdepth", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["value"] != null && decal.Depth == 9000)
+                {
                     decal.Depth = int.Parse(attrs["value"].Value);
+                }
+            });
+            DecalRegistry.AddPropertyHandler("flagsHide", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flags"] != null)
+                {
+                    string[] flags = attrs["flags"].Value.Split(',');
+                    foreach (string flag in flags)
+                    {
+                        if (decal.SceneAs<Level>().Session.GetFlag(flag))
+                        {
+                            decal.Visible = false;
+                            break;
+                        }
+                    }
+                }
             });
             foreach (Upgrades upgrade in UpgradeHandlers.Keys)
             {
