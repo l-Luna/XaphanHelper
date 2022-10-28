@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Effects;
 using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -80,7 +82,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Tag = Tags.TransitionUpdate;
                 Collider = new Hitbox(4f, 4f, -2f, -2f);
-                Add(sprite = new Image(Calc.Random.Choose(GFX.Game.GetAtlasSubtextures("objects/moveblock/debris"))));
+                Add(sprite = new Image(Calc.Random.Choose(GFX.Game.GetAtlasSubtextures(directory + "/debris"))));
                 sprite.CenterOrigin();
                 sprite.FlipX = Calc.Random.Chance(0.5f);
                 onCollideH = delegate
@@ -171,12 +173,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 sprite.Color = Color.Lerp(Color.White, Color.Gray, fadeLerp) * alpha;
             }
-
-            public void StopMoving()
-            {
-                Collidable = false;
-            }
-
         }
 
         public static ParticleType P_Activate;
@@ -185,27 +181,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public static ParticleType P_Move;
 
-        private const float Accel = 300f;
-
-        private const float MoveSpeed = 60f;
-
-        private const float FastMoveSpeed = 75f;
-
-        private const float SteerSpeed = (float)Math.PI * 16f;
-
-        private const float MaxAngle = (float)Math.PI / 4f;
-
-        private const float NoSteerTime = 0.2f;
-
-        private const float CrashTime = 0.15f;
-
-        private const float CrashResetTime = 0.1f;
-
-        private const float RegenTime = 3f;
-
         private bool canSteer;
-
-        private bool fast;
 
         private Directions direction;
 
@@ -223,13 +199,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool topPressed;
 
-        private float speed;
+        private float currentSpeed;
 
         private float targetSpeed;
+
+        private float speed;
+
+        private float acceleration;
 
         private float angle;
 
         private float targetAngle;
+
+        private float respawnTime;
 
         private Player noSquish;
 
@@ -245,7 +227,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Border border;
 
-        private Color fillColor = idleBgFill;
+        private Color fillColor;
 
         private float flash;
 
@@ -253,20 +235,49 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool triggered;
 
-        private static readonly Color idleBgFill = Calc.HexToColor("474070");
+        private Color idleBgFill;
 
-        private static readonly Color pressedBgFill = Calc.HexToColor("30b335");
+        private Color pressedBgFill;
 
-        private static readonly Color breakingBgFill = Calc.HexToColor("cc2541");
+        private Color breakingBgFill;
 
         private float particleRemainder;
+
+        private static string directory;
+
+        private bool oneUse;
+
+        private bool addBorder;
+
+        private bool upsideDown;
+
+        private bool buttonIgnoreColors;
+
+        private int buttonPressedOffset;
+
+        private bool glow;
+
+        private float alpha = 0f;
 
         public CustomMoveBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, false)
         {
             startPosition = Position;
+            directory = data.Attr("directory", "objects/moveBlock");
+            idleBgFill = Calc.HexToColor(data.Attr("idleColor", "474070"));
+            pressedBgFill = Calc.HexToColor(data.Attr("moveColor", "30b335"));
+            breakingBgFill = Calc.HexToColor(data.Attr("breakColor", "cc2541"));
+            addBorder = data.Bool("addBorder", true);
+            fillColor = idleBgFill;
             canSteer = data.Bool("canSteer", false);
             direction = data.Enum("direction", Directions.Right);
-            fast = data.Bool("fast");
+            speed = data.Float("speed", 60f);
+            acceleration = data.Float("acceleration", 300f);
+            respawnTime = data.Float("respawnTime", 3f);
+            oneUse = data.Bool("oneUse", false);
+            upsideDown = data.Bool("upsideDown", false);
+            glow = data.Bool("glow", false);
+            buttonIgnoreColors = data.Bool("buttonIgnoreColors", false);
+            buttonPressedOffset = data.Int("buttonPressedOffset", 2);
             switch (direction)
             {
                 default:
@@ -288,16 +299,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             int num = (int)Width / 8;
             int num2 = (int)Height / 8;
-            MTexture mTexture = GFX.Game["objects/moveBlock/base"];
-            MTexture mTexture2 = GFX.Game["objects/moveBlock/button"];
+            MTexture mTexture = GFX.Game[directory + "/base"];
+            MTexture mTexture2 = GFX.Game[directory + "/button"];
             if (canSteer && (direction == Directions.Left || direction == Directions.Right))
             {
-                for (int i = 0; i < num; i++)
+                if (!upsideDown)
                 {
-                    int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
-                    AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f), 0f, new Vector2(1f, 1f), topButton);
+                    for (int i = 0; i < num; i++)
+                    {
+                        int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
+                        AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f), 0f, new Vector2(1f, 1f), topButton);
+                    }
                 }
-                mTexture = GFX.Game["objects/moveBlock/base_h"];
+                else
+                {
+                    for (int i = 0; i < num; i++)
+                    {
+                        int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
+                        AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f + Height), 0f, new Vector2(1f, -1f), topButton);
+                    }
+                }
+                mTexture = GFX.Game[directory + "/base_h"];
             }
             else if (canSteer && (direction == Directions.Up || direction == Directions.Down))
             {
@@ -307,28 +329,60 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     AddImage(mTexture2.GetSubtexture(num4 * 8, 0, 8, 8), new Vector2(-4f, j * 8), (float)Math.PI / 2f, new Vector2(1f, -1f), leftButton);
                     AddImage(mTexture2.GetSubtexture(num4 * 8, 0, 8, 8), new Vector2((num - 1) * 8 + 4, j * 8), (float)Math.PI / 2f, new Vector2(1f, 1f), rightButton);
                 }
-                mTexture = GFX.Game["objects/moveBlock/base_v"];
+                mTexture = GFX.Game[directory + "/base_v"];
             }
-            for (int k = 0; k < num; k++)
+            if (!upsideDown || direction == Directions.Up || direction == Directions.Down)
             {
-                for (int l = 0; l < num2; l++)
+                for (int k = 0; k < num; k++)
                 {
-                    int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
-                    int num6 = ((l != 0) ? ((l < num2 - 1) ? 1 : 2) : 0);
-                    AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, 1f), body);
+                    for (int l = 0; l < num2; l++)
+                    {
+                        int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
+                        int num6 = ((l != 0) ? ((l < num2 - 1) ? 1 : 2) : 0);
+                        AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, 1f), body);
+                    }
                 }
             }
-            arrows = GFX.Game.GetAtlasSubtextures("objects/moveBlock/arrow");
+            else
+            {
+                for (int k = 0; k < num; k++)
+                {
+                    for (int l = num2 - 1; l >= 0; l--)
+                    {
+                        int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
+                        int num6 = ((l != num2 - 1) ? ((l > 0) ? 1 : 2) : 0);
+                        AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, -1f), body);
+                    }
+                }
+            }
+            arrows = GFX.Game.GetAtlasSubtextures(directory + "/arrow");
             Add(moveSfx = new SoundSource());
             Add(new Coroutine(Controller()));
             UpdateColors();
             Add(new LightOcclude(0.5f));
+            P_Activate = new ParticleType
+            {
+                Size = 1f,
+                Color = Calc.HexToColor(data.Attr("particlesColor", "000000")),
+                FadeMode = ParticleType.FadeModes.Late,
+                DirectionRange = 0.34906584f,
+                LifeMin = 0.4f,
+                LifeMax = 0.6f,
+                SpeedMin = 20f,
+                SpeedMax = 40f,
+                SpeedMultiplier = 0.25f
+            };
+            P_Break = new ParticleType(P_Activate);
+            P_Move = new ParticleType(P_Activate);
         }
 
         public override void Awake(Scene scene)
         {
             base.Awake(scene);
-            scene.Add(border = new Border(this));
+            if (addBorder)
+            {
+                scene.Add(border = new Border(this));
+            }
         }
 
         private IEnumerator Controller()
@@ -346,7 +400,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 StartShaking(0.2f);
                 ActivateParticles();
                 yield return 0.2f;
-                targetSpeed = (fast ? 75f : 60f);
+                targetSpeed = speed;
                 moveSfx.Play("event:/game/04_cliffside/arrowblock_move");
                 moveSfx.Param("arrow_stop", 0f);
                 StopPlayerRunIntoAnimation = false;
@@ -358,7 +412,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     if (canSteer)
                     {
                         targetAngle = homeAngle;
-                        bool flag = ((direction != Directions.Right && direction != 0) ? HasPlayerClimbing() : HasPlayerOnTop());
+                        bool flag = ((direction != Directions.Right && direction != 0) ? HasPlayerClimbing() : (!upsideDown ? HasPlayerOnTop() : SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && CollideCheck<Player>(Position + Vector2.UnitY * 6)));
                         if (flag && noSteerTimer > 0f)
                         {
                             noSteerTimer -= Engine.DeltaTime;
@@ -386,9 +440,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         MoveParticles();
                     }
-                    speed = Calc.Approach(speed, targetSpeed, 300f * Engine.DeltaTime);
+                    currentSpeed = Calc.Approach(currentSpeed, targetSpeed, acceleration * Engine.DeltaTime);
                     angle = Calc.Approach(angle, targetAngle, (float)Math.PI * 16f * Engine.DeltaTime);
-                    Vector2 vector = Calc.AngleToVector(angle, speed);
+                    Vector2 vector = Calc.AngleToVector(angle, currentSpeed);
                     Vector2 vec = vector * Engine.DeltaTime;
                     bool flag2;
                     if (direction == Directions.Right || direction == Directions.Left)
@@ -465,7 +519,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Audio.Play("event:/game/04_cliffside/arrowblock_break", Position);
                 moveSfx.Stop();
                 state = MovementState.Breaking;
-                speed = (targetSpeed = 0f);
+                currentSpeed = (targetSpeed = 0f);
                 angle = (targetAngle = homeAngle);
                 StartShaking(0.2f);
                 StopPlayerRunIntoAnimation = true;
@@ -488,31 +542,34 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 moveBlock.MoveStaticMovers(amount);
                 Position = startPosition;
                 Visible = (Collidable = false);
-                yield return 2.2f;
-                foreach (Debris item in debris)
+                if (!oneUse)
                 {
-                    item.StopMoving();
+                    yield return respawnTime;
+                    while (CollideCheck<Actor>() || CollideCheck<Solid>())
+                    {
+                        yield return null;
+                    }
+                    Collidable = true;
+                    EventInstance instance = Audio.Play("event:/game/04_cliffside/arrowblock_reform_begin", debris[0].Position);
+                    CustomMoveBlock moveBlock2 = this;
+                    Coroutine component;
+                    Coroutine routine = (component = new Coroutine(SoundFollowsDebrisCenter(instance, debris)));
+                    moveBlock2.Add(component);
+                    routine.RemoveSelf();
+                    Audio.Play("event:/game/04_cliffside/arrowblock_reappear", Position);
+                    Visible = true;
+                    EnableStaticMovers();
+                    currentSpeed = (targetSpeed = 0f);
+                    angle = (targetAngle = homeAngle);
+                    noSquish = null;
+                    fillColor = idleBgFill;
+                    UpdateColors();
+                    flash = 1f;
                 }
-                while (CollideCheck<Actor>() || CollideCheck<Solid>())
+                else
                 {
-                    yield return null;
+                    RemoveSelf();
                 }
-                Collidable = true;
-                EventInstance instance = Audio.Play("event:/game/04_cliffside/arrowblock_reform_begin", debris[0].Position);
-                CustomMoveBlock moveBlock2 = this;
-                Coroutine component;
-                Coroutine routine = (component = new Coroutine(SoundFollowsDebrisCenter(instance, debris)));
-                moveBlock2.Add(component);
-                routine.RemoveSelf();
-                Audio.Play("event:/game/04_cliffside/arrowblock_reappear", Position);
-                Visible = true;
-                EnableStaticMovers();
-                speed = (targetSpeed = 0f);
-                angle = (targetAngle = homeAngle);
-                noSquish = null;
-                fillColor = idleBgFill;
-                UpdateColors();
-                flash = 1f;
             }
         }
 
@@ -539,22 +596,35 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
+            alpha += Engine.DeltaTime * 4f;
             if (canSteer)
             {
                 bool flag = (direction == Directions.Up || direction == Directions.Down) && CollideCheck<Player>(Position + new Vector2(-1f, 0f));
                 bool flag2 = (direction == Directions.Up || direction == Directions.Down) && CollideCheck<Player>(Position + new Vector2(1f, 0f));
-                bool flag3 = (direction == Directions.Left || direction == Directions.Right) && CollideCheck<Player>(Position + new Vector2(0f, -1f));
-                foreach (Image item in topButton)
+                bool flag3 = false;
+                if (!upsideDown)
                 {
-                    item.Y = (flag3 ? 2 : 0);
+                    flag3 = (direction == Directions.Left || direction == Directions.Right) && CollideCheck<Player>(Position + new Vector2(0f, -1f));
+                    foreach (Image item in topButton)
+                    {
+                        item.Y = (flag3 ? buttonPressedOffset : 0);
+                    }
+                }
+                else
+                {
+                    flag3 = (direction == Directions.Left || direction == Directions.Right) && CollideCheck<Player>(Position + new Vector2(0f, 6f)) && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling");
+                    foreach (Image item in topButton)
+                    {
+                        item.Y = Height + (flag3 ? -buttonPressedOffset : 0);
+                    }
                 }
                 foreach (Image item2 in leftButton)
                 {
-                    item2.X = (flag ? 2 : 0);
+                    item2.X = (flag ? buttonPressedOffset : 0);
                 }
                 foreach (Image item3 in rightButton)
                 {
-                    item3.X = Width + (flag2 ? (-2) : 0);
+                    item3.X = Width + (flag2 ? (-buttonPressedOffset) : 0);
                 }
                 if ((flag && !leftPressed) || (flag3 && !topPressed) || (flag2 && !rightPressed))
                 {
@@ -573,7 +643,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 int num = (int)Math.Floor((0f - (Calc.AngleToVector(angle, 1f) * new Vector2(-1f, 1f)).Angle() + (float)Math.PI * 2f) % ((float)Math.PI * 2f) / ((float)Math.PI * 2f) * 8f + 0.5f);
                 moveSfx.Param("arrow_influence", num + 1);
             }
-            border.Visible = Visible;
+            if (border != null)
+            {
+                border.Visible = Visible;
+            }
+            
             flash = Calc.Approach(flash, 0f, Engine.DeltaTime * 5f);
             UpdateColors();
         }
@@ -666,18 +740,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 value = breakingBgFill;
             }
             fillColor = Color.Lerp(fillColor, value, 10f * Engine.DeltaTime);
-            foreach (Image item in topButton)
+            if (!buttonIgnoreColors)
             {
-                item.Color = fillColor;
-            }
-            foreach (Image item2 in leftButton)
-            {
-                item2.Color = fillColor;
-            }
-            foreach (Image item3 in rightButton)
-            {
-                item3.Color = fillColor;
-            }
+                foreach (Image item in topButton)
+                {
+                    item.Color = fillColor;
+                }
+                foreach (Image item2 in leftButton)
+                {
+                    item2.Color = fillColor;
+                }
+                foreach (Image item3 in rightButton)
+                {
+                    item3.Color = fillColor;
+                }
+            }            
         }
 
         private void AddImage(MTexture tex, Vector2 position, float rotation, Vector2 scale, List<Image> addTo)
@@ -691,18 +768,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             addTo?.Add(image);
         }
 
-        private void SetVisible(List<Image> images, bool visible)
-        {
-            foreach (Image image in images)
-            {
-                image.Visible = visible;
-            }
-        }
-
         public override void Render()
         {
+            float opacity = glow ? (0.9f * (0.9f + ((float)Math.Sin(alpha) + 1f) * 0.125f)) : 1;
             Vector2 position = Position;
             Position += Shake;
+            Draw.Rect(X + 2f, Y + 2f, Width - 4f, Height - 4f, Color.Black);
             foreach (Image item in leftButton)
             {
                 item.Render();
@@ -715,12 +786,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 item3.Render();
             }
-            Draw.Rect(X + 3f, Y + 3f, Width - 6f, Height - 6f, fillColor);
+            Draw.Rect(X + 2f, Y + 2f, Width - 4f, Height - 4f, fillColor * opacity);
             foreach (Image item4 in body)
             {
                 item4.Render();
             }
-            Draw.Rect(Center.X - 4f, Center.Y - 4f, 8f, 8f, fillColor);
+            Draw.Rect(Center.X - 4f, Center.Y - 4f, 8f, 8f, fillColor * opacity);
             if (state != MovementState.Breaking)
             {
                 int value = (int)Math.Floor((0f - angle + (float)Math.PI * 2f) % ((float)Math.PI * 2f) / ((float)Math.PI * 2f) * 8f + 0.5f);
@@ -728,7 +799,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                GFX.Game["objects/moveBlock/x"].DrawCentered(Center);
+                GFX.Game[directory + "/x"].DrawCentered(Center);
             }
             float num = flash * 4f;
             Draw.Rect(X - num, Y - num, Width + num * 2f, Height + num * 2f, Color.White * flash);
@@ -743,17 +814,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             bool flag3 = (!canSteer || flag) && !CollideCheck<Player>(Position - Vector2.UnitY);
             if (num)
             {
-                SceneAs<Level>().ParticlesBG.Emit(MoveBlock.P_Activate, (int)(Height / 2f), CenterLeft, Vector2.UnitY * (Height - 4f) * 0.5f, (float)Math.PI);
+                SceneAs<Level>().ParticlesBG.Emit(P_Activate, (int)(Height / 2f), CenterLeft, Vector2.UnitY * (Height - 4f) * 0.5f, (float)Math.PI);
             }
             if (flag2)
             {
-                SceneAs<Level>().ParticlesBG.Emit(MoveBlock.P_Activate, (int)(Height / 2f), CenterRight, Vector2.UnitY * (Height - 4f) * 0.5f, 0f);
+                SceneAs<Level>().ParticlesBG.Emit(P_Activate, (int)(Height / 2f), CenterRight, Vector2.UnitY * (Height - 4f) * 0.5f, 0f);
             }
             if (flag3)
             {
-                SceneAs<Level>().ParticlesBG.Emit(MoveBlock.P_Activate, (int)(Width / 2f), TopCenter, Vector2.UnitX * (Width - 4f) * 0.5f, -(float)Math.PI / 2f);
+                SceneAs<Level>().ParticlesBG.Emit(P_Activate, (int)(Width / 2f), TopCenter, Vector2.UnitX * (Width - 4f) * 0.5f, -(float)Math.PI / 2f);
             }
-            SceneAs<Level>().ParticlesBG.Emit(MoveBlock.P_Activate, (int)(Width / 2f), BottomCenter, Vector2.UnitX * (Width - 4f) * 0.5f, (float)Math.PI / 2f);
+            SceneAs<Level>().ParticlesBG.Emit(P_Activate, (int)(Width / 2f), BottomCenter, Vector2.UnitX * (Width - 4f) * 0.5f, (float)Math.PI / 2f);
         }
 
         private void BreakParticles()
@@ -764,7 +835,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 for (int j = 0; j < Height; j += 4)
                 {
                     Vector2 vector = Position + new Vector2(2 + i, 2 + j);
-                    SceneAs<Level>().Particles.Emit(MoveBlock.P_Break, 1, vector, Vector2.One * 2f, (vector - center).Angle());
+                    SceneAs<Level>().Particles.Emit(P_Break, 1, vector, Vector2.One * 2f, (vector - center).Angle());
                 }
             }
         }
@@ -809,7 +880,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             positionRange *= 0.5f;
             if (num3 > 0)
             {
-                SceneAs<Level>().ParticlesBG.Emit(MoveBlock.P_Move, num3, position, positionRange, num);
+                SceneAs<Level>().ParticlesBG.Emit(P_Move, num3, position, positionRange, num);
             }
         }
 
