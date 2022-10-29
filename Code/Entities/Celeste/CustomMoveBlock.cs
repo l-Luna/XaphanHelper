@@ -78,13 +78,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
             private float fadeLerp;
 
+            private string directory;
+
             public Debris() : base(Vector2.Zero)
             {
                 Tag = Tags.TransitionUpdate;
                 Collider = new Hitbox(4f, 4f, -2f, -2f);
-                Add(sprite = new Image(Calc.Random.Choose(GFX.Game.GetAtlasSubtextures(directory + "/debris"))));
-                sprite.CenterOrigin();
-                sprite.FlipX = Calc.Random.Chance(0.5f);
+                
                 onCollideH = delegate
                 {
                     speed.X = (0f - speed.X) * 0.5f;
@@ -111,12 +111,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
             }
 
-            public Debris Init(Vector2 position, Vector2 center, Vector2 returnTo)
+            public Debris Init(Vector2 position, Vector2 center, Vector2 returnTo, string directory)
             {
                 Collidable = true;
                 Position = position;
                 speed = (position - center).SafeNormalize(60f + Calc.Random.NextFloat(60f));
                 home = returnTo;
+                this.directory = directory;
+                Add(sprite = new Image(Calc.Random.Choose(GFX.Game.GetAtlasSubtextures(directory + "/debris"))));
+                sprite.CenterOrigin();
+                sprite.FlipX = Calc.Random.Chance(0.5f);
                 sprite.Position = Vector2.Zero;
                 sprite.Rotation = Calc.Random.NextAngle();
                 shaking = false;
@@ -243,7 +247,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float particleRemainder;
 
-        private static string directory;
+        private string directory;
 
         private bool oneUse;
 
@@ -303,23 +307,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             MTexture mTexture2 = GFX.Game[directory + "/button"];
             if (canSteer && (direction == Directions.Left || direction == Directions.Right))
             {
-                if (!upsideDown)
+                for (int i = 0; i < num; i++)
                 {
-                    for (int i = 0; i < num; i++)
-                    {
-                        int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
-                        AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f), 0f, new Vector2(1f, 1f), topButton);
-                    }
+                    int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
+                    AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f), 0f, new Vector2(1f, 1f), topButton);
                 }
-                else
-                {
-                    for (int i = 0; i < num; i++)
-                    {
-                        int num3 = ((i != 0) ? ((i < num - 1) ? 1 : 2) : 0);
-                        AddImage(mTexture2.GetSubtexture(num3 * 8, 0, 8, 8), new Vector2(i * 8, -4f + Height), 0f, new Vector2(1f, -1f), topButton);
-                    }
-                }
-                mTexture = GFX.Game[directory + "/base_h"];
+                mTexture = GFX.Game[directory + "/base_h" + (upsideDown ? "ud" : "")];
             }
             else if (canSteer && (direction == Directions.Up || direction == Directions.Down))
             {
@@ -331,28 +324,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 mTexture = GFX.Game[directory + "/base_v"];
             }
-            if (!upsideDown || direction == Directions.Up || direction == Directions.Down)
+            for (int k = 0; k < num; k++)
             {
-                for (int k = 0; k < num; k++)
+                for (int l = 0; l < num2; l++)
                 {
-                    for (int l = 0; l < num2; l++)
-                    {
-                        int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
-                        int num6 = ((l != 0) ? ((l < num2 - 1) ? 1 : 2) : 0);
-                        AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, 1f), body);
-                    }
-                }
-            }
-            else
-            {
-                for (int k = 0; k < num; k++)
-                {
-                    for (int l = num2 - 1; l >= 0; l--)
-                    {
-                        int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
-                        int num6 = ((l != num2 - 1) ? ((l > 0) ? 1 : 2) : 0);
-                        AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, -1f), body);
-                    }
+                    int num5 = ((k != 0) ? ((k < num - 1) ? 1 : 2) : 0);
+                    int num6 = ((l != 0) ? ((l < num2 - 1) ? 1 : 2) : 0);
+                    AddImage(mTexture.GetSubtexture(num5 * 8, num6 * 8, 8, 8), new Vector2(k, l) * 8f, 0f, new Vector2(1f, 1f), body);
                 }
             }
             arrows = GFX.Game.GetAtlasSubtextures(directory + "/arrow");
@@ -531,7 +509,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     for (int j = 0; j < Height; j += 8)
                     {
                         Vector2 vector2 = new Vector2(i + 4f, j + 4f);
-                        Debris debris2 = Engine.Pooler.Create<Debris>().Init(Position + vector2, Center, startPosition + vector2);
+                        Debris debris2 = Engine.Pooler.Create<Debris>().Init(Position + vector2, Center, startPosition + vector2, directory);
                         debris.Add(debris2);
                         Scene.Add(debris2);
                     }
@@ -615,6 +593,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     flag3 = (direction == Directions.Left || direction == Directions.Right) && CollideCheck<Player>(Position + new Vector2(0f, 6f)) && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling");
                     foreach (Image item in topButton)
                     {
+                        item.Scale = new Vector2(1f, -1f);
                         item.Y = Height + (flag3 ? -buttonPressedOffset : 0);
                     }
                 }
@@ -786,7 +765,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 item3.Render();
             }
-            Draw.Rect(X + 2f, Y + 2f, Width - 4f, Height - 4f, fillColor * opacity);
+            float rectSize = 2f;
+            if (directory == "objects/moveBlock")
+            {
+                rectSize = 3f;
+            }
+            Draw.Rect(X + rectSize, Y + rectSize, Width - rectSize * 2, Height - rectSize * 2, fillColor * opacity);
             foreach (Image item4 in body)
             {
                 item4.Render();
