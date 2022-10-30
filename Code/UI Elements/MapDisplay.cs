@@ -1679,7 +1679,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                         else if (entity.Type == "fireRateModule")
                         {
-                            Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
+                            Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
                         }
                         else if (entity.Type == "warp")
                         {
@@ -1763,7 +1763,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 }
                                 else if (entity.Type == "fireRateModule")
                                 {
-                                    Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
+                                    Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
                                 }
                                 else if (entity.Type == "warp")
                                 {

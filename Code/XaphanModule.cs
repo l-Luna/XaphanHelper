@@ -37,10 +37,6 @@ namespace Celeste.Mod.XaphanHelper
         public override Type SaveDataType => typeof(XaphanModuleSaveData);
         public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
 
-        // If you need to store session data:
-        public override Type SessionType => typeof(XaphanModuleSession);
-        public static XaphanModuleSession Session => (XaphanModuleSession)Instance._Session;
-
         public static List<TeleportToOtherSideData> TeleportToOtherSideData = new List<TeleportToOtherSideData>();
 
         private FieldInfo OuiChapterSelect_icons = typeof(OuiChapterSelect).GetField("icons", BindingFlags.Instance | BindingFlags.NonPublic);
