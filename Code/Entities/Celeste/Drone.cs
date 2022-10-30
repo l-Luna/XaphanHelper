@@ -856,7 +856,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
             string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
             level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
-            BeamDelay = 0.2f;
+           int droneFireRateUpgradesCount = 0;
+            if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+            {
+                droneFireRateUpgradesCount = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Count;
+            }
+            else
+            {
+                droneFireRateUpgradesCount = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Count;
+            }
+            BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.035f;
             while (BeamDelay > 0f)
             {
                 BeamDelay -= Engine.DeltaTime;

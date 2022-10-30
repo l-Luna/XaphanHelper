@@ -560,11 +560,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "energyTank", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY)), MapData.Area, entity.ID));
                     }
+                    else if (entity.Name == "XaphanHelper/UpgradeCollectable" && entity.Attr("upgrade") == "FireRateModule")
+                    {
+                        EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "fireRateModule", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY)), MapData.Area, entity.ID));
+                    }
                     else if (entity.Name == "XaphanHelper/WarpStation")
                     {
                         EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "warp", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY))));
                     }
-                    else if (entity.Name == "XaphanHelper/UpgradeCollectable" && (entity.Attr("upgrade") != "Map" && entity.Attr("upgrade") != "MapShard") && (entity.Attr("upgrade") != "EnergyTank"))
+                    else if (entity.Name == "XaphanHelper/UpgradeCollectable" && (entity.Attr("upgrade") != "Map" && entity.Attr("upgrade") != "MapShard") && (entity.Attr("upgrade") != "EnergyTank") && (entity.Attr("upgrade") != "FireRateModule"))
                     {
                         EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "upgrade", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY)), upgradeCollectableUpgrade: entity.Attr("upgrade")));
                     }
@@ -1673,6 +1677,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             Icons.Add(new InGameMapIconsData("energyTank", entity.Room, Vector2.One + entity.MapTilesPosition * 40, XaphanModule.ModSaveData.StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
                         }
+                        else if (entity.Type == "fireRateModule")
+                        {
+                            Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
+                        }
                         else if (entity.Type == "warp")
                         {
                             Icons.Add(new InGameMapIconsData("warp", entity.Room, Vector2.One + entity.MapTilesPosition * 40, false));
@@ -1752,6 +1760,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 else if (entity.Type == "energyTank")
                                 {
                                     Icons.Add(new InGameMapIconsData("energyTank", entity.Room, Vector2.One + entity.MapTilesPosition * 40, XaphanModule.ModSaveData.StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
+                                }
+                                else if (entity.Type == "fireRateModule")
+                                {
+                                    Icons.Add(new InGameMapIconsData("fireRateModule", entity.Room, Vector2.One + entity.MapTilesPosition * 40, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + entity.Room + ":" + entity.ID)));
                                 }
                                 else if (entity.Type == "warp")
                                 {

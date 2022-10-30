@@ -213,6 +213,13 @@ entities.XaphanHelper/ElevatorBarrier.placements.name.ElevatorBarrier=Elevator B
 entities.XaphanHelper/EtherealBlock.placements.name.EtherealBlock=Ethereal Block
 entities.XaphanHelper/EtherealBlock.attributes.description.tiletype=Change the visual apparence of the block.
 
+# FlagBlock
+entities.XaphanHelper/FlagBlock.placements.name.FlagBlock=Flag Block
+entities.XaphanHelper/FlagBlock.attributes.description.tiletype=Change the visual apparence of the block.
+entities.XaphanHelper/FlagBlock.attributes.description.mode=Block: The break block will not try to merge with nearby solid tiles.\nWall: The break block will try to merge with nearby solid tiles.
+entities.XaphanHelper/FlagBlock.attributes.description.flags=If any of these flags are set, the block will not appear, or will break if it already appeared. Flags must be separated by a comma (,).
+entities.XaphanHelper/FlagBlock.attributes.description.permanent=If true, the block will not reapear if the player die or re-enter the room.
+
 # FlagDashSwitch
 entities.XaphanHelper/FlagDashSwitch.placements.name.FlagDashSwitch=Flag Dash Switch
 entities.XaphanHelper/FlagDashSwitch.attributes.description.side=The side the switch will face.
@@ -421,6 +428,7 @@ entities.XaphanHelper/Liquid.attributes.description.directory=The directory from
 entities.XaphanHelper/Liquid.attributes.description.surfaceHeight=Number of tiles in your custom sprites for the height of the surface of the liquid.\nThis correspond to the number of tiles at the top of your custom sprites that will be drawn only once.\nIf not using custom sprites, leave this to 0 to use default values based on the liquid type.
 entities.XaphanHelper/Liquid.attributes.description.visualOnly=If true, the liquid will have no effect on the player physics nor will be able to kill them.
 entities.XaphanHelper/Liquid.attributes.description.canSwim=If true, the player will be able to swim in the liquid just like vanilla water.
+entities.XaphanHelper/Liquid.attributes.description.removeFlags=If any of these flags are set, the liquid will not appear. Flags must be separated by a comma (,).
 
 # MagneticCeiling
 entities.XaphanHelper/MagneticCeiling.placements.name.MagneticCeiling=Magnetic Ceiling

@@ -83,6 +83,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string riseEndFlag;
 
+        private string removeFlags;
+
         private int origLevelBottom;
 
         private bool playerHasMoved;
@@ -130,6 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             riseShake = data.Bool("riseShake");
             riseFlag = data.Attr("riseFlag");
             riseEndFlag = data.Attr("riseEndFlag");
+            removeFlags = data.Attr("removeFlags");
             riseSound = data.Bool("riseSound");
             directory = data.Attr("directory");
             customSurfaceHeight = data.Int("surfaceHeight", 0);
@@ -565,6 +568,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            if (!string.IsNullOrEmpty(removeFlags))
+            {
+                string[] flags = removeFlags.Split(',');
+                foreach (string flag in flags)
+                {
+                    if (SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        RemoveSelf();
+                        break;
+                    }
+                }
+            }
             origLevelBottom = SceneAs<Level>().Bounds.Bottom;
             if (liquidType == "lava")
             {
@@ -586,10 +601,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     RemoveSelf();
                 }
-            }
-            if (canSwim)
-            {
-                //SceneAs<Level>().Add(Water = new Water(Position, true, false, Width, Height) { Visible = false });
             }
         }
 

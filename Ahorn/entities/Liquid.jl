@@ -2,7 +2,7 @@ module XaphanHelperLiquid
 
 using ..Ahorn, Maple
 
-@mapdef Entity "XaphanHelper/Liquid" Liquid(x::Integer, y::Integer,  width::Integer=8, height::Integer=8, lowPosition::Int=0, liquidType::String="acid", frameDelay::Number=0.15, color::String="", transparency::Number=0.65, foreground::Bool=false, riseDelay::Number=0.00, riseDistance::Number=0, riseSpeed::Number=10, riseShake::Bool=false, riseFlag::String="", riseEndFlag::String="", riseSound::Bool=false, directory::String="objects/XaphanHelper/liquid", surfaceHeight::Number=0, visualOnly::Bool=false, canSwim::Bool=false)
+@mapdef Entity "XaphanHelper/Liquid" Liquid(x::Integer, y::Integer,  width::Integer=8, height::Integer=8, lowPosition::Int=0, liquidType::String="acid", frameDelay::Number=0.15, color::String="", transparency::Number=0.65, foreground::Bool=false, riseDelay::Number=0.00, riseDistance::Number=0, riseSpeed::Number=10, riseShake::Bool=false, riseFlag::String="", riseEndFlag::String="", riseSound::Bool=false, directory::String="objects/XaphanHelper/liquid", surfaceHeight::Number=0, visualOnly::Bool=false, canSwim::Bool=false, removeFlags::String="")
 
 const placements = Ahorn.PlacementDict(
     "Liquid (Xaphan Helper)" => Ahorn.EntityPlacement(

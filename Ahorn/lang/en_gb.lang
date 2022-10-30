@@ -191,6 +191,12 @@ placements.entities.XaphanHelper/Elevator.tooltips.flag=The flag that must be se
 # EtherealBlock
 placements.entities.XaphanHelper/EtherealBlock.tooltips.tiletype=Change the visual apparence of the block.
 
+# FlagBlock
+placements.entities.XaphanHelper/FlagBlock.tooltips.tiletype=Change the visual apparence of the block.
+placements.entities.XaphanHelper/FlagBlock.tooltips.mode=Block: The break block will not try to merge with nearby solid tiles.\nWall: The break block will try to merge with nearby solid tiles.
+placements.entities.XaphanHelper/FlagBlock.tooltips.flags=If any of these flags are set, the block will not appear, or will break if it already appeared. Flags must be separated by a comma (,).
+placements.entities.XaphanHelper/FlagBlock.tooltips.permanent=If true, the block will not reapear if the player die or re-enter the room.
+
 # FlagDashSwitch
 placements.entities.XaphanHelper/FlagDashSwitch.tooltips.side=The side the switch will face.
 placements.entities.XaphanHelper/FlagDashSwitch.tooltips.persistent=Once turned one, it will stay activated even if the player die. (No effect if Can Swap Flag is true)
@@ -387,6 +393,7 @@ placements.entities.XaphanHelper/Liquid.tooltips.directory=The directory from wh
 placements.entities.XaphanHelper/Liquid.tooltips.surfaceHeight=Number of tiles in your custom sprites for the height of the surface of the liquid.\nThis correspond to the number of tiles at the top of your custom sprites that will be drawn only once.\nIf not using custom sprites, leave this to 0 to use default values based on the liquid type.
 placements.entities.XaphanHelper/Liquid.tooltips.visualOnly=If true, the liquid will have no effect on the player physics nor will be able to kill them.
 placements.entities.XaphanHelper/Liquid.tooltips.canSwim=If true, the player will be able to swim in the liquid just like vanilla water.
+placements.entities.XaphanHelper/Liquid.tooltips.removeFlags=If any of these flags are set, the liquid will not appear. Flags must be separated by a comma (,).
 
 # MagneticCeiling
 placements.entities.XaphanHelper/MagneticCeiling.tooltips.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.

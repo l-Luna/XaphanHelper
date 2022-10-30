@@ -19,6 +19,7 @@ using MonoMod.Utils;
 using Celeste.Mod.Meta;
 using System.Xml;
 using On.Celeste;
+using System.ComponentModel.Design;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -501,7 +502,24 @@ namespace Celeste.Mod.XaphanHelper
             DecalRegistry.AddPropertyHandler("BGdepth", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["value"] != null && decal.Depth == 9000)
+                {
                     decal.Depth = int.Parse(attrs["value"].Value);
+                }
+            });
+            DecalRegistry.AddPropertyHandler("flagsHide", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flags"] != null)
+                {
+                    string[] flags = attrs["flags"].Value.Split(',');
+                    foreach (string flag in flags)
+                    {
+                        if (decal.SceneAs<Level>().Session.GetFlag(flag))
+                        {
+                            decal.Visible = false;
+                            break;
+                        }
+                    }
+                }
             });
             foreach (Upgrades upgrade in UpgradeHandlers.Keys)
             {
@@ -2098,6 +2116,7 @@ namespace Celeste.Mod.XaphanHelper
             {
                 ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                 ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 Settings.SpeedrunMode = false;
             }
 
@@ -2335,6 +2354,7 @@ namespace Celeste.Mod.XaphanHelper
                     List<string> FlagsToRemove = new List<string>();
                     List<string> CutscenesToRemove = new List<string>();
                     List<string> StaminaUpgradesToRemove = new List<string>();
+                    List<string> DroneFireRateUpgradesToRemove = new List<string>();
                     List<string> GlobalFlagsToRemove = new List<string>();
                     foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
@@ -2357,6 +2377,13 @@ namespace Celeste.Mod.XaphanHelper
                             StaminaUpgradesToRemove.Add(staminaUpgrade);
                         }
                     }
+                    foreach (string droneFireRateUpgrade in ModSaveData.DroneFireRateUpgrades)
+                    {
+                        if (droneFireRateUpgrade.Contains(level.Session.Area.LevelSet))
+                        {
+                            DroneFireRateUpgradesToRemove.Add(droneFireRateUpgrade);
+                        }
+                    }
                     foreach (string globalFlag in ModSaveData.GlobalFlags)
                     {
                         if (globalFlag.Contains(level.Session.Area.LevelSet))
@@ -2375,6 +2402,10 @@ namespace Celeste.Mod.XaphanHelper
                     foreach (string value in StaminaUpgradesToRemove)
                     {
                         ModSaveData.StaminaUpgrades.Remove(value);
+                    }
+                    foreach (string value in DroneFireRateUpgradesToRemove)
+                    {
+                        ModSaveData.DroneFireRateUpgrades.Remove(value);
                     }
                     foreach (string value in GlobalFlagsToRemove)
                     {
@@ -2830,6 +2861,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                     ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                    ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 }
                 if (ModSaveData.DestinationRoom == "")
                 {
@@ -3286,6 +3318,7 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                 ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
             }
             orig(self, player);
         }

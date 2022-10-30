@@ -44,6 +44,8 @@
 	XaphanHelper_get_MapShard_Desc_b= on your map
 	XaphanHelper_get_EnergyTank_Name= ENERGY TANK
 	XaphanHelper_get_EnergyTank_Desc= Increases maximum Stamina
+	XaphanHelper_get_FireRateModule_Name= FIRE RATE MODULE
+	XaphanHelper_get_FireRateModule_Desc= Increases drone Fire rate
 	XaphanHelper_get_PowerGrip_Name= POWER GRIP
 	XaphanHelper_get_PowerGrip_Desc= Allows you to cling to walls for a short time
 	XaphanHelper_get_PowerGrip_Desc_b= near a wall to grab it
