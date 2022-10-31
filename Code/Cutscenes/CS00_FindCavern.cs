@@ -19,7 +19,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch0_Find_Cavern");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch0_Find_Cavern");
             level.Session.SetFlag("CS_Ch0_Find_Cavern");
             player.StateMachine.State = 0;
         }

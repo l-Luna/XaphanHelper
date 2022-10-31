@@ -76,7 +76,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + SceneAs<Level>().Session.Area.ChapterIndex) || SaveData.Instance.UnlockedModes >= 3)
+            if (XaphanModule.ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + SceneAs<Level>().Session.Area.ChapterIndex) || SaveData.Instance.UnlockedModes >= 3)
             {
                 hasCSide = true;
             }
@@ -269,14 +269,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (data.Mode == DestinationSideIndex && data.Destination == CurrentModeSide)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = data.Room;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = data.Position;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = WipeType;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = 1f;
+                        XaphanModule.ModSaveData.DestinationRoom = data.Room;
+                        XaphanModule.ModSaveData.Spawn = data.Position;
+                        XaphanModule.ModSaveData.Wipe = WipeType;
+                        XaphanModule.ModSaveData.WipeDuration = 1f;
                         MapData MapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[DestinationSideIndex].MapData;
                         if (data.Room == MapData.StartLevel().Name)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ConsiderBeginning = true;
+                            XaphanModule.ModSaveData.ConsiderBeginning = true;
                         }
                         break;
                     }
@@ -287,11 +287,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             switch (side)
             {
                 case "A-Side":
-                    if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+                    if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true))
                     {
                         LevelEnter.Go(new Session(new AreaKey(SceneAs<Level>().Session.Area.ID, AreaMode.Normal))
                         {
-                            Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SceneAs<Level>().Session.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SceneAs<Level>().Session.Area.LevelSet] : 0L
+                            Time = XaphanModule.ModSaveData.SavedTime.ContainsKey(SceneAs<Level>().Session.Area.LevelSet) ? XaphanModule.ModSaveData.SavedTime[SceneAs<Level>().Session.Area.LevelSet] : 0L
                         }
                         , fromSaveData: false);
                     }
@@ -307,9 +307,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     LevelEnter.Go(new Session(new AreaKey(SceneAs<Level>().Session.Area.ID, AreaMode.BSide)), fromSaveData: false);
                     break;
                 case "C-Side":
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SceneAs<Level>().Session.Area.GetLevelSet() + ":" + SceneAs<Level>().Session.Area.ChapterIndex))
+                    if (!XaphanModule.ModSaveData.CSideUnlocked.Contains(SceneAs<Level>().Session.Area.GetLevelSet() + ":" + SceneAs<Level>().Session.Area.ChapterIndex))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Add(SceneAs<Level>().Session.Area.GetLevelSet() + ":" + SceneAs<Level>().Session.Area.ChapterIndex);
+                        XaphanModule.ModSaveData.CSideUnlocked.Add(SceneAs<Level>().Session.Area.GetLevelSet() + ":" + SceneAs<Level>().Session.Area.ChapterIndex);
                     }
                     LevelEnter.Go(new Session(new AreaKey(SceneAs<Level>().Session.Area.ID, AreaMode.CSide)), fromSaveData: false);
                     break;

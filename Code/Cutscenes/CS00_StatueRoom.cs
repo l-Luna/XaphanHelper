@@ -22,7 +22,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch0_Statue_Room");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch0_Statue_Room");
             level.Session.SetFlag("CS_Ch0_Statue_Room");
             player.StateMachine.State = 0;
         }
@@ -41,7 +41,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             level.CancelCutscene();
             level.Session.SetFlag("CS_Ch0_Statue_Room_P1");
             player.StateMachine.State = 0;
-            while ((Settings.SpeedrunMode && !level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
+            while ((Settings.SpeedrunMode && !level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
             {
                 yield return null;
             }

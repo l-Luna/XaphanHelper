@@ -169,11 +169,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             List<string> UnlockedWarps = new List<string>();
             if (!XaphanSettings.SpeedrunMode && !XaphanModule.PlayerHasGolden)
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.UnlockedWarps;
             }
             else
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps;
             }
             foreach (string warp in UnlockedWarps)
             {
@@ -312,11 +312,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             List<string> UnlockedWarps = new List<string>();
             if (!XaphanSettings.SpeedrunMode && !XaphanModule.PlayerHasGolden)
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.UnlockedWarps;
             }
             else
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps;
             }
             UnlockedWarps.Sort();
             if (currentChapter == chapterIndex)
@@ -467,7 +467,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         int chapterOffset = chapterIndex - currentChapter;
                         int currentChapterID = level.Session.Area.ID;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = DestinationRoom;
+                        XaphanModule.ModSaveData.DestinationRoom = DestinationRoom;
                         AreaKey area = level.Session.Area;
                         MapData MapData = AreaData.Areas[currentChapterID + chapterOffset].Mode[(int)area.Mode].MapData;
                         foreach (LevelData levelData in MapData.Levels)
@@ -478,14 +478,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     if (entity.Name == "XaphanHelper/WarpStation" && entity.Int("index") == DestinationIndex)
                                     {
-                                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2(entity.Position.X, entity.Position.Y);
+                                        XaphanModule.ModSaveData.Spawn = new Vector2(entity.Position.X, entity.Position.Y);
                                     }
                                 }
                                 break;
                             }
                         }
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = string.IsNullOrEmpty(WipeType) ? "Fade" : WipeType;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = WipeDuration == 0 ? 1.35f : WipeDuration;
+                        XaphanModule.ModSaveData.Wipe = string.IsNullOrEmpty(WipeType) ? "Fade" : WipeType;
+                        XaphanModule.ModSaveData.WipeDuration = WipeDuration == 0 ? 1.35f : WipeDuration;
                         switch (WipeType)
                         {
                             case "Spotlight":
@@ -603,7 +603,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = DestinationRoom;
+                        XaphanModule.ModSaveData.DestinationRoom = DestinationRoom;
                         AreaKey area = level.Session.Area;
                         MapData MapData = AreaData.Areas[globalLobbyID].Mode[(int)area.Mode].MapData;
                         foreach (LevelData levelData in MapData.Levels)
@@ -614,15 +614,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     if (entity.Name == "XaphanHelper/WarpStation" && entity.Int("index") == DestinationIndex)
                                     {
-                                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2(entity.Position.X, entity.Position.Y);
+                                        XaphanModule.ModSaveData.Spawn = new Vector2(entity.Position.X, entity.Position.Y);
                                         break;
                                     }
                                 }
                                 break;
                             }
                         }
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = string.IsNullOrEmpty(WipeType) ? "Fade" : WipeType;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = WipeDuration == 0 ? 1.35f : WipeDuration;
+                        XaphanModule.ModSaveData.Wipe = string.IsNullOrEmpty(WipeType) ? "Fade" : WipeType;
+                        XaphanModule.ModSaveData.WipeDuration = WipeDuration == 0 ? 1.35f : WipeDuration;
                         switch (WipeType)
                         {
                             case "Spotlight":
@@ -727,7 +727,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Scene.Add(BigTitle = new BigTitle(Title, new Vector2(960, 80)));
             Player player = level.Tracker.GetEntity<Player>();
             List<string> UnlockedWarps = new List<string>();
-            UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps;
+            UnlockedWarps = XaphanModule.ModSaveData.UnlockedWarps;
             UnlockedWarps.Sort();
             indexMin = 1000000;
             indexMax = 1;
@@ -869,26 +869,26 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (timerDisplay.SaveTimer)
                 {
                     AreaKey area = level.Session.Area;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = timerDisplay.PausedTimer;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = timerDisplay.Shake;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = timerDisplay.Explode;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = timerDisplay.activeFlag;
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter == -1)
+                    XaphanModule.ModSaveData.CountdownCurrentTime = timerDisplay.PausedTimer;
+                    XaphanModule.ModSaveData.CountdownShake = timerDisplay.Shake;
+                    XaphanModule.ModSaveData.CountdownExplode = timerDisplay.Explode;
+                    XaphanModule.ModSaveData.CountdownActiveFlag = timerDisplay.activeFlag;
+                    if (XaphanModule.ModSaveData.CountdownStartChapter == -1)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
+                        XaphanModule.ModSaveData.CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                     }
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = timerDisplay.startRoom;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = timerDisplay.SpawnPosition;
+                    XaphanModule.ModSaveData.CountdownStartRoom = timerDisplay.startRoom;
+                    XaphanModule.ModSaveData.CountdownSpawn = timerDisplay.SpawnPosition;
                 }
             }
-            if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true))
             {
                 long currentTime = SceneAs<Level>().Session.Time;
                 LevelEnter.Go(new Session(new AreaKey(chapterIndex))
                 {
                     Time = currentTime,
-                    DoNotLoad = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
-                    Strawberries = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
+                    DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
+                    Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
                 }
                 , fromSaveData: false);
             }
@@ -1155,11 +1155,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             List<string> UnlockedWarps = new List<string>();
             if (!XaphanSettings.SpeedrunMode && !XaphanModule.PlayerHasGolden)
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.UnlockedWarps;
             }
             else
             {
-                UnlockedWarps = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps;
+                UnlockedWarps = XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps;
             }
             UnlockedWarps.Sort();
             string prefix = level.Session.Area.GetLevelSet();

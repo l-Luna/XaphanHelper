@@ -23,28 +23,28 @@ namespace Celeste.Mod.XaphanHelper
             List<string> FlagsToRemove = new List<string>();
             if (!allChapters)
             {
-                foreach (string visitedRoom in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms)
+                foreach (string visitedRoom in XaphanModule.ModSaveData.VisitedRooms)
                 {
                     if (visitedRoom.Contains(prefix + "/Ch" + chapterIndex + "/") && (!includeCurrentRoom ? !visitedRoom.Contains(level.Session.Level) : true))
                     {
                         TilesToRemove.Add(visitedRoom);
                     }
                 }
-                foreach (string visitedRoomTile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles)
+                foreach (string visitedRoomTile in XaphanModule.ModSaveData.VisitedRoomsTiles)
                 {
                     if (visitedRoomTile.Contains(prefix + "/Ch" + chapterIndex + "/"))
                     {
                         TilesToRemove.Add(visitedRoomTile);
                     }
                 }
-                foreach (string extraUnexploredRoomTile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ExtraUnexploredRooms)
+                foreach (string extraUnexploredRoomTile in XaphanModule.ModSaveData.ExtraUnexploredRooms)
                 {
                     if (extraUnexploredRoomTile.Contains(prefix + "/Ch" + chapterIndex + "/"))
                     {
                         ExtraUnexploredRoomsTilesToRemove.Add(extraUnexploredRoomTile);
                     }
                 }
-                foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                foreach (string flag in XaphanModule.ModSaveData.SavedFlags)
                 {
                     if (flag.Contains(prefix + "/Ch" + chapterIndex + "_MapShard"))
                     {
@@ -54,28 +54,28 @@ namespace Celeste.Mod.XaphanHelper
             }
             else
             {
-                foreach (string visitedRoom in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms)
+                foreach (string visitedRoom in XaphanModule.ModSaveData.VisitedRooms)
                 {
                     if (visitedRoom.Contains(prefix) && (!includeCurrentRoom ? !visitedRoom.Contains(level.Session.Level) : true))
                     {
                         TilesToRemove.Add(visitedRoom);
                     }
                 }
-                foreach (string visitedRoomTile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles)
+                foreach (string visitedRoomTile in XaphanModule.ModSaveData.VisitedRoomsTiles)
                 {
                     if (visitedRoomTile.Contains(prefix))
                     {
                         TilesToRemove.Add(visitedRoomTile);
                     }
                 }
-                foreach (string extraUnexploredRoomTile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ExtraUnexploredRooms)
+                foreach (string extraUnexploredRoomTile in XaphanModule.ModSaveData.ExtraUnexploredRooms)
                 {
                     if (extraUnexploredRoomTile.Contains(prefix))
                     {
                         ExtraUnexploredRoomsTilesToRemove.Add(extraUnexploredRoomTile);
                     }
                 }
-                foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                foreach (string flag in XaphanModule.ModSaveData.SavedFlags)
                 {
                     if (flag.Contains(prefix) && flag.Contains("_MapShard"))
                     {
@@ -85,16 +85,16 @@ namespace Celeste.Mod.XaphanHelper
             }
             foreach (string value in TilesToRemove)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Remove(value);
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Remove(value);
+                XaphanModule.ModSaveData.VisitedRooms.Remove(value);
+                XaphanModule.ModSaveData.VisitedRoomsTiles.Remove(value);
             }
             foreach (string value in ExtraUnexploredRoomsTilesToRemove)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ExtraUnexploredRooms.Remove(value);
+                XaphanModule.ModSaveData.ExtraUnexploredRooms.Remove(value);
             }
             foreach ( string value in FlagsToRemove)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(value);
+                XaphanModule.ModSaveData.SavedFlags.Remove(value);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Celeste.Mod.XaphanHelper
         public static void Cmd_Clear_Warps()
         {
             List<string> ToRemove = new List<string>();
-            foreach (string warp in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps)
+            foreach (string warp in XaphanModule.ModSaveData.UnlockedWarps)
             {
                 if (warp.Contains(prefix))
                 {
@@ -135,7 +135,7 @@ namespace Celeste.Mod.XaphanHelper
             }
             foreach (string value in ToRemove)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).UnlockedWarps.Remove(value);
+                XaphanModule.ModSaveData.UnlockedWarps.Remove(value);
             }
         }
 
@@ -166,9 +166,9 @@ namespace Celeste.Mod.XaphanHelper
                                 XaphanModule.Instance.UpgradeHandlers[upgrade].SetValue(0);
                             }
                             level.Session.SetFlag("Upgrade_" + upgrade.ToString(), false);
-                            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
+                            if (XaphanModule.ModSaveData.SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
                             {
-                                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(prefix + "_Upgrade_" + upgrade.ToString());
+                                XaphanModule.ModSaveData.SavedFlags.Remove(prefix + "_Upgrade_" + upgrade.ToString());
                             }
                         }
                     }
@@ -201,9 +201,9 @@ namespace Celeste.Mod.XaphanHelper
                                 XaphanModule.Instance.UpgradeHandlers[upgrade].SetValue(1);
                             }
                             level.Session.SetFlag("Upgrade_" + upgrade.ToString(), true);
-                            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
+                            if (!XaphanModule.ModSaveData.SavedFlags.Contains(prefix + "_Upgrade_" + upgrade.ToString()))
                             {
-                                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(prefix + "_Upgrade_" + upgrade.ToString());
+                                XaphanModule.ModSaveData.SavedFlags.Add(prefix + "_Upgrade_" + upgrade.ToString());
                             }
                         }
                     }
@@ -217,123 +217,123 @@ namespace Celeste.Mod.XaphanHelper
             switch (upg)
             {
                 case "PowerGrip":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).PowerGripInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.PowerGripInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).PowerGripInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.PowerGripInactive.Remove(prefix);
                     }
                     break;
                 case "ClimbingKit":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).ClimbingKitInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.ClimbingKitInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ClimbingKitInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.ClimbingKitInactive.Remove(prefix);
                     }
                     break;
                 case "SpiderMagnet":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpiderMagnetInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.SpiderMagnetInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpiderMagnetInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.SpiderMagnetInactive.Remove(prefix);
                     }
                     break;
                 case "DashBoots":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).DashBootsInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.DashBootsInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DashBootsInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.DashBootsInactive.Remove(prefix);
                     }
                     break;
                 case "SpaceJump":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpaceJumpInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.SpaceJumpInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpaceJumpInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.SpaceJumpInactive.Remove(prefix);
                     }
                     break;
                 case "HoverBoots":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).HoverBootsInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.HoverBootsInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).HoverBootsInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.HoverBootsInactive.Remove(prefix);
                     }
                     break;
                 case "LightningDash":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).LightningDashInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.LightningDashInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LightningDashInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.LightningDashInactive.Remove(prefix);
                     }
                     break;
                 case "DroneTeleport":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneTeleportInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.DroneTeleportInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneTeleportInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.DroneTeleportInactive.Remove(prefix);
                     }
                     break;
                 /*case "JumpBoost":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).JumpBoostInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.JumpBoostInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).JumpBoostInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.JumpBoostInactive.Remove(prefix);
                     }
                     break;*/
                 case "VariaJacket":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VariaJacketInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.VariaJacketInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VariaJacketInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.VariaJacketInactive.Remove(prefix);
                     }
                     break;
                 case "GravityJacket":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GravityJacketInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.GravityJacketInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GravityJacketInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.GravityJacketInactive.Remove(prefix);
                     }
                     break;
                 case "Bombs":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).BombsInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.BombsInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BombsInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.BombsInactive.Remove(prefix);
                     }
                     break;
                 case "MegaBombs":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).MegaBombsInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.MegaBombsInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MegaBombsInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.MegaBombsInactive.Remove(prefix);
                     }
                     break;
                 case "RemoteDrone":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.RemoteDroneInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.RemoteDroneInactive.Remove(prefix);
                     }
                     break;
                 case "GoldenFeather":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).GoldenFeatherInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.GoldenFeatherInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GoldenFeatherInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.GoldenFeatherInactive.Remove(prefix);
                     }
                     break;
                 case "EtherealDash":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).EtherealDashInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.EtherealDashInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).EtherealDashInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.EtherealDashInactive.Remove(prefix);
                     }
                     break;
                 case "ScrewAttack":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).ScrewAttackInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.ScrewAttackInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ScrewAttackInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.ScrewAttackInactive.Remove(prefix);
                     }
                     break;
                 case "Binoculars":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).BinocularsInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.BinocularsInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BinocularsInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.BinocularsInactive.Remove(prefix);
                     }
                     break;
                 case "PortableStation":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).PortableStationInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.PortableStationInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).PortableStationInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.PortableStationInactive.Remove(prefix);
                     }
                     break;
                 case "PulseRadar":
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).PulseRadarInactive.Contains(prefix))
+                    if (XaphanModule.ModSaveData.PulseRadarInactive.Contains(prefix))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).PulseRadarInactive.Remove(prefix);
+                        XaphanModule.ModSaveData.PulseRadarInactive.Remove(prefix);
                     }
                     break;
                 default:

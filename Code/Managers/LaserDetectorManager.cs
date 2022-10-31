@@ -27,7 +27,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
             base.Update();
             foreach (LaserDetector detector in SceneAs<Level>().Tracker.GetEntities<LaserDetector>())
             {
-                if (!string.IsNullOrEmpty(detector.flag) && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + detector.flag))
+                if (!string.IsNullOrEmpty(detector.flag) && !XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + detector.flag))
                 {
                     if (detector.isActive)
                     {

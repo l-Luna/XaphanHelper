@@ -73,7 +73,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             base.Added(scene);
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            foreach (KeyValuePair<string, int> maxMissiles in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxMissiles)
+            foreach (KeyValuePair<string, int> maxMissiles in XaphanModule.ModSaveData.MaxMissiles)
             {
                 if (maxMissiles.Key == Prefix)
                 {
@@ -82,7 +82,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
             CurrentMissiles = MaxMissiles;
-            foreach (KeyValuePair<string, int> maxSuperMissiles in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxSuperMissiles)
+            foreach (KeyValuePair<string, int> maxSuperMissiles in XaphanModule.ModSaveData.MaxSuperMissiles)
             {
                 if (maxSuperMissiles.Key == Prefix)
                 {
@@ -91,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
             CurrentSuperMissiles = MaxSuperMissiles;
-            foreach (KeyValuePair<string, int> maxPowerBombs in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxPowerBombs)
+            foreach (KeyValuePair<string, int> maxPowerBombs in XaphanModule.ModSaveData.MaxPowerBombs)
             {
                 if (maxPowerBombs.Key == Prefix)
                 {
@@ -243,13 +243,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             MaxMissiles += value;
             CurrentMissiles += value;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxMissiles.ContainsKey(Prefix))
+            if (!XaphanModule.ModSaveData.MaxMissiles.ContainsKey(Prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxMissiles.Add(Prefix, MaxMissiles);
+                XaphanModule.ModSaveData.MaxMissiles.Add(Prefix, MaxMissiles);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxMissiles[Prefix] += value;
+                XaphanModule.ModSaveData.MaxMissiles[Prefix] += value;
             }
         }
 
@@ -258,13 +258,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             MaxSuperMissiles += value;
             CurrentSuperMissiles += value;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxSuperMissiles.ContainsKey(Prefix))
+            if (!XaphanModule.ModSaveData.MaxSuperMissiles.ContainsKey(Prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxSuperMissiles.Add(Prefix, MaxSuperMissiles);
+                XaphanModule.ModSaveData.MaxSuperMissiles.Add(Prefix, MaxSuperMissiles);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxSuperMissiles[Prefix] += value;
+                XaphanModule.ModSaveData.MaxSuperMissiles[Prefix] += value;
             }
         }
 
@@ -273,13 +273,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             MaxPowerBombs += value;
             CurrentPowerBombs += value;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxPowerBombs.ContainsKey(Prefix))
+            if (!XaphanModule.ModSaveData.MaxPowerBombs.ContainsKey(Prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxPowerBombs.Add(Prefix, MaxPowerBombs);
+                XaphanModule.ModSaveData.MaxPowerBombs.Add(Prefix, MaxPowerBombs);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxPowerBombs[Prefix] += value;
+                XaphanModule.ModSaveData.MaxPowerBombs[Prefix] += value;
             }
         }
 

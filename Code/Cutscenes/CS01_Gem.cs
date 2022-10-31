@@ -31,7 +31,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                     badeline.RemoveSelf();
                 }
             }
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch1_Gem");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch1_Gem");
             level.Session.SetFlag("CS_Ch1_Gem");
             player.StateMachine.State = 0;
         }

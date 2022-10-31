@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_A");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_A");
             level.Session.SetFlag("CS_Ch0_Gem_Room_A");
             player.StateMachine.State = 0;
         }

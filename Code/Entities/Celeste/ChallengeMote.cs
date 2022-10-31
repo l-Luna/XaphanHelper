@@ -33,7 +33,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
             }
             else
             {
@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_LightningDash");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_LightningDash");
             }
             else
             {
@@ -57,7 +57,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_GravityJacket");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_GravityJacket");
             }
             else
             {
@@ -104,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             level = SceneAs<Level>();
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             Add(talk = new TalkComponent(new Rectangle(-12, 8, 24, 8), new Vector2(0f, -12f), Interact));
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") || level.Session.GetFlag("Boss_Defeated_CM"))
+            if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") || level.Session.GetFlag("Boss_Defeated_CM"))
             {
                 Visible = false;
                 talk.Enabled = false;
@@ -130,9 +130,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex == -1 ? 0 : SceneAs<Level>().Session.Area.ChapterIndex;
             strawberry = level.Entities.FindFirst<Strawberry>();
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated"))
+            if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated"))
             {
-                if ((((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")) && strawberry != null && !Started)
+                if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")) && strawberry != null && !Started)
                 {
                     Started = true;
                     Visible = true;
@@ -141,7 +141,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     sprite.Play("completed");
                     sprite.OnLastFrame = onLastFrame;
                 }
-                else if ((((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")))
+                else if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")))
                 {
                     if (!Started)
                     {

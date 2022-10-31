@@ -92,9 +92,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
             level.Add(HeartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), LevelSet, TotalMaps, lobbyIndex));
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles.Clear();
+            XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Clear();
             LobbyMapController.GenerateLobbyTiles(CustomImageDirectory, lobbyIndex);
-            CustomImageTilesCoordinates = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles;
+            CustomImageTilesCoordinates = XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles;
             Add(CustomImage = new Sprite(GFX.Gui, CustomImageDirectory));
             CustomImage.AddLoop("idle", "", 1f);
             CustomImage.Play("idle");

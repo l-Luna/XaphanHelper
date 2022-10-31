@@ -199,7 +199,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             level.OnEndOfFrame += () =>
             {
                 string Prefix = level.Session.Area.GetLevelSet();
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_teleporting");
+                XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_teleporting");
                 Leader.StoreStrawberries(player.Leader);
                 level.Remove(player);
                 level.UnloadLevel();
@@ -209,7 +209,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 {
                     level.Session.RespawnPoint = level.GetSpawnPoint(new Vector2(level.Bounds.Left, level.Bounds.Top) + spawnPoint);
                 }
-                level.LoadLevel(((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownIntroType || respawnAnim) ? Player.IntroTypes.Respawn : Player.IntroTypes.None);
+                level.LoadLevel((XaphanModule.ModSaveData.CountdownIntroType || respawnAnim) ? Player.IntroTypes.Respawn : Player.IntroTypes.None);
                 if (spawnPosition != Vector2.Zero)
                 {
                     Player player2 = level.Tracker.GetEntity<Player>();
@@ -251,9 +251,9 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                         player2.Position = level.Session.RespawnPoint.GetValueOrDefault();
                     }
                 }
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownIntroType)
+                if (XaphanModule.ModSaveData.CountdownIntroType)
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownIntroType = false;
+                    XaphanModule.ModSaveData.CountdownIntroType = false;
                 }
                 if (level.Wipe != null)
                 {
@@ -262,9 +262,9 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 if (fromElevator)
                 {
                     int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
+                    if (!XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
+                        XaphanModule.ModSaveData.VisitedRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
                     }
                 }
                 if (cameraOnPlayer)
@@ -410,7 +410,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                     }
                 }
                 Leader.RestoreStrawberries(level.Tracker.GetEntity<Player>().Leader);
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(Prefix + "_teleporting");
+                XaphanModule.ModSaveData.SavedFlags.Remove(Prefix + "_teleporting");
                 level.Tracker.GetEntity<Player>().StateMachine.State = Player.StNormal;
             };
         }

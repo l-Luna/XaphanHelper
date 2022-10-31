@@ -29,6 +29,14 @@ namespace Celeste.Mod.XaphanHelper
 
         public static XaphanModule Instance;
 
+        // If you need to store settings:
+        public override Type SettingsType => typeof(XaphanModuleSettings);
+        public static XaphanModuleSettings Settings => (XaphanModuleSettings)Instance._Settings;
+
+        // If you need to store save data:
+        public override Type SaveDataType => typeof(XaphanModuleSaveData);
+        public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
+
         public static List<TeleportToOtherSideData> TeleportToOtherSideData = new List<TeleportToOtherSideData>();
 
         private FieldInfo OuiChapterSelect_icons = typeof(OuiChapterSelect).GetField("icons", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -81,7 +89,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool CanOpenMap(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;
         }
 
         public enum Upgrades
@@ -130,156 +138,156 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool PowerGripCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PowerGrip");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PowerGrip");
         }
 
         public static bool ClimbingKitCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ClimbingKit");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ClimbingKit");
         }
 
         public static bool SpiderMagnetCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpiderMagnet");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpiderMagnet");
         }
 
         public static bool DroneTeleportCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DroneTeleport");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DroneTeleport");
         }
 
         /*public static bool JumpBoostCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_JumpBoost");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_JumpBoost");
         }*/
 
         public static bool BombsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Bombs");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Bombs");
         }
 
         public static bool MegaBombsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MegaBombs");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MegaBombs");
         }
 
         public static bool RemoteDroneCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_RemoteDrone");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_RemoteDrone");
         }
 
         public static bool GoldenFeatherCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GoldenFeather");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GoldenFeather");
         }
 
         public static bool BinocularsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Binoculars");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Binoculars");
         }
 
         public static bool EtherealDashCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_EtherealDash");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_EtherealDash");
         }
 
         public static bool PortableStationCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PortableStation");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PortableStation");
         }
 
         public static bool PulseRadarCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PulseRadar");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PulseRadar");
         }
 
         public static bool DashBootsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
         }
 
         public static bool HoverBootsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HoverBoots");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HoverBoots");
         }
 
         public static bool LightningDashCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LightningDash");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LightningDash");
         }
 
         // Metroid Upgrades
 
         public static bool SpazerCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Spazer");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Spazer");
         }
 
         public static bool PlasmaBeamCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PlasmaBeam");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PlasmaBeam");
         }
 
         public static bool MorphingBallCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphingBall");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphingBall");
         }
 
         public static bool MorphBombsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphBombs");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphBombs");
         }        
 
         public static bool SpringBallCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpringBall");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpringBall");
         }
 
         public static bool HighJumpBootsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HighJumpBoots");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HighJumpBoots");
         }
 
         public static bool SpeedBoosterCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpeedBooster");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpeedBooster");
         }
 
         // Common Upgrades
 
         public static bool LongBeamCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LongBeam");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LongBeam");
         }
 
         public static bool IceBeamCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_IceBeam");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_IceBeam");
         }
 
         public static bool WaveBeamCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_WaveBeam");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_WaveBeam");
         }
 
         public static bool VariaJacketCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_VariaJacket");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_VariaJacket");
         }
 
         public static bool GravityJacketCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GravityJacket");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_GravityJacket");
         }
 
         public static bool ScrewAttackCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ScrewAttack");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ScrewAttack");
         }
 
         public static bool SpaceJumpCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
         }
 
         public static void useIngameMapCheck(Level level)
@@ -483,14 +491,6 @@ namespace Celeste.Mod.XaphanHelper
             UpgradeHandlers[Upgrades.SpaceJump] = new SpaceJump();
         }
 
-        // If you need to store settings:
-        public override Type SettingsType => typeof(XaphanModuleSettings);
-        public static XaphanModuleSettings Settings => (XaphanModuleSettings)Instance._Settings;
-
-        // If you need to store save data:
-        public override Type SaveDataType => typeof(XaphanModuleSaveData);
-        public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
-
         // Set up any hooks, event handlers and your mod in general here.
         // Load runs before Celeste itself has initialized properly.
         public override void Load()
@@ -674,7 +674,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void modOuiChapterSelectIconUpdate(On.Celeste.OuiChapterSelectIcon.orig_Update orig, OuiChapterSelectIcon self)
         {
-            if (useMergeChaptersController && SaveData.Instance != null && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && SaveData.Instance != null && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 orig(self);
                 if (!MergeChaptersControllerKeepPrologue || (MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset))
@@ -734,7 +734,7 @@ namespace Celeste.Mod.XaphanHelper
             {
                 icon.Visible = true;
             }
-            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 if (MergeChaptersControllerKeepPrologue)
                 {
@@ -776,7 +776,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private IEnumerator modOuiChapterPanelIncrementStats(On.Celeste.OuiChapterPanel.orig_IncrementStats orig, OuiChapterPanel self, bool shouldAdvance)
         {
-            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 shouldAdvance = false;
             }
@@ -786,7 +786,7 @@ namespace Celeste.Mod.XaphanHelper
         private void modOuiMapSearchInspect(On.Celeste.Mod.UI.OuiMapSearch.orig_Inspect orig, UI.OuiMapSearch self, AreaData area, AreaMode mode)
         {
             MergeChaptersControllerCheck(area);
-            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 self.Focused = false;
                 Audio.Play("event:/ui/world_map/icon/select");
@@ -816,7 +816,7 @@ namespace Celeste.Mod.XaphanHelper
         private void modOuiMapListInspect(On.Celeste.Mod.UI.OuiMapList.orig_Inspect orig, UI.OuiMapList self, AreaData area, AreaMode mode)
         {
             MergeChaptersControllerCheck(area);
-            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 self.Focused = false;
                 Audio.Play("event:/ui/world_map/icon/select");
@@ -845,7 +845,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private IEnumerator modOuiChapterPanelLeave(On.Celeste.OuiChapterPanel.orig_Leave orig, OuiChapterPanel self, Oui next)
         {
-            if (!useMergeChaptersController || (useMergeChaptersController && MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID == SaveData.Instance.GetLevelSetStats().AreaOffset) || (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : false))
+            if (!useMergeChaptersController || (useMergeChaptersController && MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID == SaveData.Instance.GetLevelSetStats().AreaOffset) || (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? ModSaveData.SpeedrunMode : false))
             {
                 yield return new SwapImmediately(orig(self, next));
             }
@@ -853,7 +853,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private IEnumerator modOuiChapterPanelEnter(On.Celeste.OuiChapterPanel.orig_Enter orig, OuiChapterPanel self, Oui from)
         {
-            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 if (MergeChaptersControllerKeepPrologue && SaveData.Instance.LastArea_Safe.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
                 {
@@ -953,7 +953,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void onSpeedrunTimerDisplayDrawTime(On.Celeste.SpeedrunTimerDisplay.orig_DrawTime orig, Vector2 position, string timeString, float scale, bool valid, bool finished, bool bestTime, float alpha)
         {
-            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 valid = true;
             }
@@ -962,11 +962,11 @@ namespace Celeste.Mod.XaphanHelper
 
         private Session onSessionRestart(On.Celeste.Session.orig_Restart orig, Session self, string intoLevel)
         {
-            if (useMergeChaptersController && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 Session session = new Session(self.Area, self.StartCheckpoint, self.OldStats)
                 {
-                    Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L,
+                    Time = ModSaveData.SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? ModSaveData.SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L,
                     UnlockedCSide = self.UnlockedCSide
                 };
                 if (intoLevel != null)
@@ -987,7 +987,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private bool modHeartGemIsCompleteArea(On.Celeste.HeartGem.orig_IsCompleteArea orig, HeartGem self, bool value)
         {
-            if ((SaveData.Instance.CurrentSession.Area.Mode == AreaMode.BSide || SaveData.Instance.CurrentSession.Area.Mode == AreaMode.CSide) && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode && SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0"))
+            if ((SaveData.Instance.CurrentSession.Area.Mode == AreaMode.BSide || SaveData.Instance.CurrentSession.Area.Mode == AreaMode.CSide) && (ModSaveData.SpeedrunMode && SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0"))
             {
                 return true;
             }
@@ -1003,7 +1003,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void onLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset)
         {
-            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 if (quickReset)
                 {
@@ -1015,7 +1015,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void onReturnMapHintRender(On.Celeste.ReturnMapHint.orig_Render orig, ReturnMapHint self)
         {
-            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && SaveData.Instance.CurrentSession.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && SaveData.Instance.CurrentSession.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
             {
                 MTexture mTexture = GFX.Gui["checkpoint"];
                 string text = "";
@@ -1042,7 +1042,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private bool modSaveDataFoundAnyCheckpoints(On.Celeste.SaveData.orig_FoundAnyCheckpoints orig, SaveData self, AreaKey area)
         {
-            if (area.LevelSet == MergeChaptersControllerLevelSet && MergeChaptersControllerMode != "Classic" && (self.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (area.LevelSet == MergeChaptersControllerLevelSet && MergeChaptersControllerMode != "Classic" && (self.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 return false;
             }
@@ -1054,7 +1054,7 @@ namespace Celeste.Mod.XaphanHelper
             if (SaveData.Instance != null)
             {
                 AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
-                if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+                if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
                 {
                     AreaModeStats areaModeStats = self.RealStats.Modes[2];
                     bool flag = areaModeStats.Strawberries.Count <= 0;
@@ -1088,7 +1088,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     unlockedBSide = true;
                 }
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + SaveData.Instance.LastArea_Safe.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
+                if (ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + SaveData.Instance.LastArea_Safe.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
                 {
                     unlockedCSide = true;
                 }
@@ -1109,7 +1109,7 @@ namespace Celeste.Mod.XaphanHelper
                         }
                     }
                     bool num = self.orig_IsStart(overworld, start);
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide == 0)
+                    if (ModSaveData.LastPlayedSide == 0)
                     {
                         self.Area.Mode = AreaMode.Normal;
                     }
@@ -1117,7 +1117,7 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         self.Area.Mode = AreaMode.BSide;
                     }
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide = 0;
+                    ModSaveData.LastPlayedSide = 0;
                     return num;
                 }
                 else
@@ -1135,7 +1135,7 @@ namespace Celeste.Mod.XaphanHelper
             HeartGemDisplay heart = OuiChapterPanelData.Get<HeartGemDisplay>("heart");
             StrawberriesCounter strawberries = OuiChapterPanelData.Get<StrawberriesCounter>("strawberries");
             AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
-            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
             {
                 AreaModeStats areaModeStats = self.DisplayedStats.Modes[2];
                 AreaData areaData = AreaData.Get(self.Area);
@@ -1174,7 +1174,7 @@ namespace Celeste.Mod.XaphanHelper
             orig(self);
             if (!SaveData.Instance.DebugMode)
             {
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
+                if (ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3)
                 {
                     object CSideOption;
                     ((IList)OuiChapterPanel_modes.GetValue(self)).Add(
@@ -1217,9 +1217,9 @@ namespace Celeste.Mod.XaphanHelper
 
         private void modOuiChapterSelectUpdate(On.Celeste.OuiChapterSelect.orig_Update orig, OuiChapterSelect self)
         {
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData) != null)
+            if (ModSaveData != null)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                ModSaveData.LoadedPlayer = false;
             }
             if (SaveData.Instance != null)
             {
@@ -1234,7 +1234,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private IEnumerator modOuiChapterPanelStartRoutine(On.Celeste.OuiChapterPanel.orig_StartRoutine orig, OuiChapterPanel self, string checkpoint)
         {
-            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 self.EnteringChapter = true;
                 self.Overworld.Maddy.Hide(down: false);
@@ -1258,7 +1258,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     LevelEnter.Go(new Session(self.Area, checkpoint)
                     {
-                        Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
+                        Time = ModSaveData.SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? ModSaveData.SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
                     }
                     , fromSaveData: false);
 
@@ -1273,7 +1273,7 @@ namespace Celeste.Mod.XaphanHelper
         private void modOuiChapterPanelStart(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
         {
             AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Area.ID];
-            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && !SaveData.Instance.DebugMode)
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && !SaveData.Instance.DebugMode)
             {
                 self.Focused = false;
                 Audio.Play("event:/ui/world_map/chapter/checkpoint_start");
@@ -1289,7 +1289,7 @@ namespace Celeste.Mod.XaphanHelper
         private IEnumerator modOuiChapterPanelIncrementStatsDisplay(On.Celeste.OuiChapterPanel.orig_IncrementStatsDisplay orig, OuiChapterPanel self, AreaModeStats modeStats, AreaModeStats newModeStats, bool doHeartGem, bool doStrawberries, bool doDeaths, bool doRemixUnlock)
         {
             AreaStats areaStats = SaveData.Instance.Areas_Safe[self.Data.ID];
-            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
+            if (self.Area.Mode == AreaMode.BSide && !areaStats.Cassette && ModSaveData.CSideUnlocked.Contains(SaveData.Instance.GetLevelSetStats().Name + ":" + self.Area.ChapterIndex) && SaveData.Instance.UnlockedModes < 3 && !SaveData.Instance.DebugMode)
             {
                 modeStats = self.DisplayedStats.Modes[2];
                 newModeStats = areaStats.Modes[2];
@@ -1363,7 +1363,7 @@ namespace Celeste.Mod.XaphanHelper
 
             // Define current side played
 
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LastPlayedSide = (int)level.Session.Area.Mode;
+            ModSaveData.LastPlayedSide = (int)level.Session.Area.Mode;
 
             // Reset all checks
 
@@ -1387,11 +1387,11 @@ namespace Celeste.Mod.XaphanHelper
             {
                 // Check for backward compatibility. Restaure explored tiles if needed.
 
-                foreach (string visitedRoom in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms)
+                foreach (string visitedRoom in ModSaveData.VisitedRooms)
                 {
                     if (visitedRoom.Contains(Prefix + "/Ch" + chapterIndex + "/"))
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Count == 0)
+                        if (ModSaveData.VisitedRoomsTiles.Count == 0)
                         {
                             MapDisplay.RestaureExploredTiles(Prefix, chapterIndex, level);
                             break;
@@ -1399,7 +1399,7 @@ namespace Celeste.Mod.XaphanHelper
                         else
                         {
                             bool skipRestaure = false;
-                            foreach (string tile in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles)
+                            foreach (string tile in ModSaveData.VisitedRoomsTiles)
                             {
                                 if (tile.Contains(Prefix + "/Ch" + chapterIndex + "/"))
                                 {
@@ -1417,9 +1417,9 @@ namespace Celeste.Mod.XaphanHelper
 
                 // Add current room to the in-game map
 
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
+                if (!ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
+                    ModSaveData.VisitedRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
                 }
                 if (level.Session.GetFlag("Map_Opened"))
                 {
@@ -1429,13 +1429,13 @@ namespace Celeste.Mod.XaphanHelper
 
             // Activate Speedrun Mode if needed
 
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode)
+            if (ModSaveData.SpeedrunMode)
             {
                 Settings.SpeedrunMode = true;
                 level.Session.SetFlag("Map_Collected");
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected"))
+                if (!ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected"))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected");
+                    ModSaveData.SavedFlags.Add("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected");
                 }
             }
 
@@ -1443,10 +1443,10 @@ namespace Celeste.Mod.XaphanHelper
 
             if (useUpgrades)
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Contains(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode))
+                if (!ModSaveData.VisitedChapters.Contains(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Add(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedChapters.Sort();
+                    ModSaveData.VisitedChapters.Add(Prefix + "_Ch" + chapterIndex + "_" + (int)level.Session.Area.Mode);
+                    ModSaveData.VisitedChapters.Sort();
                 }
                 GiveUpgradesToPlayer(MapData, level);
             }
@@ -1486,11 +1486,11 @@ namespace Celeste.Mod.XaphanHelper
 
             // Set flags based on previous player progress
 
-            if (!PlayerHasGolden && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_teleporting"))
+            if (!PlayerHasGolden && !ModSaveData.SavedFlags.Contains(Prefix + "_teleporting"))
             {
                 if (!Settings.SpeedrunMode) // Normal mode only
                 {
-                    foreach (string savedFlag in (Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
                         if (forceStartingUpgrades)
                         {
@@ -1512,7 +1512,7 @@ namespace Celeste.Mod.XaphanHelper
                             level.Session.SetFlag(flag);
                         }
                     }
-                    foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    foreach (string flag in ModSaveData.SavedFlags)
                     {
                         if (forceStartingUpgrades)
                         {
@@ -1533,7 +1533,7 @@ namespace Celeste.Mod.XaphanHelper
                             level.Session.SetFlag(result, true);
                         }
                     }
-                    foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags)
+                    foreach (string flag in ModSaveData.GlobalFlags)
                     {
                         if (flag.Contains(Prefix))
                         {
@@ -2110,9 +2110,9 @@ namespace Celeste.Mod.XaphanHelper
 
             if (Settings.SpeedrunMode)
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
+                ModSaveData.SpeedrunModeUnlockedWarps.Clear();
+                ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 Settings.SpeedrunMode = false;
             }
 
@@ -2122,20 +2122,20 @@ namespace Celeste.Mod.XaphanHelper
 
             // Reset Variables
 
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = "";
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = -1;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = false;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = false;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = "";
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = -1;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = "";
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = new Vector2();
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe = false;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles.Clear();
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GeneratedVisitedLobbyMapTiles2.Clear();
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId1 = 0;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).BagUIId2 = 0;
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+            ModSaveData.DestinationRoom = "";
+            ModSaveData.CountdownCurrentTime = -1;
+            ModSaveData.CountdownShake = false;
+            ModSaveData.CountdownExplode = false;
+            ModSaveData.CountdownActiveFlag = "";
+            ModSaveData.CountdownStartChapter = -1;
+            ModSaveData.CountdownStartRoom = "";
+            ModSaveData.CountdownSpawn = new Vector2();
+            ModSaveData.CountdownUseLevelWipe = false;
+            ModSaveData.GeneratedVisitedLobbyMapTiles.Clear();
+            ModSaveData.GeneratedVisitedLobbyMapTiles2.Clear();
+            ModSaveData.BagUIId1 = 0;
+            ModSaveData.BagUIId2 = 0;
+            ModSaveData.LoadedPlayer = false;
             startedAnySoCMChapter = false;
             minimapEnabled = false;
             SaveSettings();
@@ -2173,7 +2173,7 @@ namespace Celeste.Mod.XaphanHelper
                 GiveUpCMButton.ConfirmSfx = "event:/ui/main/message_confirm";
                 menu.Insert(retryIndex + 1, GiveUpCMButton);
             }
-            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (level.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (MergeChaptersControllerKeepPrologue ? SaveData.Instance.LastArea_Safe.ID != SaveData.Instance.GetLevelSetStats().AreaOffset : true) && (level.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 // Find the "Restart chapter" button and remove it from the menu if it exist
                 int restartAreaIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RESTARTAREA"));
@@ -2192,7 +2192,7 @@ namespace Celeste.Mod.XaphanHelper
                 RestartCampaignButton.ConfirmSfx = "event:/ui/main/message_confirm";
                 menu.Insert(restartAreaIndex, RestartCampaignButton);
             }
-            if (useMergeChaptersController && (level.Session.Area.Mode == AreaMode.BSide || level.Session.Area.Mode == AreaMode.CSide) && (level.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && (level.Session.Area.Mode == AreaMode.BSide || level.Session.Area.Mode == AreaMode.CSide) && (level.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
                 // Find the position of "Return to map"
                 int returnToMapIndex = menu.GetItems().FindIndex(item => item.GetType() == typeof(TextMenu.Button) && ((TextMenu.Button)item).Label == Dialog.Clean("MENU_PAUSE_RETURN"));
@@ -2279,12 +2279,12 @@ namespace Celeste.Mod.XaphanHelper
                 ChangingSide = true;
                 Audio.SetMusic(null);
                 Audio.SetAmbience(null);
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                ModSaveData.LoadedPlayer = false;
                 level.DoScreenWipe(false, delegate
                 {
                     LevelEnter.Go(new Session(new AreaKey(level.Session.Area.ID, AreaMode.Normal))
                     {
-                        Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(level.Session.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[level.Session.Area.LevelSet] : 0L
+                        Time = ModSaveData.SavedTime.ContainsKey(level.Session.Area.LevelSet) ? ModSaveData.SavedTime[level.Session.Area.LevelSet] : 0L
                     }
                     , fromSaveData: false);
                 });              
@@ -2334,53 +2334,53 @@ namespace Celeste.Mod.XaphanHelper
                     Commands.Cmd_Clear_Warps();
                     Commands.Cmd_Remove_Upgrades();
 
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.Remove(level.Session.Area.LevelSet);
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedRoom.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedChapter.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedSpawn.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedLightingAlphaAdd.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedBloomBaseAdd.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedCoreMode.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedMusic.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedAmbience.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedNoLoadEntities.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedTime.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedFromBeginning.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedSesionFlags.Remove(level.Session.Area.LevelSet);
+                    ModSaveData.SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
                     List<string> FlagsToRemove = new List<string>();
                     List<string> CutscenesToRemove = new List<string>();
                     List<string> StaminaUpgradesToRemove = new List<string>();
                     List<string> DroneFireRateUpgradesToRemove = new List<string>();
                     List<string> GlobalFlagsToRemove = new List<string>();
-                    foreach (string savedFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                    foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
                         if (savedFlag.Contains(level.Session.Area.LevelSet) && savedFlag != "Xaphan/0_Skip_Vignette")
                         {
                             FlagsToRemove.Add(savedFlag);
                         }
                     }
-                    foreach (string cutscene in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes)
+                    foreach (string cutscene in ModSaveData.WatchedCutscenes)
                     {
                         if (cutscene.Contains(level.Session.Area.LevelSet))
                         {
                             CutscenesToRemove.Add(cutscene);
                         }
                     }
-                    foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
+                    foreach (string staminaUpgrade in ModSaveData.StaminaUpgrades)
                     {
                         if (staminaUpgrade.Contains(level.Session.Area.LevelSet))
                         {
                             StaminaUpgradesToRemove.Add(staminaUpgrade);
                         }
                     }
-                    foreach (string droneFireRateUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
+                    foreach (string droneFireRateUpgrade in ModSaveData.DroneFireRateUpgrades)
                     {
                         if (droneFireRateUpgrade.Contains(level.Session.Area.LevelSet))
                         {
                             DroneFireRateUpgradesToRemove.Add(droneFireRateUpgrade);
                         }
                     }
-                    foreach (string globalFlag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags)
+                    foreach (string globalFlag in ModSaveData.GlobalFlags)
                     {
                         if (globalFlag.Contains(level.Session.Area.LevelSet))
                         {
@@ -2389,23 +2389,23 @@ namespace Celeste.Mod.XaphanHelper
                     }
                     foreach (string value in FlagsToRemove)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Remove(value);
+                        ModSaveData.SavedFlags.Remove(value);
                     }
                     foreach (string value in CutscenesToRemove)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Remove(value);
+                        ModSaveData.WatchedCutscenes.Remove(value);
                     }
                     foreach (string value in StaminaUpgradesToRemove)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades.Remove(value);
+                        ModSaveData.StaminaUpgrades.Remove(value);
                     }
                     foreach (string value in DroneFireRateUpgradesToRemove)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Remove(value);
+                        ModSaveData.DroneFireRateUpgrades.Remove(value);
                     }
                     foreach (string value in GlobalFlagsToRemove)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).GlobalFlags.Remove(value);
+                        ModSaveData.GlobalFlags.Remove(value);
                     }
                     LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (MergeChaptersControllerKeepPrologue ? 1 : 0), AreaMode.Normal)), fromSaveData: false);
                 });
@@ -2471,9 +2471,9 @@ namespace Celeste.Mod.XaphanHelper
 
         private void onLevelEnterGo(On.Celeste.LevelEnter.orig_Go orig, Session session, bool fromSaveData)
         {
-            if (!fromSaveData && session.StartedFromBeginning && session.Area.Mode == AreaMode.Normal && session.Area.GetSID() == "Xaphan/0/0-Prologue" && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Skip_Vignette"))
+            if (!fromSaveData && session.StartedFromBeginning && session.Area.Mode == AreaMode.Normal && session.Area.GetSID() == "Xaphan/0/0-Prologue" && !ModSaveData.SavedFlags.Contains("Xaphan/0_Skip_Vignette"))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Skip_Vignette");
+                ModSaveData.SavedFlags.Add("Xaphan/0_Skip_Vignette");
                 Engine.Scene = new SoCMIntroVignette(session);
             }
             else
@@ -2504,9 +2504,9 @@ namespace Celeste.Mod.XaphanHelper
             {
                 if (self.Session.Level == MapData.StartLevel().Name)
                 {
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Contains(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex) && area.ID != SaveData.Instance.GetLevelSetStats().AreaOffset)
+                    if (!ModSaveData.Checkpoints.Contains(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex) && area.ID != SaveData.Instance.GetLevelSetStats().AreaOffset)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Checkpoints.Add(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex);
+                        ModSaveData.Checkpoints.Add(self.Session.Area.GetLevelSet() + "|" + self.Session.Area.ChapterIndex);
                         self.AutoSave();
                     }
                 }
@@ -2537,11 +2537,11 @@ namespace Celeste.Mod.XaphanHelper
 
             // Resume the countdown started from an other chapter when entering a chapter from the start
 
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime != -1)
+            if (ModSaveData.CountdownCurrentTime != -1)
             {
                 if (self.Tracker.GetEntity<CountdownDisplay>() == null)
                 {
-                    self.Add(new CountdownDisplay((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode, true, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag)
+                    self.Add(new CountdownDisplay(ModSaveData.CountdownCurrentTime, ModSaveData.CountdownShake, ModSaveData.CountdownExplode, true, ModSaveData.CountdownStartChapter, ModSaveData.CountdownStartRoom, ModSaveData.CountdownSpawn, ModSaveData.CountdownActiveFlag)
                     {
                         PauseTimer = true
                     });
@@ -2556,7 +2556,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     minimapEnabled = false;
                 }
-                if (allRoomsUseTileController && Settings.ShowMiniMap && ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(self.Session.Area.GetLevelSet() + "_Can_Open_Map") || (self.Session.Area.LevelSet == "Xaphan/0" ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : false)) && !minimapEnabled)
+                if (allRoomsUseTileController && Settings.ShowMiniMap && (ModSaveData.SavedFlags.Contains(self.Session.Area.GetLevelSet() + "_Can_Open_Map") || (self.Session.Area.LevelSet == "Xaphan/0" ? ModSaveData.SpeedrunMode : false)) && !minimapEnabled)
                 {
                     if (self.Tracker.GetEntity<MiniMap>() == null)
                     {
@@ -2587,7 +2587,7 @@ namespace Celeste.Mod.XaphanHelper
                 string room = self.Session.Level;
                 if (self.CanPause && (self.CanRetry || PlayerIsControllingRemoteDrone()) && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && Settings.OpenMap.Pressed && !self.Session.GetFlag("Map_Opened"))
                 {
-                    if (useIngameMap && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room) && CanOpenMap(self))
+                    if (useIngameMap && ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room) && CanOpenMap(self))
                     {
                         player.StateMachine.State = Player.StDummy;
                         player.DummyAutoAnimate = false;
@@ -2612,46 +2612,46 @@ namespace Celeste.Mod.XaphanHelper
 
             // Change starting chapter and room if using a Merge Chapter Controller
 
-            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && self.Session.Area.Mode == AreaMode.Normal && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+            if (useMergeChaptersController && MergeChaptersControllerMode != "Classic" && self.Session.Area.Mode == AreaMode.Normal && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
-                if (((XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer || self.Session.GetFlag("XaphanHelper_Loaded_Player")) && !CanLoadPlayer) // If for some reason thoses value are true when entering the level, reset them to false. May happen if the game is not exited correctly
+                if ((ModSaveData.LoadedPlayer || self.Session.GetFlag("XaphanHelper_Loaded_Player")) && !CanLoadPlayer) // If for some reason thoses value are true when entering the level, reset them to false. May happen if the game is not exited correctly
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = false;
+                    ModSaveData.LoadedPlayer = false;
                     self.Session.SetFlag("XaphanHelper_Loaded_Player", false);
                 }
                 CanLoadPlayer = true;
-                if (!self.Session.GetFlag("XaphanHelper_Loaded_Player") && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer && !self.Paused)
+                if (!self.Session.GetFlag("XaphanHelper_Loaded_Player") && !ModSaveData.LoadedPlayer && !self.Paused)
                 {
                     self.Session.SetFlag("XaphanHelper_Loaded_Player", true);
                     self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet) || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet)
-                        || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset))
+                    if (!ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedSpawn.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedCoreMode.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedMusic.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedAmbience.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet)
+                        || !ModSaveData.SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
+                        ModSaveData.LoadedPlayer = true;
                     }
-                    else if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] == self.Session.Area.ChapterIndex)
+                    else if (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == self.Session.Area.ChapterIndex)
                     {
-                        string[] sessionFlags = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet].Split(',');
+                        string[] sessionFlags = ModSaveData.SavedSesionFlags[self.Session.Area.LevelSet].Split(',');
                         self.Session.FirstLevel = false;
-                        self.Session.LightingAlphaAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet];
-                        self.Session.BloomBaseAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet];
-                        self.Session.CoreMode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet];
-                        self.Session.DoNotLoad = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet];
-                        self.Session.Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet];
-                        self.Session.StartedFromBeginning = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet];
+                        self.Session.LightingAlphaAdd = ModSaveData.SavedLightingAlphaAdd[self.Session.Area.LevelSet];
+                        self.Session.BloomBaseAdd = ModSaveData.SavedBloomBaseAdd[self.Session.Area.LevelSet];
+                        self.Session.CoreMode = ModSaveData.SavedCoreMode[self.Session.Area.LevelSet];
+                        self.Session.DoNotLoad = ModSaveData.SavedNoLoadEntities[self.Session.Area.LevelSet];
+                        self.Session.Time = ModSaveData.SavedTime[self.Session.Area.LevelSet];
+                        self.Session.StartedFromBeginning = ModSaveData.SavedFromBeginning[self.Session.Area.LevelSet];
                         if (SaveData.Instance != null)
                         {
-                            SaveData.Instance.CurrentSession.LightingAlphaAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet];
-                            SaveData.Instance.CurrentSession.BloomBaseAdd = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet];
-                            SaveData.Instance.CurrentSession.CoreMode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet];
+                            SaveData.Instance.CurrentSession.LightingAlphaAdd = ModSaveData.SavedLightingAlphaAdd[self.Session.Area.LevelSet];
+                            SaveData.Instance.CurrentSession.BloomBaseAdd = ModSaveData.SavedBloomBaseAdd[self.Session.Area.LevelSet];
+                            SaveData.Instance.CurrentSession.CoreMode = ModSaveData.SavedCoreMode[self.Session.Area.LevelSet];
                         }
-                        self.Session.Audio.Music.Event = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet];
-                        self.Session.Audio.Ambience.Event = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet];
+                        self.Session.Audio.Music.Event = ModSaveData.SavedMusic[self.Session.Area.LevelSet];
+                        self.Session.Audio.Ambience.Event = ModSaveData.SavedAmbience[self.Session.Area.LevelSet];
                         self.Session.Audio.Apply(forceSixteenthNoteHack: false);
                         foreach (string flag in sessionFlags)
                         {
@@ -2660,136 +2660,136 @@ namespace Celeste.Mod.XaphanHelper
                                 self.Session.SetFlag(flag, true);
                             }
                         }
-                        self.Session.Strawberries = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet];
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
-                        self.Add(new TeleportCutscene(player, (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet], (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet], 0, 0, true, 0f, "Fade", skipFirstWipe: true, respawnAnim: true, useLevelWipe: true));
+                        self.Session.Strawberries = ModSaveData.SavedSessionStrawberries[self.Session.Area.LevelSet];
+                        ModSaveData.LoadedPlayer = true;
+                        self.Add(new TeleportCutscene(player, ModSaveData.SavedRoom[self.Session.Area.LevelSet], ModSaveData.SavedSpawn[self.Session.Area.LevelSet], 0, 0, true, 0f, "Fade", skipFirstWipe: true, respawnAnim: true, useLevelWipe: true));
                     }
                     else
                     {
-                        LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet])))
+                        LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : ModSaveData.SavedChapter[self.Session.Area.LevelSet])))
                         {
-                            Time = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] : 0L
+                            Time = ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet) ? ModSaveData.SavedTime[self.Session.Area.LevelSet] : 0L
                         }, fromSaveData: false);
                     }
                 }
 
                 // Save the room as the one that the player must load into when starting the campaign if using a MergeChaptersController with mode set to Rooms
 
-                else if (useMergeChaptersController && MergeChaptersControllerMode == "Rooms" && !self.Session.GrabbedGolden && !self.Frozen && self.Tracker.GetEntity<CountdownDisplay>() == null && self.Tracker.GetEntity<Player>() != null && self.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !PlayerIsControllingRemoteDrone() && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+                else if (useMergeChaptersController && MergeChaptersControllerMode == "Rooms" && !self.Session.GrabbedGolden && !self.Frozen && self.Tracker.GetEntity<CountdownDisplay>() == null && self.Tracker.GetEntity<Player>() != null && self.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !PlayerIsControllingRemoteDrone() && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).LoadedPlayer = true;
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.ContainsKey(self.Session.Area.LevelSet))
+                    ModSaveData.LoadedPlayer = true;
+                    if (!ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter.Add(self.Session.Area.LevelSet, self.Session.Area.ChapterIndex);
+                        ModSaveData.SavedChapter.Add(self.Session.Area.LevelSet, self.Session.Area.ChapterIndex);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] != self.Session.Area.ChapterIndex)
+                        if (ModSaveData.SavedChapter[self.Session.Area.LevelSet] != self.Session.Area.ChapterIndex)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[self.Session.Area.LevelSet] = self.Session.Area.ChapterIndex;
+                            ModSaveData.SavedChapter[self.Session.Area.LevelSet] = self.Session.Area.ChapterIndex;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom.Add(self.Session.Area.LevelSet, self.Session.Level);
+                        ModSaveData.SavedRoom.Add(self.Session.Area.LevelSet, self.Session.Level);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet] != self.Session.Level)
+                        if (ModSaveData.SavedRoom[self.Session.Area.LevelSet] != self.Session.Level)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[self.Session.Area.LevelSet] = self.Session.Level;
+                            ModSaveData.SavedRoom[self.Session.Area.LevelSet] = self.Session.Level;
                         }
                     }
                     if (self.Session.RespawnPoint == null)
                     {
                         self.Session.RespawnPoint = Vector2.Zero;
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedSpawn.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn.Add(self.Session.Area.LevelSet, (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top));
+                        ModSaveData.SavedSpawn.Add(self.Session.Area.LevelSet, (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top));
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet] != (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top))
+                        if (ModSaveData.SavedSpawn[self.Session.Area.LevelSet] != (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top))
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSpawn[self.Session.Area.LevelSet] = (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top);
+                            ModSaveData.SavedSpawn[self.Session.Area.LevelSet] = (Vector2)self.Session.RespawnPoint - new Vector2(self.Bounds.Left, self.Bounds.Top);
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedLightingAlphaAdd.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd.Add(self.Session.Area.LevelSet, self.Lighting.Alpha - self.BaseLightingAlpha);
+                        ModSaveData.SavedLightingAlphaAdd.Add(self.Session.Area.LevelSet, self.Lighting.Alpha - self.BaseLightingAlpha);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet] != self.Lighting.Alpha - self.BaseLightingAlpha)
+                        if (ModSaveData.SavedLightingAlphaAdd[self.Session.Area.LevelSet] != self.Lighting.Alpha - self.BaseLightingAlpha)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedLightingAlphaAdd[self.Session.Area.LevelSet] = self.Lighting.Alpha - self.BaseLightingAlpha;
+                            ModSaveData.SavedLightingAlphaAdd[self.Session.Area.LevelSet] = self.Lighting.Alpha - self.BaseLightingAlpha;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedBloomBaseAdd.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd.Add(self.Session.Area.LevelSet, self.Bloom.Base - AreaData.Get(self).BloomBase);
+                        ModSaveData.SavedBloomBaseAdd.Add(self.Session.Area.LevelSet, self.Bloom.Base - AreaData.Get(self).BloomBase);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet] != self.Bloom.Base - AreaData.Get(self).BloomBase)
+                        if (ModSaveData.SavedBloomBaseAdd[self.Session.Area.LevelSet] != self.Bloom.Base - AreaData.Get(self).BloomBase)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedBloomBaseAdd[self.Session.Area.LevelSet] = self.Bloom.Base - AreaData.Get(self).BloomBase;
+                            ModSaveData.SavedBloomBaseAdd[self.Session.Area.LevelSet] = self.Bloom.Base - AreaData.Get(self).BloomBase;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedCoreMode.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode.Add(self.Session.Area.LevelSet, self.Session.CoreMode);
+                        ModSaveData.SavedCoreMode.Add(self.Session.Area.LevelSet, self.Session.CoreMode);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet] != self.Session.CoreMode)
+                        if (ModSaveData.SavedCoreMode[self.Session.Area.LevelSet] != self.Session.CoreMode)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedCoreMode[self.Session.Area.LevelSet] = self.Session.CoreMode;
+                            ModSaveData.SavedCoreMode[self.Session.Area.LevelSet] = self.Session.CoreMode;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedMusic.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic.Add(self.Session.Area.LevelSet, self.Session.Audio.Music.Event);
+                        ModSaveData.SavedMusic.Add(self.Session.Area.LevelSet, self.Session.Audio.Music.Event);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet] != self.Session.Audio.Music.Event)
+                        if (ModSaveData.SavedMusic[self.Session.Area.LevelSet] != self.Session.Audio.Music.Event)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedMusic[self.Session.Area.LevelSet] = self.Session.Audio.Music.Event;
+                            ModSaveData.SavedMusic[self.Session.Area.LevelSet] = self.Session.Audio.Music.Event;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedAmbience.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience.Add(self.Session.Area.LevelSet, self.Session.Audio.Ambience.Event);
+                        ModSaveData.SavedAmbience.Add(self.Session.Area.LevelSet, self.Session.Audio.Ambience.Event);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet] != self.Session.Audio.Ambience.Event)
+                        if (ModSaveData.SavedAmbience[self.Session.Area.LevelSet] != self.Session.Audio.Ambience.Event)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedAmbience[self.Session.Area.LevelSet] = self.Session.Audio.Ambience.Event;
+                            ModSaveData.SavedAmbience[self.Session.Area.LevelSet] = self.Session.Audio.Ambience.Event;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities.Add(self.Session.Area.LevelSet, self.Session.DoNotLoad);
+                        ModSaveData.SavedNoLoadEntities.Add(self.Session.Area.LevelSet, self.Session.DoNotLoad);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet] != self.Session.DoNotLoad)
+                        if (ModSaveData.SavedNoLoadEntities[self.Session.Area.LevelSet] != self.Session.DoNotLoad)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[self.Session.Area.LevelSet] = self.Session.DoNotLoad;
+                            ModSaveData.SavedNoLoadEntities[self.Session.Area.LevelSet] = self.Session.DoNotLoad;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning.Add(self.Session.Area.LevelSet, self.Session.StartedFromBeginning);
+                        ModSaveData.SavedFromBeginning.Add(self.Session.Area.LevelSet, self.Session.StartedFromBeginning);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet] != self.Session.StartedFromBeginning)
+                        if (ModSaveData.SavedFromBeginning[self.Session.Area.LevelSet] != self.Session.StartedFromBeginning)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFromBeginning[self.Session.Area.LevelSet] = self.Session.StartedFromBeginning;
+                            ModSaveData.SavedFromBeginning[self.Session.Area.LevelSet] = self.Session.StartedFromBeginning;
                         }
                     }
                     string sessionFlags = "";
@@ -2804,41 +2804,41 @@ namespace Celeste.Mod.XaphanHelper
                             sessionFlags += "," + flag;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags.Add(self.Session.Area.LevelSet, sessionFlags);
+                        ModSaveData.SavedSesionFlags.Add(self.Session.Area.LevelSet, sessionFlags);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet] != sessionFlags)
+                        if (ModSaveData.SavedSesionFlags[self.Session.Area.LevelSet] != sessionFlags)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSesionFlags[self.Session.Area.LevelSet] = sessionFlags;
+                            ModSaveData.SavedSesionFlags[self.Session.Area.LevelSet] = sessionFlags;
                         }
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries.Add(self.Session.Area.LevelSet, self.Session.Strawberries);
+                        ModSaveData.SavedSessionStrawberries.Add(self.Session.Area.LevelSet, self.Session.Strawberries);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet] != self.Session.Strawberries)
+                        if (ModSaveData.SavedSessionStrawberries[self.Session.Area.LevelSet] != self.Session.Strawberries)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[self.Session.Area.LevelSet] = self.Session.Strawberries;
+                            ModSaveData.SavedSessionStrawberries[self.Session.Area.LevelSet] = self.Session.Strawberries;
                         }
                     }
                 }
 
-                if (XaphanModule.useMergeChaptersController && (self.Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+                if (XaphanModule.useMergeChaptersController && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
                 {
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(self.Session.Area.LevelSet))
+                    if (!ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.Add(self.Session.Area.LevelSet, self.Session.Time);
+                        ModSaveData.SavedTime.Add(self.Session.Area.LevelSet, self.Session.Time);
                     }
                     else
                     {
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] != self.Session.Time)
+                        if (ModSaveData.SavedTime[self.Session.Area.LevelSet] != self.Session.Time)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[self.Session.Area.LevelSet] = self.Session.Time;
+                            ModSaveData.SavedTime[self.Session.Area.LevelSet] = self.Session.Time;
                         }
                     }
                 }
@@ -2849,17 +2849,17 @@ namespace Celeste.Mod.XaphanHelper
             if (!self.Session.GetFlag("XaphanHelper_Changed_Start_Room"))
             {
                 self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
-                if (self.Wipe != null && self.Session.StartedFromBeginning && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe != "")
+                if (self.Wipe != null && self.Session.StartedFromBeginning && ModSaveData.Wipe != "")
                 {
                     self.Wipe.Cancel();
                 }
                 if (Settings.SpeedrunMode) // Clear Speedrun Mode stuff
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
+                    ModSaveData.SpeedrunModeUnlockedWarps.Clear();
+                    ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                    ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 }
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom == "")
+                if (ModSaveData.DestinationRoom == "")
                 {
                     if (self.Session.StartedFromBeginning)
                     {
@@ -2900,21 +2900,21 @@ namespace Celeste.Mod.XaphanHelper
                 else
                 {
                     self.Add(GetWipe(self, true));
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ConsiderBeginning && !useMergeChaptersController)
+                    if (!ModSaveData.ConsiderBeginning && !useMergeChaptersController)
                     {
                         self.Session.StartedFromBeginning = false;
                     }
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ConsiderBeginning = false;
-                    string destinationRoom = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom;
-                    Vector2 spawn = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn;
-                    string wipe = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe;
-                    float wipeDuration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration;
-                    bool fromElevator = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).TeleportFromElevator;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = "";
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2();
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "";
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = 0f;
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).TeleportFromElevator = false;
+                    ModSaveData.ConsiderBeginning = false;
+                    string destinationRoom = ModSaveData.DestinationRoom;
+                    Vector2 spawn = ModSaveData.Spawn;
+                    string wipe = ModSaveData.Wipe;
+                    float wipeDuration = ModSaveData.WipeDuration;
+                    bool fromElevator = ModSaveData.TeleportFromElevator;
+                    ModSaveData.DestinationRoom = "";
+                    ModSaveData.Spawn = new Vector2();
+                    ModSaveData.Wipe = "";
+                    ModSaveData.WipeDuration = 0f;
+                    ModSaveData.TeleportFromElevator = false;
                     if ((self = (Engine.Scene as Level)) != null)
                     {
                         if (string.IsNullOrEmpty(destinationRoom))
@@ -2928,20 +2928,20 @@ namespace Celeste.Mod.XaphanHelper
                             return;
                         }
                     }
-                    self.Add(new TeleportCutscene(player, destinationRoom, spawn, 0, 0, true, 0f, wipe, wipeDuration, fromElevator, true, useLevelWipe: (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe));
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownUseLevelWipe = false;
+                    self.Add(new TeleportCutscene(player, destinationRoom, spawn, 0, 0, true, 0f, wipe, wipeDuration, fromElevator, true, useLevelWipe: ModSaveData.CountdownUseLevelWipe));
+                    ModSaveData.CountdownUseLevelWipe = false;
                 }
             }
 
             // Change level Wipe
 
-            if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe != "")
+            if (ModSaveData.Wipe != "")
             {
                 if (self.Wipe != null && self.Tracker.GetEntities<WarpScreen>().Count == 0)
                 {
                     self.Wipe.Cancel();
                     self.Add(GetWipe(self, true));
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "";
+                    ModSaveData.Wipe = "";
                 }
             }
 
@@ -2962,9 +2962,9 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         playerPosition.Y = 0;
                     }
-                    if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y))
+                    if (!ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y))
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Add(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y);
+                        ModSaveData.VisitedRoomsTiles.Add(Prefix + "/Ch" + chapterIndex + "/" + self.Session.Level + "-" + playerPosition.X + "-" + playerPosition.Y);
                         InGameMapRoomController roomController = self.Tracker.GetEntity<InGameMapRoomController>();
                         List<Entity> tilesControllers = self.Tracker.GetEntities<InGameMapTilesController>();
                         if (CheckIfTileIsValid(self.Session.Level, playerPosition, tilesControllers))
@@ -3117,7 +3117,7 @@ namespace Celeste.Mod.XaphanHelper
                         level.Session.SetFlag("Upgrade_WaveBeam", false);
                         Settings.WaveBeam = false;
 
-                        foreach (string flag in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags)
+                        foreach (string flag in ModSaveData.SavedFlags)
                         {
                             string Prefix = level.Session.Area.GetLevelSet();
                             int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
@@ -3312,9 +3312,9 @@ namespace Celeste.Mod.XaphanHelper
                         }
                     }
                 }
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeUnlockedWarps.Clear();
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeStaminaUpgrades.Clear();
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Clear();
+                ModSaveData.SpeedrunModeUnlockedWarps.Clear();
+                ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
             }
             orig(self, player);
         }
@@ -3373,78 +3373,78 @@ namespace Celeste.Mod.XaphanHelper
         private ScreenWipe GetWipe(Level level, bool wipeIn)
         {
             ScreenWipe Wipe = null;
-            switch ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe)
+            switch (ModSaveData.Wipe)
             {
                 case "Spotlight":
                     Wipe = new SpotlightWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Curtain":
                     Wipe = new CurtainWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Mountain":
                     Wipe = new MountainWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Dream":
                     Wipe = new DreamWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Starfield":
                     Wipe = new StarfieldWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Wind":
                     Wipe = new WindWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Drop":
                     Wipe = new DropWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Fall":
                     Wipe = new FallWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "KeyDoor":
                     Wipe = new KeyDoorWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Angled":
                     Wipe = new AngledWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Heart":
                     Wipe = new HeartWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Fade":
                     Wipe = new FadeWipe(level, wipeIn)
                     {
-                        Duration = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration
+                        Duration = ModSaveData.WipeDuration
                     };
                     break;
                 case "Level":

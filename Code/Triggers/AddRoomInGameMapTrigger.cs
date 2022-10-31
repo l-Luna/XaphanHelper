@@ -22,9 +22,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             string[] rooms = Rooms.Split(',');
             foreach (string room in rooms)
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ExtraUnexploredRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
+                if (!XaphanModule.ModSaveData.ExtraUnexploredRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ExtraUnexploredRooms.Add(Prefix + "/Ch" + chapterIndex + "/"+ room);
+                    XaphanModule.ModSaveData.ExtraUnexploredRooms.Add(Prefix + "/Ch" + chapterIndex + "/"+ room);
                 }
             }
             MapDisplay mapDisplay = SceneAs<Level>().Tracker.GetEntity<MapDisplay>();

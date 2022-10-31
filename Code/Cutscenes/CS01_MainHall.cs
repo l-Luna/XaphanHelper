@@ -19,7 +19,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch1_Main_Hall");
+            XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch1_Main_Hall");
             level.Session.SetFlag("CS_Ch1_Main_Hall");
             player.StateMachine.State = 0;
         }

@@ -9,13 +9,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
     [CustomEntity("XaphanHelper/GemController")]
     class GemController : Entity
     {
-        public bool Ch1GemCollected() { return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected"); }
+        public bool Ch1GemCollected() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected"); }
 
-        public bool Ch2GemCollected() { return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected"); }
+        public bool Ch2GemCollected() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected"); }
 
-        public bool Ch3GemCollected() { return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected"); }
+        public bool Ch3GemCollected() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected"); }
 
-        public bool Ch4GemCollected() { return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
+        public bool Ch4GemCollected() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
 
         public bool EndAreaOpened;
 
@@ -38,7 +38,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                     triggered = true;
                     Add(new Coroutine(ActivateGems()));
                 }
-                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_End_Area_Open"))
+                if (XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_End_Area_Open"))
                 {
                     SceneAs<Level>().Session.SetFlag("Open_End_Area", true);
                 }
@@ -57,7 +57,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         {
             foreach (GemSlot gem in Scene.Entities.FindAll<GemSlot>())
             {
-                if (!gem.Activated && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch" + gem.Chapter + "_Gem_Collected"))
+                if (!gem.Activated && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + gem.Chapter + "_Gem_Collected"))
                 {
                     yield return 0.5f;
                     gem.Activated = true;
@@ -75,7 +75,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 timer -= Engine.DeltaTime;
             }
             SceneAs<Level>().Session.SetFlag("Open_End_Area", true);
-            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_End_Area_Open");
+            XaphanModule.ModSaveData.SavedFlags.Add("Xaphan/0_End_Area_Open");
         }
     }
 }

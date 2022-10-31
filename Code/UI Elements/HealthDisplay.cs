@@ -58,7 +58,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             base.Added(scene);
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            foreach (KeyValuePair<string, int> maxHealth in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxHealth)
+            foreach (KeyValuePair<string, int> maxHealth in XaphanModule.ModSaveData.MaxHealth)
             {
                 if (maxHealth.Key == Prefix)
                 {
@@ -257,13 +257,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             MaxHealth += value;
             CurrentHealth = MaxHealth;
-            if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxHealth.ContainsKey(Prefix))
+            if (!XaphanModule.ModSaveData.MaxHealth.ContainsKey(Prefix))
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxHealth.Add(Prefix, MaxHealth);
+                XaphanModule.ModSaveData.MaxHealth.Add(Prefix, MaxHealth);
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).MaxHealth[Prefix] += value;
+                XaphanModule.ModSaveData.MaxHealth[Prefix] += value;
             }
             EnergyTanks = GetEnergyTanks();
         }
@@ -328,8 +328,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 player.Sprite.Visible = false;
                 yield return null;
             }
-            string DestinationRoom = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedRoom[Level.Session.Area.LevelSet];
-            int chapterIndex = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedChapter[Level.Session.Area.LevelSet];
+            string DestinationRoom = XaphanModule.ModSaveData.SavedRoom[Level.Session.Area.LevelSet];
+            int chapterIndex = XaphanModule.ModSaveData.SavedChapter[Level.Session.Area.LevelSet];
             if (chapterIndex == (Level.Session.Area.ChapterIndex == -1 ? 0 : Level.Session.Area.ChapterIndex))
             {
                 Vector2 spawnPoint = Vector2.Zero;

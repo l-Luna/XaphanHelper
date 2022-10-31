@@ -387,25 +387,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DestinationRoom = DestinationRoom;
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Spawn = new Vector2(SpawnRoomX, SpawnRoomY);
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).Wipe = "Fade";
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WipeDuration = 1.35f;
+                XaphanModule.ModSaveData.DestinationRoom = DestinationRoom;
+                XaphanModule.ModSaveData.Spawn = new Vector2(SpawnRoomX, SpawnRoomY);
+                XaphanModule.ModSaveData.Wipe = "Fade";
+                XaphanModule.ModSaveData.WipeDuration = 1.35f;
                 CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
                 if (timerDisplay != null)
                 {
                     if (timerDisplay.SaveTimer)
                     {
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownCurrentTime = timerDisplay.GetRemainingTime();
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownShake = timerDisplay.Shake;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownExplode = timerDisplay.Explode;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownActiveFlag = timerDisplay.activeFlag;
-                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter == -1)
+                        XaphanModule.ModSaveData.CountdownCurrentTime = timerDisplay.GetRemainingTime();
+                        XaphanModule.ModSaveData.CountdownShake = timerDisplay.Shake;
+                        XaphanModule.ModSaveData.CountdownExplode = timerDisplay.Explode;
+                        XaphanModule.ModSaveData.CountdownActiveFlag = timerDisplay.activeFlag;
+                        if (XaphanModule.ModSaveData.CountdownStartChapter == -1)
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
+                            XaphanModule.ModSaveData.CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                         }
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownStartRoom = timerDisplay.startRoom;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).CountdownSpawn = timerDisplay.SpawnPosition;
+                        XaphanModule.ModSaveData.CountdownStartRoom = timerDisplay.startRoom;
+                        XaphanModule.ModSaveData.CountdownSpawn = timerDisplay.SpawnPosition;
                     }
                 }
                 int chapterOffset = ToChapter - currentChapter;
@@ -414,14 +414,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     SceneAs<Level>().RegisterAreaComplete();
                 }
-                if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunMode : true))
+                if (XaphanModule.useMergeChaptersController && (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true))
                 {
                     long currentTime = SceneAs<Level>().Session.Time;
                     LevelEnter.Go(new Session(new AreaKey(currentChapterID + chapterOffset))
                     {
                         Time = currentTime,
-                        DoNotLoad = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
-                        Strawberries = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
+                        DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
+                        Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
                     }
                     , fromSaveData: false);
                 }

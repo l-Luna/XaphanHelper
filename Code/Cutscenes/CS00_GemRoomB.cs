@@ -33,13 +33,13 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnEnd(Level level)
         {
-            if (level.Session.GetFlag("Upgrade_DashBoots") || (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots"))
+            if (level.Session.GetFlag("Upgrade_DashBoots") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots"))
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Can_Open_Map"))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Can_Open_Map"))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add("Xaphan/0_Can_Open_Map");
+                    XaphanModule.ModSaveData.SavedFlags.Add("Xaphan/0_Can_Open_Map");
                 }
-                (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_B");
+                XaphanModule.ModSaveData.WatchedCutscenes.Add("Xaphan/0_Ch0_Gem_Room_B");
                 level.Session.SetFlag("CS_Ch0_Gem_Room_B");
             }
             player.StateMachine.State = 0;
@@ -87,7 +87,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public IEnumerator Cutscene(Level level)
         {
-            if ((Settings.SpeedrunMode && level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
+            if ((Settings.SpeedrunMode && level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
             {
                 player.StateMachine.State = 11;
                 yield return Level.ZoomTo(new Vector2(160f, 110f), 1.5f, 1f);

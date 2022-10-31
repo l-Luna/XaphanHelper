@@ -59,13 +59,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Prefix = Level.Session.Area.GetLevelSet();
             if (chapterIndex != -1)
             {
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode.ContainsKey(Prefix))
+                if (!XaphanModule.ModSaveData.ProgressMode.ContainsKey(Prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode.Add(Prefix, 0);
+                    XaphanModule.ModSaveData.ProgressMode.Add(Prefix, 0);
                 }
                 else
                 {
-                    mode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode[Prefix];
+                    mode = XaphanModule.ModSaveData.ProgressMode[Prefix];
                 }
                 if (mode == 1 && SubAreaControllerData.Count == 1)
                 {
@@ -75,13 +75,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             else
             {
                 MapScreen = Level.Tracker.GetEntity<MapScreen>();
-                if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).WorldMapProgressMode.ContainsKey(Prefix))
+                if (!XaphanModule.ModSaveData.WorldMapProgressMode.ContainsKey(Prefix))
                 {
-                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WorldMapProgressMode.Add(Prefix, 0);
+                    XaphanModule.ModSaveData.WorldMapProgressMode.Add(Prefix, 0);
                 }
                 else
                 {
-                    mode = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WorldMapProgressMode[Prefix];
+                    mode = XaphanModule.ModSaveData.WorldMapProgressMode[Prefix];
                 }
             }
             MapPercent = (getCurrentMapTiles() * 100 / getTotalMapTiles()).ToString();
@@ -146,18 +146,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         if (getSubAreaIndex() == -1 || SubAreaControllerData.Count == 1)
                         {
                             mode = 2;
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode[Prefix] = mode;
+                            XaphanModule.ModSaveData.ProgressMode[Prefix] = mode;
                         }
                         else
                         {
                             mode++;
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode[Prefix]++;
+                            XaphanModule.ModSaveData.ProgressMode[Prefix]++;
                         }
                     }
                     else
                     {
                         mode = 0;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ProgressMode[Prefix] = mode;
+                        XaphanModule.ModSaveData.ProgressMode[Prefix] = mode;
                     }
                 }
                 else
@@ -165,12 +165,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     if (mode == 0)
                     {
                         mode = 2;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WorldMapProgressMode[Prefix] = mode;
+                        XaphanModule.ModSaveData.WorldMapProgressMode[Prefix] = mode;
                     }
                     else
                     {
                         mode = 0;
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WorldMapProgressMode[Prefix] = mode;
+                        XaphanModule.ModSaveData.WorldMapProgressMode[Prefix] = mode;
                     }
                 }
                 if (mode == 1 || mode == 0)
@@ -211,7 +211,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             string tile = tilesControllerData.GetTile(i);
                             if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
                             {
-                                if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
+                                if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                 {
                                     currentTiles++;
                                 }
@@ -233,7 +233,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                     string tile = tilesControllerData.GetTile(i);
                                     if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
                                     {
-                                        if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
+                                        if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                         {
                                             currentTiles++;
                                         }
@@ -257,7 +257,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 string tile = tilesControllerData.GetTile(i);
                                 if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
                                 {
-                                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapter + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
+                                    if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapter + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                     {
                                         currentTiles++;
                                     }
@@ -456,7 +456,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 foreach (InGameMapEntitiesData entityData in EntitiesData)
                 {
-                    if (entityData.Type == "upgrade" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + entityData.UpgradeCollectableUpgrade))
+                    if (entityData.Type == "upgrade" && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + entityData.UpgradeCollectableUpgrade))
                     {
                         CurrentUpgradesCount++;
                     }
@@ -471,7 +471,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (room == entityData.Room)
                         {
-                            if (entityData.Type == "upgrade" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Upgrade_" + entityData.UpgradeCollectableUpgrade))
+                            if (entityData.Type == "upgrade" && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Upgrade_" + entityData.UpgradeCollectableUpgrade))
                             {
                                 CurrentUpgradesCount++;
                             }
@@ -520,7 +520,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int CurrentStaminaUpgradesCount = 0;
             if (subAreaIndex == -1)
             {
-                foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
+                foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
                 {
                     if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                     {
@@ -539,7 +539,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             if (entityData.Type == "energyTank")
                             {
-                                foreach (string staminaUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).StaminaUpgrades)
+                                foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
                                 {
                                     if (staminaUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
                                     {
@@ -592,7 +592,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int CurrentFireRateUpgradesCount = 0;
             if (subAreaIndex == -1)
             {
-                foreach (string droneFireRateUpgradeUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
+                foreach (string droneFireRateUpgradeUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
                 {
                     if (droneFireRateUpgradeUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                     {
@@ -611,7 +611,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             if (entityData.Type == "fireRateModule")
                             {
-                                foreach (string droneFireRateUpgradeUpgrade in (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades)
+                                foreach (string droneFireRateUpgradeUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
                                 {
                                     if (droneFireRateUpgradeUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
                                     {
@@ -864,7 +864,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     foreach (InGameMapEntitiesData entityData in EntitiesData)
                     {
-                        if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + entityData.CustomCollectableFlag))
+                        if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + entityData.CustomCollectableFlag))
                         {
                             CurrentCustomCollectableCount++;
                         }
@@ -879,7 +879,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             if (room == entityData.Room)
                             {
-                                if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + entityData.CustomCollectableFlag))
+                                if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + entityData.CustomCollectableFlag))
                                 {
                                     CurrentCustomCollectableCount++;
                                 }
@@ -894,7 +894,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     foreach (InGameMapEntitiesData entityData in EntitiesData)
                     {
-                        if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch" + chapter + "_" + entityData.CustomCollectableFlag))
+                        if (entityData.Type == "customCollectable" && entityData.CustomCollectableMapIcon == customCollectable && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapter + "_" + entityData.CustomCollectableFlag))
                         {
                             CurrentCustomCollectableCount++;
                         }

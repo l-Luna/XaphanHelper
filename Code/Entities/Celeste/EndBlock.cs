@@ -37,7 +37,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (Settings.SpeedrunMode || !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_End_Area_Open"))
+            if (Settings.SpeedrunMode || !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_End_Area_Open"))
             {
                 sprite.Play("idle");
                 Collidable = true;

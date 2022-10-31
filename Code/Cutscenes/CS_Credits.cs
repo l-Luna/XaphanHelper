@@ -64,27 +64,27 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public bool DashBootsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
+            return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
         }
 
         public bool PowerGripCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PowerGrip");
+            return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_PowerGrip");
         }
 
         public bool ClimbingKitCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ClimbingKit");
+            return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_ClimbingKit");
         }
 
         public bool BombsCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Bombs");
+            return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Bombs");
         }
 
         public bool SpaceJumpCollected(Level level)
         {
-            return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
+            return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
         }
 
 
@@ -319,7 +319,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                     TotalCassetteCount += cassetteCount;
                 }
             }
-            TimeSpan timespan = TimeSpan.FromTicks((XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L);
+            TimeSpan timespan = TimeSpan.FromTicks(XaphanModule.ModSaveData.SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? XaphanModule.ModSaveData.SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L);
             string gameTime = ((int)timespan.TotalHours).ToString() + timespan.ToString("\\:mm\\:ss\\.fff");
             float timeWidth = SpeedrunTimerDisplay.GetTimeWidth(gameTime);
             TimeDisplay totaltime = new TimeDisplay(gameTime, 960 - timeWidth / 2, Engine.Height / 2 + 146);

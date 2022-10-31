@@ -37,7 +37,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                                 {
                                     string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
                                     SceneAs<Level>().Session.SetFlag("Ignore_Room_Adjust_" + level.Name, true);
-                                    (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ignore_Room_Adjust_Ch" + chapterIndex + "_" + level.Name);
+                                    XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ignore_Room_Adjust_Ch" + chapterIndex + "_" + level.Name);
                                     break;
                                 }
                             }

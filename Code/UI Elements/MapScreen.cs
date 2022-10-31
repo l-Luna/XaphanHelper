@@ -150,10 +150,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (mapDisplay.useHints)
                 {
                     mapDisplay.ShowHints = !mapDisplay.ShowHints;
-                    if ((XaphanModule.Instance._SaveData as XaphanModuleSaveData).ShowHints[mapDisplay.Prefix])
+                    if (XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix])
                     {
                         Audio.Play("event:/ui/main/button_back");
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ShowHints[mapDisplay.Prefix] = false;
+                        XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = false;
                         mapDisplay.MapWidth = mapDisplay.BeforeHintsMapWidth;
                         mapDisplay.MapHeight = mapDisplay.BeforeHintsMapHeight;
                         mapDisplay.MostLeftRoomX = mapDisplay.BeforeHintsMostLeftRoomX;
@@ -171,7 +171,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     else
                     {
                         Audio.Play("event:/ui/main/message_confirm");
-                        (XaphanModule.Instance._SaveData as XaphanModuleSaveData).ShowHints[mapDisplay.Prefix] = true;
+                        XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = true;
                         mapDisplay.MapWidth = mapDisplay.AfterHintsMapWidth;
                         mapDisplay.MapHeight = mapDisplay.AfterHintsMapHeight;
                         mapDisplay.MostLeftRoomX = mapDisplay.AfterHintsMostLeftRoomX;

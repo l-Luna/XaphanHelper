@@ -859,11 +859,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
            int droneFireRateUpgradesCount = 0;
             if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
             {
-                droneFireRateUpgradesCount = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedrunModeDroneFireRateUpgrades.Count;
+                droneFireRateUpgradesCount = XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Count;
             }
             else
             {
-                droneFireRateUpgradesCount = (XaphanModule.Instance._SaveData as XaphanModuleSaveData).DroneFireRateUpgrades.Count;
+                droneFireRateUpgradesCount = XaphanModule.ModSaveData.DroneFireRateUpgrades.Count;
             }
             BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.035f;
             while (BeamDelay > 0f)

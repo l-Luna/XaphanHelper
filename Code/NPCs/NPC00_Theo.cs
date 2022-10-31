@@ -15,7 +15,7 @@ namespace Celeste.Mod.XaphanHelper.NPCs
 
         private bool StartMoving;
 
-        public bool playerHasCollectedOneGem() { return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected") || (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected") || (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected") || (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
+        public bool playerHasCollectedOneGem() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
 
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
@@ -40,11 +40,11 @@ namespace Celeste.Mod.XaphanHelper.NPCs
             base.Added(scene);
             if (!Settings.SpeedrunMode)
             {
-                if (mode == "start" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots"))
+                if (mode == "start" && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots"))
                 {
                     RemoveSelf();
                 }
-                else if (mode == "gemRoom" && (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots") || playerHasCollectedOneGem()))
+                else if (mode == "gemRoom" && (!XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots") || playerHasCollectedOneGem()))
                 {
                     RemoveSelf();
                 }
@@ -73,7 +73,7 @@ namespace Celeste.Mod.XaphanHelper.NPCs
         public override void Update()
         {
             base.Update();
-            if (mode =="gemRoom" && (XaphanModule.Instance._SaveData as XaphanModuleSaveData).WatchedCutscenes.Contains("Xaphan/0_Ch0_Gem_Room_B") && !StartMoving)
+            if (mode =="gemRoom" && XaphanModule.ModSaveData.WatchedCutscenes.Contains("Xaphan/0_Ch0_Gem_Room_B") && !StartMoving)
             {
                 StartMoving = true;
                 Add(new Coroutine(Searching()));

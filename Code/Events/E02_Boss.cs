@@ -70,7 +70,7 @@ namespace Celeste.Mod.XaphanHelper.Events
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated");
             }
             else
             {
@@ -82,7 +82,7 @@ namespace Celeste.Mod.XaphanHelper.Events
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated_CM");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated_CM");
             }
             else
             {
@@ -94,7 +94,7 @@ namespace Celeste.Mod.XaphanHelper.Events
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Celeste.Mod.XaphanHelper.Events
         {
             if (!Settings.SpeedrunMode)
             {
-                return (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots");
+                return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots");
             }
             else
             {
@@ -549,18 +549,18 @@ namespace Celeste.Mod.XaphanHelper.Events
                     else
                     {
                         level.Session.SetFlag("Boss_Defeated", true);
-                        if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated"))
+                        if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated"))
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch2_Boss_Defeated");
+                            XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch2_Boss_Defeated");
                         }
                     }
                     level.Session.SetFlag("Boss_Defeated", true);
                     if (level.Session.GetFlag("boss_Challenge_Mode"))
                     {
                         level.Session.SetFlag("Boss_Defeated_CM", true);
-                        if (!(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM"))
+                        if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM"))
                         {
-                            (XaphanModule.Instance._SaveData as XaphanModuleSaveData).SavedFlags.Add(Prefix + "_Ch2_Boss_Defeated_CM");
+                            XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch2_Boss_Defeated_CM");
                         }
                     }
                     level.Session.SetFlag("In_bossfight", false);
