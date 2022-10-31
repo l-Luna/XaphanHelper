@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using On.Celeste;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -48,6 +46,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public static Player player;
 
         private Coroutine JumpGraceTimerRoutine = new Coroutine();
+
+        public CustomMoveBlock attachedMoveBlock;
 
         public MagneticCeiling(EntityData data, Vector2 offset, EntityID eid) : base(data.Position + offset)
         {
@@ -129,7 +129,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
             {
-                return Collide.Check(self, solid, self.Position - new Vector2(0, 8));
+                if (solid is CustomMoveBlock)
+                {
+                    CustomMoveBlock block = solid as CustomMoveBlock;
+                    return Collide.Check(self, solid, self.Position - new Vector2(0, 6 + block.magneticCeilingOffset));
+                }
+                return Collide.Check(self, solid, self.Position - new Vector2(0, 6));
             }
             return orig(self, solid);
         }
@@ -141,6 +146,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return (Collide.Check(self, player, self.Position + new Vector2(0, self.Height) + Vector2.UnitY)) ? player : null;
             }
             return orig(self);
+        }
+
+        public override void Awake(Scene scene)
+        {
+            base.Awake(scene);
+            foreach (CustomMoveBlock block in SceneAs<Level>().Tracker.GetEntities<CustomMoveBlock>())
+            {
+                if (block.Left <= Left && block.Right >= Right && block.Bottom == Top)
+                {
+                    attachedMoveBlock = block;
+                    break;
+                }
+            }
         }
 
         public override void Update()
@@ -180,6 +198,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 else
                 {
                     playerSprite.FlipX = false;
+                }
+                if (attachedMoveBlock != null && attachedMoveBlock.steerSides.Contains("Bottom") && (attachedMoveBlock.direction == CustomMoveBlock.Directions.Left || attachedMoveBlock.direction == CustomMoveBlock.Directions.Right))
+                {
+                    if (playerWasAttached)
+                    {
+                        Position.Y = attachedMoveBlock.Position.Y + attachedMoveBlock.Height + attachedMoveBlock.magneticCeilingOffset + attachedMoveBlock.buttonPressedOffset;
+                    }
+                    else
+                    {
+                        Position.Y = attachedMoveBlock.Position.Y + attachedMoveBlock.Height + attachedMoveBlock.magneticCeilingOffset;
+                    }
                 }
                 if (playerWasAttached && (SceneAs<Level>().Transitioning || !player.CollideCheck<MagneticCeiling>(player.Position - Vector2.UnitY)))
                 {
@@ -345,7 +374,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         private bool IsRiding(Solid solid)
-        {
+        {           
+            if (attachedMoveBlock != null)
+            {
+                return CollideCheckOutside(solid, Position - Vector2.UnitY * (1 + attachedMoveBlock.magneticCeilingOffset));
+            }
             return CollideCheckOutside(solid, Position - Vector2.UnitY);
         }
 
