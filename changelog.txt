@@ -7,6 +7,7 @@ Version 1.0.49 :
 - Slightly increased Bombs explosion radius
 - Decreased Mega Bombs explosion radius
 - Bombs and Mega Bombs are now correctly affected by the momentum of moving solids entities
+- The player can no longer grab a Magnetic Ceiling while they are dashing
 - Fixed Loenn plugin for Drone Switchs side attribute having a "Bottom" option instead of "Down", preventing placing switches on the ceiling
 - Slopes should no longer prevent the player from falling after throwing the Remote Drone
 - Slopes should no longer create collisions issues with nearby solids entities
