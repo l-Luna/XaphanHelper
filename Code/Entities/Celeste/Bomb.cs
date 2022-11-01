@@ -324,8 +324,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             AllowPushing = false;
             explode = true;
-            Collider = new Circle(14f, 0f, -7f);
-            bombSprite.Position += new Vector2(0, 11);
+            Collider = new Circle(12f, 0f, -4f);
+            bombSprite.Position += new Vector2(0, 12);
             Audio.Play("event:/game/xaphan/bomb_explode", Position);
             bombSprite.Play("explode", false);
             bombSprite.OnLastFrame = onLastFrame;
