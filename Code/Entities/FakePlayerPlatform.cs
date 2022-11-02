@@ -70,47 +70,44 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 FakePlayer player = self.Scene.Tracker.GetEntity<FakePlayer>();
                 if (!platform.UpsideDown)
                 {
-                    //if (self.Collidable)
+                    if (player != null)
                     {
-                        if (player != null)
+                        if (move < 0)
                         {
-                            if (move < 0)
+                            if (player.IsRiding(self))
                             {
-                                if (player.IsRiding(self))
+                                self.Collidable = false;
+                                if (player.TreatNaive)
                                 {
-                                    self.Collidable = false;
-                                    if (player.TreatNaive)
-                                    {
-                                        player.NaiveMove(Vector2.UnitY * move);
-                                    }
-                                    else
-                                    {
-                                        player.MoveVExact(move);
-                                    }
-                                    self.Collidable = true;
+                                    player.NaiveMove(Vector2.UnitY * move);
                                 }
-                                else if (!player.TreatNaive && self.CollideCheck(player, self.Position + Vector2.UnitY * move) && !self.CollideCheck(player))
+                                else
                                 {
-                                    self.Collidable = false;
-                                    player.MoveVExact((int)(self.Top + move - player.Bottom));
-                                    self.Collidable = true;
+                                    player.MoveVExact(move);
                                 }
+                                self.Collidable = true;
                             }
-                            else
+                            else if (!player.TreatNaive && self.CollideCheck(player, self.Position + Vector2.UnitY * move) && !self.CollideCheck(player))
                             {
-                                if ((player.IsRiding(self) && (platform.StickyDash || player.StateMachine.State != 2)))
+                                self.Collidable = false;
+                                player.MoveVExact((int)(self.Top + move - player.Bottom));
+                                self.Collidable = true;
+                            }
+                        }
+                        else
+                        {
+                            if ((player.IsRiding(self) && (platform.StickyDash || player.StateMachine.State != 2)))
+                            {
+                                self.Collidable = false;
+                                if (player.TreatNaive)
                                 {
-                                    self.Collidable = false;
-                                    if (player.TreatNaive)
-                                    {
-                                        player.NaiveMove(Vector2.UnitY * move);
-                                    }
-                                    else
-                                    {
-                                        player.MoveVExact(move);
-                                    }
-                                    self.Collidable = true;
+                                    player.NaiveMove(Vector2.UnitY * move);
                                 }
+                                else
+                                {
+                                    player.MoveVExact(move);
+                                }
+                                self.Collidable = true;
                             }
                         }
                     }
