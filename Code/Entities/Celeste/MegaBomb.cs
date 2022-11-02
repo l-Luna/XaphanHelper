@@ -2,6 +2,7 @@
 using Monocle;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -303,16 +304,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 previousPosition = ExactPosition;
                 MoveH(Speed.X * Engine.DeltaTime, onCollideH);
                 MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
-                foreach (Entity entity in Scene.Tracker.GetEntities<Liquid>())
+                bool shouldExplodeImmediately = false;
+                foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
                 {
-                    Liquid liquid = (Liquid)entity;
-                    if (liquid.liquidType == "lava" || liquid.liquidType.Contains("acid"))
+                    if (entityList.Key == typeof(Liquid))
                     {
-                        if (CollideCheck(liquid))
+                        foreach (Entity entity in entityList.Value)
                         {
-                            Add(new Coroutine(Explode(true)));
+                            Liquid liquid = (Liquid)entity;
+                            if (CollideCheck(liquid) && (liquid.liquidType == "lava" || liquid.liquidType.Contains("acid")))
+                            {
+                                shouldExplodeImmediately = true;
+                            }
+                        }
+
+                    }
+                    else if (entityList.Key == typeof(LaserBeam))
+                    {
+                        foreach (Entity entity in entityList.Value)
+                        {
+                            LaserBeam beam = (LaserBeam)entity;
+                            if (CollideCheck(beam) && (beam.Type == "Kill" || beam.Type == "Must Dash"))
+                            {
+                                shouldExplodeImmediately = true;
+                            }
                         }
                     }
+                }
+                if (shouldExplodeImmediately)
+                {
+                    Add(new Coroutine(Explode(true)));
                 }
                 if (Left > SceneAs<Level>().Bounds.Right || Right < SceneAs<Level>().Bounds.Left || Top > SceneAs<Level>().Bounds.Bottom)
                 {
