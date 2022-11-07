@@ -12,6 +12,7 @@ Version 1.0.49 :
 - Slopes should no longer prevent the player from falling after throwing the Remote Drone
 - Slopes should no longer create collisions issues with nearby solids entities
 - Slopes will now try to move the player out of them if the player manage to get stuck into them
+- Throwables should no longer get stuck when the player throw them toward an upside down Slope
 
 Version 1.0.48 :
 

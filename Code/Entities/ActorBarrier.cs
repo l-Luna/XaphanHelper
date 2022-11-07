@@ -150,81 +150,77 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             List<Entity> actorBarriers = actor.Scene.Tracker.GetEntities<ActorBarrier>().ToList();
             List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
-            foreach (Entity barrier in actorBarriers)
+            foreach (Entity entity in actorBarriers)
             {
-                ActorBarrier barrier2 = barrier as ActorBarrier;
-                if (barrier2.Height > 1)
+                ActorBarrier barrier = (ActorBarrier)entity;
+                if (barrier.Height > 1 || barrier.UpsideDown)
                 {
                     if (CanJumpThrough)
                     {
-                        if (barrier2.Side == "Left")
+                        if (barrier.Side == "Left")
                         {
-                            if (actor.Left >= barrier2.Right)
+                            if (actor.Left >= barrier.Right)
                             {
-                                barrier2.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier2.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                         else
                         {
-                            if (actor.Right <= barrier2.Left)
+                            if (actor.Right <= barrier.Left)
                             {
-                                barrier2.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier2.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                     }
                     else
                     {
-                        barrier2.Collidable = true;
+                        barrier.Collidable = true;
                     }
                 }
-                else if (actor.Center.X > barrier.Left && actor.Center.X < barrier.Right)
+                else if (actor.Center.X > entity.Left && actor.Center.X < entity.Right)
                 {
-                    ActorBarrier barrier3 = barrier as ActorBarrier;
                     if (CanJumpThrough)
                     {
-                        if (!barrier3.UpsideDown)
+                        if (!barrier.UpsideDown)
                         {
-                            if (actor.Bottom <= barrier3.Top)
+                            if (actor.Bottom <= barrier.Top)
                             {
-                                barrier3.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier3.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                         else
                         {
-                            if (actor.Top >= barrier3.Bottom)
+                            if (actor.Top >= barrier.Bottom)
                             {
-                                barrier3.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier3.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                     }
                     else
                     {
-                        barrier3.Collidable = true;
+                        barrier.Collidable = true;
                     }
                 }
             }
             foreach (PlayerPlatform platform in playerPlatforms)
             {
-                if (actor.Left >= platform.Left && actor.Right <= platform.Right)
-                {
-                    platform.Collidable = false;
-                }
+                platform.Collidable = false;
             }
         }
 
@@ -232,81 +228,77 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             List<Entity> actorBarriers = actor.Scene.Tracker.GetEntities<ActorBarrier>().ToList();
             List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
-            foreach (Entity barrier in actorBarriers)
+            foreach (Entity entity in actorBarriers)
             {
-                ActorBarrier barrier2 = barrier as ActorBarrier;
-                if (barrier2.Height > 1)
+                ActorBarrier barrier = (ActorBarrier)entity;
+                if (barrier.Height > 1 || barrier.UpsideDown)
                 {
                     if (CanJumpThrough)
                     {
-                        if (barrier2.Side == "Left")
+                        if (barrier.Side == "Left")
                         {
-                            if (actor.Left >= barrier2.Right)
+                            if (actor.Left >= barrier.Right)
                             {
-                                barrier2.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier2.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                         else
                         {
-                            if (actor.Right <= barrier2.Left)
+                            if (actor.Right <= barrier.Left)
                             {
-                                barrier2.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier2.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                     }
                     else
                     {
-                        barrier2.Collidable = true;
+                        barrier.Collidable = true;
                     }
                 }
-                else if (actor.Center.X > barrier.Left && actor.Center.X < barrier.Right)
+                else if (actor.Center.X > entity.Left && actor.Center.X < entity.Right)
                 {
-                    ActorBarrier barrier3 = barrier as ActorBarrier;
                     if (CanJumpThrough)
                     {
-                        if (!barrier3.UpsideDown)
+                        if (!barrier.UpsideDown)
                         {
-                            if (actor.Bottom <= barrier3.Top)
+                            if (actor.Bottom <= barrier.Top)
                             {
-                                barrier3.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier3.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                         else
                         {
-                            if (actor.Top >= barrier3.Bottom)
+                            if (actor.Top >= barrier.Bottom)
                             {
-                                barrier3.Collidable = true;
+                                barrier.Collidable = true;
                             }
                             else
                             {
-                                barrier3.Collidable = false;
+                                barrier.Collidable = false;
                             }
                         }
                     }
                     else
                     {
-                        barrier3.Collidable = true;
+                        barrier.Collidable = true;
                     }
                 }
             }
             foreach (PlayerPlatform platform in playerPlatforms)
             {
-                if (actor.Left >= platform.Left && actor.Right <= platform.Right)
-                {
-                    platform.Collidable = false;
-                }
+                platform.Collidable = false;
             }
         }
 
@@ -317,10 +309,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             actorBarriers.ForEach(entity => entity.Collidable = false);
             foreach (PlayerPlatform platform in actor.Scene.Tracker.GetEntities<PlayerPlatform>())
             {
-                if (actor.Left >= platform.Left && actor.Right <= platform.Right && player != null && player.Bottom <= platform.Top && (platform.Side == "Left" ? player.Right <= platform.Right : player.Left >= platform.Left))
-                {
-                    platform.SetCollision(player);
-                }
+                platform.SetCollision(player);
             }
         }
 
@@ -331,10 +320,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             actorBarriers.ForEach(entity => entity.Collidable = false);
             foreach (PlayerPlatform platform in actor.Scene.Tracker.GetEntities<PlayerPlatform>())
             {
-                if (actor.Left >= platform.Left && actor.Right <= platform.Right && player != null && player.Bottom <= platform.Top && (platform.Side == "Left" ? player.Right <= platform.Right : player.Left >= platform.Left))
-                {
-                    platform.SetCollision(player);
-                }
+                platform.SetCollision(player);
             }
         }
 
