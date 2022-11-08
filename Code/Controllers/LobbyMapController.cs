@@ -1,5 +1,4 @@
 ﻿using Celeste.Mod.Entities;
-using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -17,30 +16,25 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         public string Directory;
 
-        public int lobbyIndex;
-
         public int CustomImagesTilesSizeX;
 
         public int CustomImagesTilesSizeY;
 
         public Vector2 PlayerPosition;
 
-        public List<LobbyMapsLobbiesData> LobbiesData = new List<LobbyMapsLobbiesData>();
-
         public LobbyMapController(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
             Tag = Tags.Persistent;
             Directory = data.Attr("directory");
-            lobbyIndex = data.Int("lobbyIndex", 0);
             CustomImagesTilesSizeX = 4;
             CustomImagesTilesSizeY = 4;
+            CustomImage = GFX.Gui[Directory];
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            GetLobbiesData();
-            GenerateLobbyTiles(Directory, lobbyIndex);
+            GenerateLobbyTiles(SceneAs<Level>().Session.Area.ID, CustomImage);
         }
 
         public override void Update()
@@ -68,7 +62,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                         List<Vector2> Tmp2GeneratedVisitedLobbyMapTiles = new List<Vector2>();
                         List<Vector2> Tmp3GeneratedVisitedLobbyMapTiles = new List<Vector2>();
                         List<Vector2> Tmp4GeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                        XaphanModule.ModSaveData.VisitedLobbyMapTiles.Add(Prefix + "/Ch" + (lobbyIndex != 0 ? lobbyIndex : chapterIndex) + "/" + level.Session.Level + "/" + PlayerPosition.X + "-" + PlayerPosition.Y);
+                        XaphanModule.ModSaveData.VisitedLobbyMapTiles.Add(Prefix + "/Ch" + chapterIndex + "/" + level.Session.Level + "/" + PlayerPosition.X + "-" + PlayerPosition.Y);
                         Circle circle = new Circle(15, PlayerPosition.X, PlayerPosition.Y);
                         for (int i = Math.Max(0, (int)(PlayerPosition.X - circle.Radius)); i < Math.Min((int)(PlayerPosition.X + circle.Radius), CustomImage.Width / 4); i++)
                         {
@@ -96,53 +90,28 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             }
         }
 
-        public void GetLobbiesData()
+        public static void GenerateLobbyTiles(int areaId, MTexture mapTexture)
         {
-            AreaKey area = SceneAs<Level>().Session.Area;
-            for (int i = 0; i < 5; i++)
-            {
-                bool AddedLobby = false;
-                MapData MapData = AreaData.Areas[area.ID - (lobbyIndex - 1) + i].Mode[(int)area.Mode].MapData;
-                foreach (LevelData levelData in MapData.Levels)
-                {
-                    foreach (EntityData entity in levelData.Entities)
-                    {
-                        if (entity.Name == "XaphanHelper/LobbyMapController")
-                        {
-                            LobbiesData.Add(new LobbyMapsLobbiesData(entity.Int("lobbyIndex"), entity.Attr("directory"), area.ID - (lobbyIndex - 1) + i, entity.Attr("levelSet"), entity.Int("totalMaps")));
-                            AddedLobby = true;
-                            break;
-                        }
-                    }
-                    if (AddedLobby)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
+            AreaKey area = new(areaId);
+            string Prefix = area.LevelSet;
+            int chapterIndex = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
 
-        public void GenerateLobbyTiles(string directory, int lobbyIndex)
-        {
-            CustomImage = GFX.Gui[directory];
             if (XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Count == 0)
             {
-                Level level = SceneAs<Level>();
-                string Prefix = level.Session.Area.GetLevelSet();
                 List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new List<Vector2>();
                 foreach (string tile in XaphanModule.ModSaveData.VisitedLobbyMapTiles)
                 {
                     string[] str = tile.Split('/');
-                    if (Prefix == str[0] + "/" + str[1] && str[2] == "Ch" + lobbyIndex)
+                    if (Prefix == str[0] + "/" + str[1] && str[2] == "Ch" + chapterIndex)
                     {
                         string[] str2 = str[4].Split('-');
                         float cordX = float.Parse(str2[0]);
                         float cordY = float.Parse(str2[1]);
                         Rectangle rectangle = new Rectangle((int)cordX - 15, (int)cordY - 15, 30, 30);
                         TmpGeneratedVisitedLobbyMapTiles.Add(new Vector2(cordX, cordY));
-                        for (int i = Math.Max(0, (int)(cordX - rectangle.Width / 2)); i < Math.Min((int)(cordX + rectangle.Width / 2), CustomImage.Width / 4); i++)
+                        for (int i = Math.Max(0, (int)(cordX - rectangle.Width / 2)); i < Math.Min((int)(cordX + rectangle.Width / 2), mapTexture.Width / 4); i++)
                         {
-                            for (int j = Math.Max(0, (int)(cordY - rectangle.Height / 2)); j < Math.Min((int)(cordY + rectangle.Height / 2), CustomImage.Height / 4); j++)
+                            for (int j = Math.Max(0, (int)(cordY - rectangle.Height / 2)); j < Math.Min((int)(cordY + rectangle.Height / 2), mapTexture.Height / 4); j++)
                             {
                                 if (rectangle.Contains(i, j))
                                 {

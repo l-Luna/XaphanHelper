@@ -137,7 +137,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
             SubAreaMapPercent = (getCurrentMapTiles(getSubAreaIndex()) * 100 / getTotalMapTiles(getSubAreaIndex())).ToString();
-            if (Input.Grab.Pressed && Visible)
+            if (XaphanModule.Settings.MapScreenShowProgressDisplay.Pressed && Visible)
             {
                 if (chapterIndex != -1)
                 {
