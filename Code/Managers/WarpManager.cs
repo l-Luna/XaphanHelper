@@ -94,10 +94,10 @@ namespace Celeste.Mod.XaphanHelper.Managers {
                     ScreenWipe wipe = null;
                     if (typeof(Celeste).Assembly.GetType($"Celeste.{wipeType}Wipe") is Type type) {
                         wipe = (ScreenWipe)Activator.CreateInstance(type, new object[] {
-                            level, false, () => TeleportToChapter(warp.AreaId)
+                            level, false, new Action(() => TeleportToChapter(warp.AreaId))
                         });
                     } else {
-                        wipe = new FadeWipe(level, false, () => TeleportToChapter(warp.AreaId));
+                        wipe = new FadeWipe(level, false, new Action(() => TeleportToChapter(warp.AreaId)));
                     }
 
                     wipe.Duration = Math.Min(1.35f, wipeDuration);
