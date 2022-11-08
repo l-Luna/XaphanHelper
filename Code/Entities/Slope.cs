@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 using System;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -13,25 +14,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string Side;
 
-        private string TilesTop;
+        public string TilesTop;
 
-        private string TilesBottom;
+        public string TilesBottom;
 
-        private string Directory;
+        public string Directory;
 
-        private string Texture;
+        public string Texture;
 
         public bool Gentle;
 
-        private bool CanSlide;
+        public bool CanSlide;
 
         public bool UpsideDown;
 
-        private bool NoRender;
+        public bool NoRender;
 
-        private bool StickyDash;
+        public bool StickyDash;
 
-        private int SoundIndex;
+        public int SoundIndex;
 
         public int SlopeHeight;
 
@@ -43,11 +44,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private MTexture[] SlopeTextures;
 
-        private bool Rainbow;
+        public bool Rainbow;
 
-        private bool CanJumpThrough;
+        public bool CanJumpThrough;
 
-        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, bool canSlide, string directory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough) : base(position + offset)
+        public bool VisualOnly;
+
+        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, bool canSlide, string directory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, bool visualOnly = false) : base(position + offset)
         {
             Tag = Tags.TransitionUpdate;
             Gentle = gentle;
@@ -64,6 +67,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             StickyDash = stickyDash;
             Rainbow = rainbow;
             CanJumpThrough = canJumpThrough;
+            VisualOnly = visualOnly;
             if (SlopeHeight < 1)
             {
                 SlopeHeight = 1;
@@ -139,99 +143,102 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!UpsideDown)
+            if (!VisualOnly)
             {
-                if (Side == "Left")
+                if (!UpsideDown)
                 {
-                    for (int i = 0; i <= SlopeHeight - 1; i++)
+                    if (Side == "Left")
                     {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 0f + i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 1f + i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 2f + i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 3f + i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 4f + i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 5f + i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 6f + i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 7f + i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 0f + i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 1f + i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 2f + i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 3f + i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 4f + i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 5f + i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 6f + i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 7f + i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
 
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 4f + i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 4f + i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }
+                        /*if (TilesBottom != "Horizontal")
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }*/
                     }
-                    /*if (TilesBottom != "Horizontal")
+                    else
                     {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }*/
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 0f + j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 1f + j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 2f + j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 3f + j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 4f + j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 5f + j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 6f + j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 7f + j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 4f + j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }
+                        /*if (TilesBottom != "Horizontal")
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }*/
+                    }
                 }
                 else
                 {
-                    for (int j = 0; j <= SlopeHeight - 1; j++)
+                    if (Side == "Left")
                     {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 0f + j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 1f + j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 2f + j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 3f + j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 4f + j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 5f + j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 6f + j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 7f + j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 15f - i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 14f - i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 13f - i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 12f - i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 11f - i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 10f - i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 9f - i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
 
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 4f + j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 8f - i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }
+                        /*if (TilesBottom != "Horizontal")
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }*/
                     }
-                    /*if (TilesBottom != "Horizontal")
+                    else
                     {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }*/
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 15f - j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 14f - j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 13f - j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 12f - j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 11f - j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 10f - j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 9f - j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 8f - j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
+
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, 8f - j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 8f - j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }
+                        /*if (TilesBottom != "Horizontal")
+                        {
+                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
+                        }*/
+                    }
                 }
+                SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
+                SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
+                SceneAs<Level>().Add(new PlayerBlocker(new Vector2(Side == "Right" ? Left + 20f : Left, UpsideDown ? Top + 12f : Top), 4f, 4f, false, SoundIndex, UpsideDown, true));
             }
-            else
-            {
-                if (Side == "Left")
-                {
-                    for (int i = 0; i <= SlopeHeight - 1; i++)
-                    {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 15f - i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 14f - i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 13f - i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 12f - i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 11f - i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 10f - i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 9f - i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 8f - i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }
-                    /*if (TilesBottom != "Horizontal")
-                    {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }*/
-                }
-                else
-                {
-                    for (int j = 0; j <= SlopeHeight - 1; j++)
-                    {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 15f - j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 14f - j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 13f - j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 12f - j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 11f - j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 10f - j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 9f - j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 8f - j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, 8f - j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 8f - j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }
-                    /*if (TilesBottom != "Horizontal")
-                    {
-                        SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                    }*/
-                }
-            }
-            SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
-            SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
-            SceneAs<Level>().Add(new PlayerBlocker(new Vector2(Side == "Right" ? Left + 20f : Left, UpsideDown ? Top + 12f : Top), 4f, 4f, false, SoundIndex, UpsideDown, true));
         }
 
         private Color GetHue(Vector2 position)
