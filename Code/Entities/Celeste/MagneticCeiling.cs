@@ -141,7 +141,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static Player OnSolidGetPlayerOnTop(On.Celeste.Solid.orig_GetPlayerOnTop orig, Solid self)
         {
-            if (self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
+            if (self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && player != null)
             {
                 return (Collide.Check(self, player, self.Position + new Vector2(0, self.Height) + Vector2.UnitY)) ? player : null;
             }
