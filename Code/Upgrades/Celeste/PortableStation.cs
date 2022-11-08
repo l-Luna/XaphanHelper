@@ -62,7 +62,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                         {
                             if (bagDisplay.currentSelection == 2)
                             {
-                                self.Add(new WarpScreen(self, "event:/game/xaphan/warp", "Fade", 0.75f, fromWarp: false));
+                                self.Add(new WarpScreen());
                             }
                         }
                     }
