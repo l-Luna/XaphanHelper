@@ -116,7 +116,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Update()
         {
-            ActorBarrier.SetCollisionBeforeUpdate(this);
+            //ActorBarrier.SetCollisionBeforeUpdate(this);
             base.Update();
             if (alphaStatus == 0 || (alphaStatus == 1 && laserAlpha != 0.9f))
             {
@@ -300,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Collider.Height += 4;
                 }
             }
-            ActorBarrier.SetCollisionAfterUpdate(this);
+            //ActorBarrier.SetCollisionAfterUpdate(this);
         }
 
         private void OnCollide(Player player)

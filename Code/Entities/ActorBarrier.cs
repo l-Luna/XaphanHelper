@@ -224,7 +224,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public static void SetCollisionBeforeUpdate(MovableEntity actor)
+        /*public static void SetCollisionBeforeUpdate(MovableEntity actor)
         {
             List<Entity> actorBarriers = actor.Scene.Tracker.GetEntities<ActorBarrier>().ToList();
             List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
@@ -300,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 platform.Collidable = false;
             }
-        }
+        }*/
 
         public static void SetCollisionAfterUpdate(Actor actor)
         {
@@ -313,7 +313,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public static void SetCollisionAfterUpdate(MovableEntity actor)
+        /*public static void SetCollisionAfterUpdate(MovableEntity actor)
         {
             List<Entity> actorBarriers = actor.Scene.Tracker.GetEntities<ActorBarrier>().ToList();
             Player player = actor.Scene.Tracker.GetEntity<Player>();
@@ -322,7 +322,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 platform.SetCollision(player);
             }
-        }
+        }*/
 
         public override void Update()
         {

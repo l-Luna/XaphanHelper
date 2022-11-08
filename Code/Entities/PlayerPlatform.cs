@@ -362,7 +362,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (CanJumpThrough)
                     {
-                        if (player.Bottom <= Top)
+                        if (player.Bottom <= Top + 2)
                         {
                             Collidable = true;
                         }
