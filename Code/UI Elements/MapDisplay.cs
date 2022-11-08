@@ -392,13 +392,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public Vector2 GetRoomOffset(MapData mapData, string room, int index)
         {
-            if (mode == "warp" && room == currentRoom && chapterIndex == (level.Session.Area.ChapterIndex == -1 ? 0 : (level.Session.Area.ChapterIndex)))
+            if (mode == "warp" && level.Tracker.GetEntity<WarpScreen>() is WarpScreen warpScreen)
             {
-                WarpScreen warpScreen = level.Tracker.GetEntity<WarpScreen>();
-                if (warpScreen != null && warpScreen.menu.Selection == 0)
-                {
-                    return playerPosition * 40;
-                }
+                Vector2 pos = warpScreen.SelectedWarp.Position;
+                return new Vector2((float)Math.Floor(pos.X / ScreenTilesX), (float)Math.Floor(pos.Y / ScreenTilesY)) * 40;
             }
             foreach (LevelData levelData in mapData.Levels)
             {

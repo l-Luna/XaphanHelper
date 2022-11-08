@@ -32,9 +32,9 @@ namespace Celeste.Mod.XaphanHelper
 
         // Warps
 
-        public List<string> UnlockedWarps = new List<string>();
+        public HashSet<string> UnlockedWarps = new();
 
-        public List<string> SpeedrunModeUnlockedWarps = new List<string>();
+        public HashSet<string> SpeedrunModeUnlockedWarps = new();
 
         // Celeste Upgrades
 
