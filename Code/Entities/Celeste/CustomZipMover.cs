@@ -160,7 +160,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Added(Scene scene)
         {
-            Added(scene);
+            base.Added(scene);
             scene.Add(pathRenderer = new ZipMoverPathRenderer(this));
         }
 
@@ -168,12 +168,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             scene.Remove(pathRenderer);
             pathRenderer = null;
-            Removed(scene);
+            base.Removed(scene);
         }
 
         public override void Update()
         {
-            Update();
+            base.Update();
             bloom.Y = streetlight.CurrentAnimationFrame * 3;
         }
 
@@ -238,7 +238,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            Render();
+            base.Render();
             Position = position;
         }
 
