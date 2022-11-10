@@ -251,7 +251,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
                 SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
-                SceneAs<Level>().Add(new PlayerBlocker(new Vector2(Side == "Right" ? Left + 20f : Left, UpsideDown ? Top + 12f : Top), 4f, 4f, false, SoundIndex, UpsideDown, true));
+                //SceneAs<Level>().Add(new PlayerBlocker(new Vector2(Side == "Right" ? Left + 20f : Left, UpsideDown ? Top + 12f : Top), 4f, 4f, false, SoundIndex, UpsideDown, true));
             }
         }
 
