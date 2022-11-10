@@ -89,8 +89,6 @@ namespace Celeste.Mod.XaphanHelper
 
         public static Dictionary<string, Autotiler.Generated> TilesetsControllerGeneratedLevelsTiles = new();
 
-        public static Dictionary<string, VirtualMap<char>> TilesetsControllerGeneratedLevelsData = new();
-
         public static bool CanOpenMap(Level level)
         {
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;

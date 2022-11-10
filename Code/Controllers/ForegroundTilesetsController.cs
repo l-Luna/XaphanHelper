@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
@@ -53,8 +55,6 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private char newTileset10;
 
-        private string currentLevel;      
-
         private static bool storedData;
 
         private string flag;
@@ -107,16 +107,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             base.Update();
             if (!string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
             {
-                if (currentLevel != SceneAs<Level>().Session.Level)
+                if (!XaphanModule.TilesetsControllerGeneratedLevelsTiles.ContainsKey(SceneAs<Level>().Session.Level))
                 {
-                    if (!XaphanModule.TilesetsControllerGeneratedLevelsTiles.ContainsKey(SceneAs<Level>().Session.Level) && !XaphanModule.TilesetsControllerGeneratedLevelsData.ContainsKey(SceneAs<Level>().Session.Level))
-                    {
-                        switchTilesets();
-                    }
-                    else
-                    {
-                        applyGeneratedTileset(XaphanModule.TilesetsControllerGeneratedLevelsTiles[SceneAs<Level>().Session.Level], XaphanModule.TilesetsControllerGeneratedLevelsData[SceneAs<Level>().Session.Level]);
-                    }
+                    switchTilesets();
+                }
+                else
+                {
+                    applyGeneratedTileset(SceneAs<Level>(), XaphanModule.TilesetsControllerGeneratedLevelsTiles[SceneAs<Level>().Session.Level]);
                 }
             }
         }
@@ -130,6 +127,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         public static void Unload()
         {
+            Everest.Events.Level.OnEnter -= onLevelEnter;
             Everest.Events.Level.OnExit -= onLevelExit;
             On.Celeste.Level.Update -= onLevelUpdate;
         }
@@ -203,13 +201,11 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         private void switchTilesets()
         {
             Level level = Scene as Level;
-            currentLevel = level.Session.Level;
             int ox = level.LevelSolidOffset.X;
             int oy = level.LevelSolidOffset.Y;
             int tw = (int)Math.Ceiling(level.Bounds.Width / 8f);
             int th = (int)Math.Ceiling(level.Bounds.Height / 8f);
             VirtualMap<char> fgData = level.SolidsData;
-            VirtualMap<MTexture> fgTexes = level.SolidTiles.Tiles.Tiles;
             VirtualMap<char> newFgData = new VirtualMap<char>(tw + 2, th + 2, '0');
             for (int x = ox - 1; x < ox + tw + 1; x++)
             {
@@ -217,70 +213,70 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 {
                     if (fgData[x, y] == oldTileset1)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset1;
                         }
                     }
                     else if (fgData[x, y] == oldTileset2)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset2;
                         }
                     }
                     else if (fgData[x, y] == oldTileset3)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset3;
                         }
                     }
                     else if (fgData[x, y] == oldTileset4)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset4;
                         }
                     }
                     else if (fgData[x, y] == oldTileset5)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset5;
                         }
                     }
                     else if (fgData[x, y] == oldTileset6)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset6;
                         }
                     }
                     else if(fgData[x, y] == oldTileset7)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset7;
                         }
                     }
                     else if(fgData[x, y] == oldTileset8)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset8;
                         }
                     }
                     else if(fgData[x, y] == oldTileset9)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset9;
                         }
                     }
                     else if(fgData[x, y] == oldTileset10)
                     {
-                        if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && fgData[x, y] != '0')
+                        if (x > 0 && y > 0 && fgData[x, y] != '0')
                         {
                             newFgData[x - ox + 1, y - oy + 1] = newTileset10;
                         }
@@ -293,19 +289,15 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             }
             Autotiler.Generated newFgTiles = GFX.FGAutotiler.GenerateMap(newFgData, false);
             XaphanModule.TilesetsControllerGeneratedLevelsTiles.Add(level.Session.Level, newFgTiles);
-            XaphanModule.TilesetsControllerGeneratedLevelsData.Add(level.Session.Level, newFgData);
-            applyGeneratedTileset(newFgTiles, newFgData);
+            applyGeneratedTileset(level, newFgTiles);
         }
 
-        private void applyGeneratedTileset(Autotiler.Generated newFgTiles, VirtualMap<char> newFgData)
+        private void applyGeneratedTileset(Level level, Autotiler.Generated newFgTiles)
         {
-            Level level = Scene as Level;
-            currentLevel = level.Session.Level;
             int ox = level.LevelSolidOffset.X;
             int oy = level.LevelSolidOffset.Y;
             int tw = (int)Math.Ceiling(level.Bounds.Width / 8f);
             int th = (int)Math.Ceiling(level.Bounds.Height / 8f);
-            VirtualMap<char> fgData = level.SolidsData;
             VirtualMap<MTexture> fgTexes = level.SolidTiles.Tiles.Tiles;
             for (int x = ox - 1; x < ox + tw + 1; x++)
             {
@@ -313,7 +305,6 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 {
                     if (x > 0 && x < fgTexes.Columns && y > 0 && y < fgTexes.Rows && x >= ox && x < ox + tw && y >= oy && y < oy + th && fgTexes[x, y] != newFgTiles.TileGrid.Tiles[x - ox + 1, y - oy + 1])
                     {
-                        fgData[x, y] = newFgData[x - ox + 1, y - oy + 1];
                         fgTexes[x, y] = newFgTiles.TileGrid.Tiles[x - ox + 1, y - oy + 1];
                     }
                 }
