@@ -52,7 +52,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            foreach (LinkedFakeWall wall in Scene.Tracker.GetEntities<LinkedFakeWall>())
+            foreach (CustomFakeWall wall in Scene.Tracker.GetEntities<CustomFakeWall>())
             {
                 for (int i = 0; i < wall.Height / 8; i++)
                 {

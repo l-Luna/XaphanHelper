@@ -54,7 +54,7 @@ local Slope = {}
 Slope.name = "XaphanHelper/Slope"
 Slope.depth = -10001
 Slope.fieldOrder = {
-    "x", "y", "side", "gentle", "customDirectory", "texture", "soundIndex", "slopeHeight", "tilesTop", "tilesBottom", "canSlide", "upsideDown", "stickyDash", "noRender", "rainbow", "canJumpThrough"
+    "x", "y", "side", "flag", "customDirectory", "flagCustomDirectory", "texture", "flagTexture", "soundIndex", "slopeHeight", "tilesTop", "tilesBottom", "gentle", "canSlide", "upsideDown", "stickyDash", "noRender", "rainbow", "canJumpThrough"
 }
 Slope.fieldInformation = {
     side = {
@@ -78,6 +78,9 @@ Slope.fieldInformation = {
     },
     texture = {
         options = {"cement", "cliffside", "cliffsideAlt", "core", "deadgrass", "dirt", "girder", "grass", "lostlevels", "poolEdges", "reflection", "reflectionAlt", "rock", "scifi", "snow", "starJump", "stone", "summit", "summitNoSnow", "templeA", "templeB", "tower", "wood", "woodStoneEdges"}
+    },
+    flagTexture = {
+        options = {"cement", "cliffside", "cliffsideAlt", "core", "deadgrass", "dirt", "girder", "grass", "lostlevels", "poolEdges", "reflection", "reflectionAlt", "rock", "scifi", "snow", "starJump", "stone", "summit", "summitNoSnow", "templeA", "templeB", "tower", "wood", "woodStoneEdges"}
     }
 }
 Slope.placements = {
@@ -90,7 +93,10 @@ Slope.placements = {
         tilesTop = "Horizontal",
         tilesBottom = "Horizontal",
         customDirectory = "objects/XaphanHelper/Slope",
+        flagCustomDirectory = "objects/XaphanHelper/Slope",
         texture = "cement",
+        flagTexture = "cement",
+        flag = "",
         canSlide = false,
         upsideDown = false,
         noRender = false,

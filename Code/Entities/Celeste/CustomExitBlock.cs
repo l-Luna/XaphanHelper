@@ -4,9 +4,18 @@ using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
+    [Tracked(true)]
     [CustomEntity("XaphanHelper/CustomExitBlock")]
     class CustomExitBlock : Solid
     {
+        public enum Modes
+        {
+            Wall,
+            Block
+        }
+
+        private Modes mode;
+
         private TileGrid tiles;
 
         private TransitionListener tl;
@@ -17,13 +26,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private char fillTile;
 
+        private char flagFillTile;
+
         private bool CloseSound;
 
         private int group;
 
+        private string flag;
+
         public CustomExitBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {
             Depth = -13000;
+            mode = data.Enum<Modes>("mode", Modes.Block);
+            flag = data.Attr("flag");
+            flagFillTile = data.Char("flagTiletype", '3');
             fillTile = data.Char("tiletype", '3');
             CloseSound = data.Bool("closeSound");
             group = data.Int("group");
@@ -72,7 +88,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
             base.Added(scene);
             int tilesX = (int)Width / 8;
             int tilesY = (int)Height / 8;
-            tiles = GFX.FGAutotiler.GenerateBox(fillTile, tilesX, tilesY).TileGrid;
+            Level level = SceneAs<Level>();
+            if (mode == Modes.Wall)
+            {
+                Rectangle tileBounds = level.Session.MapData.TileBounds;
+                VirtualMap<char> solidsData = level.SolidsData;
+                int x = (int)X / 8 - tileBounds.Left;
+                int y = (int)Y / 8 - tileBounds.Top;
+                tiles = GFX.FGAutotiler.GenerateOverlay((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, x, y, tilesX, tilesY, solidsData).TileGrid;
+            }
+            else if (mode == Modes.Block)
+            {
+                tiles = GFX.FGAutotiler.GenerateBox((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, tilesX, tilesY).TileGrid;
+            }
             Add(tiles);
             Add(new TileInterceptor(tiles, highPriority: false));
         }
@@ -130,6 +158,31 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Audio.Play("event:/game/general/passage_closed_behind", Center);
                 }
             }
+        }
+
+        public override void Render()
+        {
+            if (tiles.Alpha >= 1f)
+            {
+                Level level = Scene as Level;
+                if (level.ShakeVector.X < 0f && level.Camera.X <= level.Bounds.Left && X <= level.Bounds.Left)
+                {
+                    tiles.RenderAt(Position + new Vector2(-3f, 0f));
+                }
+                if (level.ShakeVector.X > 0f && level.Camera.X + 320f >= level.Bounds.Right && X + Width >= level.Bounds.Right)
+                {
+                    tiles.RenderAt(Position + new Vector2(3f, 0f));
+                }
+                if (level.ShakeVector.Y < 0f && level.Camera.Y <= level.Bounds.Top && Y <= level.Bounds.Top)
+                {
+                    tiles.RenderAt(Position + new Vector2(0f, -3f));
+                }
+                if (level.ShakeVector.Y > 0f && level.Camera.Y + 180f >= level.Bounds.Bottom && Y + Height >= level.Bounds.Bottom)
+                {
+                    tiles.RenderAt(Position + new Vector2(0f, 3f));
+                }
+            }
+            base.Render();
         }
     }
 }

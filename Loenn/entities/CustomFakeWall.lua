@@ -1,13 +1,13 @@
 local fakeTilesHelper = require("helpers.fake_tiles")
 
-local CustomExitBlock = {}
+local CustomFakeWall = {}
 
-CustomExitBlock.name = "XaphanHelper/CustomExitBlock"
-CustomExitBlock.depth = -13000
-CustomExitBlock.fieldOrder = {
-    "x", "y", "width", "height", "flag", "mode", "tiletype", "flagTiletype", "group", "closeSound"
+CustomFakeWall.name = "XaphanHelper/CustomFakeWall"
+CustomFakeWall.depth = -13000
+CustomFakeWall.fieldOrder = {
+    "x", "y", "width", "height", "flag", "mode", "tiletype", "flagTiletype", "group", "playTransitionReveal"
 }
-function CustomExitBlock.fieldInformation(entity)
+function CustomFakeWall.fieldInformation(entity)
     return {
         tiletype = {
             options = fakeTilesHelper.getTilesOptions(),
@@ -26,20 +26,20 @@ function CustomExitBlock.fieldInformation(entity)
         }     
     }
 end
-CustomExitBlock.placements = {
-    name = "CustomExitBlock",
+CustomFakeWall.placements = {
+    name = "CustomFakeWall",
     data = {
         width = 8,
         height = 8,
+        mode = "Block",
         tiletype = "3",
         flagTiletype = "3",
-        flag ="",
-        closeSound = false,
-        mode = "Block",
-        group = 0
+        flag = "",
+        group = 0,
+        playTransitionReveal = false
     }
 }
 
-CustomExitBlock.sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false, "tilesFg", {1.0, 1.0, 1.0, 0.7})
+CustomFakeWall.sprite = fakeTilesHelper.getEntitySpriteFunction("tiletype", false, "tilesFg", {1.0, 1.0, 1.0, 0.7})
 
-return CustomExitBlock
+return CustomFakeWall

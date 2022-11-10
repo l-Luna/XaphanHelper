@@ -4,20 +4,32 @@ local BreakBlock = {}
 
 BreakBlock.name = "XaphanHelper/BreakBlock"
 BreakBlock.depth = -13000
-local fieldInformation = {
-    mode = {
-        options = {"Block", "Wall"},
-        editable = false
-    },
-    type = {
-        options = {"Bomb", "Drone", "LightningDash", "MegaBomb", "RedBooster", "ScrewAttack"},
-        editable = false
-    },
-    color = {
-        fieldType = "color"
-    }
+BreakBlock.fieldOrder = {
+    "x", "y", "width", "height", "flag", "mode", "tiletype", "flagTiletype", "directory", "type", "color", "startRevealed", "permanent"
 }
-BreakBlock.fieldInformation = fakeTilesHelper.addTileFieldInformation(fieldInformation, "tiletype")
+function BreakBlock.fieldInformation(entity)
+    return {
+        tiletype = {
+            options = fakeTilesHelper.getTilesOptions(),
+            editable = false
+        },
+        flagTiletype = {
+            options = fakeTilesHelper.getTilesOptions(),
+            editable = false
+        },
+        mode = {
+            options = {"Block", "Wall"},
+            editable = false
+        },
+        type = {
+            options = {"Bomb", "Drone", "LightningDash", "MegaBomb", "RedBooster", "ScrewAttack"},
+            editable = false
+        },
+        color = {
+            fieldType = "color"
+        }  
+    }
+end
 BreakBlock.placements = {
     name = "BreakBlock",
     data = {
@@ -25,10 +37,13 @@ BreakBlock.placements = {
         height = 8,
         mode = "Block",
         tiletype = "3",
+        flagTiletype = "3",
+        flag = "",
         type = "Bomb",
         color = "FFFFFF",
         startRevealed = false,
-        directory = "objects/XaphanHelper/BreakBlock"
+        directory = "objects/XaphanHelper/BreakBlock",
+        permanent = true
     }
 }
 

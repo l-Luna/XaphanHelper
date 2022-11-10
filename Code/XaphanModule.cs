@@ -87,6 +87,10 @@ namespace Celeste.Mod.XaphanHelper
 
         private string lastLevelSet;
 
+        public static Dictionary<string, Autotiler.Generated> TilesetsControllerGeneratedLevelsTiles = new();
+
+        public static Dictionary<string, VirtualMap<char>> TilesetsControllerGeneratedLevelsData = new();
+
         public static bool CanOpenMap(Level level)
         {
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;
@@ -583,6 +587,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Load();
             Binocular.Load();
             EtherealBlock.Load();
+            TilesetsController.Load();
             UI_Elements.StaminaDisplay.Load();
         }
 
@@ -659,6 +664,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Unload();
             Binocular.Unload();
             EtherealBlock.Unload();
+            TilesetsController.Unload();
             UI_Elements.StaminaDisplay.Unload();
         }
 

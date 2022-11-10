@@ -16,7 +16,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Modes mode;
 
-        private char fillTile;
+        public char fillTile;
+
+        private char flagFillTile;
 
         private TileGrid tiles;
 
@@ -42,22 +44,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool permanent;
 
+        private string flag;
+
         public BreakBlock(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position, data.Width, data.Height, safe: true)
         {
             index = data.Int("index");
             mode = data.Enum<Modes>("mode");
+            flag = data.Attr("flag");
             color = data.Attr("color");
             directory = data.Attr("directory");
             type = data.Attr("type");
             startRevealed = data.Bool("startRevealed");
             eid = ID;
             fillTile = data.Char("tiletype", '3');
+            flagFillTile = data.Char("flagTiletype", '3');
             permanent = data.Bool("permanent", true);
             Collider = new Hitbox(data.Width, data.Height);
             Depth = -13000;
             Add(cutout = new EffectCutout());
             Add(new LightOcclude(0.5f));
         }
+
 
         public override void Added(Scene scene)
         {
@@ -73,18 +80,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             int tilesX = (int)Width / 8;
             int tilesY = (int)Height / 8;
+            Level level = SceneAs<Level>();
             if (mode == Modes.Wall)
             {
-                Level level = SceneAs<Level>();
                 Rectangle tileBounds = level.Session.MapData.TileBounds;
                 VirtualMap<char> solidsData = level.SolidsData;
                 int x = (int)X / 8 - tileBounds.Left;
                 int y = (int)Y / 8 - tileBounds.Top;
-                tiles = GFX.FGAutotiler.GenerateOverlay(fillTile, x, y, tilesX, tilesY, solidsData).TileGrid;
+                tiles = GFX.FGAutotiler.GenerateOverlay((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, x, y, tilesX, tilesY, solidsData).TileGrid;
             }
             else if (mode == Modes.Block)
             {
-                tiles = GFX.FGAutotiler.GenerateBox(fillTile, tilesX, tilesY).TileGrid;
+                tiles = GFX.FGAutotiler.GenerateBox((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, tilesX, tilesY).TileGrid;
             }
             Add(tiles);
             Add(new TileInterceptor(tiles, highPriority: false));
@@ -194,17 +201,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void Break(bool playSound = true, bool playDebrisSound = true)
         {
+            Level level = SceneAs<Level>();
             if (playSound)
             {
-                if (fillTile == '1')
+                if (((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile) == '1')
                 {
                     Audio.Play("event:/game/general/wall_break_dirt", Position);
                 }
-                else if (fillTile == '3')
+                else if (((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile) == '3')
                 {
                     Audio.Play("event:/game/general/wall_break_ice", Position);
                 }
-                else if (fillTile == '9')
+                else if (((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile) == '9')
                 {
                     Audio.Play("event:/game/general/wall_break_wood", Position);
                 }
@@ -217,12 +225,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 for (int j = 0; j < Height / 8f; j++)
                 {
-                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), fillTile, playDebrisSound).BlastFrom(Center));
+                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), (!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, playDebrisSound).BlastFrom(Center));
                 }
             }
             Collidable = false;
             RemoveSelf();
-            Level level = SceneAs<Level>();
             if (permanent)
             {
                 level.Session.DoNotLoad.Add(eid);

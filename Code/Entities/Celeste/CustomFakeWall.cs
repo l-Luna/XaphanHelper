@@ -5,8 +5,8 @@ using Monocle;
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
-    [CustomEntity("XaphanHelper/LinkedFakeWall")]
-    class LinkedFakeWall : Entity
+    [CustomEntity("XaphanHelper/CustomFakeWall", "XaphanHelper/LinkedFakeWall")]
+    class CustomFakeWall : Entity
     {
         public enum Modes
         {
@@ -17,6 +17,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private Modes mode;
 
         private char fillTile;
+
+        private char flagFillTile;
 
         public TileGrid tiles;
 
@@ -32,12 +34,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool playRevealWhenTransitionedInto;
 
-        public LinkedFakeWall(EntityData data, Vector2 position, EntityID eid) : base(data.Position + position)
+        private int group;
+
+        private string flag;
+
+        public CustomFakeWall(EntityData data, Vector2 position, EntityID eid) : base(data.Position + position)
         {
             mode = data.Enum<Modes>("mode");
             this.eid = eid;
             fillTile = data.Char("tiletype", '3');
+            flagFillTile = data.Char("flagTiletype", '3');
             playRevealWhenTransitionedInto = data.Bool("playTransitionReveal");
+            group = data.Int("group", 0);
+            flag = data.Attr("flag");
             Collider = new Hitbox(data.Width, data.Height);
             Depth = -13000;
             Add(cutout = new EffectCutout());
@@ -48,18 +57,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             base.Added(scene);
             int tilesX = (int)Width / 8;
             int tilesY = (int)Height / 8;
+            Level level = SceneAs<Level>();
             if (mode == Modes.Wall)
             {
-                Level level = SceneAs<Level>();
                 Rectangle tileBounds = level.Session.MapData.TileBounds;
                 VirtualMap<char> solidsData = level.SolidsData;
                 int x = (int)X / 8 - tileBounds.Left;
                 int y = (int)Y / 8 - tileBounds.Top;
-                tiles = GFX.FGAutotiler.GenerateOverlay(fillTile, x, y, tilesX, tilesY, solidsData).TileGrid;
+                tiles = GFX.FGAutotiler.GenerateOverlay((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, x, y, tilesX, tilesY, solidsData).TileGrid;
             }
             else if (mode == Modes.Block)
             {
-                tiles = GFX.FGAutotiler.GenerateBox(fillTile, tilesX, tilesY).TileGrid;
+                tiles = GFX.FGAutotiler.GenerateBox((!string.IsNullOrEmpty(flag) && level.Session.GetFlag(flag)) ? flagFillTile : fillTile, tilesX, tilesY).TileGrid;
             }
             Add(tiles);
             Add(new TileInterceptor(tiles, highPriority: false));
@@ -74,9 +83,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     Audio.Play("event:/game/general/secret_revealed", Center);
                 }
-                foreach (LinkedFakeWall fakewall in Scene.Entities.FindAll<LinkedFakeWall>())
+                foreach (CustomFakeWall fakewall in Scene.Entities.FindAll<CustomFakeWall>())
                 {
-                    fakewall.RevealWhenTransition();
+                    if (fakewall.group == group)
+                    {
+                        fakewall.RevealWhenTransition();
+                    }
                 }
             }
             else
@@ -157,9 +169,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Player player = CollideFirst<Player>();
             if (player != null && player.StateMachine.State != 9)
             {
-                foreach (LinkedFakeWall fakewall in Scene.Entities.FindAll<LinkedFakeWall>())
+                foreach (CustomFakeWall fakewall in Scene.Entities.FindAll<CustomFakeWall>())
                 {
-                    fakewall.Reveal();
+                    if (fakewall.group == group)
+                    {
+                        fakewall.Reveal();
+                    }
                 }
                 Audio.Play("event:/game/general/secret_revealed", Center);
             }

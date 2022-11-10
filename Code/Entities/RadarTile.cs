@@ -26,7 +26,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
-            if (!CollideCheck<DashBlock>() && !CollideCheck<FakeWall>() && !CollideCheck<LinkedFakeWall>() && !CollideCheck<BreakBlock>() && !FadeRoutine.Active)
+            if (!CollideCheck<DashBlock>() && !CollideCheck<FakeWall>() && !CollideCheck<CustomFakeWall>() && !CollideCheck<BreakBlock>() && !FadeRoutine.Active)
             {
                 Disapear();
             }

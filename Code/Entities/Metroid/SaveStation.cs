@@ -207,8 +207,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             base.Added(scene);
             level = SceneAs<Level>();
-            level.Add(new Slope(Position, Vector2.UnitX, false, "Left", 7, 1, "Horizontal", "Horizontal", "cement", false, "", false, true, false, false, false));
-            level.Add(new Slope(Position, new Vector2(-25f ,0f), false, "Right", 7, 1, "Horizontal", "Horizontal", "cement", false, "", false, true, false, false, false));
+            level.Add(new Slope(Position, Vector2.UnitX, false, "Left", 7, 1, "Horizontal", "Horizontal", "cement", "cement", false, "", "", false, true, false, false, false, ""));
+            level.Add(new Slope(Position, new Vector2(-25f ,0f), false, "Right", 7, 1, "Horizontal", "Horizontal", "cement", "cement", false, "", "", false, true, false, false, false, ""));
             Add(talk = new TalkComponent(new Rectangle(-4, -8, 8, 8), new Vector2(0f, -16f), Interact));
             talk.PlayerMustBeFacing = false;
             talk.Enabled = false;

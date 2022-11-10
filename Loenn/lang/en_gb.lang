@@ -132,6 +132,12 @@ entities.XaphanHelper/CustomCollectable.attributes.description.completeSpeedrun=
 entities.XaphanHelper/CustomCollectable.attributes.description.registerInSaveData=If true, the flag will be registered in the player Save file and will be set forever.
 entities.XaphanHelper/CustomCollectable.attributes.description.ignoreGolden=If true, the collectable will not re-appear when the player carry a golden berry if it has already been collected.
 
+# CustomCoverupWall
+entities.XaphanHelper/CustomCoverupWall.placements.name.CustomCoverupWall=Custom Coverup Wall
+entities.XaphanHelper/CustomCoverupWall.attributes.description.tiletype=Change the visual apparence of the wall.
+entities.XaphanHelper/CustomCoverupWall.attributes.description.flag=If this flag is set, the wall will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/CustomCoverupWall.attributes.description.flagTiletype=Change the visual apparence of the wall if the flag is set.
+
 #CustomEndScreenController
 entities.XaphanHelper/CustomEndScreenController.placements.name.CustomEndScreenController=Custom End Screen Controller
 entities.XaphanHelper/CustomEndScreenController.attributes.description.atlas=The full path to the images used by this End Screen, relative to Atlases/.
@@ -166,7 +172,19 @@ entities.XaphanHelper/CustomEndScreenController.attributes.description.priority=
 entities.XaphanHelper/CustomExitBlock.placements.name.CustomExitBlock=Custom Exit Block
 entities.XaphanHelper/CustomExitBlock.attributes.description.tiletype=Change the visual apparence of the block.
 entities.XaphanHelper/CustomExitBlock.attributes.description.closeSound=If true, the close behind sound will play when the player is no longer inside any CustomExitBlock with the same group number as this one.
-entities.XaphanHelper/CustomExitBlock.attributes.description.group=All CustomExitBlocks with the same group number will turn solid once the player is outside all of them.
+entities.XaphanHelper/CustomExitBlock.attributes.description.group=All Custom Exit Blocks with the same group number will turn solid once the player is outside all of them.
+entities.XaphanHelper/CustomExitBlock.attributes.description.mode=Block: The exit block will not try to merge with nearby solid tiles.\nWall: The exit block will try to merge with nearby solid tiles.
+entities.XaphanHelper/CustomExitBlock.attributes.description.flag=If this flag is set, the block will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/CustomExitBlock.attributes.description.flagTiletype=Change the visual apparence of the block if the flag is set.
+
+# CustomFakeWall
+entities.XaphanHelper/CustomFakeWall.placements.name.CustomFakeWall=Custom Fake Wall
+entities.XaphanHelper/CustomFakeWall.attributes.description.mode=Block: The fake wall will not try to merge with nearby solid tiles.\nWall: The fake wall will try to merge with nearby solid tiles.
+entities.XaphanHelper/CustomFakeWall.attributes.description.tiletype=Change the visual apparence of the wall.
+entities.XaphanHelper/CustomFakeWall.attributes.description.playTransitionReveal=If true, play the secret revealed sound if the player enter this fake wall during a screen transition.
+entities.XaphanHelper/CustomFakeWall.attributes.description.group=All Custom Fake Walls with the same group number will disapear once the player is inside one of them.
+entities.XaphanHelper/CustomFakeWall.attributes.description.flag=If this flag is set, the wall will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/CustomFakeWall.attributes.description.flagTiletype=Change the visual apparence of the wall if the flag is set.
 
 # CustomTorch
 entities.XaphanHelper/CustomTorch.placements.name.CustomTorch=Custom Torch
@@ -216,9 +234,11 @@ entities.XaphanHelper/EtherealBlock.attributes.description.tiletype=Change the v
 # FlagBlock
 entities.XaphanHelper/FlagBlock.placements.name.FlagBlock=Flag Block
 entities.XaphanHelper/FlagBlock.attributes.description.tiletype=Change the visual apparence of the block.
-entities.XaphanHelper/FlagBlock.attributes.description.mode=Block: The break block will not try to merge with nearby solid tiles.\nWall: The break block will try to merge with nearby solid tiles.
-entities.XaphanHelper/FlagBlock.attributes.description.flags=If any of these flags are set, the block will not appear, or will break if it already appeared. Flags must be separated by a comma (,).
+entities.XaphanHelper/FlagBlock.attributes.description.mode=Block: The flag block will not try to merge with nearby solid tiles.\nWall: The flag block will try to merge with nearby solid tiles.
+entities.XaphanHelper/FlagBlock.attributes.description.removeFlags=If any of these flags are set, the block will not appear, or will break if it already appeared. Flags must be separated by a comma (,).
 entities.XaphanHelper/FlagBlock.attributes.description.permanent=If true, the block will not reapear if the player die or re-enter the room.
+entities.XaphanHelper/FlagBlock.attributes.description.flag=If this flag is set, the block will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/FlagBlock.attributes.description.flagTiletype=Change the visual apparence of the block if the flag is set.
 
 # FlagDashSwitch
 entities.XaphanHelper/FlagDashSwitch.placements.name.FlagDashSwitch=Flag Dash Switch
@@ -402,12 +422,6 @@ entities.XaphanHelper/LaserEmitter.attributes.description.directory=The director
 entities.XaphanHelper/LaserEmitter.attributes.description.inverted=If true, the flag must not be set for the laser to be active. (No effect if flag is empty)
 entities.XaphanHelper/LaserEmitter.attributes.description.base=If true, add a base to the laser emitter.
 entities.XaphanHelper/LaserEmitter.attributes.description.noBeam=If true, this laser emitter will not shoot any laser.
-
-# LinkedFakeWall
-entities.XaphanHelper/LinkedFakeWall.placements.name.LinkedFakeWall=Linked Fake Wall
-entities.XaphanHelper/LinkedFakeWall.attributes.description.mode=Block: The fake wall will not try to merge with nearby solid tiles.\nWall: The fake wall will try to merge with nearby solid tiles.
-entities.XaphanHelper/LinkedFakeWall.attributes.description.tiletype=Change the visual apparence of the wall.
-entities.XaphanHelper/LinkedFakeWall.attributes.description.playTransitionReveal=If true, play the secret revealed sound if the player enter this fake wall during a screen transition.
 
 # Liquid
 entities.XaphanHelper/Liquid.placements.name.Liquid=Liquid

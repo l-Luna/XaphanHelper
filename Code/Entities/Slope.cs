@@ -20,7 +20,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string Directory;
 
+        public string FlagDirectory;
+
         public string Texture;
+
+        public string FlagTexture;
 
         public bool Gentle;
 
@@ -50,7 +54,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool VisualOnly;
 
-        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, bool canSlide, string directory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, bool visualOnly = false) : base(position + offset)
+        public string Flag;
+
+        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool visualOnly = false) : base(position + offset)
         {
             Tag = Tags.TransitionUpdate;
             Gentle = gentle;
@@ -60,14 +66,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             TilesTop = tilesTop;
             TilesBottom = tilesBottom;
             Texture = texture;
+            FlagTexture = flagTexture;
             CanSlide = canSlide;
             Directory = directory;
+            FlagDirectory = flagDirectory;
             UpsideDown = upsideDown;
             NoRender = noRender;
             StickyDash = stickyDash;
             Rainbow = rainbow;
             CanJumpThrough = canJumpThrough;
             VisualOnly = visualOnly;
+            Flag = flag;
             if (SlopeHeight < 1)
             {
                 SlopeHeight = 1;
@@ -80,7 +89,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Directory = "objects/XaphanHelper/Slope";
             }
-            MTexture mtexture = GFX.Game[Directory + "/" + Texture];
+            if (string.IsNullOrEmpty(FlagDirectory))
+            {
+                FlagDirectory = "objects/XaphanHelper/Slope";
+            }
+            Depth = -10000;
+        }
+
+        public Slope(EntityData data, Vector2 offset) : this(data.Position, offset, data.Bool("gentle"), data.Attr("side"), data.Int("soundIndex"), data.Int("slopeHeight", 1), data.Attr("tilesTop"), data.Attr("tilesBottom"),
+            data.Attr("texture", "cement"), data.Attr("flagTexture", ""), data.Bool("canSlide", false), data.Attr("customDirectory", ""), data.Attr("flagCustomDirectory", ""), data.Bool("upsideDown", false), data.Bool("noRender", false), data.Bool("stickyDash", false), data.Bool("rainbow", false),
+            data.Bool("canJumpThrough", false), data.Attr("flag", ""))
+        {
+            
+        }
+
+        public override void Added(Scene scene)
+        {
+            base.Added(scene);
+            MTexture mtexture = GFX.Game[((!string.IsNullOrEmpty(Flag) && SceneAs<Level>().Session.GetFlag(Flag)) ? FlagDirectory : Directory) + "/" + ((!string.IsNullOrEmpty(Flag) && SceneAs<Level>().Session.GetFlag(Flag)) ? FlagTexture : Texture)];
             BaseTextures = new MTexture[6, 15];
             for (int i = 0; i < 6; i++)
             {
@@ -131,18 +157,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 variationInner[m] = Variation;
             }
-            Depth = -10000;
-        }
-
-        public Slope(EntityData data, Vector2 offset) : this(data.Position, offset, data.Bool("gentle"), data.Attr("side"), data.Int("soundIndex"), data.Int("slopeHeight", 1), data.Attr("tilesTop"), data.Attr("tilesBottom"),
-            data.Attr("texture", "cement"), data.Bool("canSlide", false), data.Attr("customDirectory", ""), data.Bool("upsideDown", false), data.Bool("noRender", false), data.Bool("stickyDash", false), data.Bool("rainbow", false), data.Bool("canJumpThrough", false))
-        {
-            
-        }
-
-        public override void Added(Scene scene)
-        {
-            base.Added(scene);
             if (!VisualOnly)
             {
                 if (!UpsideDown)

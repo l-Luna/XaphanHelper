@@ -4,13 +4,22 @@ local FlagBlock = {}
 
 FlagBlock.name = "XaphanHelper/FlagBlock"
 FlagBlock.depth = -13000
-local fieldInformation = {
-    mode = {
-        options = {"Block", "Wall"},
-        editable = false
+function FlagBlock.fieldInformation(entity)
+    return {
+        tiletype = {
+            options = fakeTilesHelper.getTilesOptions(),
+            editable = false
+        },
+        flagTiletype = {
+            options = fakeTilesHelper.getTilesOptions(),
+            editable = false
+        },
+        mode = {
+            options = {"Block", "Wall"},
+            editable = false
+        }
     }
-}
-FlagBlock.fieldInformation = fakeTilesHelper.addTileFieldInformation(fieldInformation, "tiletype")
+end
 FlagBlock.placements = {
     name = "FlagBlock",
     data = {
@@ -18,7 +27,9 @@ FlagBlock.placements = {
         height = 8,
         mode = "Block",
         tiletype = "3",
-        flags = "",
+        flagTiletype = "3",
+        flag = "",
+        removeFlags = "",
         permanent = true
     }
 }
