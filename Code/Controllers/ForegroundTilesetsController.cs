@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Data;
-using Celeste.Mod.XaphanHelper.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
     [Tracked(true)]
-    [CustomEntity("XaphanHelper/TilesetsController")]
-    class TilesetsController : Entity
+    [CustomEntity("XaphanHelper/ForegroundTilesetsController")]
+    class ForegroundTilesetsController : Entity
     {
-        public static List<TilesetsControllerData> TilesetsControllerData = new();
+        public static List<ForegroundTilesetsControllerData> TilesetsControllerData = new();
 
         private char oldTileset1;
 
@@ -62,7 +59,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private string flag;
 
-        public TilesetsController(Vector2 position, Vector2 offset, char oldTileset1, char newTileset1, char oldTileset2, char newTileset2, char oldTileset3, char newTileset3, char oldTileset4, char newTileset4, char oldTileset5, char newTileset5, char oldTileset6, char newTileset6, char oldTileset7, char newTileset7, char oldTileset8, char newTileset8, char oldTileset9, char newTileset9, char oldTileset10, char newTileset10, string flag) : base(position + offset)
+        public ForegroundTilesetsController(Vector2 position, Vector2 offset, char oldTileset1, char newTileset1, char oldTileset2, char newTileset2, char oldTileset3, char newTileset3, char oldTileset4, char newTileset4, char oldTileset5, char newTileset5, char oldTileset6, char newTileset6, char oldTileset7, char newTileset7, char oldTileset8, char newTileset8, char oldTileset9, char newTileset9, char oldTileset10, char newTileset10, string flag) : base(position + offset)
         {
             Tag = Tags.TransitionUpdate | Tags.Persistent | Tags.Global;
             this.oldTileset1 = oldTileset1;
@@ -88,7 +85,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             this.flag = flag;
         }
 
-        public TilesetsController(EntityData data, Vector2 offset) : this(data.Position, offset, data.Char("oldTileset1", '0'), data.Char("newTileset1", '0'), data.Char("oldTileset2", '0'), data.Char("newTileset2", '0'),
+        public ForegroundTilesetsController(EntityData data, Vector2 offset) : this(data.Position, offset, data.Char("oldTileset1", '0'), data.Char("newTileset1", '0'), data.Char("oldTileset2", '0'), data.Char("newTileset2", '0'),
             data.Char("oldTileset3", '0'), data.Char("newTileset3", '0'), data.Char("oldTileset4", '0'), data.Char("newTileset4", '0'), data.Char("oldTileset5", '0'), data.Char("newTileset5", '0'),
             data.Char("oldTileset6", '0'), data.Char("newTileset6", '0'), data.Char("oldTileset7", '0'), data.Char("newTileset7", '0'), data.Char("oldTileset8", '0'), data.Char("newTileset8", '0'),
             data.Char("oldTileset9", '0'), data.Char("newTileset9", '0'), data.Char("oldTileset10", '0'), data.Char("newTileset10", '0'), data.Attr("flag"))
@@ -99,7 +96,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (SceneAs<Level>().Tracker.GetEntities<TilesetsController>().Count > 1)
+            if (SceneAs<Level>().Tracker.GetEntities<ForegroundTilesetsController>().Count > 1)
             {
                 RemoveSelf();
             }
@@ -167,13 +164,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             {
                 getData(self.Session);
             }
-            if (self.Tracker.GetEntities<TilesetsController>().Count == 0 && TilesetsControllerData.Count != 0)
+            if (self.Tracker.GetEntities<ForegroundTilesetsController>().Count == 0 && TilesetsControllerData.Count != 0)
             {
-                foreach (TilesetsControllerData data in TilesetsControllerData)
+                foreach (ForegroundTilesetsControllerData data in TilesetsControllerData)
                 {
                     if (data.Prefix == self.Session.Area.LevelSet && data.ChapterIndex == self.Session.Area.ChapterIndex)
                     {
-                        self.Add(new TilesetsController(Vector2.Zero, Vector2.Zero, data.OldTileset1, data.NewTileset1, data.OldTileset2, data.NewTileset2, data.OldTileset3, data.NewTileset3, data.OldTileset4, data.NewTileset4, data.OldTileset5, data.NewTileset5, data.OldTileset6, data.NewTileset6, data.OldTileset7, data.NewTileset7, data.OldTileset8, data.NewTileset8, data.OldTileset9, data.NewTileset9, data.OldTileset10, data.NewTileset10, data.Flag));
+                        self.Add(new ForegroundTilesetsController(Vector2.Zero, Vector2.Zero, data.OldTileset1, data.NewTileset1, data.OldTileset2, data.NewTileset2, data.OldTileset3, data.NewTileset3, data.OldTileset4, data.NewTileset4, data.OldTileset5, data.NewTileset5, data.OldTileset6, data.NewTileset6, data.OldTileset7, data.NewTileset7, data.OldTileset8, data.NewTileset8, data.OldTileset9, data.NewTileset9, data.OldTileset10, data.NewTileset10, data.Flag));
                     }
                 }
             }
@@ -188,9 +185,9 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 {
                     foreach (EntityData entity in levelData.Entities)
                     {
-                        if (entity.Name == "XaphanHelper/TilesetsController")
+                        if (entity.Name == "XaphanHelper/ForegroundTilesetsController")
                         {
-                            TilesetsControllerData.Add(new TilesetsControllerData(session.Area.LevelSet, session.Area.ChapterIndex == - 1 ? 0 : session.Area.ChapterIndex,
+                            TilesetsControllerData.Add(new ForegroundTilesetsControllerData(session.Area.LevelSet, session.Area.ChapterIndex == - 1 ? 0 : session.Area.ChapterIndex,
                                 entity.Char("oldTileset1"), entity.Char("newTileset1"), entity.Char("oldTileset2"), entity.Char("newTileset2"), entity.Char("oldTileset3"), entity.Char("newTileset3"),
                                 entity.Char("oldTileset4"), entity.Char("newTileset4"), entity.Char("oldTileset5"), entity.Char("newTileset5"), entity.Char("oldTileset6"), entity.Char("newTileset6"),
                                 entity.Char("oldTileset7"), entity.Char("newTileset7"), entity.Char("oldTileset8"), entity.Char("newTileset8"), entity.Char("oldTileset9"), entity.Char("newTileset9"),

@@ -587,7 +587,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Load();
             Binocular.Load();
             EtherealBlock.Load();
-            TilesetsController.Load();
+            ForegroundTilesetsController.Load();
             UI_Elements.StaminaDisplay.Load();
         }
 
@@ -664,7 +664,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Unload();
             Binocular.Unload();
             EtherealBlock.Unload();
-            TilesetsController.Unload();
+            ForegroundTilesetsController.Unload();
             UI_Elements.StaminaDisplay.Unload();
         }
 

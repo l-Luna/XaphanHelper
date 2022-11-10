@@ -1,6 +1,6 @@
 ﻿namespace Celeste.Mod.XaphanHelper.Data
 {
-    public class TilesetsControllerData
+    public class ForegroundTilesetsControllerData
     {
         public string Prefix;
 
@@ -48,7 +48,7 @@
 
         public string Flag;
 
-        public TilesetsControllerData(string prefix, int chapterIndex, char oldTileset1, char newTileset1, char oldTileset2, char newTileset2, char oldTileset3, char newTileset3, char oldTileset4, char newTileset4, char oldTileset5, char newTileset5, char oldTileset6, char newTileset6, char oldTileset7, char newTileset7, char oldTileset8, char newTileset8, char oldTileset9, char newTileset9, char oldTileset10, char newTileset10, string flag)
+        public ForegroundTilesetsControllerData(string prefix, int chapterIndex, char oldTileset1, char newTileset1, char oldTileset2, char newTileset2, char oldTileset3, char newTileset3, char oldTileset4, char newTileset4, char oldTileset5, char newTileset5, char oldTileset6, char newTileset6, char oldTileset7, char newTileset7, char oldTileset8, char newTileset8, char oldTileset9, char newTileset9, char oldTileset10, char newTileset10, string flag)
         {
             Prefix = prefix;
             ChapterIndex = chapterIndex;
