@@ -16,6 +16,8 @@ entities.XaphanHelper/BreakBlock.attributes.description.type=Detemine what will 
 entities.XaphanHelper/BreakBlock.attributes.description.color=Hexadecimal code of the tint color of the indicators. FFFFFF (white) means no color.
 entities.XaphanHelper/BreakBlock.attributes.description.startRevealed=If true, the indicators will be visible without the player needing to dash into the block first.
 entities.XaphanHelper/BreakBlock.attributes.description.directory=The directory from which the sprites are taken for the indicators, relative to Atlases/Gameplay/.
+entities.XaphanHelper/BreakBlock.attributes.description.flag=If this flag is set, the block will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/BreakBlock.attributes.description.flagTiletype=Change the visual apparence of the block if the flag is set.
 
 # BubbleDoor
 entities.XaphanHelper/BubbleDoor.placements.name.BubbleDoor=Bubble Door
@@ -137,6 +139,15 @@ entities.XaphanHelper/CustomCoverupWall.placements.name.CustomCoverupWall=Custom
 entities.XaphanHelper/CustomCoverupWall.attributes.description.tiletype=Change the visual apparence of the wall.
 entities.XaphanHelper/CustomCoverupWall.attributes.description.flag=If this flag is set, the wall will use the tileset set in Flag Tiletype when entering the room.
 entities.XaphanHelper/CustomCoverupWall.attributes.description.flagTiletype=Change the visual apparence of the wall if the flag is set.
+
+# CustomDashBlock
+entities.XaphanHelper/CustomDashBlock.placements.name.CustomDashBlock=Custom Dash Block
+entities.XaphanHelper/CustomDashBlock.attributes.description.canDash=Whether the player can break the block by dashing into it.
+entities.XaphanHelper/CustomDashBlock.attributes.description.blendIn=Blends the block with the walls it touches, making it less apparent.
+entities.XaphanHelper/CustomDashBlock.attributes.description.permanent=Once broken, the block will remain that way, even if the player dies.
+entities.XaphanHelper/CustomDashBlock.attributes.description.tiletype=Change the visual apparence of the block.
+entities.XaphanHelper/CustomDashBlock.attributes.description.flag=If this flag is set, the block will use the tileset set in Flag Tiletype when entering the room.
+entities.XaphanHelper/CustomDashBlock.attributes.description.flagTiletype=Change the visual apparence of the block if the flag is set.
 
 #CustomEndScreenController
 entities.XaphanHelper/CustomEndScreenController.placements.name.CustomEndScreenController=Custom End Screen Controller
@@ -475,6 +486,7 @@ entities.XaphanHelper/Slope.attributes.description.noRender=If true, the slope w
 entities.XaphanHelper/Slope.attributes.description.stickyDash=If true, the player will stick to the slope while dashing away from it.
 entities.XaphanHelper/Slope.attributes.description.rainbow=If true, the slope will have a rainbow effect. (No effect if No Render is true)
 entities.XaphanHelper/Slope.attributes.description.canJumpThrough=If true, the player can jump through the slope.
+
 
 # TeleportStrawberry
 entities.XaphanHelper/TeleportStrawberry.placements.name.TeleportStrawberry=Teleport Strawberry
