@@ -310,6 +310,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     blocker.RemoveSelf();
                 }
             }
+            foreach (PlayerPlatform platform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
+            {
+                platform.Active = false;
+            }
             if (direction == "Down")
             {
                 player.DummyGravity = false;
@@ -340,6 +344,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = 5000;
             isInPipe = false;
             SceneAs<Level>().Session.RespawnPoint = SceneAs<Level>().GetSpawnPoint(Position);
+            foreach (PlayerPlatform platform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
+            {
+                platform.Active = true;
+            }
             player.StateMachine.State = 0;
             stop = false;
             Add(new Coroutine(WaitForClose()));
