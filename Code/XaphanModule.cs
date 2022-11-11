@@ -20,6 +20,7 @@ using Celeste.Mod.Meta;
 using System.Xml;
 using On.Celeste;
 using System.ComponentModel.Design;
+using Celeste.Mod.XaphanHelper.Hooks;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -86,8 +87,6 @@ namespace Celeste.Mod.XaphanHelper
         private string MergeChaptersControllerLevelSet;
 
         private string lastLevelSet;
-
-        public static Dictionary<string, Autotiler.Generated> TilesetsControllerGeneratedLevelsTiles = new();
 
         public static bool CanOpenMap(Level level)
         {
@@ -585,7 +584,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Load();
             Binocular.Load();
             EtherealBlock.Load();
-            ForegroundTilesetsController.Load();
+            TilesetsSwap.Load();
             UI_Elements.StaminaDisplay.Load();
         }
 
@@ -662,7 +661,7 @@ namespace Celeste.Mod.XaphanHelper
             CustomEndScreenController.Unload();
             Binocular.Unload();
             EtherealBlock.Unload();
-            ForegroundTilesetsController.Unload();
+            TilesetsSwap.Unload();
             UI_Elements.StaminaDisplay.Unload();
         }
 
