@@ -265,7 +265,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            SceneAs<Level>().PauseLock = true;
+            if (!Settings.UseBagItemSlot.Check)
+            {
+                RemoveSelf();
+            }
+            else
+            {
+                SceneAs<Level>().PauseLock = true;
+            }
         }
 
         public override void Removed(Scene scene)

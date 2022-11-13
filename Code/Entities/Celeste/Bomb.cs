@@ -208,7 +208,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            Add(new Coroutine(Explode(false)));
+            if (!Settings.UseBagItemSlot.Check)
+            {
+                RemoveSelf();
+            }
+            else
+            {
+                Add(new Coroutine(Explode(false)));
+            }
         }
 
         public override void Update()
