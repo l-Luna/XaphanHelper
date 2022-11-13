@@ -2,12 +2,17 @@
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
     class RemoteDrone : Upgrade
     {
+        Coroutine UseDroneCoroutine;
+
+        public static bool isActive;
+
         public override int GetDefaultValue()
         {
             return 0;
@@ -38,8 +43,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             return Settings.RemoteDrone && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
-        public static bool isActive;
-
         private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
         {
             orig(self);
@@ -56,7 +59,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive && !XaphanModule.PlayerIsControllingRemoteDrone() && !GravityJacket.determineIfInWater())
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -64,11 +67,27 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                             int totalDrones = self.Tracker.CountEntities<Drone>();
                             if (bagDisplay.currentSelection == 3 && totalDrones == 0)
                             {
-                                self.Add(new Drone(player.Position, player));
+                                UseDroneCoroutine = new Coroutine(UseDrone(player, self));
                             }
                         }
                     }
+                    if (UseDroneCoroutine != null)
+                    {
+                        UseDroneCoroutine.Update();
+                    }
                 }
+            }
+        }
+
+        private IEnumerator UseDrone(Player player, Level level)
+        {
+            while (player.Speed != Vector2.Zero && Settings.UseBagItemSlot.Check)
+            {
+                yield return null;
+            }
+            if (player.Speed == Vector2.Zero && Settings.UseBagItemSlot.Check && !player.Dead)
+            {
+                level.Add(new Drone(player.Position, player));
             }
         }
     }

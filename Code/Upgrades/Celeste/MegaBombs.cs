@@ -63,7 +63,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive)
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -86,13 +86,21 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private IEnumerator UseBomb(Player player, Level level)
         {
-            cooldown = true;
-            level.Add(new MegaBomb(player.Position, player));
-            while (delay > 0f)
+            while (player.Speed != Vector2.Zero && Settings.UseBagItemSlot.Check)
             {
-                delay -= Engine.DeltaTime;
                 yield return null;
             }
+            if (player.Speed == Vector2.Zero && Settings.UseBagItemSlot.Check && !player.Dead)
+            {
+                cooldown = true;
+                level.Add(new MegaBomb(player.Position, player));
+                while (delay > 0f)
+                {
+                    delay -= Engine.DeltaTime;
+                    yield return null;
+                }
+            }
+            delay = 0f;
             cooldown = false;
         }
     }
