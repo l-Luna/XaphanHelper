@@ -12,6 +12,8 @@ Version 1.0.49 :
 - Multiple Lasers Detectors in the same room affecting the same flag will now set the flag to true if at least one of them detect a laser
 - Slightly increased Bombs explosion radius
 - Decreased Mega Bombs explosion radius
+- Bombs, Mega Bombs and Remote Drone abilities will now be used when the player land on the ground if the "Use Bag Item Slot" button is hold while the player is not on the ground yet
+- Warps registered in the player Save data that no longer exist are now automatically removed from the player Save data
 - Bombs and Mega Bombs are now correctly affected by the momentum of moving solids entities
 - The player can no longer grab a Magnetic Ceiling while they are dashing
 - Fixed Loenn plugin for Drone Switchs side attribute having a "Bottom" option instead of "Down", preventing placing switches on the ceiling
