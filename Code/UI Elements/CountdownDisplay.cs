@@ -49,11 +49,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public Vector2 SpawnPosition;
 
+        private bool WasTickingBeforeTransition;
+
+        private Coroutine WaitForSpawnRoutine = new();
+
         NormalText Timetext;
 
         public CountdownDisplay(StartCountdownTrigger timer, bool saveTimer, Vector2 spawnPosition, bool immediate = false)
         {
-            Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate);
+            Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate);
             SpawnPosition = spawnPosition;
             ChapterTimerAtStart = -1;
             startFlag = timer.startFlag;
@@ -69,7 +73,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public CountdownDisplay(float time, bool shake, bool explode, bool saveTimer, int startingChapter, string startingRoom, Vector2 spawnPositrion, string activeFlag)
         {
-            Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate);
+            Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate);
             SpawnPosition = spawnPositrion;
             ChapterTimerAtStart = -1;
             this.activeFlag = activeFlag;
@@ -129,9 +133,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator DisplayExplosions()
         {
             Explosing = true;
-            var randX = new Random();
+            var randX = Calc.Random;
             yield return 0.05f;
-            var randY = new Random();
+            var randY = Calc.Random;
             while (!SceneAs<Level>().Paused)
             {
                 TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(randX.Next(0, 320), randY.Next(0, 184)));
@@ -150,12 +154,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 465), Color.Gold, 1f, 0.7f)
+            if (Timetext == null)
             {
-                Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate),
-                Depth = 10000
-            };
-            SceneAs<Level>().Add(Timetext);
+                Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 465), Color.Gold, 1f, 0.7f)
+                {
+                    Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate),
+                    Depth = 10000
+                };
+                SceneAs<Level>().Add(Timetext);
+            }
         }
 
         public override void Removed(Scene scene)
@@ -170,6 +177,29 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
+            Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+            if (player == null)
+            {
+                StopTimer(true, true);
+            }
+            else
+            {
+                if (player.StateMachine.State == Player.StIntroRespawn && !WaitForSpawnRoutine.Active)
+                {
+                    Add(WaitForSpawnRoutine = new Coroutine(SpawnTimerRestartRoutine(player)));
+                    return;
+                }
+            }
+            if (SceneAs<Level>().Transitioning)
+            {
+                WasTickingBeforeTransition = IsPaused;
+                StopTimer(true, true);
+            }
+            else if (WasTickingBeforeTransition)
+            {
+                WasTickingBeforeTransition = false;
+                StopTimer(false, true);
+            }
             if (Shake && !Shaking)
             {
                 Add(new Coroutine(ShakeLevel()));
@@ -178,7 +208,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 Add(new Coroutine(DisplayExplosions()));
             }
-            Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
             if ((!playerHasMoved && player != null && player.Speed != Vector2.Zero) || FromOtherChapter || Immediate)
             {
                 playerHasMoved = true;
@@ -210,6 +239,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Add(new Coroutine(KillPlayer(player)));
                 }
             }
+        }
+
+        private IEnumerator SpawnTimerRestartRoutine(Player player)
+        {
+            while (player.StateMachine.State == Player.StIntroRespawn)
+            {
+                yield return null;
+            }
+            StopTimer(false, true);
         }
 
         public IEnumerator KillPlayer(Player player)

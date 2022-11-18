@@ -186,6 +186,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private void Interact(Player player)
         {
             talk.Enabled = false;
+            CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
+            if (timerDisplay != null)
+            {
+                timerDisplay.StopTimer(true, true);
+            }
             if (direction == "Left" || direction == "Right")
             {
                 Add(new Coroutine(InteractHorizontalRoutine()));
@@ -260,6 +265,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private IEnumerator HorizontalGetOutOfPipe(Player player)
         {
+            CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
+            if (timerDisplay != null)
+            {
+                timerDisplay.StopTimer(true, true);
+            }
             barrier.Collidable = false;
             stop = true;
             Depth = -9000;
@@ -290,6 +300,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = 5000;
             isInPipe = false;
             SceneAs<Level>().Session.RespawnPoint = SceneAs<Level>().GetSpawnPoint(Position);
+            if (timerDisplay != null)
+            {
+                timerDisplay.StopTimer(false, true);
+            }
             player.StateMachine.State = 0;
             stop = false;
             Add(new Coroutine(WaitForClose()));
@@ -297,6 +311,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private IEnumerator VerticalGetOutOfPipe(Player player)
         {
+            CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
+            if (timerDisplay != null)
+            {
+                timerDisplay.StopTimer(true, true);
+            }
             player.Facing = playerDirection == "Left" ? Facings.Left : Facings.Right;
             barrier.Collidable = false;
             stop = true;
@@ -344,6 +363,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = 5000;
             isInPipe = false;
             SceneAs<Level>().Session.RespawnPoint = SceneAs<Level>().GetSpawnPoint(Position);
+            if (timerDisplay != null)
+            {
+                timerDisplay.StopTimer(false, true);
+            }
             foreach (PlayerPlatform platform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
             {
                 platform.Active = true;

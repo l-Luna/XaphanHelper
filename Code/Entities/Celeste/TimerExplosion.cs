@@ -16,21 +16,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             explosionSprite.CenterOrigin();
             explosionSprite.Play("idle");
             explosionSprite.OnLastFrame = onLastFrame;
-            //Collider = new Hitbox(2f, 2f, -1f, -1f);
+            Collider = new Hitbox(2f, 2f, -1f, -1f);
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            var randChance = new Random();
+            var randChance = Calc.Random;
             if (randChance.Next(0, 101) <= 50)
             {
                 RemoveSelf();
             }
-            /*if (!CollideCheck<SolidTiles>())
+            if (!CollideCheck<SolidTiles>())
             {
                 RemoveSelf();
-            }*/
+            }
         }
 
         private void onLastFrame(string s)
