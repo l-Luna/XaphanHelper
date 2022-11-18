@@ -28,13 +28,17 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                             {
                                 if (mapData[x, y] != '0')
                                 {
-                                    if (mapData[x, y] == 'y')
+                                    if (mapData[x, y] == 'w')
                                     {
-                                        mapData[x, y] = 'Y';
+                                        mapData[x, y] = 'W';
                                     }
                                     else if (mapData[x, y] == 'x')
                                     {
                                         mapData[x, y] = 'X';
+                                    }
+                                    else if (mapData[x, y] == 'y')
+                                    {
+                                        mapData[x, y] = 'Y';
                                     }
                                 }
                             }
