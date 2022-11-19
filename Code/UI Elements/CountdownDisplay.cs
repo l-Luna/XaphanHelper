@@ -133,12 +133,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator DisplayExplosions()
         {
             Explosing = true;
-            var randX = Calc.Random;
+            Random rand = Calc.Random;
             yield return 0.05f;
-            var randY = Calc.Random;
             while (!SceneAs<Level>().Paused)
             {
-                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(randX.Next(0, 320), randY.Next(0, 184)));
+                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
                 SceneAs<Level>().Add(explosion);
                 yield return 0.05f;
             }
@@ -154,6 +153,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            foreach (CountdownDisplay display in SceneAs<Level>().Tracker.GetEntities<CountdownDisplay>())
+            {
+                if (display != this)
+                {
+                    display.RemoveSelf();
+                }
+            }   
             if (Timetext == null)
             {
                 Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 465), Color.Gold, 1f, 0.7f)

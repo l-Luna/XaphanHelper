@@ -4,6 +4,7 @@ using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
+    [Tracked(true)]
     class TimerExplosion : Entity
     {
         Sprite explosionSprite;
@@ -16,22 +17,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             explosionSprite.CenterOrigin();
             explosionSprite.Play("idle");
             explosionSprite.OnLastFrame = onLastFrame;
-            Collider = new Hitbox(2f, 2f, -1f, -1f);
+            Collider = new Circle(50f);
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            var randChance = Calc.Random;
-            if (randChance.Next(0, 101) <= 50)
-            {
-                RemoveSelf();
-            }
-            if (!CollideCheck<SolidTiles>())
+            if (CollideCheck<Player>() || CollideCheck<TimerExplosion>())
             {
                 RemoveSelf();
             }
         }
+
 
         private void onLastFrame(string s)
         {

@@ -144,12 +144,11 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private IEnumerator DisplayExplosions()
         {
-            var randX = new Random();
+            Random rand = Calc.Random;
             yield return 0.05f;
-            var randY = new Random();
             while (messageTimer > 0)
             {
-                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(randX.Next(0, 320), randY.Next(0, 184)));
+                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
                 SceneAs<Level>().Add(explosion);
                 yield return 0.05f;
             }
