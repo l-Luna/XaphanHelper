@@ -2191,6 +2191,11 @@ namespace Celeste.Mod.XaphanHelper
             ModSaveData.CountdownCurrentTime = -1;
             ModSaveData.CountdownShake = false;
             ModSaveData.CountdownExplode = false;
+            if (!string.IsNullOrEmpty(ModSaveData.CountdownActiveFlag) && ModSaveData.SavedSesionFlags.ContainsKey(session.Area.LevelSet))
+            {
+                ModSaveData.SavedSesionFlags[session.Area.LevelSet] = ModSaveData.SavedSesionFlags[session.Area.LevelSet].Replace(ModSaveData.CountdownActiveFlag + ",", "");
+                ModSaveData.SavedSesionFlags[session.Area.LevelSet] = ModSaveData.SavedSesionFlags[session.Area.LevelSet].Replace("," + ModSaveData.CountdownActiveFlag, "");
+            }
             ModSaveData.CountdownActiveFlag = "";
             ModSaveData.CountdownStartChapter = -1;
             ModSaveData.CountdownStartRoom = "";
@@ -2754,17 +2759,21 @@ namespace Celeste.Mod.XaphanHelper
                             ModSaveData.SavedChapter[self.Session.Area.LevelSet] = self.Session.Area.ChapterIndex;
                         }
                     }
-                    if (!ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet))
+                    if (string.IsNullOrEmpty(ModSaveData.CountdownStartRoom))
                     {
-                        ModSaveData.SavedRoom.Add(self.Session.Area.LevelSet, self.Session.Level);
-                    }
-                    else
-                    {
-                        if (ModSaveData.SavedRoom[self.Session.Area.LevelSet] != self.Session.Level)
+                        if (!ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet))
                         {
-                            ModSaveData.SavedRoom[self.Session.Area.LevelSet] = self.Session.Level;
+                            ModSaveData.SavedRoom.Add(self.Session.Area.LevelSet, self.Session.Level);
+                        }
+                        else
+                        {
+                            if (ModSaveData.SavedRoom[self.Session.Area.LevelSet] != self.Session.Level)
+                            {
+                                ModSaveData.SavedRoom[self.Session.Area.LevelSet] = self.Session.Level;
+                            }
                         }
                     }
+                    
                     if (self.Session.RespawnPoint == null)
                     {
                         self.Session.RespawnPoint = Vector2.Zero;

@@ -177,7 +177,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                     XaphanModule.ModSaveData.CountdownCurrentTime = timerDisplay.GetRemainingTime();
                     XaphanModule.ModSaveData.CountdownShake = timerDisplay.Shake;
                     XaphanModule.ModSaveData.CountdownExplode = timerDisplay.Explode;
-                    XaphanModule.ModSaveData.CountdownActiveFlag = timerDisplay.activeFlag;
                     if (XaphanModule.ModSaveData.CountdownStartChapter == -1)
                     {
                         XaphanModule.ModSaveData.CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;

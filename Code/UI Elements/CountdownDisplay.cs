@@ -55,6 +55,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         NormalText Timetext;
 
+        StartCountdownTrigger trigger;
+
         public CountdownDisplay(StartCountdownTrigger timer, bool saveTimer, Vector2 spawnPosition, bool immediate = false)
         {
             Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate);
@@ -68,6 +70,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             SaveTimer = saveTimer;
             CurrentTime = (long)timer.time * 10000000;
             Immediate = immediate;
+            trigger = timer;
             Depth = 1000000;
         }
 
@@ -153,6 +156,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            Logger.Log(LogLevel.Info, "xh", "added");
             foreach (CountdownDisplay display in SceneAs<Level>().Tracker.GetEntities<CountdownDisplay>())
             {
                 if (display != this)
@@ -174,69 +178,75 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Removed(Scene scene)
         {
             base.Removed(scene);
+            Logger.Log(LogLevel.Info, "xh", "removed");
             if (Timetext != null)
             {
                 Timetext.RemoveSelf();
             }
+            trigger.RemoveSelf();
         }
 
         public override void Update()
         {
             base.Update();
             Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
-            if (player == null)
+            if (!TimerRanOut)
             {
-                StopTimer(true, true);
-            }
-            else
-            {
-                if (player.StateMachine.State == Player.StIntroRespawn && !WaitForSpawnRoutine.Active)
+                if (player == null)
                 {
-                    Add(WaitForSpawnRoutine = new Coroutine(SpawnTimerRestartRoutine(player)));
-                    return;
+                    StopTimer(true, true);
                 }
-            }
-            if (SceneAs<Level>().Transitioning)
-            {
-                WasTickingBeforeTransition = IsPaused;
-                StopTimer(true, true);
-            }
-            else if (WasTickingBeforeTransition)
-            {
-                WasTickingBeforeTransition = false;
-                StopTimer(false, true);
-            }
-            if (Shake && !Shaking)
-            {
-                Add(new Coroutine(ShakeLevel()));
-            }
-            if (Explode && !Explosing)
-            {
-                Add(new Coroutine(DisplayExplosions()));
-            }
-            if ((!playerHasMoved && player != null && player.Speed != Vector2.Zero) || FromOtherChapter || Immediate)
-            {
-                playerHasMoved = true;
-                SceneAs<Level>().SaveQuitDisabled = true;
-                if (!string.IsNullOrEmpty(activeFlag))
+                else
                 {
-                    SceneAs<Level>().Session.SetFlag(activeFlag, true);
+                    if (player.StateMachine.State == Player.StIntroRespawn && !WaitForSpawnRoutine.Active)
+                    {
+                        Add(WaitForSpawnRoutine = new Coroutine(SpawnTimerRestartRoutine(player)));
+                        return;
+                    }
                 }
-            }
-            if ((string.IsNullOrEmpty(startFlag) ? true : SceneAs<Level>().Session.GetFlag(startFlag)) && ChapterTimerAtStart == -1 && playerHasMoved)
-            {
-                ChapterTimerAtStart = SceneAs<Level>().Session.Time;
-            }
-            if ((SceneAs<Level>().Paused && !IsPaused && !PauseTimer) || (PauseTimer && !IsPaused && !SceneAs<Level>().Paused))
-            {
-                PausedTimer = GetRemainingTime();
-                IsPaused = true;
-            }
-            if ((!SceneAs<Level>().Paused && IsPaused && !PauseTimer) || (!PauseTimer && IsPaused && !SceneAs<Level>().Paused))
-            {
-                CurrentTime = PausedTimer;
-                ChapterTimerAtStart = SceneAs<Level>().Session.Time;
-                IsPaused = false;
+                if (SceneAs<Level>().Transitioning)
+                {
+                    WasTickingBeforeTransition = IsPaused;
+                    StopTimer(true, true);
+                }
+                else if (WasTickingBeforeTransition)
+                {
+                    WasTickingBeforeTransition = false;
+                    StopTimer(false, true);
+                }
+                if (Shake && !Shaking)
+                {
+                    Add(new Coroutine(ShakeLevel()));
+                }
+                if (Explode && !Explosing)
+                {
+                    Add(new Coroutine(DisplayExplosions()));
+                }
+                if ((!playerHasMoved && player != null && player.Speed != Vector2.Zero) || FromOtherChapter || Immediate)
+                {
+                    playerHasMoved = true;
+                    SceneAs<Level>().SaveQuitDisabled = true;
+                    if (!string.IsNullOrEmpty(activeFlag))
+                    {
+                        SceneAs<Level>().Session.SetFlag(activeFlag, true);
+                        XaphanModule.ModSaveData.CountdownActiveFlag = activeFlag;
+                    }
+                }
+                if ((string.IsNullOrEmpty(startFlag) ? true : SceneAs<Level>().Session.GetFlag(startFlag)) && ChapterTimerAtStart == -1 && playerHasMoved)
+                {
+                    ChapterTimerAtStart = SceneAs<Level>().Session.Time;
+                }
+                if ((SceneAs<Level>().Paused && !IsPaused && !PauseTimer) || (PauseTimer && !IsPaused && !SceneAs<Level>().Paused))
+                {
+                    PausedTimer = GetRemainingTime();
+                    IsPaused = true;
+                }
+                if ((!SceneAs<Level>().Paused && IsPaused && !PauseTimer) || (!PauseTimer && IsPaused && !SceneAs<Level>().Paused))
+                {
+                    CurrentTime = PausedTimer;
+                    ChapterTimerAtStart = SceneAs<Level>().Session.Time;
+                    IsPaused = false;
+                }
             }
             if (GetRemainingTime() <= 0 && !TimerRanOut && !SceneAs<Level>().Paused && !PauseTimer)
             {
@@ -282,24 +292,17 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             if (!FromOtherChapter)
             {
                 Scene.Add(new TeleportCutscene(player, startRoom, SpawnPosition, 0, 0, true, 0f, "Fade", respawnAnim: true, useLevelWipe: true));
-                if (!string.IsNullOrEmpty(activeFlag))
-                {
-                    Level.Session.SetFlag(activeFlag, false);
-                }
                 RemoveSelf();
             }
             else
             {
                 Level.DoScreenWipe(false, () => ReturnToOrigChapter(Level));
             }
+            
         }
 
         private void ReturnToOrigChapter(Level level)
         {
-            if (!string.IsNullOrEmpty(activeFlag))
-            {
-                SceneAs<Level>().Session.SetFlag(activeFlag, false);
-            }
             AreaKey area = SceneAs<Level>().Session.Area;
             string Prefix = area.GetLevelSet();
             int currentChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;

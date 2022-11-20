@@ -78,6 +78,9 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         {
             base.Added(scene);
             startRoom = SceneAs<Level>().Session.Level;
+            SceneAs<Level>().Session.SetFlag("Countdown_" + eid.Key, false);
+            SceneAs<Level>().Session.SetFlag(activeFlag, false);
+            XaphanModule.ModSaveData.CountdownActiveFlag = "";
         }
 
         public override void Update()
@@ -156,7 +159,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private IEnumerator DisplayStartingText()
         {
-            SceneAs<Level>().Session.SetFlag("Countdown_" + eid.Key, true);
             SceneAs<Level>().Add(message = new IntroText(dialogID, "Middle", 340, Calc.HexToColor(MessageColor), 1.2f, true, true, fastMessageDisplay, false, true));
             message.Show = true;
             while (messageTimer > 2.5f)
