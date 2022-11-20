@@ -26,11 +26,14 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             }
             triggered = true;
             Session session = SceneAs<Level>().Session;
-            Level level = base.Scene as Level;
+            Level level = Scene as Level;
             switch (Event)
             {
                 case "Ch2 - Boss":
                     Scene.Add(new E02_Boss(player, level));
+                    break;
+                case "Ch5 - Escape End":
+                    Scene.Add(new E05_EscapeEnd(player, level));
                     break;
             }
         }

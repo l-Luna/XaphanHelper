@@ -21,6 +21,7 @@ using System.Xml;
 using On.Celeste;
 using System.ComponentModel.Design;
 using Celeste.Mod.XaphanHelper.Hooks;
+using IL.Celeste;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -550,6 +551,7 @@ namespace Celeste.Mod.XaphanHelper
             On.Celeste.OuiChapterPanel.Start += modOuiChapterPanelStart;
             On.Celeste.OuiChapterPanel.StartRoutine += modOuiChapterPanelStartRoutine;
             On.Celeste.Overworld.SetNormalMusic += modOverworldSetNormalMusic;
+            On.Celeste.Player.ctor += modPlayerCtor;
             On.Celeste.Player.CallDashEvents += modPlayerCallDashEvents;
             On.Celeste.Player.Render += onPlayerRender;
             On.Celeste.PlayerDeadBody.Render += onPlayerDeadBodyRender;
@@ -627,6 +629,7 @@ namespace Celeste.Mod.XaphanHelper
             On.Celeste.OuiChapterPanel.Start -= modOuiChapterPanelStart;
             On.Celeste.OuiChapterPanel.StartRoutine -= modOuiChapterPanelStartRoutine;
             On.Celeste.Overworld.SetNormalMusic -= modOverworldSetNormalMusic;
+            On.Celeste.Player.ctor -= modPlayerCtor;
             On.Celeste.Player.CallDashEvents -= modPlayerCallDashEvents;
             On.Celeste.Player.Render -= onPlayerRender;
             On.Celeste.PlayerDeadBody.Render -= onPlayerDeadBodyRender;
@@ -665,6 +668,63 @@ namespace Celeste.Mod.XaphanHelper
             UI_Elements.StaminaDisplay.Unload();
         }
 
+        // Custom States
+
+        private void modPlayerCtor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 position, PlayerSpriteMode spriteMode)
+        {
+            orig(self, position, spriteMode);
+            StateMachineExt.AddState(self.StateMachine, FastFallUpdate, FastLabFallCoroutine);
+        }
+
+        private int FastFallUpdate()
+        {
+            if (Engine.Scene is Level)
+            {
+                Player player = ((Level)Engine.Scene).Tracker.GetEntity<Player>();
+                player.Facing = Facings.Right;
+                if (!player.OnGround() && player.DummyGravity)
+                {
+                    player.Speed.Y = 320f;
+                }
+            }   
+            return 26;
+        }
+
+        private IEnumerator FastLabFallCoroutine()
+        {
+            if (Engine.Scene is Level)
+            {
+                Level level = (Level)Engine.Scene;
+                Player player = level.Tracker.GetEntity<Player>();
+                player.Sprite.Play("fallFast");
+                while (!player.OnGround())
+                {
+                    yield return null;
+                }
+                player.Play("event:/char/madeline/mirrortemple_big_landing");
+                if (player.Dashes <= 1)
+                {
+                    player.Sprite.Play("fallPose");
+                }
+                else
+                {
+                    player.Sprite.Play("idle");
+                }
+                player.Sprite.Scale.Y = 0.7f;
+                Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
+                level.DirectionalShake(new Vector2(0f, 1f), 0.5f);
+                player.Speed.X = 0f;
+                level.Particles.Emit(Player.P_SummitLandA, 12, player.BottomCenter, Vector2.UnitX * 3f, -(float)Math.PI / 2f);
+                level.Particles.Emit(Player.P_SummitLandB, 8, player.BottomCenter - Vector2.UnitX * 2f, Vector2.UnitX * 2f, 3.403392f);
+                level.Particles.Emit(Player.P_SummitLandB, 8, player.BottomCenter + Vector2.UnitX * 2f, Vector2.UnitX * 2f, -(float)Math.PI / 12f);
+                for (float p = 0f; p < 1f; p += Engine.DeltaTime)
+                {
+                    yield return null;
+                }
+                player.StateMachine.State = 0;
+            }
+        }
+
         private void onGameplayStatsRender(On.Celeste.GameplayStats.orig_Render orig, GameplayStats self)
         {
             AreaKey area = self.SceneAs<Level>().Session.Area;
@@ -674,6 +734,8 @@ namespace Celeste.Mod.XaphanHelper
                 orig(self);
             }
         }
+
+        // Custom Chapter Pannel
 
         private void modOuiChapterSelectIconUpdate(On.Celeste.OuiChapterSelectIcon.orig_Update orig, OuiChapterSelectIcon self)
         {
@@ -2852,9 +2914,16 @@ namespace Celeste.Mod.XaphanHelper
             if (!self.Session.GetFlag("XaphanHelper_Changed_Start_Room"))
             {
                 self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
-                if (self.Wipe != null && self.Session.StartedFromBeginning && ModSaveData.Wipe != "")
+
+                // Change level Wipe
+
+                if (!string.IsNullOrEmpty(ModSaveData.Wipe))
                 {
-                    self.Wipe.Cancel();
+                    if (self.Wipe != null && self.Tracker.GetEntities<WarpScreen>().Count == 0)
+                    {
+                        self.Wipe.Cancel();
+                        self.Add(GetWipe(self, true));
+                    }
                 }
                 if (Settings.SpeedrunMode) // Clear Speedrun Mode stuff
                 {
@@ -2862,12 +2931,12 @@ namespace Celeste.Mod.XaphanHelper
                     ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
                     ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 }
-                if (ModSaveData.DestinationRoom == "")
+                if (string.IsNullOrEmpty(ModSaveData.DestinationRoom))
                 {
                     if (self.Session.StartedFromBeginning)
-                    {
-                        ScreenWipe Wipe = null;
+                    {  
                         string currentRoom = self.Session.Level;
+                        ScreenWipe Wipe = null;
                         foreach (LevelData level in MapData.Levels)
                         {
                             if (level.Name == currentRoom)
@@ -2933,18 +3002,6 @@ namespace Celeste.Mod.XaphanHelper
                     }
                     self.Add(new TeleportCutscene(player, destinationRoom, spawn, 0, 0, true, 0f, wipe, wipeDuration, fromElevator, true, useLevelWipe: ModSaveData.CountdownUseLevelWipe));
                     ModSaveData.CountdownUseLevelWipe = false;
-                }
-            }
-
-            // Change level Wipe
-
-            if (ModSaveData.Wipe != "")
-            {
-                if (self.Wipe != null && self.Tracker.GetEntities<WarpScreen>().Count == 0)
-                {
-                    self.Wipe.Cancel();
-                    self.Add(GetWipe(self, true));
-                    ModSaveData.Wipe = "";
                 }
             }
 
