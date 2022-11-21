@@ -12,7 +12,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
 
         public LaserDetectorManager()
         {
-
+            Tag = Tags.TransitionUpdate;
         }
 
         public override void Added(Scene scene)
@@ -35,7 +35,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
                     }
                     else
                     {
-                        int totalActive = 0;
+                        bool atLeastOneActive = false;
                         foreach (LaserDetector detector2 in SceneAs<Level>().Tracker.GetEntities<LaserDetector>())
                         {
                             if (detector2.flag == detector.flag)
@@ -43,12 +43,12 @@ namespace Celeste.Mod.XaphanHelper.Managers
                                 if (detector2.isActive)
                                 {
                                     SceneAs<Level>().Session.SetFlag(detector.flag, true);
-                                    totalActive++;
+                                    atLeastOneActive = true;
                                     break;
                                 }
                             }
                         }
-                        if (totalActive == 0)
+                        if (!atLeastOneActive)
                         {
                             SceneAs<Level>().Session.SetFlag(detector.flag, false);
                         }
