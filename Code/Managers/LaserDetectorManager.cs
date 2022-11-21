@@ -35,20 +35,20 @@ namespace Celeste.Mod.XaphanHelper.Managers
                     }
                     else
                     {
-                        bool atLeastOneActive = false;
+                        int totalActive = 0;
                         foreach (LaserDetector detector2 in SceneAs<Level>().Tracker.GetEntities<LaserDetector>())
                         {
-                            if (detector2 != detector && detector2.flag == detector.flag)
+                            if (detector2.flag == detector.flag)
                             {
                                 if (detector2.isActive)
                                 {
                                     SceneAs<Level>().Session.SetFlag(detector.flag, true);
-                                    atLeastOneActive = true;
+                                    totalActive++;
                                     break;
                                 }
                             }
                         }
-                        if (!atLeastOneActive)
+                        if (totalActive == 0)
                         {
                             SceneAs<Level>().Session.SetFlag(detector.flag, false);
                         }
