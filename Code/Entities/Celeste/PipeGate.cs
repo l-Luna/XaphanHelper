@@ -268,6 +268,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
             if (timerDisplay != null)
             {
+                timerDisplay.CurrentTime += 340000;
                 timerDisplay.StopTimer(true, true);
             }
             barrier.Collidable = false;
@@ -314,6 +315,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             CountdownDisplay timerDisplay = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
             if (timerDisplay != null)
             {
+                timerDisplay.CurrentTime += 340000;
                 timerDisplay.StopTimer(true, true);
             }
             player.Facing = playerDirection == "Left" ? Facings.Left : Facings.Right;

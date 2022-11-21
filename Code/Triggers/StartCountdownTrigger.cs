@@ -137,23 +137,29 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private IEnumerator ShakeLevel()
         {
-            while (messageTimer > 0)
+            if (display != null)
             {
-                SceneAs<Level>().DirectionalShake(new Vector2(0.5f, 0), 0.05f);
-                Input.Rumble(RumbleStrength.Light, RumbleLength.Short);
-                yield return 0.05f;
+                while (true)
+                {
+                    SceneAs<Level>().DirectionalShake(new Vector2(0.5f, 0), 0.05f);
+                    Input.Rumble(RumbleStrength.Light, RumbleLength.Short);
+                    yield return 0.05f;
+                }
             }
         }
 
         private IEnumerator DisplayExplosions()
         {
-            Random rand = Calc.Random;
-            yield return 0.05f;
-            while (messageTimer > 0)
+            if (display != null)
             {
-                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
-                SceneAs<Level>().Add(explosion);
+                Random rand = Calc.Random;
                 yield return 0.05f;
+                while (true)
+                {
+                    TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
+                    SceneAs<Level>().Add(explosion);
+                    yield return 0.05f;
+                }
             }
         }
 
