@@ -323,17 +323,21 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             if (Input.MenuLeft.Pressed && currentMenu > 0) {
                 lobbyWiggle?.Start();
                 Audio.Play(SFX.ui_world_journal_page_main_back);
-                Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
+                /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu--;
                     InitializeScreen();
-                })));
+                })));*/
+                currentMenu--;
+                InitializeScreen();
             } else if (Input.MenuRight.Pressed && currentMenu < warpsPerArea.Count - 1) {
                 lobbyWiggle?.Start();
                 Audio.Play(SFX.ui_world_journal_page_main_forward);
-                Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
+                /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu++;
                     InitializeScreen();
-                })));
+                })));*/
+                currentMenu++;
+                InitializeScreen();
             } else {
                 if (mapDisplay != null) {
                     if (mapDisplay.currentRoom != SelectedWarp.Room) {
