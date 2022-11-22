@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.XaphanHelper.Entities;
+﻿using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Entities;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Managers
@@ -10,9 +11,32 @@ namespace Celeste.Mod.XaphanHelper.Managers
 
         private int chapterIndex;
 
+        public List<LaserDetector> activeDetectors = new();
+
+        public List<LaserDetector> inactiveDetectors = new();
+
+        public List<string> activeFlags = new();
+
+        private List<string> inactiveFlags = new();
+
         public LaserDetectorManager()
         {
             Tag = Tags.TransitionUpdate;
+        }
+
+        public static void Load()
+        {
+            Everest.Events.Level.OnLoadLevel += modOnLevelLoad;
+        }
+
+        public static void Unload()
+        {
+            Everest.Events.Level.OnLoadLevel -= modOnLevelLoad;
+        }
+
+        private static void modOnLevelLoad(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
+        {
+            level.Add(new LaserDetectorManager());
         }
 
         public override void Added(Scene scene)
@@ -22,37 +46,34 @@ namespace Celeste.Mod.XaphanHelper.Managers
             chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
         }
 
+        public void GetDetectorsFlags()
+        {            activeFlags.Clear();
+            inactiveFlags.Clear();
+            foreach (LaserDetector activeDetector in activeDetectors)
+            {
+                activeFlags.Add(activeDetector.flag);
+            }
+            foreach (LaserDetector inactiveDetector in inactiveDetectors)
+            {
+                inactiveFlags.Add(inactiveDetector.flag);
+            }
+        }
+
         public override void Update()
         {
             base.Update();
-            foreach (LaserDetector detector in SceneAs<Level>().Tracker.GetEntities<LaserDetector>())
+            foreach (string flag in activeFlags)
             {
-                if (!string.IsNullOrEmpty(detector.flag) && !XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + detector.flag))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                 {
-                    if (detector.isActive)
-                    {
-                        SceneAs<Level>().Session.SetFlag(detector.flag, true);
-                    }
-                    else
-                    {
-                        bool atLeastOneActive = false;
-                        foreach (LaserDetector detector2 in SceneAs<Level>().Tracker.GetEntities<LaserDetector>())
-                        {
-                            if (detector2.flag == detector.flag)
-                            {
-                                if (detector2.isActive)
-                                {
-                                    SceneAs<Level>().Session.SetFlag(detector.flag, true);
-                                    atLeastOneActive = true;
-                                    break;
-                                }
+                    SceneAs<Level>().Session.SetFlag(flag, true);
+                }
                             }
-                        }
-                        if (!atLeastOneActive)
-                        {
-                            SceneAs<Level>().Session.SetFlag(detector.flag, false);
-                        }
-                    }
+            foreach (string flag in inactiveFlags)
+            {
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)  && !activeFlags.Contains(flag))
+                {
+                    SceneAs<Level>().Session.SetFlag(flag, false);
                 }
             }
         }

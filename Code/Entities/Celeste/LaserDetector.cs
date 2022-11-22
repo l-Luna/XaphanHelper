@@ -24,8 +24,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string flag;
 
-        public bool isActive;
-
         public LaserDetector(EntityData data, Vector2 offset) : base(data.Position + offset, 8, 8, safe: true)
         {
             Tag = Tags.TransitionUpdate;
@@ -70,33 +68,48 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = -9998;
         }
 
-        public override void Added(Scene scene)
-        {
-            base.Added(scene);
-            if (SceneAs<Level>().Tracker.GetEntities<LaserDetectorManager>().Count == 0)
-            {
-                SceneAs<Level>().Add(new LaserDetectorManager());
-            }
-        }
+        public bool shouldActive;
+
+        public bool active;
 
         public override void Update()
         {
             base.Update();
             if (!string.IsNullOrEmpty(flag))
             {
-                foreach (LaserBeam beam in SceneAs<Level>().Tracker.GetEntities<LaserBeam>())
+                LaserDetectorManager manager = SceneAs<Level>().Tracker.GetEntity<LaserDetectorManager>();
+                if (manager != null)
                 {
-                    if ((sides.Contains("Left") && beam.Top > Top + 2 && beam.Bottom < Bottom - 2 && beam.Right < Right && beam.Right > Left) || (sides.Contains("Right") && beam.Top > Top + 2 && beam.Bottom < Bottom - 2 && beam.Left > Left && beam.Left < Right) || (sides.Contains("Top") && beam.Left > Left + 2 && beam.Right < Right - 2 && beam.Bottom < Bottom && beam.Bottom > Top) || (sides.Contains("Bottom") && beam.Left > Left + 2 && beam.Right < Right - 2 && beam.Top > Top && beam.Top < Bottom))
+                    foreach (LaserBeam beam in SceneAs<Level>().Tracker.GetEntities<LaserBeam>())
                     {
-                        //SceneAs<Level>().Session.SetFlag(flag, true);
-                        isActive = true;
-                        baseSprite.Play("baseActive");
-                        return;
+                        if ((sides.Contains("Left") && beam.Top > Top + 2 && beam.Bottom < Bottom - 2 && beam.Right < Right && beam.Right > Left) || (sides.Contains("Right") && beam.Top > Top + 2 && beam.Bottom < Bottom - 2 && beam.Left > Left && beam.Left < Right) || (sides.Contains("Top") && beam.Left > Left + 2 && beam.Right < Right - 2 && beam.Bottom < Bottom && beam.Bottom > Top) || (sides.Contains("Bottom") && beam.Left > Left + 2 && beam.Right < Right - 2 && beam.Top > Top && beam.Top < Bottom))
+                        {
+                            if (!manager.activeDetectors.Contains(this))
+                            {
+                                manager.activeDetectors.Add(this);
+                                
+                            }
+                            if (manager.inactiveDetectors.Contains(this))
+                            {
+                                manager.inactiveDetectors.Remove(this);
+                            }
+                            manager.GetDetectorsFlags();
+                            baseSprite.Play("baseActive");
+                            return;
+                        }
                     }
+                    if (!manager.inactiveDetectors.Contains(this))
+                    {
+                        manager.inactiveDetectors.Add(this);
+
+                    }
+                    if (manager.activeDetectors.Contains(this))
+                    {
+                        manager.activeDetectors.Remove(this);
+                    }
+                    manager.GetDetectorsFlags();
+                    baseSprite.Play("baseInactive");
                 }
-                //SceneAs<Level>().Session.SetFlag(flag, false);
-                isActive = false;
-                baseSprite.Play("baseInactive");
             }
         }
     }

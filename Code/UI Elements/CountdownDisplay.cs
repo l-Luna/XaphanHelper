@@ -156,7 +156,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            Logger.Log(LogLevel.Info, "xh", "added");
             foreach (CountdownDisplay display in SceneAs<Level>().Tracker.GetEntities<CountdownDisplay>())
             {
                 if (display != this)
@@ -178,7 +177,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Removed(Scene scene)
         {
             base.Removed(scene);
-            Logger.Log(LogLevel.Info, "xh", "removed");
             if (Timetext != null)
             {
                 Timetext.RemoveSelf();
