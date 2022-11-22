@@ -9,7 +9,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 {
     class RemoteDrone : Upgrade
     {
-        Coroutine UseDroneCoroutine;
+        Coroutine UseDroneCoroutine = new Coroutine();
 
         public static bool isActive;
 
@@ -59,7 +59,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive && !XaphanModule.PlayerIsControllingRemoteDrone() && !GravityJacket.determineIfInWater())
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Check && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseDroneCoroutine.Active)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -81,13 +81,19 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private IEnumerator UseDrone(Player player, Level level)
         {
-            while (player.Speed != Vector2.Zero && Settings.UseBagItemSlot.Check)
+            bool usedDrone = false;
+            while (Settings.UseBagItemSlot.Check && !usedDrone)
             {
+                while (player.Speed != Vector2.Zero)
+                {
+                    yield return null;
+                }
+                if (player.OnGround() && !player.Dead && !player.DashAttacking && player.StateMachine.State != Player.StClimb)
+                {
+                    level.Add(new Drone(player.Position, player));
+                    usedDrone = true;
+                }
                 yield return null;
-            }
-            if (player.Speed == Vector2.Zero && Settings.UseBagItemSlot.Check && !player.Dead)
-            {
-                level.Add(new Drone(player.Position, player));
             }
         }
     }

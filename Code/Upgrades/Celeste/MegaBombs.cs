@@ -13,7 +13,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         bool cooldown;
 
-        Coroutine UseBombCoroutine;
+        Coroutine UseBombCoroutine = new Coroutine();
 
         public static bool isActive;
 
@@ -63,7 +63,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive)
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Check && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseBombCoroutine.Active)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -71,7 +71,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                             int totalBombs = self.Tracker.CountEntities<MegaBomb>();
                             if (bagDisplay.currentSelection == 2 && delay <= 0f && totalBombs == 0)
                             {
-                                delay = 0.5f;
+                                delay = 0.3f;
                                 UseBombCoroutine = new Coroutine(UseBomb(player, self));
                             }
                         }
@@ -86,19 +86,25 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private IEnumerator UseBomb(Player player, Level level)
         {
-            while (player.Speed != Vector2.Zero && Settings.UseBagItemSlot.Check)
+            bool usedBomb = false;
+            while (Settings.UseBagItemSlot.Check && !usedBomb)
             {
-                yield return null;
-            }
-            if (player.Speed == Vector2.Zero && Settings.UseBagItemSlot.Check && !player.Dead)
-            {
-                cooldown = true;
-                level.Add(new MegaBomb(player.Position, player));
-                while (delay > 0f)
+                while (player.Speed != Vector2.Zero)
                 {
-                    delay -= Engine.DeltaTime;
                     yield return null;
                 }
+                if (player.OnGround() && !player.Dead && !player.DashAttacking && player.StateMachine.State != Player.StClimb)
+                {
+                    cooldown = true;
+                    level.Add(new MegaBomb(player.Position, player));
+                    usedBomb = true;
+                    while (delay > 0f)
+                    {
+                        delay -= Engine.DeltaTime;
+                        yield return null;
+                    }
+                }
+                yield return null;
             }
             delay = 0f;
             cooldown = false;
