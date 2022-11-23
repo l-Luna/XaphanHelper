@@ -11,7 +11,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
-using On.Celeste;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -111,6 +110,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool canSwim;
 
+        private bool upsideDown;
+
         private DisplacementRenderHook Displacement;
 
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
@@ -138,6 +139,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             customSurfaceHeight = data.Int("surfaceHeight", 0);
             visualOnly = data.Bool("visualOnly", false);
             canSwim = data.Bool("canSwim", false);
+            upsideDown = data.Bool("upsideDown", false);
             FinalPos = Position - new Vector2(0, riseDistance);
             if (delay == 0)
             {
@@ -228,6 +230,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             waterSplashOut.AddLoop("splash", "splash", 0.04f);
             liquidSprite.Color = waterSplashIn .Color = waterSplashOut.Color = Calc.HexToColor(color) * transparency;
             Add(pc = new PlayerCollider(OnCollide));
+            if (upsideDown)
+            {
+                liquidSprite.FlipY = true;
+            }
         }
 
         public static void Load()
@@ -864,46 +870,93 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     waterSplashOut.Render();
                 }
             }
-            for (int i = 0; i < Width / liquidSprite.Width; i++)
+            if (upsideDown)
             {
-                liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, -8f);
-                if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height <= Height)
+                for (int i = 0; i < Width / liquidSprite.Width; i++)
                 {
-                    liquidSprite.Render();
-                }
-                else if ((i + 1) * liquidSprite.Width > Width && liquidSprite.Height <= Height)
-                {
-                    liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height));
-                }
-                else if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height > Height)
-                {
-                    liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width, (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
-                }
-                else
-                {
-                    liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
-                }
-            }
-            for (int i = 0; i < Width / liquidSprite.Width; i++)
-            {
-                for (int j = 0; j < (Height + 8 - liquidSprite.Height) / (liquidSprite.Height - surfaceHeight); j++)
-                {
-                    liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight));
-                    if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) <= (Height + 8 - liquidSprite.Height))
+                    liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, Height - liquidSprite.Height + 8);
+                    if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height <= Height)
                     {
-                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width, (int)liquidSprite.Height - surfaceHeight));
+                        liquidSprite.Render();
                     }
-                    else if ((i + 1) * liquidSprite.Width > Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) <= (Height + 8 - liquidSprite.Height))
+                    else if ((i + 1) * liquidSprite.Width > Width && liquidSprite.Height <= Height)
                     {
-                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - surfaceHeight));
+                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height));
                     }
-                    else if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) > (Height + 8 - liquidSprite.Height))
+                    else if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height > Height)
                     {
-                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width, (int)(liquidSprite.Height - surfaceHeight) - ((int)(liquidSprite.Height - surfaceHeight + j * (liquidSprite.Height - surfaceHeight)) - (int)(Height + 8 - liquidSprite.Height))));
+                        liquidSprite.DrawSubrect(new Vector2(0, liquidSprite.Height - Height - 8), new Rectangle(0, 0, (int)liquidSprite.Width, (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
                     }
                     else
                     {
-                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)(liquidSprite.Height - surfaceHeight) - ((int)(liquidSprite.Height - surfaceHeight + j * (liquidSprite.Height - surfaceHeight)) - (int)(Height + 8 - liquidSprite.Height))));
+                        liquidSprite.DrawSubrect(new Vector2(0, liquidSprite.Height - Height - 8), new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
+                    }
+                }
+
+
+                int totalLines = (int)(liquidSprite.Height - surfaceHeight) / 8;
+                int Variation;
+
+                for (int i = 0; i < Width / liquidSprite.Width; i++)
+                {
+                    for (int j = 0; j < (Height + 8 - liquidSprite.Height) / 8; j++)
+                    {
+                        liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, (Height + 8 - liquidSprite.Height) - j * 8 - 8);
+                        Math.DivRem(j, totalLines, out Variation);
+                        if ((i + 1) * liquidSprite.Width <= Width)
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight + 8 * Variation, (int)liquidSprite.Width, 8));
+                        }
+                        else
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight + 8 * Variation, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), 8));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Width / liquidSprite.Width; i++)
+                {
+                    liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, -8f);
+                    if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height <= Height)
+                    {
+                        liquidSprite.Render();
+                    }
+                    else if ((i + 1) * liquidSprite.Width > Width && liquidSprite.Height <= Height)
+                    {
+                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height));
+                    }
+                    else if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height > Height)
+                    {
+                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width, (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
+                    }
+                    else
+                    {
+                        liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
+                    }
+                }
+                for (int i = 0; i < Width / liquidSprite.Width; i++)
+                {
+                    for (int j = 0; j < (Height + 8 - liquidSprite.Height) / (liquidSprite.Height - surfaceHeight); j++)
+                    {
+                        liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight));
+                        if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) <= (Height + 8 - liquidSprite.Height))
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width, (int)liquidSprite.Height - surfaceHeight));
+                        }
+                        else if ((i + 1) * liquidSprite.Width > Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) <= (Height + 8 - liquidSprite.Height))
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - surfaceHeight));
+                        }
+                        else if ((i + 1) * liquidSprite.Width <= Width && liquidSprite.Height - 8 + j * (liquidSprite.Height - surfaceHeight) > (Height + 8 - liquidSprite.Height))
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width, (int)(liquidSprite.Height - surfaceHeight) - ((int)(liquidSprite.Height - surfaceHeight + j * (liquidSprite.Height - surfaceHeight)) - (int)(Height + 8 - liquidSprite.Height))));
+                        }
+                        else
+                        {
+                            liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)(liquidSprite.Height - surfaceHeight) - ((int)(liquidSprite.Height - surfaceHeight + j * (liquidSprite.Height - surfaceHeight)) - (int)(Height + 8 - liquidSprite.Height))));
+                        }
                     }
                 }
             }

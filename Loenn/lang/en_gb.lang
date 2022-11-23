@@ -454,6 +454,7 @@ entities.XaphanHelper/Liquid.attributes.description.surfaceHeight=Number of tile
 entities.XaphanHelper/Liquid.attributes.description.visualOnly=If true, the liquid will have no effect on the player physics nor will be able to kill them.
 entities.XaphanHelper/Liquid.attributes.description.canSwim=If true, the player will be able to swim in the liquid just like vanilla water.
 entities.XaphanHelper/Liquid.attributes.description.removeFlags=If any of these flags are set, the liquid will not appear. Flags must be separated by a comma (,).
+entities.XaphanHelper/Liquid.attributes.description.upsideDown=If true, the liquid will render upside down.
 
 # MagneticCeiling
 entities.XaphanHelper/MagneticCeiling.placements.name.MagneticCeiling=Magnetic Ceiling

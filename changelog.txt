@@ -3,9 +3,10 @@ Version 1.0.49 :
 - Added Flag Block
 - Added Custom Coverup Wall
 - Added Custom Dash Block
+- Renamed Linked Fake Walls to Custom Fake Walls
 - Added "Remove Flags" attribute to Liquids
 - Added "Mode", "Flag" and "Flag Tiletype" attributes to Custom Exit Blocks
-- Renamed Linked Fake Walls to Custom Fake Walls
+- Added "Upside Down" attribute to Liquids
 - Added "Group", "Flag" and "Flag Tiletype" attributes to Custom Fake Walls
 - Added "Flag", "Flag Custom Directory" and "Flag texture' to Slopes
 - Reduced fire rate of the Remote Drone
