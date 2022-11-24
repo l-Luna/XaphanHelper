@@ -7,7 +7,7 @@ using System.Collections;
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
-    public class LaserBeam : MovableEntity
+    public class LaserBeam : Entity
     {
         public LaserEmitter Emitter;
 
