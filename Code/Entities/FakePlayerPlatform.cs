@@ -43,86 +43,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Side = side;
             UpsideDown = upsideDown;
             Collidable = false;
-            Collider = new Hitbox(width, 4, Gentle ? (Side == "Left" ? 4 : -12) : (Side == "Left" ? 4 : -4), UpsideDown ? 4 : 8);
+            Collider = new Hitbox(width, 4, Gentle ? (Side == "Left" ? 0 : -8) : 0, UpsideDown ? 4 : 8);
             SurfaceSoundIndex = soundIndex;
             SlopeHeight = slopeHeight;
             platfromWidth = width;
             slopeTop = top;
             StickyDash = stickyDash;
             CanJumpThrough = canJumpThrough;
-        }
-
-        public static void Load()
-        {
-            On.Celeste.Solid.MoveVExact += OnSolidMoveVExact;
-        }
-
-        public static void Unload()
-        {
-            On.Celeste.Solid.MoveVExact -= OnSolidMoveVExact;
-        }
-
-        private static void OnSolidMoveVExact(On.Celeste.Solid.orig_MoveVExact orig, Solid self, int move)
-        {
-            if (self.GetType() == typeof(FakePlayerPlatform))
-            {
-                FakePlayerPlatform platform = (FakePlayerPlatform)self;
-                FakePlayer player = self.Scene.Tracker.GetEntity<FakePlayer>();
-                if (!platform.UpsideDown)
-                {
-                    if (player != null)
-                    {
-                        if (move < 0)
-                        {
-                            if (player.IsRiding(self))
-                            {
-                                self.Collidable = false;
-                                if (player.TreatNaive)
-                                {
-                                    player.NaiveMove(Vector2.UnitY * move);
-                                }
-                                else
-                                {
-                                    player.MoveVExact(move);
-                                }
-                                self.Collidable = true;
-                            }
-                            else if (!player.TreatNaive && self.CollideCheck(player, self.Position + Vector2.UnitY * move) && !self.CollideCheck(player))
-                            {
-                                self.Collidable = false;
-                                player.MoveVExact((int)(self.Top + move - player.Bottom));
-                                self.Collidable = true;
-                            }
-                        }
-                        else
-                        {
-                            if ((player.IsRiding(self) && (platform.StickyDash || player.StateMachine.State != 2)))
-                            {
-                                self.Collidable = false;
-                                if (player.TreatNaive)
-                                {
-                                    player.NaiveMove(Vector2.UnitY * move);
-                                }
-                                else
-                                {
-                                    player.MoveVExact(move);
-                                }
-                                self.Collidable = true;
-                            }
-                        }
-                    }
-                    self.Y += move;
-                    self.MoveStaticMovers(Vector2.UnitY * move);
-                }
-                else
-                {
-                    orig(self, move);
-                }
-            }
-            else
-            {
-                orig(self, move);
-            }
         }
 
         public override void Added(Scene scene)
@@ -170,7 +97,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X < Right + 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? 0 : 4) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
                                 Add(new Coroutine(MoveSlope(player)));
                             }
                         }
@@ -178,7 +105,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X > Left - 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? 0 : 4) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
                                 Add(new Coroutine(MoveSlope(player)));
                             }
                         }
@@ -197,7 +124,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X < Right && player.BottomCenter.X > Left && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? 0 : 4) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
                                 Add(new Coroutine(MoveSlope(player)));
                             }
                         }
@@ -205,7 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X > Left && player.BottomCenter.X < Right && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? 0 : 4) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
                                 Add(new Coroutine(MoveSlope(player)));
                             }
                         }

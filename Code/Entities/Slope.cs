@@ -177,10 +177,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 4f + i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
                         }
-                        /*if (TilesBottom != "Horizontal")
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }*/
                     }
                     else
                     {
@@ -198,10 +194,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 4f + j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
                         }
-                        /*if (TilesBottom != "Horizontal")
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), SlopeHeight * 8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }*/
                     }
                 }
                 else
@@ -222,10 +214,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 8f - i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
                         }
-                        /*if (TilesBottom != "Horizontal")
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? SlopeHeight * 16 : SlopeHeight * 8, 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }*/
                     }
                     else
                     {
@@ -243,15 +231,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, 8f - j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
                             SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 8f - j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
                         }
-                        /*if (TilesBottom != "Horizontal")
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - SlopeHeight * 16 : 16f - SlopeHeight * 8), 8 + SlopeHeight * -8), 8, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }*/
                     }
                 }
                 SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
-                SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
-                //SceneAs<Level>().Add(new PlayerBlocker(new Vector2(Side == "Right" ? Left + 20f : Left, UpsideDown ? Top + 12f : Top), 4f, 4f, false, SoundIndex, UpsideDown, true));
+                if (!UpsideDown)
+                {
+                    SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
+                }
+
             }
         }
 
