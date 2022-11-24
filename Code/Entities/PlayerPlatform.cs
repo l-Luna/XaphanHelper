@@ -262,7 +262,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                             if (player.BottomCenter.X < Right + 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
                                 Add(new Coroutine(MoveSlope()));
                             }
                         }
@@ -290,7 +290,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                             if (player.BottomCenter.X > Left - 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
                                 Add(new Coroutine(MoveSlope()));
                             }
                         }
@@ -317,7 +317,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X < Right && player.BottomCenter.X > Left && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
                                 Add(new Coroutine(MoveSlope()));
                             }
                         }
@@ -325,7 +325,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (player.BottomCenter.X > Left && player.BottomCenter.X < Right && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
                                 Add(new Coroutine(MoveSlope()));
                             }
                         }
