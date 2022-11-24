@@ -322,7 +322,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
 
             if (Input.MenuLeft.Pressed && currentMenu > 0) {
                 lobbyWiggle?.Start();
-                Audio.Play(SFX.ui_world_journal_page_main_back);
+                Audio.Play("event:/ui/main/rollover_down");
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu--;
                     InitializeScreen();
@@ -331,7 +331,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
                 InitializeScreen();
             } else if (Input.MenuRight.Pressed && currentMenu < warpsPerArea.Count - 1) {
                 lobbyWiggle?.Start();
-                Audio.Play(SFX.ui_world_journal_page_main_forward);
+                Audio.Play("event:/ui/main/rollover_up");
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu++;
                     InitializeScreen();
