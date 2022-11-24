@@ -233,6 +233,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (upsideDown)
             {
                 liquidSprite.FlipY = true;
+                waterSplashIn.FlipY = true;
+                waterSplashOut.FlipY = true;
             }
         }
 
@@ -776,17 +778,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (player != null && player.Left < Right && player.Right > Left)
                 {
-                    if (player.Bottom >= Top - 1f && player.Bottom <= Top + 1f && player.Speed.Y > 0 && !waterIn)
+                    if ((upsideDown ? (player.Top <= Bottom + 1f && player.Top >= Bottom - 1f && player.Speed.Y < 0) : (player.Bottom >= Top - 1f && player.Bottom <= Top + 1f && player.Speed.Y > 0)) && !waterIn)
                     {
                         waterIn = true;
-                        waterSplashIn.RenderPosition = new Vector2(player.Position.X - 12f, Top - 21f);
+                        waterSplashIn.RenderPosition = new Vector2(player.Position.X - 12f, (upsideDown ? Bottom - 20f : Top - 21f));
                         waterSplashIn.Play("splash", restart: true);
                         waterSplashIn.OnLastFrame = onLastFrameIn;
                     }
-                    if (player.Bottom >= Top - 1f && player.Bottom <= Top + 1f && player.Speed.Y < 0 && !waterOut)
+                    if ((upsideDown ? (player.Top <= Bottom + 1f && player.Top >= Bottom - 1f && player.Speed.Y > 0) : (player.Bottom >= Top - 1f && player.Bottom <= Top + 1f && player.Speed.Y < 0)) && !waterOut)
                     {
                         waterOut = true;
-                        waterSplashOut.RenderPosition = new Vector2(player.Position.X - 12f, Top - 21f);
+                        waterSplashOut.RenderPosition = new Vector2(player.Position.X - 12f, (upsideDown ? Bottom - 20f : Top - 21f));
                         waterSplashOut.Play("splash", restart: true);
                         waterSplashOut.OnLastFrame = onLastFrameOut;
                     }
@@ -892,17 +894,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         liquidSprite.DrawSubrect(new Vector2(0, liquidSprite.Height - Height - 8), new Rectangle(0, 0, (int)liquidSprite.Width - ((i + 1) * (int)liquidSprite.Width - (int)Width), (int)liquidSprite.Height - ((int)liquidSprite.Height - (int)Height - 8)));
                     }
                 }
-
-
                 int totalLines = (int)(liquidSprite.Height - surfaceHeight) / 8;
-                int Variation;
-
                 for (int i = 0; i < Width / liquidSprite.Width; i++)
                 {
                     for (int j = 0; j < (Height + 8 - liquidSprite.Height) / 8; j++)
                     {
                         liquidSprite.RenderPosition = Position + new Vector2(i * liquidSprite.Width, (Height + 8 - liquidSprite.Height) - j * 8 - 8);
-                        Math.DivRem(j, totalLines, out Variation);
+                        Math.DivRem(j, totalLines, out int Variation);
                         if ((i + 1) * liquidSprite.Width <= Width)
                         {
                             liquidSprite.DrawSubrect(Vector2.Zero, new Rectangle(0, surfaceHeight + 8 * Variation, (int)liquidSprite.Width, 8));
