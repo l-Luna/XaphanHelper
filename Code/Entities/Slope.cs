@@ -3,14 +3,28 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
     [CustomEntity("XaphanHelper/Slope")]
-    class Slope : Entity
+    class Slope : Solid
     {
-        protected static XaphanModuleSettings Settings => XaphanModule.Settings;
+        public class LightOccludeBlock : Entity
+        {
+            public LightOccludeBlock(Vector2 position, float width, float height) : base(position)
+            {
+                Collider = new Hitbox(width, height);
+                Add(new LightOcclude());
+                Depth = -10000;
+            }
+
+            public override void DebugRender(Camera camera)
+            {
+
+            }
+        }
 
         public string Side;
 
@@ -56,9 +70,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string Flag;
 
-        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool visualOnly = false) : base(position + offset)
+        public ColliderList colliderList;
+
+        private List<LightOccludeBlock> lightOccludeBlocks = new List<LightOccludeBlock>();
+
+
+        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool visualOnly = false) : base(position + offset, 0, 0, true)
         {
+            
             Tag = Tags.TransitionUpdate;
+            Collidable = false;
             Gentle = gentle;
             Side = side;
             SoundIndex = soundIndex;
@@ -77,6 +98,127 @@ namespace Celeste.Mod.XaphanHelper.Entities
             CanJumpThrough = canJumpThrough;
             VisualOnly = visualOnly;
             Flag = flag;
+            if (!VisualOnly)
+            {
+                if (!upsideDown)
+                {
+                    if (side == "Left")
+                    {
+                        colliderList = new ColliderList(new Hitbox(4, 1, 0, 0));
+                        lightOccludeBlocks.Add(new LightOccludeBlock(Position, 8, 1));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 0)
+                            {
+                                colliderList.Add(new Hitbox(4, 1, (Gentle ? i * 16 : i * 8), i * 8));
+                                lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), i * 8), 8, 1));
+                            }
+                            colliderList.Add(new Hitbox(Gentle ? 6 : 5, 1, (Gentle ? i * 16 : i * 8), 1 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 8 : 6, 1, (Gentle ? i * 16 : i * 8), 2 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 10 : 7, 1, (Gentle ? i * 16 : i * 8), 3 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 12 : 8, 1, (Gentle ? i * 16 : i * 8), 4 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 14 : 9, 1, (Gentle ? i * 16 : i * 8), 5 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 16 : 10, 1, (Gentle ? i * 16 : i * 8), 6 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 18 : 11, 1, (Gentle ? i * 16 : i * 8), 7 + i * 8));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 1 + i * 8), 4 + (Gentle ? 6 : 5), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 2 + i * 8), 4 + (Gentle ? 8 : 6), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 3 + i * 8), 4 + (Gentle ? 10 : 7), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 4 + i * 8), 4 + (Gentle ? 12 : 8), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 5 + i * 8), 4 + (Gentle ? 14 : 9), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 6 + i * 8), 4 + (Gentle ? 16 : 10), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + i * 8), 4 + (Gentle ? 18 : 11), 1));
+                        }
+                        Collider = colliderList;
+                    }
+                    else
+                    {
+                        colliderList = new ColliderList(new Hitbox(4, 1, 20, 0));
+                        lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2(16, 0), 8, 1));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 0)
+                            {
+                                colliderList.Add(new Hitbox(4, 1, 20 + (Gentle ? i * -16 : i * -8), i * 8));
+                                lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2(16 + (Gentle ? i * -16 : i * -8), i * 8), 8, 1));
+                            }
+                            colliderList.Add(new Hitbox(Gentle ? 6 : 5, 1, (Gentle ? 18f - i * 16 : 19f - i * 8), 1 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 8 : 6, 1, (Gentle ? 16f - i * 16 : 18f - i * 8), 2 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 10 : 7, 1, (Gentle ? 14f - i * 16 : 17f - i * 8), 3 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 12 : 8, 1, (Gentle ? 12f - i * 16 : 16f - i * 8), 4 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 14 : 9, 1, (Gentle ? 10f - i * 16 : 15f - i * 8), 5 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 16 : 10, 1, (Gentle ? 8f - i * 16 : 14f - i * 8), 6 + i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 18 : 11, 1, (Gentle ? 6f - i * 16 : 13f - i * 8), 7 + i * 8));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 14f - i * 16 : 15f - i * 8), 1 + i * 8), 4 + (Gentle ? 6 : 5), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 12f - i * 16 : 14f - i * 8), 2 + i * 8), 4 + (Gentle ? 8 : 6), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 10f - i * 16 : 13f - i * 8), 3 + i * 8), 4 + (Gentle ? 10 : 7), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 8f - i * 16 : 12f - i * 8), 4 + i * 8), 4 + (Gentle ? 12 : 8), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 6f - i * 16 : 11f - i * 8), 5 + i * 8), 4 + (Gentle ? 14 : 9), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 4f - i * 16 : 10f - i * 8), 6 + i * 8), 4 + (Gentle ? 16 : 10), 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 2f - i * 16 : 9f - i * 8), 7 + i * 8), 4 + (Gentle ? 18 : 11), 1));
+                        }
+                        Collider = colliderList;
+                    }
+                }
+                else
+                {
+                    if (side == "Left")
+                    {
+                        colliderList = new ColliderList(new Hitbox(8, 1, 0, 15));
+                        lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2(0, 15), 8, 1));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 0)
+                            {
+                                colliderList.Add(new Hitbox(8, 1, (Gentle ? i * 16 : i * 8), 15 + i * -8));
+                                lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 15 + i * -8), 8, 1));
+                            }
+                            colliderList.Add(new Hitbox(Gentle ? 10 : 9, 1, (Gentle ? i * 16 : i * 8), 7 + 7 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 12 : 10, 1, (Gentle ? i * 16 : i * 8), 7 + 6 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 14 : 11, 1, (Gentle ? i * 16 : i * 8), 7 + 5 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 16 : 12, 1, (Gentle ? i * 16 : i * 8), 7 + 4 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 18 : 13, 1, (Gentle ? i * 16 : i * 8), 7 + 3 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 20 : 14, 1, (Gentle ? i * 16 : i * 8), 7 + 2 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 22 : 15, 1, (Gentle ? i * 16 : i * 8), 7 + 1 - i * 8));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 7 - i * 8), Gentle ? 10 : 9, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 6 - i * 8), Gentle ? 12 : 10, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 5 - i * 8), Gentle ? 14 : 11, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 4 - i * 8), Gentle ? 16 : 12, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 3 - i * 8), Gentle ? 18 : 13, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 2 - i * 8), Gentle ? 20 : 14, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? i * 16 : i * 8), 7 + 1 - i * 8), Gentle ? 22 : 15, 1));
+                        }
+                        Collider = colliderList;
+                    }
+                    else
+                    {
+                        colliderList = new ColliderList(new Hitbox(8, 1, 16, 15));
+                        lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2(16, 15), 8, 1));
+                        for (int i = 0; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 0)
+                            {
+                                colliderList.Add(new Hitbox(8, 1, 16 + (Gentle ? i * -16 : i * -8), 15 + i * -8));
+                                lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2(16 + (Gentle ? i * -16 : i * -8), 15 + i * -8), 8, 1));
+                            }
+                            colliderList.Add(new Hitbox(Gentle ? 10 : 9, 1, (Gentle ? 14f - i * 16 : 15f - i * 8), 7 + 7 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 12 : 10, 1, (Gentle ? 12f - i * 16 : 14f - i * 8), 7 + 6 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 14 : 11, 1, (Gentle ? 10f - i * 16 : 13f - i * 8), 7 + 5 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 16 : 12, 1, (Gentle ? 8f - i * 16 : 12f - i * 8), 7 + 4 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 18 : 13, 1, (Gentle ? 6f - i * 16 : 11f - i * 8), 7 + 3 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 20 : 14, 1, (Gentle ? 4f - i * 16 : 10f - i * 8), 7 + 2 - i * 8));
+                            colliderList.Add(new Hitbox(Gentle ? 22 : 15, 1, (Gentle ? 2f - i * 16 : 9f - i * 8), 7 + 1 - i * 8));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 14f - i * 16 : 15f - i * 8), 7 + 7 - i * 8), Gentle ? 10 : 9, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 12f - i * 16 : 14f - i * 8), 7 + 6 - i * 8), Gentle ? 12 : 10, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 10f - i * 16 : 13f - i * 8), 7 + 5 - i * 8), Gentle ? 14 : 11, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 8f - i * 16 : 12f - i * 8), 7 + 4 - i * 8), Gentle ? 16 : 12, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 6f - i * 16 : 11f - i * 8), 7 + 3 - i * 8), Gentle ? 18 : 13, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 4f - i * 16 : 10f - i * 8), 7 + 2 - i * 8), Gentle ? 20 : 14, 1));
+                            lightOccludeBlocks.Add(new LightOccludeBlock(Position + new Vector2((Gentle ? 2f - i * 16 : 9f - i * 8), 7 + 1 - i * 8), Gentle ? 22 : 15, 1));
+                        }
+                        Collider = colliderList;
+                    }
+                }
+            }
             if (SlopeHeight < 1)
             {
                 SlopeHeight = 1;
@@ -103,9 +245,161 @@ namespace Celeste.Mod.XaphanHelper.Entities
             
         }
 
+        public static void Load()
+        {
+            On.Celeste.Actor.MoveH += onActorMoveH;
+            On.Celeste.TheoCrystal.Update += TheoCrystalOnUpdate;
+            On.Celeste.TheoCrystal.OnCollideH += TheoCrystalOnOnCollideH;
+            On.Celeste.Glider.Update += GliderOnUpdate;
+            On.Celeste.Glider.OnCollideH += GliderOnOnCollideH;
+            On.Celeste.Puffer.Update += PufferOnUpdate;
+            On.Celeste.Seeker.Update += SeekerOnUpdate;
+            On.Celeste.Debris.Update += DebrisOnUpdate;
+        }
+
+        public static void Unload()
+        {
+            On.Celeste.Actor.MoveH -= onActorMoveH;
+            On.Celeste.TheoCrystal.Update -= TheoCrystalOnUpdate;
+            On.Celeste.TheoCrystal.OnCollideH -= TheoCrystalOnOnCollideH;
+            On.Celeste.Glider.Update -= GliderOnUpdate;
+            On.Celeste.Glider.OnCollideH -= GliderOnOnCollideH;
+            On.Celeste.Puffer.Update -= PufferOnUpdate;
+            On.Celeste.Seeker.Update -= SeekerOnUpdate;
+            On.Celeste.Debris.Update -= DebrisOnUpdate;
+        }
+
+        private static bool onActorMoveH(On.Celeste.Actor.orig_MoveH orig, Actor self, float moveH, Collision onCollide, Solid pusher)
+        {
+            if (self.CollideCheck<Slope>(self.Position + Vector2.UnitY) && self.GetType() != typeof(Player))
+            {
+                moveH = 0;
+            }
+            return orig(self, moveH, onCollide, pusher);
+        }
+
+        private static void TheoCrystalOnUpdate(On.Celeste.TheoCrystal.orig_Update orig, TheoCrystal self)
+        {
+            if (self.GetType() != typeof(TheoCrystal))
+            {
+                orig(self);
+                return;
+            }
+            SetCollisionBeforeUpdate(self);
+            orig(self);
+            SetCollisionAfterUpdate(self);
+        }
+
+        private static void TheoCrystalOnOnCollideH(On.Celeste.TheoCrystal.orig_OnCollideH orig, TheoCrystal self, CollisionData data)
+        {
+            if (data.Hit is Slope)
+            {
+                self.Speed.X *= -0.4f;
+            }
+            else
+            {
+                orig(self, data);
+            }
+        }
+
+        private static void GliderOnUpdate(On.Celeste.Glider.orig_Update orig, Glider self)
+        {
+            if (self.GetType() != typeof(Glider))
+            {
+                orig(self);
+                return;
+            }
+            SetCollisionBeforeUpdate(self);
+            orig(self);
+            SetCollisionAfterUpdate(self);
+        }
+
+        private static void GliderOnOnCollideH(On.Celeste.Glider.orig_OnCollideH orig, Glider self, CollisionData data)
+        {
+            if (data.Hit is Slope)
+            {
+                if (self.Speed.X < -50f)
+                {
+                    Audio.Play("event:/new_content/game/10_farewell/glider_wallbounce_left", self.Position);
+                }
+                else if (self.Speed.X > 50f)
+                {
+                    Audio.Play("event:/new_content/game/10_farewell/glider_wallbounce_right", self.Position);
+                }
+                self.Speed.X *= -1f;
+            }
+            else
+            {
+                orig(self, data);
+            }
+        }
+
+        private static void PufferOnUpdate(On.Celeste.Puffer.orig_Update orig, Puffer self)
+        {
+            if (self.GetType() != typeof(Puffer))
+            {
+                orig(self);
+                return;
+            }
+            SetCollisionBeforeUpdate(self);
+            orig(self);
+            SetCollisionAfterUpdate(self);
+        }
+
+        private static void SeekerOnUpdate(On.Celeste.Seeker.orig_Update orig, Seeker self)
+        {
+            if (self.GetType() != typeof(Seeker))
+            {
+                orig(self);
+                return;
+            }
+            SetCollisionBeforeUpdate(self);
+            orig(self);
+            SetCollisionAfterUpdate(self);
+        }
+
+        private static void DebrisOnUpdate(On.Celeste.Debris.orig_Update orig, Debris self)
+        {
+            if (self.GetType() != typeof(Debris))
+            {
+                orig(self);
+                return;
+            }
+            SetCollisionBeforeUpdate(self);
+            orig(self);
+            SetCollisionAfterUpdate(self);
+        }
+
+        public static void SetCollisionBeforeUpdate(Actor actor)
+        {
+            List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
+            List<Entity> slopes = actor.Scene.Tracker.GetEntities<Slope>().ToList();
+            slopes.ForEach(entity => entity.Collidable = true);
+            foreach (PlayerPlatform platform in playerPlatforms)
+            {
+                platform.Collidable = false;
+            }
+        }
+
+
+        public static void SetCollisionAfterUpdate(Actor actor)
+        {
+            List<Entity> slopes = actor.Scene.Tracker.GetEntities<Slope>().ToList();
+            Player player = actor.Scene.Tracker.GetEntity<Player>();
+            slopes.ForEach(entity => entity.Collidable = false);
+            foreach (PlayerPlatform platform in actor.Scene.Tracker.GetEntities<PlayerPlatform>())
+            {
+                platform.SetCollision(player);
+            }
+        }
+
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            foreach (LightOccludeBlock lightOccludeBlock in lightOccludeBlocks)
+            {
+                SceneAs<Level>().Add(lightOccludeBlock);
+            }
             MTexture mtexture = GFX.Game[((!string.IsNullOrEmpty(Flag) && SceneAs<Level>().Session.GetFlag(Flag)) ? FlagDirectory : Directory) + "/" + ((!string.IsNullOrEmpty(Flag) && SceneAs<Level>().Session.GetFlag(Flag)) ? FlagTexture : Texture)];
             BaseTextures = new MTexture[6, 15];
             for (int i = 0; i < 6; i++)
@@ -159,86 +453,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (!VisualOnly)
             {
-                if (!UpsideDown)
-                {
-                    if (Side == "Left")
-                    {
-                        for (int i = 0; i <= SlopeHeight - 1; i++)
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 0f + i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 1f + i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 2f + i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 3f + i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 4f + i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 5f + i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 6f + i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 7f + i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 4f + i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }
-                    }
-                    else
-                    {
-                        for (int j = 0; j <= SlopeHeight - 1; j++)
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 0f + j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 1f + j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 2f + j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 3f + j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 4f + j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 5f + j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 6f + j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 7f + j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 4f + j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }
-                    }
-                }
-                else
-                {
-                    if (Side == "Left")
-                    {
-                        for (int i = 0; i <= SlopeHeight - 1; i++)
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 15f - i * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 14f - i * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 13f - i * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 12f - i * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 11f - i * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 10f - i * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 9f - i * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? i * 16 : i * 8, 8f - i * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? i * 16 : i * 8) + 4, 8f - i * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }
-                    }
-                    else
-                    {
-                        for (int j = 0; j <= SlopeHeight - 1; j++)
-                        {
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 16f - j * 16 : 16f - j * 8, 15f - j * 8), Gentle ? 8 : 8, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 14f - j * 16 : 15f - j * 8, 14f - j * 8), Gentle ? 10 : 9, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 12f - j * 16 : 14f - j * 8, 13f - j * 8), Gentle ? 12 : 10, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 10f - j * 16 : 13f - j * 8, 12f - j * 8), Gentle ? 14 : 11, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 8f - j * 16 : 12f - j * 8, 11f - j * 8), Gentle ? 16 : 12, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 6f - j * 16 : 11f - j * 8, 10f - j * 8), Gentle ? 18 : 13, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 4f - j * 16 : 10f - j * 8, 9f - j * 8), Gentle ? 20 : 14, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2(Gentle ? 2f - j * 16 : 9f - j * 8, 8f - j * 8), Gentle ? 22 : 15, 1, SoundIndex, Side, UpsideDown, CanJumpThrough));
-
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) + 4, 8f - j * 8), 4, 8, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                            SceneAs<Level>().Add(new ActorBarrier(Position + new Vector2((Gentle ? 16f - j * 16 : 16f - j * 8) - (Gentle ? 8 : 4) + 4, 8f - j * 8), Gentle ? 8 : 4, 4, SoundIndex, Side, UpsideDown, CanJumpThrough));
-                        }
-                    }
-                }
                 SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
                 if (!UpsideDown)
                 {
                     SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
                 }
-
             }
         }
 
@@ -247,6 +466,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             float num = 280f;
             float value = (position.Length() + Scene.TimeActive * 50f) % num / num;
             return Calc.HsvToColor(0.4f + Calc.YoYo(value) * 0.4f, 0.4f, 0.9f);
+        }
+
+        public override void Update()
+        {
+            if (SceneAs<Level>().Tracker.GetEntities<DroneDebris>().Count > 0 && !CanJumpThrough)
+            {
+                Collidable = true;
+            }
+            else
+            {
+                Collidable = false;
+            }
         }
 
         public override void Render()

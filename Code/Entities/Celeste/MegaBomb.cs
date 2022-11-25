@@ -235,7 +235,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Update()
         {
-            ActorBarrier.SetCollisionBeforeUpdate(this);
+            Slope.SetCollisionBeforeUpdate(this);
             base.Update();
             if (Hold.IsHeld)
             {
@@ -351,7 +351,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Hold.CheckAgainstColliders();
             }
-            ActorBarrier.SetCollisionAfterUpdate(this);
+            Slope.SetCollisionAfterUpdate(this);
         }
 
         public IEnumerator Explode(bool immediate)

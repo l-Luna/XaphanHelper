@@ -176,12 +176,12 @@ namespace Celeste.Mod.XaphanHelper.Enemies
                         noCollideY = true;
                     }
                 }
-                if (CollideCheck<ActorBarrier>(Position + new Vector2(2f, 3f)) || CollideCheck<ActorBarrier>(Position + new Vector2(-2f, 3f)))
+                if (CollideCheck<Slope>(Position + new Vector2(2f, 3f)) || CollideCheck<Slope>(Position + new Vector2(-2f, 3f)))
                 {
                     sprite.Rotation = 0;
                     sprite.Position = new Vector2(-4f, -7f);
                 }
-                else if (CollideCheck<ActorBarrier>(Position + new Vector2(2f, -3f)) || CollideCheck<ActorBarrier>(Position + new Vector2(-2f, -3f)))
+                else if (CollideCheck<Slope>(Position + new Vector2(2f, -3f)) || CollideCheck<Slope>(Position + new Vector2(-2f, -3f)))
                 {
                     sprite.Rotation = (float)Math.PI;
                     sprite.Position = new Vector2(12f, 13f);

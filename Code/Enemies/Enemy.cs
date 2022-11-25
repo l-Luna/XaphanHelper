@@ -64,7 +64,7 @@ namespace Celeste.Mod.XaphanHelper.Enemies
 
         public void BeforeUpdate()
         {
-            ActorBarrier.SetCollisionBeforeUpdate(this);
+            Slope.SetCollisionBeforeUpdate(this);
             enemyBarriers = Scene.Tracker.GetEntities<EnemyBarrier>().ToList();
             playerBlockers = Scene.Tracker.GetEntities<PlayerBlocker>().ToList();
             enemyBarriers.ForEach(entity => entity.Collidable = true);
@@ -86,7 +86,7 @@ namespace Celeste.Mod.XaphanHelper.Enemies
 
         public void AfterUpdate()
         {
-            ActorBarrier.SetCollisionAfterUpdate(this);
+            Slope.SetCollisionAfterUpdate(this);
             enemyBarriers.ForEach(entity => entity.Collidable = false);
             playerBlockers.ForEach(entity => entity.Collidable = true);
         }

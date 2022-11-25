@@ -382,9 +382,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Update()
         {
-            List<Entity> actorBarriers = SceneAs<Level>().Tracker.GetEntities<ActorBarrier>().ToList();
+            List<Entity> slopes = SceneAs<Level>().Tracker.GetEntities<Slope>().ToList();
             List<Entity> playerPlatforms = SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>().ToList();
-            actorBarriers.ForEach(entity => entity.Collidable = true);
+            slopes.ForEach(entity => entity.Collidable = true);
             playerPlatforms.ForEach(entity => entity.Collidable = false);
             base.Update();
             foreach (WeaponCollider weaponCollider in Scene.Tracker.GetComponents<WeaponCollider>())
@@ -514,7 +514,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 SceneAs<Level>().Particles.Emit(P_Ice, Direction.Y == 0 ? (Direction.X < 0 ? CenterRight : CenterLeft) : (Direction.Y == -1 ? BottomCenter : TopCenter) + Vector2.One);
             }
-            actorBarriers.ForEach(entity => entity.Collidable = false);
+            slopes.ForEach(entity => entity.Collidable = false);
             playerPlatforms.ForEach(entity => entity.Collidable = true);
         }
 

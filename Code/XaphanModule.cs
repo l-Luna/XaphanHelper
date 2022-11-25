@@ -569,7 +569,7 @@ namespace Celeste.Mod.XaphanHelper
             ScrewAttackManager.Load();
             MapDisplay.Load();
             PlayerPlatform.Load();
-            ActorBarrier.Load();
+            Slope.Load();
             CameraBlocker.Load();
             HeatController.Load();
             JumpBlock.Load();
@@ -648,7 +648,7 @@ namespace Celeste.Mod.XaphanHelper
             ScrewAttackManager.Unload();
             MapDisplay.Unload();
             PlayerPlatform.Unload();
-            ActorBarrier.Unload();
+            Slope.Unload();
             CameraBlocker.Unload();
             HeatController.Unload();
             JumpBlock.Unload();

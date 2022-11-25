@@ -146,7 +146,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Update()
         {
-            ActorBarrier.SetCollisionBeforeUpdate(this);
+            Slope.SetCollisionBeforeUpdate(this);
             base.Update();
             if (dead)
             {
@@ -286,7 +286,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 tutorialGui.Open = (tutorial && tutorialTimer > 0.25f);
             }
-            ActorBarrier.SetCollisionAfterUpdate(this);
+            Slope.SetCollisionAfterUpdate(this);
         }
 
         public void ExplodeLaunch(Vector2 from)
