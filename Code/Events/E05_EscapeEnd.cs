@@ -21,7 +21,7 @@ namespace Celeste.Mod.XaphanHelper.Events
             }
             else if (level.Session.Area.ChapterIndex == 4)
             {
-                player.StateMachine.State = 26;
+                player.StateMachine.State = XaphanModule.StFastFall;
             }
         }
 

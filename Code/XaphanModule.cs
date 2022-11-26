@@ -672,10 +672,12 @@ namespace Celeste.Mod.XaphanHelper
 
         // Custom States
 
+        public static int StFastFall;
+
         private void modPlayerCtor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 position, PlayerSpriteMode spriteMode)
         {
-            orig(self, position, spriteMode);
-            StateMachineExt.AddState(self.StateMachine, FastFallUpdate, FastLabFallCoroutine);
+            orig.Invoke(self, position, spriteMode);
+            StFastFall = StateMachineExt.AddState(self.StateMachine, FastFallUpdate, FastLabFallCoroutine);
         }
 
         private int FastFallUpdate()
@@ -689,7 +691,7 @@ namespace Celeste.Mod.XaphanHelper
                     player.Speed.Y = 320f;
                 }
             }   
-            return 26;
+            return StFastFall;
         }
 
         private IEnumerator FastLabFallCoroutine()
