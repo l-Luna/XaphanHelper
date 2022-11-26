@@ -333,7 +333,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             foreach (PlayerPlatform platform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
             {
-                platform.Active = false;
+                platform.TurnOffCollision(true);
             }
             if (direction == "Down")
             {
@@ -371,7 +371,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             foreach (PlayerPlatform platform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
             {
-                platform.Active = true;
+                platform.TurnOffCollision(false);
             }
             player.StateMachine.State = 0;
             stop = false;

@@ -44,6 +44,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool Sliding;
 
+        public bool preventCollision;
+
         public PlayerPlatform(Vector2 position, int width, bool gentle, string side, int soundIndex, int slopeHeight, bool canSlide, float top, bool upsideDown = false, bool stickyDash = false, bool canJumpThrough = false) : base(position, width, 4, true)
         {
             AllowStaticMovers = false;
@@ -160,7 +162,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             foreach (PlayerPlatform platform in self.Scene.Tracker.GetEntities<PlayerPlatform>())
             {
-                if (!platform.HasPlayerRider() && platform.CollideFirst<Player>(platform.Position + Vector2.UnitY) == null && !platform.UpsideDown)
+                if ((!platform.HasPlayerRider() && platform.CollideFirst<Player>(platform.Position + Vector2.UnitY) == null && !platform.UpsideDown) || platform.preventCollision)
                 {
                     platform.Collidable = false;
                 }
@@ -359,45 +361,57 @@ namespace Celeste.Mod.XaphanHelper.Entities
             yield return null;
         }
 
+        public void TurnOffCollision(bool state)
+        {
+            preventCollision = state;
+        }
+
         public void SetCollision(Player player)
         {
-            if (player != null)
+            if (!preventCollision)
             {
-                if (!UpsideDown)
+                if (player != null)
                 {
-                    if (CanJumpThrough)
+                    if (!UpsideDown)
                     {
-                        if (player.Bottom <= Top + 2)
+                        if (CanJumpThrough)
                         {
-                            Collidable = true;
+                            if (player.Bottom <= Top + 2)
+                            {
+                                Collidable = true;
+                            }
+                            else
+                            {
+                                Collidable = false;
+                            }
                         }
                         else
                         {
-                            Collidable = false;
+                            Collidable = true;
                         }
                     }
                     else
                     {
-                        Collidable = true;
+                        if (CanJumpThrough)
+                        {
+                            if (player.Top >= Bottom)
+                            {
+                                Collidable = true;
+                            }
+                            else
+                            {
+                                Collidable = false;
+                            }
+                        }
+                        else
+                        {
+                            Collidable = true;
+                        }
                     }
                 }
                 else
                 {
-                    if (CanJumpThrough)
-                    {
-                        if (player.Top >= Bottom)
-                        {
-                            Collidable = true;
-                        }
-                        else
-                        {
-                            Collidable = false;
-                        }
-                    }
-                    else
-                    {
-                        Collidable = true;
-                    }
+                    Collidable = false;
                 }
             }
             else
