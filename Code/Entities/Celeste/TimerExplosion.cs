@@ -13,10 +13,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             Tag = Tags.TransitionUpdate;
             Depth = -100000;
-            Add(explosionSprite = new Sprite(GFX.Game, "upgrades/Missile/"));
-            explosionSprite.AddLoop("idle", "missileExplode", 0.08f);
+            Add(explosionSprite = new Sprite(GFX.Game, "countdown/"));
+            explosionSprite.AddLoop("explosionA", "explosionA", 0.08f);
+            explosionSprite.AddLoop("explosionB", "explosionB", 0.08f);
             explosionSprite.CenterOrigin();
-            explosionSprite.Play("idle");
+            Random rand = Calc.Random;
+            if (rand.Next(101) <= 50)
+            {
+                explosionSprite.Play("explosionA");
+            }
+            else
+            {
+                explosionSprite.Play("explosionB");
+            }
             explosionSprite.OnLastFrame = onLastFrame;
             Collider = new Circle(50f);
         }

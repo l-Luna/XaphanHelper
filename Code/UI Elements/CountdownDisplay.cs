@@ -165,7 +165,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }   
             if (Timetext == null)
             {
-                Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 465), Color.Gold, 1f, 0.7f)
+                Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 510), Color.Gold, 1f, 0.7f)
                 {
                     Tag = (Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate),
                     Depth = 10000
@@ -359,7 +359,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             base.Render();
             string timeString = TimeSpan.FromTicks(IsPaused ? PausedTimer : (GetRemainingTime() <= 0 ? 0 : GetRemainingTime())).ShortGameplayFormat();
             float timeWidth = SpeedrunTimerDisplay.GetTimeWidth(timeString);
-            SpeedrunTimerDisplay.DrawTime(new Vector2(Engine.Width / 2 - timeWidth * 1.5f / 2, Engine.Height / 2 - 375), timeString, 1.5f);
+            SpeedrunTimerDisplay.DrawTime(new Vector2(Engine.Width / 2 - timeWidth * 1.5f / 2, Engine.Height / 2 - 420), timeString, 1.5f);
         }
     }
 }
