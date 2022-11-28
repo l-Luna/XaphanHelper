@@ -87,7 +87,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 {
                     yield return null;
                 }
-                if (player.OnGround() && !player.Dead && !player.DashAttacking && player.StateMachine.State != Player.StClimb)
+                if (player.Scene != null && player.OnGround() && !player.Dead && !player.DashAttacking && player.StateMachine.State != Player.StClimb)
                 {
                     level.Add(new Drone(player.Position, player));
                     usedDrone = true;
