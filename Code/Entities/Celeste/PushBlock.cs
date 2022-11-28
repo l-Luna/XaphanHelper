@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
@@ -7,6 +9,7 @@ using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
+    [Tracked(true)]
     [CustomEntity("XaphanHelper/PushBlock")]
     class PushBlock : Solid
     {
@@ -30,7 +33,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool canPush;
 
-        private bool canKill;
+        public bool canKill;
 
         private bool mustDash;
 
@@ -117,6 +120,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
             };
             Add(new LightOcclude(0.2f));
             Depth = -9999;
+        }
+
+        public static void Load()
+        {
+            On.Celeste.Player.Update += onPlayerUpdate;
+        }
+
+        public static void Unload()
+        {
+            On.Celeste.Player.Update -= onPlayerUpdate;
+        }
+
+        private static void onPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
+        {
+            List<Entity> pushBlocks = self.Scene.Tracker.GetEntities<PushBlock>().ToList();
+            foreach (PushBlock pushBlock in pushBlocks)
+            {
+                if (pushBlock.canKill && !self.DashAttacking)
+                {
+                    pushBlock.Collidable = false;
+                }
+            }
+            orig(self);
+            foreach (PushBlock pushBlock in pushBlocks)
+            {
+                if (pushBlock.canKill)
+                {
+                    pushBlock.Collidable = true;
+                }
+            }
         }
 
         public override void Added(Scene scene)

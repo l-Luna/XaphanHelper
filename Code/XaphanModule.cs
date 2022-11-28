@@ -586,6 +586,7 @@ namespace Celeste.Mod.XaphanHelper
             TilesetsSwap.Load();
             UI_Elements.StaminaDisplay.Load();
             LaserDetectorManager.Load();
+            PushBlock.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -665,6 +666,7 @@ namespace Celeste.Mod.XaphanHelper
             TilesetsSwap.Unload();
             UI_Elements.StaminaDisplay.Unload();
             LaserDetectorManager.Unload();
+            PushBlock.Unload();
         }
 
         // Custom States
