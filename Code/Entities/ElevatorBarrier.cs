@@ -1,8 +1,5 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
-using Monocle;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

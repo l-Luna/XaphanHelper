@@ -1,12 +1,13 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
-using System.Collections;
 
-namespace Celeste.Mod.XaphanHelper.Entities {
+namespace Celeste.Mod.XaphanHelper.Entities
+{
     [Tracked(true)]
     [CustomEntity("XaphanHelper/WarpStation")]
     public class WarpStation : Solid
@@ -68,16 +69,20 @@ namespace Celeste.Mod.XaphanHelper.Entities {
             Depth = -9000;
         }
 
-        public override void Awake(Scene scene) {
+        public override void Awake(Scene scene)
+        {
             base.Awake(scene);
 
             warpId = WarpManager.GetWarpId(level, index);
-            if (WarpManager.IsUnlocked(warpId)) {
+            if (WarpManager.IsUnlocked(warpId))
+            {
                 Activate();
             }
 
-            if (InSJLobby) {
-                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player)))) {
+            if (InSJLobby)
+            {
+                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
+                {
                     PlayerMustBeFacing = false
                 });
             }
@@ -87,7 +92,8 @@ namespace Celeste.Mod.XaphanHelper.Entities {
         {
             base.Update();
 
-            if (!activated && HasPlayerOnTop() && (string.IsNullOrEmpty(flag) || level.Session.GetFlag(flag))) {
+            if (!activated && HasPlayerOnTop() && (string.IsNullOrEmpty(flag) || level.Session.GetFlag(flag)))
+            {
                 Activate();
             }
 
@@ -134,7 +140,7 @@ namespace Celeste.Mod.XaphanHelper.Entities {
                     {
                         XaphanModule.ModSaveData.SavedSpawn[prefix] = Position;
                         ShouldSave = true;
-                    }                    
+                    }
                 }
                 if (!XaphanModule.ModSaveData.SavedLightingAlphaAdd.ContainsKey(prefix))
                 {
@@ -214,7 +220,7 @@ namespace Celeste.Mod.XaphanHelper.Entities {
                     }
                 }
                 string sessionFlags = "";
-                foreach(string flag in level.Session.Flags)
+                foreach (string flag in level.Session.Flags)
                 {
                     if (sessionFlags == "")
                     {
@@ -266,7 +272,8 @@ namespace Celeste.Mod.XaphanHelper.Entities {
                 yield return player.DummyWalkToExact((int)X + 16, false, 1f, true);
                 player.Facing = Facings.Right;
 
-                if (InSJLobby) {
+                if (InSJLobby)
+                {
                     player.Sprite.Visible = player.Hair.Visible = false;
 
                     Add(PlayerSprite = new Sprite(GFX.Game, "characters/Xaphan/player/"));
@@ -281,7 +288,8 @@ namespace Celeste.Mod.XaphanHelper.Entities {
                     PlayerSprite.Play("sit");
                     PlayerHairSprite.Play("sit");
 
-                    while (PlayerSprite.Animating) {
+                    while (PlayerSprite.Animating)
+                    {
                         yield return null;
                     }
                 }
@@ -289,25 +297,29 @@ namespace Celeste.Mod.XaphanHelper.Entities {
                 WarpScreen warpScreen;
                 level.Add(warpScreen = new WarpScreen(warpId, confirmSfx, wipeType, wipeDuration));
 
-                while (warpScreen.Visible) {
+                while (warpScreen.Visible)
+                {
                     yield return null;
                 }
 
                 PlayerSprite?.RemoveSelf();
                 PlayerHairSprite?.RemoveSelf();
                 player.Sprite.Visible = player.Hair.Visible = true;
-            }           
+            }
         }
 
         private void Activate()
         {
             activated = true;
             warpStationSprite.Play("active");
-            if (!noBeam) {
+            if (!noBeam)
+            {
                 level.Add(beam = new WarpBeam(Position + new Vector2(16, 0), beamColor));
             }
-            if (!InSJLobby) {
-                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player)))) {
+            if (!InSJLobby)
+            {
+                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
+                {
                     PlayerMustBeFacing = false
                 });
             }
@@ -315,27 +327,32 @@ namespace Celeste.Mod.XaphanHelper.Entities {
             WarpManager.ActivateWarp(warpId);
         }
 
-        private void Deactivate() {
+        private void Deactivate()
+        {
             activated = false;
             warpStationSprite.Play("idle");
             beam?.RemoveSelf();
-            if (!InSJLobby) {
+            if (!InSJLobby)
+            {
                 talker?.RemoveSelf();
-            }            
+            }
 
             WarpManager.DeactivateWarp(warpId);
         }
 
-        public class WarpBeam : LightBeam {
+        public class WarpBeam : LightBeam
+        {
             public WarpBeam(Vector2 position, Color beamColor)
-                : base(new EntityData() { Values = new() }, position) {
+                : base(new EntityData() { Values = new() }, position)
+            {
                 LightWidth = 28;
                 LightLength = 24;
                 Rotation = Rotation = 180f * Calc.DegToRad;
                 DynamicData.For(this).Set("color", beamColor);
             }
 
-            public override void Update() {
+            public override void Update()
+            {
                 base.Update();
                 DynamicData.For(this).Set("alpha", 1f);
             }

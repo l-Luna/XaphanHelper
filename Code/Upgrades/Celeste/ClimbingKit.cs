@@ -1,9 +1,9 @@
-﻿using Monocle;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using System;
-using MonoMod.RuntimeDetour;
+﻿using System;
 using System.Reflection;
+using Mono.Cecil.Cil;
+using Monocle;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -52,7 +52,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void onPlayerClimbUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<VirtualButton>("get_Pressed")))
             {
@@ -64,7 +64,8 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdsfld(typeof(Input), "MoveY"), instr => instr.MatchLdfld<VirtualIntegerAxis>("Value")))
             {
-                cursor.EmitDelegate<Func<int, int>>(orig => {
+                cursor.EmitDelegate<Func<int, int>>(orig =>
+                {
                     if (Engine.Scene is Level)
                     {
                         Level level = (Level)Engine.Scene;
@@ -73,7 +74,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                             return orig;
                         }
                     }
-                    
+
                     return 0;
                 });
             }
@@ -99,7 +100,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Ldarg_0, instr => instr.MatchLdfld<Player>("moveX")))
             {

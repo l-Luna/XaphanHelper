@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -398,7 +398,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (ToChapter != currentChapter)
                 {
-                    FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false, () => ExitRoom(player))
+                    FadeWipe Wipe = new(SceneAs<Level>(), false, () => ExitRoom(player))
                     {
                         Duration = 1.35f
                     };

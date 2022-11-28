@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
@@ -111,7 +111,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public Vector2 RenderPosition => (((Entity != null) ? Entity.Position : Vector2.Zero) + Position).Round();
 
         public CollectableCounter(bool centeredX, int amount, string icon, int outOf = 0, bool showOutOf = false) : base(active: true, visible: true)
-	{
+        {
             CenteredX = centeredX;
             this.amount = amount;
             this.icon = icon;
@@ -160,7 +160,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Vector2 renderPosition = RenderPosition;
             Vector2 value = Calc.AngleToVector(Rotation, 1f);
-            Vector2 value2 = new Vector2(0f - value.Y, value.X);
+            Vector2 value2 = new(0f - value.Y, value.X);
             string text = showOutOf ? sOutOf : "";
             float num = ActiveFont.Measure(sAmount).X;
             float num2 = ActiveFont.Measure(text).X;

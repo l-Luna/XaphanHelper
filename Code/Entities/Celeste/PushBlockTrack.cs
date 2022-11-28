@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -18,9 +18,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         Sprite GlowSprite;
 
-        Dictionary<Vector2, string> tiles = new Dictionary<Vector2, string>();
+        Dictionary<Vector2, string> tiles = new();
 
-        Dictionary<Vector2, Vector2> tilesSpritePos = new Dictionary<Vector2, Vector2>();
+        Dictionary<Vector2, Vector2> tilesSpritePos = new();
 
         public PushBlockTrack(EntityData data, Vector2 offset) : base(data.Position + offset)
         {

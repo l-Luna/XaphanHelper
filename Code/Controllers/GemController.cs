@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -24,7 +24,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public GemController(EntityData data, Vector2 position) : base(data.Position + position)
-		{
+        {
 
         }
 

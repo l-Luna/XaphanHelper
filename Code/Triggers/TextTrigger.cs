@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Triggers
 {

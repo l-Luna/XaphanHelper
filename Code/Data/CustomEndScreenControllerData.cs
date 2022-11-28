@@ -58,7 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Data
 
         public int Priority;
 
-        public CustomEndScreenControllerData(string atlas = "", string images ="", string title = "", bool showTitle = true, string subText1 = "", string subText1Color = "", string subText2 = "", string subText2Color = "", string music = "", bool hideVanillaTimer = false, long requiredTime = 0, bool showTime = false, int requiredStrawberries = 0, bool showStrawberries = false, string strawberriesColor = "", string strawberriesMaxColor = "", int requiredItemPercent = 0, bool showItemPercent = false, string itemPercentColor = "", string itemPercentMaxColor = "", int requiredMapPercent = 0, bool showMapPercent = false, string mapPercentColor = "", string mapPercentMaxColor = "", string requiredFlags = "", string requirementsCheck = "", int priority = 0)
+        public CustomEndScreenControllerData(string atlas = "", string images = "", string title = "", bool showTitle = true, string subText1 = "", string subText1Color = "", string subText2 = "", string subText2Color = "", string music = "", bool hideVanillaTimer = false, long requiredTime = 0, bool showTime = false, int requiredStrawberries = 0, bool showStrawberries = false, string strawberriesColor = "", string strawberriesMaxColor = "", int requiredItemPercent = 0, bool showItemPercent = false, string itemPercentColor = "", string itemPercentMaxColor = "", int requiredMapPercent = 0, bool showMapPercent = false, string mapPercentColor = "", string mapPercentMaxColor = "", string requiredFlags = "", string requirementsCheck = "", int priority = 0)
         {
             Atlas = atlas;
             Images = images;

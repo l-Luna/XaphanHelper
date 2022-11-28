@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using Celeste.Mod.XaphanHelper.UI_Elements;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -212,7 +212,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             level.Flash(Color.White, drawPlayerOver: true);
             Scene.Add(new BgFlash());
-            List<Strawberry> strawbs = new List<Strawberry>();
+            List<Strawberry> strawbs = new();
             foreach (Follower follower in player.Leader.Followers)
             {
                 if (follower.Entity is Strawberry)
@@ -304,7 +304,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                 {
                     XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
-                }                
+                }
             }
         }
 

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 using Monocle;
-using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {

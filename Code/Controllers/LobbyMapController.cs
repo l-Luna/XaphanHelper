@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -40,7 +40,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public override void Update()
         {
             base.Update();
-            if (CustomImage!= null && SceneAs<Level>().Tracker.GetEntity<WarpScreen>() == null)
+            if (CustomImage != null && SceneAs<Level>().Tracker.GetEntity<WarpScreen>() == null)
             {
                 Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
                 if (player != null)
@@ -58,12 +58,12 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                     PlayerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - level.Bounds.X) / 8f), (float)Math.Round(level.Bounds.Width / 8f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - level.Bounds.Y) / 8f), (float)Math.Round(level.Bounds.Height / 8f, MidpointRounding.AwayFromZero) + 1));
                     if (PlayerPosition.X >= 0 && PlayerPosition.X < Math.Floor((float)CustomImage.Width / CustomImagesTilesSizeX) && PlayerPosition.Y >= 0 && PlayerPosition.Y < Math.Floor((float)CustomImage.Height / CustomImagesTilesSizeY) && !XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles2.Contains(new Vector2(PlayerPosition.X, PlayerPosition.Y)))
                     {
-                        List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                        List<Vector2> Tmp2GeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                        List<Vector2> Tmp3GeneratedVisitedLobbyMapTiles = new List<Vector2>();
-                        List<Vector2> Tmp4GeneratedVisitedLobbyMapTiles = new List<Vector2>();
+                        List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new();
+                        List<Vector2> Tmp2GeneratedVisitedLobbyMapTiles = new();
+                        List<Vector2> Tmp3GeneratedVisitedLobbyMapTiles = new();
+                        List<Vector2> Tmp4GeneratedVisitedLobbyMapTiles = new();
                         XaphanModule.ModSaveData.VisitedLobbyMapTiles.Add(Prefix + "/Ch" + chapterIndex + "/" + level.Session.Level + "/" + PlayerPosition.X + "-" + PlayerPosition.Y);
-                        Circle circle = new Circle(15, PlayerPosition.X, PlayerPosition.Y);
+                        Circle circle = new(15, PlayerPosition.X, PlayerPosition.Y);
                         for (int i = Math.Max(0, (int)(PlayerPosition.X - circle.Radius)); i < Math.Min((int)(PlayerPosition.X + circle.Radius), CustomImage.Width / 4); i++)
                         {
                             for (int j = Math.Max(0, (int)(PlayerPosition.Y - circle.Radius)); j < Math.Min((int)(PlayerPosition.Y + circle.Radius), CustomImage.Height / 4); j++)
@@ -98,7 +98,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
             if (XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Count == 0)
             {
-                List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new List<Vector2>();
+                List<Vector2> TmpGeneratedVisitedLobbyMapTiles = new();
                 foreach (string tile in XaphanModule.ModSaveData.VisitedLobbyMapTiles)
                 {
                     string[] str = tile.Split('/');
@@ -107,7 +107,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                         string[] str2 = str[4].Split('-');
                         float cordX = float.Parse(str2[0]);
                         float cordY = float.Parse(str2[1]);
-                        Rectangle rectangle = new Rectangle((int)cordX - 15, (int)cordY - 15, 30, 30);
+                        Rectangle rectangle = new((int)cordX - 15, (int)cordY - 15, 30, 30);
                         TmpGeneratedVisitedLobbyMapTiles.Add(new Vector2(cordX, cordY));
                         for (int i = Math.Max(0, (int)(cordX - rectangle.Width / 2)); i < Math.Min((int)(cordX + rectangle.Width / 2), mapTexture.Width / 4); i++)
                         {

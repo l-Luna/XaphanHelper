@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
+﻿using System.Collections;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {
@@ -99,84 +99,84 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                     switch (wipeType)
                     {
                         case "Spotlight":
-                            SpotlightWipe WipeA = new SpotlightWipe(level, false, () => EndCutscene(level))
+                            SpotlightWipe WipeA = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeA);
                             break;
                         case "Curtain":
-                            CurtainWipe WipeB = new CurtainWipe(level, false, () => EndCutscene(level))
+                            CurtainWipe WipeB = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeB);
                             break;
                         case "Mountain":
-                            MountainWipe WipeC = new MountainWipe(level, false, () => EndCutscene(level))
+                            MountainWipe WipeC = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeC);
                             break;
                         case "Dream":
-                            DreamWipe WipeD = new DreamWipe(level, false, () => EndCutscene(level))
+                            DreamWipe WipeD = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeD);
                             break;
                         case "Starfield":
-                            StarfieldWipe WipeE = new StarfieldWipe(level, false, () => EndCutscene(level))
+                            StarfieldWipe WipeE = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeE);
                             break;
                         case "Wind":
-                            WindWipe WipeF = new WindWipe(level, false, () => EndCutscene(level))
+                            WindWipe WipeF = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeF);
                             break;
                         case "Drop":
-                            DropWipe WipeG = new DropWipe(level, false, () => EndCutscene(level))
+                            DropWipe WipeG = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeG);
                             break;
                         case "Fall":
-                            FallWipe WipeH = new FallWipe(level, false, () => EndCutscene(level))
+                            FallWipe WipeH = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeH);
                             break;
                         case "KeyDoor":
-                            KeyDoorWipe WipeI = new KeyDoorWipe(level, false, () => EndCutscene(level))
+                            KeyDoorWipe WipeI = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeI);
                             break;
                         case "Angled":
-                            AngledWipe WipeJ = new AngledWipe(level, false, () => EndCutscene(level))
+                            AngledWipe WipeJ = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeJ);
                             break;
                         case "Heart":
-                            HeartWipe WipeK = new HeartWipe(level, false, () => EndCutscene(level))
+                            HeartWipe WipeK = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeK);
                             break;
                         case "Fade":
-                            FadeWipe WipeL = new FadeWipe(level, false, () => EndCutscene(level))
+                            FadeWipe WipeL = new(level, false, () => EndCutscene(level))
                             {
                                 Duration = wipeDuration
                             };
@@ -297,84 +297,84 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                     switch (wipeType)
                     {
                         case "Spotlight":
-                            SpotlightWipe WipeA = new SpotlightWipe(level, true)
+                            SpotlightWipe WipeA = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeA);
                             break;
                         case "Curtain":
-                            CurtainWipe WipeB = new CurtainWipe(level, true)
+                            CurtainWipe WipeB = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeB);
                             break;
                         case "Mountain":
-                            MountainWipe WipeC = new MountainWipe(level, true)
+                            MountainWipe WipeC = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeC);
                             break;
                         case "Dream":
-                            DreamWipe WipeD = new DreamWipe(level, true)
+                            DreamWipe WipeD = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeD);
                             break;
                         case "Starfield":
-                            StarfieldWipe WipeE = new StarfieldWipe(level, true)
+                            StarfieldWipe WipeE = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeE);
                             break;
                         case "Wind":
-                            WindWipe WipeF = new WindWipe(level, true)
+                            WindWipe WipeF = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeF);
                             break;
                         case "Drop":
-                            DropWipe WipeG = new DropWipe(level, true)
+                            DropWipe WipeG = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeG);
                             break;
                         case "Fall":
-                            FallWipe WipeH = new FallWipe(level, true)
+                            FallWipe WipeH = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeH);
                             break;
                         case "KeyDoor":
-                            KeyDoorWipe WipeI = new KeyDoorWipe(level, true)
+                            KeyDoorWipe WipeI = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeI);
                             break;
                         case "Angled":
-                            AngledWipe WipeJ = new AngledWipe(level, true)
+                            AngledWipe WipeJ = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeJ);
                             break;
                         case "Heart":
-                            HeartWipe WipeK = new HeartWipe(level, true)
+                            HeartWipe WipeK = new(level, true)
                             {
                                 Duration = wipeDuration
                             };
                             level.Add(WipeK);
                             break;
                         case "Fade":
-                            FadeWipe WipeL = new FadeWipe(level, true)
+                            FadeWipe WipeL = new(level, true)
                             {
                                 Duration = wipeDuration
                             };

@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public static Player player;
 
-        private Coroutine JumpGraceTimerRoutine = new Coroutine();
+        private Coroutine JumpGraceTimerRoutine = new();
 
         public CustomMoveBlock attachedMoveBlock;
 
@@ -374,7 +374,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         private bool IsRiding(Solid solid)
-        {           
+        {
             if (attachedMoveBlock != null)
             {
                 return CollideCheckOutside(solid, Position - Vector2.UnitY * (1 + attachedMoveBlock.magneticCeilingOffset));

@@ -72,7 +72,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     num2 = 1 + Calc.Random.Next(num - 2);
                     num3 = Calc.Random.Choose(0, 1);
                 }
-                Image image = new Image(mTexture.GetSubtexture(num2 * 8, num3 * 8, 8, 8));
+                Image image = new(mTexture.GetSubtexture(num2 * 8, num3 * 8, 8, 8));
                 image.X = i * 8;
                 Add(image);
             }

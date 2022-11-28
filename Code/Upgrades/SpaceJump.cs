@@ -1,12 +1,12 @@
-﻿using Celeste.Mod.XaphanHelper.Entities;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -35,28 +35,28 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override void Load()
         {
-                IL.Celeste.Player.NormalUpdate += patchJumpGraceTimer;
-                IL.Celeste.Player.DashUpdate += patchJumpGraceTimer;
-                On.Celeste.Player.UseRefill += modUseRefill;
-                On.Celeste.Player.DreamDashEnd += modDreamDashEnd;
-                On.Celeste.Player.RefillDash += modRefillDash;
-                On.Celeste.Level.LoadLevel += modLoadLevel;
-                if (Engine.Scene is Level)
-                {
-                    Level level = (Level)Engine.Scene;
-                    level.Add(new SpaceJumpIndicator());
-                    level.Entities.UpdateLists();
-                }
+            IL.Celeste.Player.NormalUpdate += patchJumpGraceTimer;
+            IL.Celeste.Player.DashUpdate += patchJumpGraceTimer;
+            On.Celeste.Player.UseRefill += modUseRefill;
+            On.Celeste.Player.DreamDashEnd += modDreamDashEnd;
+            On.Celeste.Player.RefillDash += modRefillDash;
+            On.Celeste.Level.LoadLevel += modLoadLevel;
+            if (Engine.Scene is Level)
+            {
+                Level level = (Level)Engine.Scene;
+                level.Add(new SpaceJumpIndicator());
+                level.Entities.UpdateLists();
+            }
         }
 
         public override void Unload()
         {
-                IL.Celeste.Player.NormalUpdate -= patchJumpGraceTimer;
-                IL.Celeste.Player.DashUpdate -= patchJumpGraceTimer;
-                On.Celeste.Player.UseRefill -= modUseRefill;
-                On.Celeste.Player.DreamDashEnd -= modDreamDashEnd;
-                On.Celeste.Player.RefillDash -= modRefillDash;
-                On.Celeste.Level.LoadLevel -= modLoadLevel;
+            IL.Celeste.Player.NormalUpdate -= patchJumpGraceTimer;
+            IL.Celeste.Player.DashUpdate -= patchJumpGraceTimer;
+            On.Celeste.Player.UseRefill -= modUseRefill;
+            On.Celeste.Player.DreamDashEnd -= modDreamDashEnd;
+            On.Celeste.Player.RefillDash -= modRefillDash;
+            On.Celeste.Level.LoadLevel -= modLoadLevel;
         }
 
         public static bool Active(Level level)
@@ -66,7 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void patchJumpGraceTimer(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             MethodReference wallJumpCheck = seekReferenceToMethod(il, "WallJumpCheck");
 
@@ -104,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         /// <returns>A reference to the method</returns>
         private MethodReference seekReferenceToMethod(ILContext il, string methodName)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             if (cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Callvirt && ((MethodReference)instr.Operand).Name.Contains(methodName)))
             {
                 return (MethodReference)cursor.Next.Operand;
@@ -184,7 +184,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             {
                 // we disabled jumping, so let's pretend the grace timer has run out
                 // but if the player is grabbing a magnetic ceiling that allows jumping, we give them one free jump
-                if (self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling_Can_Jump")  || (lastGrabbedCeiling != null && lastGrabbedCeiling.JumpGracePeriod) || Liquid.determineIfInQuicksand())
+                if (self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling_Can_Jump") || (lastGrabbedCeiling != null && lastGrabbedCeiling.JumpGracePeriod) || Liquid.determineIfInQuicksand())
                 {
                     if (Active(self.SceneAs<Level>()))
                     {
@@ -209,7 +209,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 // (our jump buffer ran out, or vanilla Celeste allows jumping anyway)
                 return initialJumpGraceTimer;
             }
-            
+
             if (self.Speed.Y <= 0 && (self.Speed.X <= -160f || self.Speed.X >= 160f) && self.StateMachine.State != Player.StDash)
             {
                 // Pupperfish fix

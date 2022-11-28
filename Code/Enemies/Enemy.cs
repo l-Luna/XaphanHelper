@@ -1,13 +1,12 @@
-﻿using Celeste.Mod.XaphanHelper.Colliders;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Celeste.Mod.XaphanHelper.Colliders;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Enemies
 {
@@ -42,9 +41,9 @@ namespace Celeste.Mod.XaphanHelper.Enemies
 
         private bool powerBombIgnore;
 
-        private Coroutine BeamIgnoreRoutine = new Coroutine();
+        private Coroutine BeamIgnoreRoutine = new();
 
-        private Coroutine PowerBombIgnoreRoutine = new Coroutine();
+        private Coroutine PowerBombIgnoreRoutine = new();
 
         public string DeathSound = "event:/game/xaphan/enemy_hit_screw_attack";
 
@@ -324,7 +323,7 @@ namespace Celeste.Mod.XaphanHelper.Enemies
                     {
                         sprite.Color = Calc.HexToColor("60DCF8");
                     }
-                    
+
                 }
                 else
                 {

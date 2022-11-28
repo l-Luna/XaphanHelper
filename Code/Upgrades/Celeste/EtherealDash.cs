@@ -1,8 +1,4 @@
-﻿
-using System;
-using On.Celeste;
-
-namespace Celeste.Mod.XaphanHelper.Upgrades
+﻿namespace Celeste.Mod.XaphanHelper.Upgrades
 {
     class EtherealDash : Upgrade
     {

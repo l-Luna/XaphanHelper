@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Celeste.Mod.Entities;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -99,7 +99,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private List<MTexture> innerCogs;
 
-        private MTexture temp = new MTexture();
+        private MTexture temp = new();
 
         private bool drawBlackBorder;
 
@@ -113,7 +113,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Color ropeLightColor = Calc.HexToColor("9b6157");
 
-        private SoundSource sfx = new SoundSource();
+        private SoundSource sfx = new();
 
         public string directory = "objects/zipmover";
 
@@ -190,9 +190,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 int num3 = num;
                 for (int j = 4; j <= Width - 4f; j += 8)
                 {
-                    int index = (int)(mod((num2 + num * percent * (float)Math.PI * 4f) / ((float)Math.PI / 2f), 1f) * (float)count);
+                    int index = (int)(mod((num2 + num * percent * (float)Math.PI * 4f) / ((float)Math.PI / 2f), 1f) * count);
                     MTexture mTexture = innerCogs[index];
-                    Rectangle rectangle = new Rectangle(0, 0, mTexture.Width, mTexture.Height);
+                    Rectangle rectangle = new(0, 0, mTexture.Width, mTexture.Height);
                     Vector2 zero = Vector2.Zero;
                     if (j <= 4)
                     {
@@ -234,7 +234,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     int num5 = (l != 0) ? ((l != Height / 8f - 1f) ? 1 : 2) : 0;
                     if (num4 != 1 || num5 != 1)
                     {
-                        edges[num4, num5].Draw(new Vector2(X + (float)(k * 8), Y + (float)(l * 8)));
+                        edges[num4, num5].Draw(new Vector2(X + k * 8, Y + l * 8));
                     }
                 }
             }
@@ -268,14 +268,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     for (int i = num2; i < num3; i += 8)
                     {
-                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopLeft + new Vector2(0f, (float)i + (float)num * 2f), (num == 1) ? (-(float)Math.PI / 4f) : ((float)Math.PI / 4f));
+                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopLeft + new Vector2(0f, i + num * 2f), (num == 1) ? (-(float)Math.PI / 4f) : ((float)Math.PI / 4f));
                     }
                 }
                 if (Scene.CollideCheck<Solid>(value + new Vector2(Width + 2f, num * -2)))
                 {
                     for (int j = num2; j < num3; j += 8)
                     {
-                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopRight + new Vector2(-1f, (float)j + (float)num * 2f), (num == 1) ? ((float)Math.PI * -3f / 4f) : ((float)Math.PI * 3f / 4f));
+                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopRight + new Vector2(-1f, j + num * 2f), (num == 1) ? ((float)Math.PI * -3f / 4f) : ((float)Math.PI * 3f / 4f));
                     }
                 }
             }
@@ -301,14 +301,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     for (int k = num5; k < num6; k += 8)
                     {
-                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopLeft + new Vector2((float)k + (float)num4 * 2f, -1f), (num4 == 1) ? ((float)Math.PI * 3f / 4f) : ((float)Math.PI / 4f));
+                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, TopLeft + new Vector2(k + num4 * 2f, -1f), (num4 == 1) ? ((float)Math.PI * 3f / 4f) : ((float)Math.PI / 4f));
                     }
                 }
                 if (Scene.CollideCheck<Solid>(value2 + new Vector2(num4 * -2, Height + 2f)))
                 {
                     for (int l = num5; l < num6; l += 8)
                     {
-                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, BottomLeft + new Vector2((float)l + (float)num4 * 2f, 0f), (num4 == 1) ? ((float)Math.PI * -3f / 4f) : (-(float)Math.PI / 4f));
+                        SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, BottomLeft + new Vector2(l + num4 * 2f, 0f), (num4 == 1) ? ((float)Math.PI * -3f / 4f) : (-(float)Math.PI / 4f));
                     }
                 }
             }

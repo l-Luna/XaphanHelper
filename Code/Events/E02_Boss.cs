@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.XaphanHelper.Cutscenes;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Events
 {
@@ -65,7 +65,7 @@ namespace Celeste.Mod.XaphanHelper.Events
         private Decal warningSign;
 
         private Strawberry strawberry;
-       
+
         public bool BossDefeated()
         {
             if (!Settings.SpeedrunMode)
@@ -169,7 +169,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public override void OnEnd(Level level)
         {
-            
+
         }
 
         public bool HasGolden()
@@ -272,7 +272,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                     ground.MoveToY(ground.Position.Y + speed);
                     num = num + 1;
                     yield return null;
-                } while (num <= duration) ;
+                } while (num <= duration);
             }
             if (wall == "cellingTop")
             {

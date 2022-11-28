@@ -1,6 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.Data;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections;
+using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -19,11 +19,11 @@ namespace Celeste.Mod.XaphanHelper
             }
         }
 
-        public static List<InGameMapRoomControllerData> RoomControllerData = new List<InGameMapRoomControllerData>();
+        public static List<InGameMapRoomControllerData> RoomControllerData = new();
 
-        public static List<InGameMapTilesControllerData> TilesControllerData = new List<InGameMapTilesControllerData>();
+        public static List<InGameMapTilesControllerData> TilesControllerData = new();
 
-        public static List<InGameMapEntitiesData> EntitiesData = new List<InGameMapEntitiesData>();
+        public static List<InGameMapEntitiesData> EntitiesData = new();
 
         public static int maxChapters;
 
@@ -47,9 +47,9 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool[,] GoldensBerries;
 
-        public static HashSet<StrawberryData> Strawberries = new HashSet<StrawberryData>();
+        public static HashSet<StrawberryData> Strawberries = new();
 
-        public static HashSet<StrawberryData> AlreadyCollectedStrawberries = new HashSet<StrawberryData>();
+        public static HashSet<StrawberryData> AlreadyCollectedStrawberries = new();
 
         public static int TotalASideHearts;
 
@@ -368,7 +368,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private static IEnumerator onHeartGemCollectRoutine(On.Celeste.HeartGem.orig_CollectRoutine orig, HeartGem self, Player player)
         {
-            if (useStatsFlagsController && (int)self.SceneAs<Level>().Session.Area.Mode == 0 && !SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Modes[0].HeartGem)
+            if (useStatsFlagsController && self.SceneAs<Level>().Session.Area.Mode == 0 && !SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Modes[0].HeartGem)
             {
                 heartCount += 1;
             }
@@ -466,7 +466,7 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         foreach (EntityData goldenberry in MapData.Goldenberries)
                         {
-                            EntityID goldenID = new EntityID(goldenberry.Level.Name, goldenberry.ID);
+                            EntityID goldenID = new(goldenberry.Level.Name, goldenberry.ID);
                             if (SaveData.Instance.Areas_Safe[item.ID].Modes[i].Strawberries.Contains(goldenID))
                             {
                                 GoldensBerries[chapterIndex, i] = true;
@@ -548,7 +548,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public static Dictionary<int, int> getSubAreaTiles(string prefix, int chapterIndex, bool total = false)
         {
-            Dictionary<int, int> subAreaTiles = new Dictionary<int, int>();
+            Dictionary<int, int> subAreaTiles = new();
             foreach (InGameMapRoomControllerData roomControllerData in RoomControllerData)
             {
                 int tiles = 0;
@@ -570,7 +570,7 @@ namespace Celeste.Mod.XaphanHelper
                                     tiles++;
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -588,7 +588,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public static Dictionary<int, int> getSubAreaStrawberries(string prefix, int chapterIndex, bool total = false)
         {
-            Dictionary<int, int> subAreaStrawberries = new Dictionary<int, int>();
+            Dictionary<int, int> subAreaStrawberries = new();
             foreach (InGameMapRoomControllerData roomControllerData in RoomControllerData)
             {
                 int strawberries = 0;

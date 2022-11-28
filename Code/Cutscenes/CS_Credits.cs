@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.XaphanHelper.UI_Elements;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {
@@ -171,7 +171,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 MTexture buttonTexture = Input.GuiButton(Input.ESC, "controls/keyboard/oemquestion");
                 int buttonTextureWidth = buttonTexture.Width;
                 float num3 = ButtonUI.Width(label, Input.ESC);
-                Vector2 position = new Vector2(0f, 1045f);
+                Vector2 position = new(0f, 1045f);
                 position.X = 1920 - num3 / 2 + buttonTextureWidth + (Settings.Instance.Language == "french" ? 19 : 0);
                 ButtonUI.Render(position, label, Input.ESC, num, 1f, skipWiggle.Value * 0.05f);
             }
@@ -322,7 +322,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             TimeSpan timespan = TimeSpan.FromTicks(XaphanModule.ModSaveData.SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? XaphanModule.ModSaveData.SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L);
             string gameTime = ((int)timespan.TotalHours).ToString() + timespan.ToString("\\:mm\\:ss\\.fff");
             float timeWidth = SpeedrunTimerDisplay.GetTimeWidth(gameTime);
-            TimeDisplay totaltime = new TimeDisplay(gameTime, 960 - timeWidth / 2, Engine.Height / 2 + 146);
+            TimeDisplay totaltime = new(gameTime, 960 - timeWidth / 2, Engine.Height / 2 + 146);
             int TotalItemsCollected = TotalUpgradeCount + TotalStrawberryCount + TotalheartCount + TotalCassetteCount;
             double ItemPercentage = Math.Round(TotalItemsCollected * 100f / TotalItems, 0, MidpointRounding.AwayFromZero);
             if (!Skipped)

@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Data;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -73,7 +73,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         InactiveList.Add(LevelSet);
                         Audio.Play("event:/ui/main/button_back");
-                    } 
+                    }
                     if (alphaStatus == 0 || (alphaStatus == 1 && selectedAlpha != 0.9f))
                     {
                         alphaStatus = 1;
@@ -125,13 +125,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Sprite PlayerSprite;
 
-        public HashSet<int> LeftDisplays = new HashSet<int>();
+        public HashSet<int> LeftDisplays = new();
 
-        public HashSet<int> RightDisplays = new HashSet<int>();
+        public HashSet<int> RightDisplays = new();
 
         public UpgradeDisplay SelectedDisplay;
 
-        public List<CustomUpgradesData> CustomUpgradesData  = new List<Data.CustomUpgradesData>();
+        public List<CustomUpgradesData> CustomUpgradesData = new();
 
         public StatusDisplay(Level level, bool useMap)
         {
@@ -179,7 +179,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public override void Update()
         {
-        base.Update();
+            base.Update();
             if (GravityJacket.Active(level))
             {
                 PlayerSprite.Play("gravity");
@@ -681,7 +681,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else if (controlA is ButtonBinding)
                     {
-                        VirtualButton Button = new VirtualButton();
+                        VirtualButton Button = new();
                         ButtonBinding ControlA = (ButtonBinding)controlA;
                         Button.Binding = ControlA.Binding;
                         MTexture buttonATexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
@@ -694,7 +694,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else if (controlB is ButtonBinding)
                     {
-                        VirtualButton Button = new VirtualButton();
+                        VirtualButton Button = new();
                         ButtonBinding ControlB = (ButtonBinding)controlB;
                         Button.Binding = ControlB.Binding;
                         MTexture buttonBTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
@@ -710,7 +710,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     string inputActA = Dialog.Clean(inputActionA);
                     string inputActB = Dialog.Clean(inputActionB);
-                    Vector2 vector = new Vector2(960f, 980f);
+                    Vector2 vector = new(960f, 980f);
                     float TotalLenght = 0;
 
                     if (select)
@@ -787,7 +787,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             else if (controlB is ButtonBinding)
                             {
-                                VirtualButton Button = new VirtualButton();
+                                VirtualButton Button = new();
                                 ButtonBinding ControlB = (ButtonBinding)controlB;
                                 Button.Binding = ControlB.Binding;
                                 MTexture buttonBTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
@@ -809,7 +809,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else if (controlA is ButtonBinding)
                     {
-                        VirtualButton Button = new VirtualButton();
+                        VirtualButton Button = new();
                         ButtonBinding ControlA = (ButtonBinding)controlA;
                         Button.Binding = ControlA.Binding;
                         MTexture buttonATexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
@@ -824,7 +824,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else if (controlB is ButtonBinding)
                     {
-                        VirtualButton Button = new VirtualButton();
+                        VirtualButton Button = new();
                         ButtonBinding ControlB = (ButtonBinding)controlB;
                         Button.Binding = ControlB.Binding;
                         MTexture buttonBTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");

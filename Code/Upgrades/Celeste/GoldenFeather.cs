@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Celeste.Mod.XaphanHelper.Entities;
-using Celeste.Mod.XaphanHelper.UI_Elements;
-using Monocle;
 using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
     class GoldenFeather : Upgrade
     {
-        Coroutine UseFeatherCoroutine = new Coroutine();
+        Coroutine UseFeatherCoroutine = new();
 
         public override int GetDefaultValue()
         {

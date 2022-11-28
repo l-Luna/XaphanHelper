@@ -1,14 +1,14 @@
-﻿using Celeste.Mod.UI;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Celeste.Mod.UI;
 using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -68,8 +68,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public void SlideTowards(int i, int count, bool snap)
             {
-                float num = (float)count / 2f - 0.5f;
-                float num2 = (float)i - num;
+                float num = count / 2f - 0.5f;
+                float num2 = i - num;
                 if (snap)
                 {
                     Slide = num2;
@@ -82,8 +82,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public Vector2 GetRenderPosition(Vector2 center)
             {
-                float num = (float)(Large ? 170 : 130) * Scale;
-                if (Siblings > 0 && num * (float)Siblings > 750f)
+                float num = (Large ? 170 : 130) * Scale;
+                if (Siblings > 0 && num * Siblings > 750f)
                 {
                     num = 750 / Siblings;
                 }
@@ -103,7 +103,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     float num2 = Ease.CubeIn(IconEase);
                     Color color2 = Color.Lerp(Color.White, Color.Black, Faded * 0.6f) * num2;
-                    Icon.DrawCentered(renderPosition, color2, (float)(Bg.Width - 50) / (float)Icon.Width * num * (2.5f - num2 * 1.5f));
+                    Icon.DrawCentered(renderPosition, color2, (Bg.Width - 50) / (float)Icon.Width * num * (2.5f - num2 * 1.5f));
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Wiggler modeAppearWiggler;
 
-        private MTexture card = new MTexture();
+        private MTexture card = new();
 
         private Vector2 contentOffset;
 
@@ -154,15 +154,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private AreaCompleteTitle remixUnlockText;
 
-        private StrawberriesCounter strawberries = new StrawberriesCounter(true, 0, 0, true);
+        private StrawberriesCounter strawberries = new(true, 0, 0, true);
 
-        private CollectableCounter cassettes = new CollectableCounter(true, 0, "collectables/XaphanHelper/cassette", 0, true);
+        private CollectableCounter cassettes = new(true, 0, "collectables/XaphanHelper/cassette", 0, true);
 
-        private CollectableCounter heartsASide = new CollectableCounter(true, 0, "collectables/XaphanHelper/heart", 0, true);
+        private CollectableCounter heartsASide = new(true, 0, "collectables/XaphanHelper/heart", 0, true);
 
-        private CollectableCounter heartsBSide = new CollectableCounter(true, 0, "collectables/XaphanHelper/heartb", 0, true);
+        private CollectableCounter heartsBSide = new(true, 0, "collectables/XaphanHelper/heartb", 0, true);
 
-        private CollectableCounter heartsCSide = new CollectableCounter(true, 0, "collectables/XaphanHelper/heartc", 0, true);
+        private CollectableCounter heartsCSide = new(true, 0, "collectables/XaphanHelper/heartc", 0, true);
 
         private Vector2 strawberriesOffset;
 
@@ -174,11 +174,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Vector2 heartsCSideOffset;
 
-        private DeathsCounter deathsASide = new DeathsCounter(AreaMode.Normal, true, 0);
+        private DeathsCounter deathsASide = new(AreaMode.Normal, true, 0);
 
-        private DeathsCounter deathsBSide = new DeathsCounter(AreaMode.BSide, true, 0);
+        private DeathsCounter deathsBSide = new(AreaMode.BSide, true, 0);
 
-        private DeathsCounter deathsCSide = new DeathsCounter(AreaMode.CSide, true, 0);
+        private DeathsCounter deathsCSide = new(AreaMode.CSide, true, 0);
 
         private Vector2 deathsASideOffset;
 
@@ -188,23 +188,23 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private int checkpoint;
 
-        private List<Option> modes = new List<Option>();
+        private List<Option> modes = new();
 
-        private List<Option> checkpoints = new List<Option>();
+        private List<Option> checkpoints = new();
 
         private EventInstance bSideUnlockSfx;
 
         private bool instantClose;
 
-        public Vector2 OpenPosition => new Vector2(1070f, 100f);
+        public Vector2 OpenPosition => new(1070f, 100f);
 
-        public Vector2 ClosePosition => new Vector2(2220f, 100f);
+        public Vector2 ClosePosition => new(2220f, 100f);
 
-        public Vector2 IconOffset => new Vector2(690f, 86f);
+        public Vector2 IconOffset => new(690f, 86f);
 
         private Vector2 OptionsRenderPosition => Position + new Vector2(contentOffset.X, 128f + height);
 
-        public Dictionary<int, int> chapterCheckpoints = new Dictionary<int, int>();
+        public Dictionary<int, int> chapterCheckpoints = new();
 
         private bool Leaving;
 
@@ -378,7 +378,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Option AddRemixButton()
         {
-            Option option = new Option
+            Option option = new()
             {
                 Label = Dialog.Clean("overworld_remix"),
                 Icon = GFX.Gui["menu/remix"],
@@ -449,7 +449,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             yield return 0.5f;
             LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + ((XaphanModule.MergeChaptersControllerKeepPrologue && chapterIndex == 0) ? 1 : 0) + chapterIndex, Area.Mode), checkpoint)
             {
-               Time = XaphanModule.ModSaveData.SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? XaphanModule.ModSaveData.SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
+                Time = XaphanModule.ModSaveData.SavedTime.ContainsKey(SaveData.Instance.GetLevelSetStats().Name) ? XaphanModule.ModSaveData.SavedTime[SaveData.Instance.GetLevelSetStats().Name] : 0L
             }, fromSaveData: false);
         }
 
@@ -715,7 +715,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 int mode = (int)Area.Mode;
                 foreach (EntityData goldenberry in AreaData.Areas[Area.ID].Mode[mode].MapData.Goldenberries)
                 {
-                    EntityID item = new EntityID(goldenberry.Level.Name, goldenberry.ID);
+                    EntityID item = new(goldenberry.Level.Name, goldenberry.ID);
                     if (RealStats.Modes[mode].Strawberries.Contains(item))
                     {
                         flag = true;
@@ -784,7 +784,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     string[] str = null;
                     if (options[num].CheckpointLevelName != null)
                     {
-                         str = options[num].CheckpointLevelName.Split('|');
+                        str = options[num].CheckpointLevelName.Split('|');
                     }
                     string FixedCheckpointName = str != null ? str[1] : options[num].CheckpointLevelName;
                     if (options[num].ChapterIndex == CurrentDrawChapter)
@@ -839,7 +839,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 return;
             }
-            Vector2 vec = new Vector2(300f, 220f);
+            Vector2 vec = new(300f, 220f);
             vec = vector + vec.Rotate(checkpointRotation);
             int num = 0;
             AreaData areaData = AreaData.Areas[Area.ID + chapterIndex + ((XaphanModule.MergeChaptersControllerKeepPrologue && chapterIndex == 0) ? 1 : 0)];
@@ -1098,7 +1098,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 yield return 0.8f;
             }
             bool skipped = false;
-            Coroutine routine = new Coroutine(IncrementStatsDisplay(modeStats, newModeStats, doStrawberries, doRemixUnlock));
+            Coroutine routine = new(IncrementStatsDisplay(modeStats, newModeStats, doStrawberries, doRemixUnlock));
             Add(routine);
             yield return null;
             while (!routine.Finished)

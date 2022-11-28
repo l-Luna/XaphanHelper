@@ -47,7 +47,8 @@ namespace Celeste.Mod.XaphanHelper.Managers
         }
 
         public void GetDetectorsFlags()
-        {            activeFlags.Clear();
+        {
+            activeFlags.Clear();
             inactiveFlags.Clear();
             foreach (LaserDetector activeDetector in activeDetectors)
             {
@@ -68,10 +69,10 @@ namespace Celeste.Mod.XaphanHelper.Managers
                 {
                     SceneAs<Level>().Session.SetFlag(flag, true);
                 }
-                            }
+            }
             foreach (string flag in inactiveFlags)
             {
-                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)  && !activeFlags.Contains(flag))
+                if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag) && !activeFlags.Contains(flag))
                 {
                     SceneAs<Level>().Session.SetFlag(flag, false);
                 }

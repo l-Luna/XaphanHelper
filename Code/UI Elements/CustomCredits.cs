@@ -1,7 +1,6 @@
-﻿using Celeste;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -55,7 +54,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             public override void Render(Vector2 position, float alignment = 0.5f, float scale = 1f)
             {
                 position.Y += TopPadding * scale;
-                ActiveFont.DrawOutline(Title, position.Floor() - new Vector2(860 + (ActiveFont.Measure(Title).X * 1.4f) /2, 0), new Vector2(0f, 0f), Vector2.One * 1.4f * scale, TitleColor, 2f, BorderColor);
+                ActiveFont.DrawOutline(Title, position.Floor() - new Vector2(860 + (ActiveFont.Measure(Title).X * 1.4f) / 2, 0), new Vector2(0f, 0f), Vector2.One * 1.4f * scale, TitleColor, 2f, BorderColor);
                 position.Y += (LineHeight * 1.4f + 8f + Spacing) * scale;
                 for (int i = 0; i < Credits.Length; i++)
                 {
@@ -219,7 +218,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             public override void Render(Vector2 position, float alignment = 0.5f, float scale = 1f)
             {
                 MTexture mTexture = Atlas[ImagePath];
-                Vector2 position2 = position + new Vector2((float)mTexture.Width * (0.5f - alignment), (float)mTexture.Height * 0.5f) * scale;
+                Vector2 position2 = position + new Vector2(mTexture.Width * (0.5f - alignment), mTexture.Height * 0.5f) * scale;
                 if (ScreenCenter)
                 {
                     position2.X = 960f;
@@ -229,7 +228,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public override float Height(float scale = 1f)
             {
-                return ((float)Atlas[ImagePath].Height + BottomPadding) * scale;
+                return (Atlas[ImagePath].Height + BottomPadding) * scale;
             }
         }
 
@@ -249,7 +248,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Image[] array = images;
                 foreach (Image image in array)
                 {
-                    num2 += (float)(image.Atlas[image.ImagePath].Width + 32) * scale;
+                    num2 += (image.Atlas[image.ImagePath].Width + 32) * scale;
                 }
                 num2 -= 32f * scale;
                 Vector2 value = position - new Vector2(alignment * num2, 0f);
@@ -257,7 +256,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 foreach (Image image2 in array2)
                 {
                     image2.Render(value + new Vector2(0f, (num - image2.Height(scale)) / 2f), 0f, scale);
-                    value.X += (float)(image2.Atlas[image2.ImagePath].Width + 32) * scale;
+                    value.X += (image2.Atlas[image2.ImagePath].Width + 32) * scale;
                 }
             }
 
@@ -339,7 +338,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private static List<CreditNode> CreateCredits(bool title, bool polaroids)
         {
-            List<CreditNode> list = new List<CreditNode>();
+            List<CreditNode> list = new();
             if (title)
             {
                 string logoPath;
@@ -455,10 +454,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 int num2 = 64;
                 int num3 = 1080 - num2 * 2;
-                float num4 = (float)num3 * ((float)num3 / height);
-                float num5 = scroll / height * ((float)num3 - num4);
+                float num4 = num3 * (num3 / height);
+                float num5 = scroll / height * (num3 - num4);
                 Draw.Rect(1844f, num2, 12f, num3, Color.White * 0.2f * scrollbarAlpha);
-                Draw.Rect(1844f, (float)num2 + num5, 12f, num4, Color.White * 0.5f * scrollbarAlpha);
+                Draw.Rect(1844f, num2 + num5, 12f, num4, Color.White * 0.5f * scrollbarAlpha);
             }
         }
     }

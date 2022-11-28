@@ -1,17 +1,14 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Celeste.Mod.Meta;
+using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-using System.Collections.Generic;
-using Celeste.Mod.XaphanHelper.Data;
-using System;
-using On.Celeste;
-using FMOD.Studio;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -27,7 +24,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static FieldInfo LevelExit_session = typeof(LevelExit).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        private static List<CustomEndScreenControllerData> CustomEndScreenControllerData = new List<CustomEndScreenControllerData>();
+        private static List<CustomEndScreenControllerData> CustomEndScreenControllerData = new();
 
         public CustomEndScreenController(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
@@ -52,7 +49,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             if ((LevelExit.Mode)LevelExit_mode.GetValue(self) == LevelExit.Mode.Completed && CustomEndScreenControllerData.Count > 0)
             {
                 StatsFlags.GetStats(session);
-                CustomEndScreenControllerData SelectedScreenData = new CustomEndScreenControllerData()
+                CustomEndScreenControllerData SelectedScreenData = new()
                 {
                     Priority = -1
                 };
@@ -71,7 +68,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 else
                 {
                     SaveLoadIcon.Show(self);
-                    HiresSnow snow = new HiresSnow();
+                    HiresSnow snow = new();
                     snow.Direction = new Vector2(0f, 16f);
                     snow.Reset();
                     AreaData areaData = AreaData.Get(session);
@@ -97,7 +94,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                     completeMeta.Layers = new MapMetaCompleteScreenLayer[images.GetLength(0) + (SelectedScreenData.ShowTitle ? 1 : 0)];
                     for (int i = 0; i < images.GetLength(0); i++)
                     {
-                        MapMetaCompleteScreenLayer layer = new MapMetaCompleteScreenLayer();
+                        MapMetaCompleteScreenLayer layer = new();
                         layer.Type = "layer";
                         layer.Images = new string[1];
                         layer.Images[0] = images[i];
@@ -107,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                     }
                     if (SelectedScreenData.ShowTitle)
                     {
-                        MapMetaCompleteScreenLayer layer = new MapMetaCompleteScreenLayer();
+                        MapMetaCompleteScreenLayer layer = new();
                         layer.Type = "ui";
                         completeMeta.Layers[images.GetLength(0)] = layer;
                     }
@@ -277,7 +274,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             if (requirementsCheck == "Chapter")
             {
                 int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
-                Strawberries = StatsFlags.CurrentStrawberries[chapterIndex];                
+                Strawberries = StatsFlags.CurrentStrawberries[chapterIndex];
             }
             else
             {

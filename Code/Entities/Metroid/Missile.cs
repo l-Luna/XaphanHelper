@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Colliders;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod.XaphanHelper.Colliders;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

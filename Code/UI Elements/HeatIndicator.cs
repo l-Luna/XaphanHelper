@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -22,7 +22,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public string inactiveFlag;
 
-        public Coroutine HeatDamageRoutine = new Coroutine();
+        public Coroutine HeatDamageRoutine = new();
 
         public HeatIndicator(float maxDuration, string inactiveFlag)
         {
@@ -196,7 +196,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 heatIndicator = GFX.Gui["upgrades/heatindicator16"];
             }
-            else if (heat < maxDuration* 0.935f)
+            else if (heat < maxDuration * 0.935f)
             {
                 heatIndicator = GFX.Gui["upgrades/heatindicator17"];
             }

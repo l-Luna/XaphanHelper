@@ -1,4 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using FMOD.Studio;
@@ -7,10 +11,6 @@ using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -46,7 +46,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static ILHook wallJumpHook;
 
-        private HashSet<WaterInteraction> contains = new HashSet<WaterInteraction>();
+        private HashSet<WaterInteraction> contains = new();
 
         private bool waterIn;
 
@@ -94,7 +94,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public EventInstance riseSoundSource;
 
-        public Coroutine LiquidDamageRoutine = new Coroutine();
+        public Coroutine LiquidDamageRoutine = new();
 
         public bool FlashingRed;
 
@@ -192,10 +192,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 else
                 {
                     Add(sfx2 = new SoundSource());
-                    sfx.Position = new Vector2(data.Width/ 4f, data.Height / 2f);
-                    sfx2.Position = new Vector2(data.Width/ 4f * 3f, data.Height / 2f);
+                    sfx.Position = new Vector2(data.Width / 4f, data.Height / 2f);
+                    sfx2.Position = new Vector2(data.Width / 4f * 3f, data.Height / 2f);
                 }
-                
+
             }
             if (liquidType == "water")
             {
@@ -228,7 +228,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             waterSplashIn.AddLoop("splash", "splash", 0.04f);
             Add(waterSplashOut = new Sprite(GFX.Game, "objects/XaphanHelper/liquid/water/"));
             waterSplashOut.AddLoop("splash", "splash", 0.04f);
-            liquidSprite.Color = waterSplashIn .Color = waterSplashOut.Color = Calc.HexToColor(color) * transparency;
+            liquidSprite.Color = waterSplashIn.Color = waterSplashOut.Color = Calc.HexToColor(color) * transparency;
             Add(pc = new PlayerCollider(OnCollide));
             if (upsideDown)
             {
@@ -383,7 +383,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void modNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(90f)) && cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Stloc_S && (((VariableDefinition)instr.Operand).Index == 6 || ((VariableDefinition)instr.Operand).Index == 31)))
             {
@@ -408,7 +408,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void modJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(-105f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineJumpHeightFactor);
@@ -418,7 +418,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void modSuperJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(260f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -433,7 +433,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void modWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(130f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -448,7 +448,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void modSuperWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(170f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -471,7 +471,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void onPlayerClimbUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<VirtualButton>("get_Pressed")))
             {
@@ -483,7 +483,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdsfld(typeof(Input), "MoveY"), instr => instr.MatchLdfld<VirtualIntegerAxis>("Value")))
             {
-                cursor.EmitDelegate<Func<int, int>>(orig => {
+                cursor.EmitDelegate<Func<int, int>>(orig =>
+                {
                     if (Engine.Scene is Level)
                     {
                         Level level = (Level)Engine.Scene;
@@ -684,7 +685,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public IEnumerator LevelBottomDelay()
         {
             float timer = 1.5f;
-            while (timer> 0)
+            while (timer > 0)
             {
                 timer -= Engine.DeltaTime;
                 yield return null;
@@ -982,7 +983,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void RenderDisplacement()
         {
-            Color color = new Color(0.5f, 0.5f, 0.25f, 1f);
+            Color color = new(0.5f, 0.5f, 0.25f, 1f);
             int i = 0;
             int length = grid.GetLength(0);
             int length2 = grid.GetLength(1);
@@ -1119,7 +1120,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                     }
                 }
-            }        
+            }
         }
 
         private IEnumerator LiquidDamage(string liquidType)

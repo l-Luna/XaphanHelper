@@ -1,6 +1,5 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
-using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Triggers
 {
@@ -21,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public override void Update()
         {
             base.Update();
-            if (Settings.SpeedrunMode && !SceneAs<Level>().Session.StartedFromBeginning&& !triggered)
+            if (Settings.SpeedrunMode && !SceneAs<Level>().Session.StartedFromBeginning && !triggered)
             {
                 foreach (string flag in flags)
                 {

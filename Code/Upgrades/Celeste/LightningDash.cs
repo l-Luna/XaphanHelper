@@ -1,12 +1,12 @@
-﻿using Mono.Cecil.Cil;
+﻿using System;
+using System.Collections;
+using System.Reflection;
+using FMOD.Studio;
+using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
+using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
-using Monocle;
-using System;
-using Microsoft.Xna.Framework;
-using System.Reflection;
-using System.Collections;
-using FMOD.Studio;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -68,7 +68,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modCallDashEvents(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => (instr.OpCode == OpCodes.Brtrue || instr.OpCode == OpCodes.Brfalse)))
             {
@@ -81,7 +81,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (Active(self.SceneAs<Level>()) && (self.Speed.X > 600f || self.Speed.X < -600f))
             {
-                Vector2 scale = new Vector2(Math.Abs(self.Sprite.Scale.X) * (float)self.Facing, self.Sprite.Scale.Y);
+                Vector2 scale = new(Math.Abs(self.Sprite.Scale.X) * (float)self.Facing, self.Sprite.Scale.Y);
                 TrailManager.Add(self, scale, Calc.HexToColor("F2EB6D"));
             }
             else
@@ -144,7 +144,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                         Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
                         level.Session.SetFlag("Xaphan_Helper_Shinesparking", false);
                     }
-                    if (Active(level)  && !self.OnGround() && self.ClimbCheck(1) && aim.X < 0 && self.Facing == Facings.Left && aim.Y == 0 && ((GravityJacket.determineIfInWater() || GravityJacket.determineIfInLava()) ? GravityJacket.Active(level) : true) && (Input.Grab.Check || level.Session.GetFlag("Xaphan_Helper_Shinesparking")))
+                    if (Active(level) && !self.OnGround() && self.ClimbCheck(1) && aim.X < 0 && self.Facing == Facings.Left && aim.Y == 0 && ((GravityJacket.determineIfInWater() || GravityJacket.determineIfInLava()) ? GravityJacket.Active(level) : true) && (Input.Grab.Check || level.Session.GetFlag("Xaphan_Helper_Shinesparking")))
                     {
                         level.Session.SetFlag("Xaphan_Helper_Shinesparking", true);
                         sound = Audio.Play("event:/game/xaphan/shinespark_start");
@@ -196,11 +196,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private static void modPlayerOrigUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(0.01f), instr => instr.OpCode == OpCodes.Ldloc_S))
             {
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate<Func<float, Player, float>>((orig, self) => {
+                cursor.EmitDelegate<Func<float, Player, float>>((orig, self) =>
+                {
                     XaphanModuleSettings Settings = XaphanModule.Settings;
                     if (Settings.LightningDash && (self.Speed.X > 600f || self.Speed.X < -600f) && self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))
                     {

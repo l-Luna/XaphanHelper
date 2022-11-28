@@ -1,12 +1,11 @@
-﻿using Celeste.Mod.XaphanHelper.Managers;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
-using System;
-using System.Collections;
-using On.Celeste;
-using Celeste.Mod.XaphanHelper.Entities;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -20,9 +19,9 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static Tween tween;
 
-        public static Coroutine FloatTimerRoutine = new Coroutine();
+        public static Coroutine FloatTimerRoutine = new();
 
-        public ParticleType P_Dust = new ParticleType();
+        public ParticleType P_Dust = new();
 
         public override int GetDefaultValue()
         {
@@ -62,7 +61,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private static void ilPlayerNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(0.65f)))
             {
@@ -79,12 +78,13 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private static void ilPlayerRender(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(instr => instr.MatchCallvirt<StateMachine>("get_State"), instr => instr.MatchLdcI4(19)))
             {
                 cursor.Index++;
-                cursor.EmitDelegate<Func<int, int>>(orig => {
+                cursor.EmitDelegate<Func<int, int>>(orig =>
+                {
                     if (Floating)
                     {
                         return 19;
@@ -134,7 +134,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             if (Active(self.SceneAs<Level>()) && !XaphanModule.PlayerIsControllingRemoteDrone())
             {
                 ScrewAttackManager manager = self.SceneAs<Level>().Tracker.GetEntity<ScrewAttackManager>();
-                if (self.Speed.Y >= 0 && Input.MenuUp.Check && !self.OnGround() && !self.DashAttacking && self.StateMachine.State == 0 && CanFloat &&  !Liquid.determineIfInQuicksand())
+                if (self.Speed.Y >= 0 && Input.MenuUp.Check && !self.OnGround() && !self.DashAttacking && self.StateMachine.State == 0 && CanFloat && !Liquid.determineIfInQuicksand())
                 {
                     if (!Floating)
                     {
@@ -225,7 +225,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private IEnumerator FloatTimer(Player player)
         {
-            while ( floatTimer > 0f)
+            while (floatTimer > 0f)
             {
                 if (Floating)
                 {

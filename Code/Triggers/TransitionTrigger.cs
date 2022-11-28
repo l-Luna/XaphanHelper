@@ -25,7 +25,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public override void OnStay(Player player)
         {
             base.OnStay(player);
-            Rectangle bounds = new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
+            Rectangle bounds = new((int)X, (int)Y, (int)Width, (int)Height);
             if (SceneAs<Level>().Transitioning)
             {
                 return;

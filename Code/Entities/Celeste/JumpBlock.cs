@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -21,11 +21,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Color color;
 
-        private List<Image> pressed = new List<Image>();
+        private List<Image> pressed = new();
 
-        private List<Image> solid = new List<Image>();
+        private List<Image> solid = new();
 
-        private List<Image> all = new List<Image>();
+        private List<Image> all = new();
 
         private LightOcclude occluder;
 
@@ -74,7 +74,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            List<int> indexes = new List<int>();
+            List<int> indexes = new();
             if (SceneAs<Level>().Tracker.GetEntities<JumpBlock>().Count != 0)
             {
                 AreaKey area = SceneAs<Level>().Session.Area;
@@ -111,7 +111,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             base.Awake(scene);
             Color color = Calc.HexToColor("667da5");
-            Color disabledColor = new Color(color.R / 255f * (this.color.R / 255f), color.G / 255f * (this.color.G / 255f), color.B / 255f * (this.color.B / 255f), 1f);
+            Color disabledColor = new(color.R / 255f * (this.color.R / 255f), color.G / 255f * (this.color.G / 255f), color.B / 255f * (this.color.B / 255f), 1f);
             foreach (StaticMover staticMover in staticMovers)
             {
                 Spikes spikes = staticMover.Entity as Spikes;
@@ -274,8 +274,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Image CreateImage(float x, float y, int tx, int ty, MTexture tex)
         {
-            Vector2 value = new Vector2(x - X, y - Y);
-            Image image = new Image(tex.GetSubtexture(tx * 8, ty * 8, 8, 8));
+            Vector2 value = new(x - X, y - Y);
+            Image image = new(tex.GetSubtexture(tx * 8, ty * 8, 8, 8));
             Vector2 vector = groupOrigin - Position;
             image.Origin = vector - value;
             image.Position = vector;
@@ -376,7 +376,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (groupLeader)
             {
-                Vector2 scale = new Vector2(1f + wiggler.Value * 0.05f * wigglerScaler.X, 1f + wiggler.Value * 0.15f * wigglerScaler.Y);
+                Vector2 scale = new(1f + wiggler.Value * 0.05f * wigglerScaler.X, 1f + wiggler.Value * 0.15f * wigglerScaler.Y);
                 foreach (JumpBlock item3 in group)
                 {
                     foreach (Image item4 in item3.all)
@@ -435,7 +435,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (player.SceneAs<Level>().Tracker.GetEntities<JumpBlock>().Count > 0)
             {
-                List<int> indexes = new List<int>();
+                List<int> indexes = new();
                 int currentIndex = -1;
                 foreach (JumpBlock jumpblock in player.SceneAs<Level>().Tracker.GetEntities<JumpBlock>())
                 {

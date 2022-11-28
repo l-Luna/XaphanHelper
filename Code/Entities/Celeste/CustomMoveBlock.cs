@@ -83,7 +83,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Tag = Tags.TransitionUpdate;
                 Collider = new Hitbox(4f, 4f, -2f, -2f);
-                
+
                 onCollideH = delegate
                 {
                     speed.X = (0f - speed.X) * 0.5f;
@@ -220,17 +220,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Player noSquish;
 
-        private List<Image> body = new List<Image>();
+        private List<Image> body = new();
 
-        private List<Image> topButton = new List<Image>();
+        private List<Image> topButton = new();
 
-        private List<Image> bottomButton = new List<Image>();
+        private List<Image> bottomButton = new();
 
-        private List<Image> leftButton = new List<Image>();
+        private List<Image> leftButton = new();
 
-        private List<Image> rightButton = new List<Image>();
+        private List<Image> rightButton = new();
 
-        private List<MTexture> arrows = new List<MTexture>();
+        private List<MTexture> arrows = new();
 
         private Border border;
 
@@ -534,12 +534,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 StopPlayerRunIntoAnimation = true;
                 yield return 0.2f;
                 BreakParticles();
-                List<Debris> debris = new List<Debris>();
+                List<Debris> debris = new();
                 for (int i = 0; i < Width; i += 8)
                 {
                     for (int j = 0; j < Height; j += 8)
                     {
-                        Vector2 vector2 = new Vector2(i + 4f, j + 4f);
+                        Vector2 vector2 = new(i + 4f, j + 4f);
                         Debris debris2 = Engine.Pooler.Create<Debris>().Init(Position + vector2, Center, startPosition + vector2, directory);
                         debris.Add(debris2);
                         Scene.Add(debris2);
@@ -651,7 +651,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 border.Visible = Visible;
             }
-            
+
             flash = Calc.Approach(flash, 0f, Engine.DeltaTime * 5f);
             UpdateColors();
         }
@@ -695,7 +695,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         for (int num = 1; num >= -1; num -= 2)
                         {
-                            Vector2 vector = new Vector2(Math.Sign(speed.X), i * num);
+                            Vector2 vector = new(Math.Sign(speed.X), i * num);
                             if (!CollideCheck<Solid>(Position + vector))
                             {
                                 MoveVExact(i * num);
@@ -716,7 +716,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         for (int num2 = 1; num2 >= -1; num2 -= 2)
                         {
-                            Vector2 vector2 = new Vector2(j * num2, Math.Sign(speed.Y));
+                            Vector2 vector2 = new(j * num2, Math.Sign(speed.Y));
                             if (!CollideCheck<Solid>(Position + vector2))
                             {
                                 MoveHExact(j * num2);
@@ -762,12 +762,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     item.Color = fillColor;
                 }
-            }            
+            }
         }
 
         private void AddImage(MTexture tex, Vector2 position, float rotation, Vector2 scale, List<Image> addTo)
         {
-            Image image = new Image(tex);
+            Image image = new(tex);
             image.Position = position + new Vector2(4f, 4f);
             image.CenterOrigin();
             image.Rotation = rotation;
@@ -910,7 +910,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 float x = ((!(dir.X > 0f)) ? (Left - 1f) : Right);
                 for (int i = 0; i < Height; i += 8)
                 {
-                    Vector2 vector = new Vector2(x, Top + 4f + i);
+                    Vector2 vector = new(x, Top + 4f + i);
                     if (Scene.CollideCheck<Solid>(vector))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, vector);
@@ -922,7 +922,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 float y = ((!(dir.Y > 0f)) ? (Top - 1f) : Bottom);
                 for (int j = 0; j < Width; j += 8)
                 {
-                    Vector2 vector2 = new Vector2(Left + 4f + j, y);
+                    Vector2 vector2 = new(Left + 4f + j, y);
                     if (Scene.CollideCheck<Solid>(vector2))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(ZipMover.P_Scrape, vector2);

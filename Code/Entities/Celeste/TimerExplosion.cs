@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -41,7 +41,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Random rand = Calc.Random;
                 if (rand.Next(101) <= 75)
-                Audio.Play("event:/game/xaphan/explosion");
+                    Audio.Play("event:/game/xaphan/explosion");
             }
         }
 

@@ -1,15 +1,14 @@
-﻿using Celeste.Mod.XaphanHelper.Cutscenes;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
+using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
-using System.Reflection;
-using System.Collections.Generic;
 using MonoMod.Utils;
-using System.Linq;
-using Celeste.Mod.XaphanHelper.Upgrades;
-using On.Celeste;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -246,7 +245,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             else
             {
                 return orig(self, direction, evenIfInvincible, registerDeathInStats);
-            }                
+            }
         }
 
         private static void OnPlayerjump(On.Celeste.Player.orig_Jump orig, Player self, bool particles, bool playSfx)
@@ -301,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (player != null)
             {
-                DynData<Player> playerData = new DynData<Player>(player);
+                DynData<Player> playerData = new(player);
                 Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
                 normalPlayerHitbox.Height = 7f;
                 normalPlayerHitbox.Width = 6f;
@@ -506,7 +505,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             SceneAs<Level>().Displacement.AddBurst(FakePlayer.Center, 0.5f, 8f, 32f, 0.5f);
             SceneAs<Level>().Displacement.AddBurst(player.Center, 0.5f, 8f, 32f, 0.5f);
             player.Visible = true;
-            DynData<Player> playerData = new DynData<Player>(player);
+            DynData<Player> playerData = new(player);
             Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
             normalPlayerHitbox.Height = 11f;
             normalPlayerHitbox.Width = 8f;
@@ -638,7 +637,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Light.Visible = true;
                 AddTag(Tags.TransitionUpdate);
-                if (Input.Dash.Check && BeamDelay <= 0 && !SceneAs<Level>().Transitioning && droneSprite.CurrentAnimationID != "egg" && droneSprite.CurrentAnimationID != "hatch" && droneSprite.CurrentAnimationID != "egg"&& !dead && player.StateMachine.State == 0)
+                if (Input.Dash.Check && BeamDelay <= 0 && !SceneAs<Level>().Transitioning && droneSprite.CurrentAnimationID != "egg" && droneSprite.CurrentAnimationID != "hatch" && droneSprite.CurrentAnimationID != "egg" && !dead && player.StateMachine.State == 0)
                 {
                     Add(new Coroutine(Shoot(SceneAs<Level>())));
                 }
@@ -863,7 +862,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
             string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
             level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
-           int droneFireRateUpgradesCount = 0;
+            int droneFireRateUpgradesCount = 0;
             if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
             {
                 droneFireRateUpgradesCount = XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Count;
@@ -921,7 +920,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (startRoom == Level.Session.Level && !respawnPlayerInSameRoom)
                 {
                     respawnPlayerInSameRoom = true;
-                    DynData<Player> playerData = new DynData<Player>(player);
+                    DynData<Player> playerData = new(player);
                     Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
                     normalPlayerHitbox.Height = 11f;
                     normalPlayerHitbox.Width = 8f;

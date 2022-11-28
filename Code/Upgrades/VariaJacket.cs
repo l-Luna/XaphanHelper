@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Collections;
+﻿using System.Collections;
+using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -45,6 +45,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             }
             IEnumerator origEnum = orig(self, player);
             while (origEnum.MoveNext()) yield return origEnum.Current;
-        }        
+        }
     }
 }

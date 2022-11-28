@@ -1,10 +1,9 @@
-﻿using Monocle;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using System;
-using Microsoft.Xna.Framework;
+﻿using System;
 using Celeste.Mod.XaphanHelper.UI_Elements;
-using On.Celeste;
+using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
+using Monocle;
+using MonoMod.Cil;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -82,7 +81,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void onPlayerClimbUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<VirtualButton>("get_Pressed")))
             {

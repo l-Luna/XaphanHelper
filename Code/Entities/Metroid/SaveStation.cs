@@ -1,12 +1,11 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -187,7 +186,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Level level;
 
-        private Coroutine GameLoadCoroutine = new Coroutine();
+        private Coroutine GameLoadCoroutine = new();
 
         public SaveStation(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {
@@ -208,7 +207,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             base.Added(scene);
             level = SceneAs<Level>();
             level.Add(new Slope(Position, Vector2.UnitX, false, "Left", 7, 1, "Horizontal", "Horizontal", "cement", "cement", false, "", "", false, true, false, false, false, ""));
-            level.Add(new Slope(Position, new Vector2(-25f ,0f), false, "Right", 7, 1, "Horizontal", "Horizontal", "cement", "cement", false, "", "", false, true, false, false, false, ""));
+            level.Add(new Slope(Position, new Vector2(-25f, 0f), false, "Right", 7, 1, "Horizontal", "Horizontal", "cement", "cement", false, "", "", false, true, false, false, false, ""));
             Add(talk = new TalkComponent(new Rectangle(-4, -8, 8, 8), new Vector2(0f, -16f), Interact));
             talk.PlayerMustBeFacing = false;
             talk.Enabled = false;

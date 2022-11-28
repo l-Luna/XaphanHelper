@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using Monocle;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -112,7 +111,7 @@ namespace Celeste.Mod.XaphanHelper
         public bool Binoculars { get; set; } = false;
 
         [SettingIgnore]
-        public bool EtherealDash { get; set; } = false; 
+        public bool EtherealDash { get; set; } = false;
 
         [SettingIgnore]
         public bool PortableStation { get; set; } = false;

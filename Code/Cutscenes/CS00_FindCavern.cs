@@ -1,5 +1,5 @@
-﻿using Monocle;
-using System.Collections;
+﻿using System.Collections;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {

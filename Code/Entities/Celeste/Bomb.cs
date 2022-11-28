@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Upgrades;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Upgrades;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -298,7 +298,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
                 bool shouldExplodeImmediately = false;
                 foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
-                {                    
+                {
                     if (entityList.Key == typeof(Liquid))
                     {
                         foreach (Entity entity in entityList.Value)
@@ -309,7 +309,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 shouldExplodeImmediately = true;
                             }
                         }
-                        
+
                     }
                     else if (entityList.Key == typeof(LaserBeam))
                     {

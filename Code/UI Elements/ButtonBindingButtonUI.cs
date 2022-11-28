@@ -5,13 +5,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
     public static class ButtonBindingButtonUI
     {
-        public static VirtualButton vButton = new VirtualButton();
+        public static VirtualButton vButton = new();
 
         public static float Width(string label, ButtonBinding button)
         {
             vButton.Binding = button.Binding;
             MTexture mTexture = Input.GuiButton(vButton, "controls/keyboard/oemquestion");
-            return ActiveFont.Measure(label).X + 8f + (float)mTexture.Width;
+            return ActiveFont.Measure(label).X + 8f + mTexture.Width;
         }
 
         public static void Render(Vector2 position, string label, ButtonBinding button, float scale, float justifyX = 0.5f, float wiggle = 0f, float alpha = 1f)
@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             MTexture mTexture = Input.GuiButton(vButton, "controls/keyboard/oemquestion");
             float num = Width(label, button);
             position.X -= scale * num * (justifyX - 0.5f);
-            mTexture.Draw(position, new Vector2((float)mTexture.Width - num / 2f, (float)mTexture.Height / 2f), Color.White * alpha, scale + wiggle);
+            mTexture.Draw(position, new Vector2(mTexture.Width - num / 2f, mTexture.Height / 2f), Color.White * alpha, scale + wiggle);
             DrawText(label, position, num / 2f, scale + wiggle, alpha);
         }
 

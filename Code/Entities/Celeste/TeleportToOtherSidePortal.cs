@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
-using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -25,7 +24,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool TeleportToStartingSpawnOfChapter;
 
-        private Coroutine TeleportRoutine = new Coroutine();
+        private Coroutine TeleportRoutine = new();
 
         private bool EnteredPortal;
 

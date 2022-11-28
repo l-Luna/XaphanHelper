@@ -1,11 +1,11 @@
-﻿using Celeste.Mod.XaphanHelper.Colliders;
-using Celeste.Mod.XaphanHelper.Upgrades;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod.XaphanHelper.Colliders;
+using Celeste.Mod.XaphanHelper.Upgrades;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -213,7 +213,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 ShootOffset.Y = Input.MoveY == -1 ? -16f : -8f;
             }
             beamSpritePath = "upgrades/Beams/";
-            if(!XaphanModule.useMetroidGameplay)
+            if (!XaphanModule.useMetroidGameplay)
             {
                 colliderWidth = 5f;
                 colliderHeight = 3f;

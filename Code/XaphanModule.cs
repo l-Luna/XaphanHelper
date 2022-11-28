@@ -1,7 +1,16 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Xml;
+using Celeste.Mod.Meta;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Cutscenes;
+using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Effects;
 using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.Hooks;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.Triggers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
@@ -9,19 +18,7 @@ using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Celeste.Mod.XaphanHelper.Data;
 using MonoMod.Utils;
-using Celeste.Mod.Meta;
-using System.Xml;
-using On.Celeste;
-using System.ComponentModel.Design;
-using Celeste.Mod.XaphanHelper.Hooks;
-using IL.Celeste;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -39,7 +36,7 @@ namespace Celeste.Mod.XaphanHelper
         public override Type SaveDataType => typeof(XaphanModuleSaveData);
         public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
 
-        public static List<TeleportToOtherSideData> TeleportToOtherSideData = new List<TeleportToOtherSideData>();
+        public static List<TeleportToOtherSideData> TeleportToOtherSideData = new();
 
         private FieldInfo OuiChapterSelect_icons = typeof(OuiChapterSelect).GetField("icons", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -238,7 +235,7 @@ namespace Celeste.Mod.XaphanHelper
         public static bool MorphBombsCollected(Level level)
         {
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MorphBombs");
-        }        
+        }
 
         public static bool SpringBallCollected(Level level)
         {
@@ -435,7 +432,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool useMetroidGameplay;
 
-        public Dictionary<Upgrades, Upgrade> UpgradeHandlers = new Dictionary<Upgrades, Upgrade>();
+        public Dictionary<Upgrades, Upgrade> UpgradeHandlers = new();
 
         public static bool PlayerHasGolden;
 
@@ -690,7 +687,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     player.Speed.Y = 320f;
                 }
-            }   
+            }
             return StFastFall;
         }
 
@@ -1033,7 +1030,7 @@ namespace Celeste.Mod.XaphanHelper
         {
             if (useMergeChaptersController && SaveData.Instance.CurrentSession.Area.Mode == AreaMode.Normal && (SaveData.Instance.CurrentSession.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true))
             {
-                Session session = new Session(self.Area, self.StartCheckpoint, self.OldStats)
+                Session session = new(self.Area, self.StartCheckpoint, self.OldStats)
                 {
                     Time = ModSaveData.SavedTime.ContainsKey(SaveData.Instance.CurrentSession.Area.LevelSet) ? ModSaveData.SavedTime[SaveData.Instance.CurrentSession.Area.LevelSet] : 0L,
                     UnlockedCSide = self.UnlockedCSide
@@ -1098,7 +1095,7 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 float width = ActiveFont.Measure(text).X * 0.75f;
                 float textureWidth = mTexture.Width * 0.75f;
-                Vector2 value2 = new Vector2((1920f - width - textureWidth - 64f) / 2f, 730f);
+                Vector2 value2 = new((1920f - width - textureWidth - 64f) / 2f, 730f);
                 ActiveFont.DrawOutline(text, value2 + new Vector2(width / 2f, 0f), new Vector2(0.5f, 0.5f), Vector2.One * 0.75f, Color.LightGray, 2f, Color.Black);
                 value2.X += width + 64f;
                 mTexture.DrawCentered(value2 + new Vector2(textureWidth * 0.5f, 0f), Color.White, 0.75f);
@@ -1199,7 +1196,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void modOuiChapterPanelUpdateStats(On.Celeste.OuiChapterPanel.orig_UpdateStats orig, OuiChapterPanel self, bool wiggle, bool? overrideStrawberryWiggle, bool? overrideDeathWiggle, bool? overrideHeartWiggle)
         {
-            DynData<OuiChapterPanel> OuiChapterPanelData = new DynData<OuiChapterPanel>(self);
+            DynData<OuiChapterPanel> OuiChapterPanelData = new(self);
             DeathsCounter deaths = OuiChapterPanelData.Get<DeathsCounter>("deaths");
             HeartGemDisplay heart = OuiChapterPanelData.Get<HeartGemDisplay>("heart");
             StrawberriesCounter strawberries = OuiChapterPanelData.Get<StrawberriesCounter>("strawberries");
@@ -1393,7 +1390,7 @@ namespace Celeste.Mod.XaphanHelper
         private void getTeleportToOtherSidePortalsData(Level level)
         {
             TeleportToOtherSideData.Clear();
-            HashSet<int> Modes = new HashSet<int>();
+            HashSet<int> Modes = new();
             Modes.Add(0);
             if (AreaData.Areas[level.Session.Area.ID].HasMode(AreaMode.BSide))
             {
@@ -1717,7 +1714,7 @@ namespace Celeste.Mod.XaphanHelper
                         setLongBeam = entity.Bool("onlyAllowLongBeam") || entity.Bool("startWithLongBeam");
                         setIceBeam = entity.Bool("onlyAllowIceBeam") || entity.Bool("startWithIceBeam");
                         setWaveBeam = entity.Bool("onlyAllowWaveBeam") || entity.Bool("startWithWaveBeam");
-                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs ||  setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam;
+                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam;
                         forceStartingUpgrades = entity.Bool("onlyAllowStartingUpgrades", hasStartingUpgrades ? true : false);
                         break;
                     }
@@ -2238,8 +2235,9 @@ namespace Celeste.Mod.XaphanHelper
                 }
 
                 // add the "Giveup Challenge Mode" button
-                TextMenu.Button GiveUpCMButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_GiveUpCM"));
-                GiveUpCMButton.Pressed(() => {
+                TextMenu.Button GiveUpCMButton = new(Dialog.Clean("XaphanHelper_UI_GiveUpCM"));
+                GiveUpCMButton.Pressed(() =>
+                {
                     level.PauseMainMenuOpen = false;
                     menu.RemoveSelf();
                     confirmGiveUpCMMenu(level, menu.Selection);
@@ -2257,8 +2255,9 @@ namespace Celeste.Mod.XaphanHelper
                 }
 
                 // add the "Restart campaign" button
-                TextMenu.Button RestartCampaignButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_RestartCampaign"));
-                RestartCampaignButton.Pressed(() => {
+                TextMenu.Button RestartCampaignButton = new(Dialog.Clean("XaphanHelper_UI_RestartCampaign"));
+                RestartCampaignButton.Pressed(() =>
+                {
                     level.PauseMainMenuOpen = false;
                     menu.RemoveSelf();
                     confirmRestartCampaign(level, menu.Selection);
@@ -2284,8 +2283,9 @@ namespace Celeste.Mod.XaphanHelper
                 }
 
                 // add the "Exit X-Side" button
-                TextMenu.Button ExitSideButton = new TextMenu.Button(Dialog.Clean("XaphanHelper_UI_GiveUp" + (level.Session.Area.Mode == AreaMode.BSide ? "B" : "C") + "Side"));
-                ExitSideButton.Pressed(() => {
+                TextMenu.Button ExitSideButton = new(Dialog.Clean("XaphanHelper_UI_GiveUp" + (level.Session.Area.Mode == AreaMode.BSide ? "B" : "C") + "Side"));
+                ExitSideButton.Pressed(() =>
+                {
                     level.PauseMainMenuOpen = false;
                     menu.RemoveSelf();
                     confirmExitSideMenu(level, menu.Selection);
@@ -2301,7 +2301,7 @@ namespace Celeste.Mod.XaphanHelper
             if (CMote != null)
             {
                 level.Paused = true;
-                TextMenu menu = new TextMenu();
+                TextMenu menu = new();
                 menu.AutoScroll = false;
                 menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
                 menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_GiveUpCM_title")));
@@ -2341,7 +2341,7 @@ namespace Celeste.Mod.XaphanHelper
             level.Paused = true;
             ReturnToASideHint returnHint = null;
             level.Add(returnHint = new ReturnToASideHint());
-            TextMenu menu = new TextMenu();
+            TextMenu menu = new();
             menu.AutoScroll = false;
             menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
             menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_GiveUp" + (level.Session.Area.Mode == AreaMode.BSide ? "B" : "C") + "Side_title")));
@@ -2361,7 +2361,7 @@ namespace Celeste.Mod.XaphanHelper
                         Time = ModSaveData.SavedTime.ContainsKey(level.Session.Area.LevelSet) ? ModSaveData.SavedTime[level.Session.Area.LevelSet] : 0L
                     }
                     , fromSaveData: false);
-                });              
+                });
             }));
             menu.Add(new TextMenu.Button(Dialog.Clean("menu_return_cancel")).Pressed(delegate
             {
@@ -2390,7 +2390,7 @@ namespace Celeste.Mod.XaphanHelper
             level.Paused = true;
             RestartCampaignHint returnHint = null;
             level.Add(returnHint = new RestartCampaignHint());
-            TextMenu menu = new TextMenu();
+            TextMenu menu = new();
             menu.AutoScroll = false;
             menu.Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f - 100f);
             menu.Add(new TextMenu.Header(Dialog.Clean("XaphanHelper_UI_RestartCampaign_title")));
@@ -2421,11 +2421,11 @@ namespace Celeste.Mod.XaphanHelper
                     ModSaveData.SavedFromBeginning.Remove(level.Session.Area.LevelSet);
                     ModSaveData.SavedSesionFlags.Remove(level.Session.Area.LevelSet);
                     ModSaveData.SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
-                    List<string> FlagsToRemove = new List<string>();
-                    List<string> CutscenesToRemove = new List<string>();
-                    List<string> StaminaUpgradesToRemove = new List<string>();
-                    List<string> DroneFireRateUpgradesToRemove = new List<string>();
-                    List<string> GlobalFlagsToRemove = new List<string>();
+                    List<string> FlagsToRemove = new();
+                    List<string> CutscenesToRemove = new();
+                    List<string> StaminaUpgradesToRemove = new();
+                    List<string> DroneFireRateUpgradesToRemove = new();
+                    List<string> GlobalFlagsToRemove = new();
                     foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
                         if (savedFlag.Contains(level.Session.Area.LevelSet) && savedFlag != "Xaphan/0_Skip_Vignette")
@@ -2602,12 +2602,12 @@ namespace Celeste.Mod.XaphanHelper
                 if (self.Tracker.GetEntity<HealthDisplay>() == null)
                 {
                     self.Add(new HealthDisplay(new Vector2(22f, 22f)));
-                }               
+                }
                 if (self.Tracker.GetEntity<AmmoDisplay>() == null)
                 {
                     self.Add(new AmmoDisplay(new Vector2(22f, 31f)));
                 }
-            }            
+            }
 
             // Resume the countdown started from an other chapter when entering a chapter from the start
 
@@ -2777,7 +2777,7 @@ namespace Celeste.Mod.XaphanHelper
                             }
                         }
                     }
-                    
+
                     if (self.Session.RespawnPoint == null)
                     {
                         self.Session.RespawnPoint = Vector2.Zero;
@@ -2947,7 +2947,7 @@ namespace Celeste.Mod.XaphanHelper
                 if (string.IsNullOrEmpty(ModSaveData.DestinationRoom))
                 {
                     if (self.Session.StartedFromBeginning)
-                    {  
+                    {
                         string currentRoom = self.Session.Level;
                         ScreenWipe Wipe = null;
                         foreach (LevelData level in MapData.Levels)
@@ -3026,7 +3026,7 @@ namespace Celeste.Mod.XaphanHelper
                 int chapterIndex = self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex;
                 if (player != null && !self.Paused && !self.Transitioning)
                 {
-                    Vector2 playerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - self.Bounds.X) / 320f), (float)Math.Round(self.Bounds.Width / 320f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - self.Bounds.Y) / 184f), (float)Math.Round(self.Bounds.Height / 184f, MidpointRounding.AwayFromZero) + 1));
+                    Vector2 playerPosition = new(Math.Min((float)Math.Floor((player.Center.X - self.Bounds.X) / 320f), (float)Math.Round(self.Bounds.Width / 320f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - self.Bounds.Y) / 184f), (float)Math.Round(self.Bounds.Height / 184f, MidpointRounding.AwayFromZero) + 1));
                     if (playerPosition.X < 0)
                     {
                         playerPosition.X = 0;
@@ -3094,7 +3094,7 @@ namespace Celeste.Mod.XaphanHelper
         private bool CheckIfTileIsValid(string room, Vector2 playerPosition, List<Entity> TilesControllers)
         {
             bool isValid = false;
-            List<InGameMapTilesControllerData> TilesControllerData = new List<InGameMapTilesControllerData>();
+            List<InGameMapTilesControllerData> TilesControllerData = new();
             foreach (Entity tileController in TilesControllers)
             {
                 InGameMapTilesController controller = tileController as InGameMapTilesController;

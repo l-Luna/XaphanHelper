@@ -1,9 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using MonoMod;
-using System;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -222,7 +221,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 filler.Depth = Depth + 1;
             }
             List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(bgDirectory);
-            Image image = new Image(Calc.Random.Choose(atlasSubtextures));
+            Image image = new(Calc.Random.Choose(atlasSubtextures));
             image.Position = offset;
             image.Rotation = Calc.Random.Choose(0, 1, 2, 3) * ((float)Math.PI / 2f);
             image.CenterOrigin();

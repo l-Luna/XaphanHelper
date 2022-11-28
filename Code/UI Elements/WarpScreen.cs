@@ -1,14 +1,16 @@
-﻿using Celeste.Mod.XaphanHelper.Managers;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
-namespace Celeste.Mod.XaphanHelper.UI_Elements {
+namespace Celeste.Mod.XaphanHelper.UI_Elements
+{
     [Tracked]
-    public class WarpScreen : Entity {
+    public class WarpScreen : Entity
+    {
         private static readonly MTexture arrowTex = GFX.Gui["towerarrow"];
 
         private static readonly MTexture playerIcon = GFX.Gui["maps/player"];
@@ -48,7 +50,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
         private WarpMenu warpMenu;
         private readonly List<List<WarpInfo>> warpsPerArea = new();
 
-        public WarpScreen(string currentWarp = "", string confirmSfx = "event:/game/xaphan/warp", string wipeType = "Fade", float wipeDuration = 0.75f) {
+        public WarpScreen(string currentWarp = "", string confirmSfx = "event:/game/xaphan/warp", string wipeType = "Fade", float wipeDuration = 0.75f)
+        {
             this.currentWarp = currentWarp;
             this.confirmSfx = confirmSfx;
             this.wipeType = wipeType;
@@ -70,7 +73,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
 
         public bool ShowUI => Visible;
 
-        public override void Added(Scene scene) {
+        public override void Added(Scene scene)
+        {
             base.Added(scene);
             Level level = Scene as Level;
 
@@ -78,19 +82,23 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             string levelSet = level.Session.Area.LevelSet;
             LevelSetStats stats = SaveData.Instance.GetLevelSetStatsFor(levelSet);
 
-            for (int i = 0; i < stats.Areas.Count; i++) {
+            for (int i = 0; i < stats.Areas.Count; i++)
+            {
                 int areaId = stats.AreaOffset + i;
 
                 List<WarpInfo> warps = WarpManager.GetWarpTargets(areaId);
-                if (warps.Count > 0) {
-                    if (areaId == currentAreaId) {
+                if (warps.Count > 0)
+                {
+                    if (areaId == currentAreaId)
+                    {
                         currentMenu = warpsPerArea.Count;
                     }
                     warpsPerArea.Add(warps);
                 }
             }
 
-            Scene.Add(warpMenu = new WarpMenu() {
+            Scene.Add(warpMenu = new WarpMenu()
+            {
                 CurrentWarp = currentWarp,
                 ConfirmSfx = confirmSfx,
                 OnCancel = CloseScreen,
@@ -103,9 +111,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             OpenScreen();
         }
 
-        public override void Render() {
+        public override void Render()
+        {
             base.Render();
-            if (mapDisplay?.Scene != null) {
+            if (mapDisplay?.Scene != null)
+            {
                 Draw.Rect(new Vector2(-10, -10), 1940, 182, Color.Black);
                 Draw.Rect(new Vector2(-10, 172), 100, 856, Color.Black);
                 Draw.Rect(new Vector2(1030, 172), 900, 856, Color.Black);
@@ -116,7 +126,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
                 Draw.Rect(new Vector2(90, 1020), 940, 8, Color.White);
             }
 
-            if (lobbyMapDisplay?.Scene != null) {
+            if (lobbyMapDisplay?.Scene != null)
+            {
                 Draw.Rect(new Vector2(-10, -10), 1940, 182, Color.Black);
                 Draw.Rect(new Vector2(-10, 172), 100, 856, Color.Black);
                 Draw.Rect(new Vector2(1830, 172), 100, 856, Color.Black);
@@ -127,51 +138,64 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
                 Draw.Rect(new Vector2(90, 1020), 1740, 8, Color.White);
             }
 
-            if (!string.IsNullOrEmpty(title)) {
+            if (!string.IsNullOrEmpty(title))
+            {
                 ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray, 4f, Color.DarkSlateBlue, 2f, Color.Black);
-                if (lobbyMapDisplay?.Scene == null) {
-                    if (currentMenu > 0) {
+                if (lobbyMapDisplay?.Scene == null)
+                {
+                    if (currentMenu > 0)
+                    {
                         arrowTex.DrawCentered(new Vector2(960f - ActiveFont.Measure(title).X - 100f, 80f), Color.White);
                     }
-                    if (currentMenu < warpsPerArea.Count - 1) {
+                    if (currentMenu < warpsPerArea.Count - 1)
+                    {
                         arrowTex.DrawCentered(new Vector2(960f + ActiveFont.Measure(title).X + 100f, 80f), Color.White, 1f, (float)Math.PI);
                     }
                 }
             }
 
-            if (lobbyMapDisplay?.Scene == null) {
-                if (warpMenu.LastPossibleSelection > 10 && warpMenu.Selection <= ActiveWarps.Count - 5) {
+            if (lobbyMapDisplay?.Scene == null)
+            {
+                if (warpMenu.LastPossibleSelection > 10 && warpMenu.Selection <= ActiveWarps.Count - 5)
+                {
                     arrowTex.DrawCentered(new Vector2(X, 1024f), Color.White, 1f, (float)Math.PI * 3f / 2f);
                 }
-                if (warpMenu.Selection > 5 && warpMenu.LastPossibleSelection > 10) {
+                if (warpMenu.Selection > 5 && warpMenu.LastPossibleSelection > 10)
+                {
                     arrowTex.DrawCentered(new Vector2(X, 175f), Color.White, 1f, (float)Math.PI / 2f);
                 }
             }
 
-            if (mapDisplay?.Scene != null) {
-                if (mapProgressDisplay?.Scene != null && !mapProgressDisplay.Hidden) {
+            if (mapDisplay?.Scene != null)
+            {
+                if (mapProgressDisplay?.Scene != null && !mapProgressDisplay.Hidden)
+                {
                     float scale = 0.5f;
                     Vector2 position = new(1030f, 1055f);
                     string progressDisplayStatus = mapProgressDisplay.mode == 0 ? (mapProgressDisplay.getSubAreaIndex() == -1 || mapProgressDisplay.SubAreaControllerData.Count == 1 ? hideProgressLabel : changeProgressLabel) : mapProgressDisplay.mode == 1 ? hideProgressLabel : showProgressLabel;
                     ButtonBindingButtonUI.Render(position, progressDisplayStatus, XaphanModule.Settings.MapScreenShowProgressDisplay, scale, 1f, progressWiggle.Value * 0.05f);
-                    if (mapProgressDisplay.mode != 2) {
+                    if (mapProgressDisplay.mode != 2)
+                    {
                         string progressDisplayMode = mapProgressDisplay.mode == 0 ? areaProgressLabel : subareaProgressLabel;
                         float progressDisplayWidth = ActiveFont.Measure(progressDisplayMode).X;
                         ActiveFont.Draw(progressDisplayMode, new Vector2(90 + progressDisplayWidth / 4, position.Y), new Vector2(0.5f), new Vector2(scale), Color.White);
                     }
                 }
 
-                if (displayIcon) {
+                if (displayIcon)
+                {
                     Vector2 iconPos = new(mapDisplay.Grid.Left + 441f, mapDisplay.Grid.Top + 401f);
                     playerIcon.Draw(iconPos);
                     playerIconHair.Draw(iconPos, Vector2.Zero, Scene.Tracker.GetEntity<Player>()?.Hair.Color ?? Color.White);
                 }
             }
 
-            if (lobbyMapDisplay?.Scene != null) {
+            if (lobbyMapDisplay?.Scene != null)
+            {
                 float inputEase = 0f;
                 inputEase = Calc.Approach(inputEase, 1, Engine.DeltaTime * 4f);
-                if (inputEase > 0f) {
+                if (inputEase > 0f)
+                {
                     float scale = 0.5f;
                     DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f), changeDestinationLabel, Input.MenuUp, Input.MenuDown, scale, warpMenu.Selection > 1, warpMenu.Selection < warpMenu.LastPossibleSelection, 1f, warpMenu.Current.SelectWiggler.Value * 0.05f);
                     DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuLeft, Input.MenuRight) - Input.GuiButton(Input.MenuRight, "controls/keyboard/oemquestion").Width / 2, 1055f), changeLobbyLabel, Input.MenuLeft, Input.MenuRight, scale, currentMenu > 0, currentMenu < warpsPerArea.Count - 1, 1f, lobbyWiggle.Value * 0.05f);
@@ -188,13 +212,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             }
         }
 
-        private void OpenScreen() {
+        private void OpenScreen()
+        {
             Level level = Scene as Level;
             level.PauseLock = true;
             level.Session.SetFlag("Map_Opened", true);
             level.Tracker.GetEntity<CountdownDisplay>()?.StopTimer(true, false);
 
-            if (Scene.Tracker.GetEntity<Player>() is Player player) {
+            if (Scene.Tracker.GetEntity<Player>() is Player player)
+            {
                 player.StateMachine.State = Player.StDummy;
             }
 
@@ -202,7 +228,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             Add(new Coroutine(TransitionRoutine(onFadeOut: InitializeScreen)));
         }
 
-        private void InitializeScreen() {
+        private void InitializeScreen()
+        {
             warpMenu.UpdateWarps(ActiveWarps);
 
             AreaKey area = new(SelectedWarp.AreaId);
@@ -210,24 +237,31 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
 
             bool usingMap = false;
             MapData mapData = AreaData.Areas[SelectedWarp.AreaId].Mode[0].MapData;
-            if (mapData.GetEntityData("XaphanHelper/InGameMapController") is EntityData mapController) {
+            if (mapData.GetEntityData("XaphanHelper/InGameMapController") is EntityData mapController)
+            {
                 warpMenu.Position = new Vector2(Celeste.TargetWidth - 400f, Celeste.TargetHeight / 2f + 98f);
                 string mapName = mapController.Attr("mapName");
-                if (!string.IsNullOrEmpty(mapName)) {
+                if (!string.IsNullOrEmpty(mapName))
+                {
                     title = Dialog.Clean(mapName);
                 }
                 usingMap = true;
                 Add(new Coroutine(MapRoutine()));
-            } else {
+            }
+            else
+            {
                 mapDisplay?.RemoveSelf();
                 mapProgressDisplay?.RemoveSelf();
             }
 
-            if (mapData.HasEntity("XaphanHelper/LobbyMapController")) {
+            if (mapData.HasEntity("XaphanHelper/LobbyMapController"))
+            {
                 warpMenu.Visible = false;
                 usingMap = true;
                 Add(new Coroutine(LobbyMapRoutine()));
-            } else {
+            }
+            else
+            {
                 lobbyMapDisplay?.RemoveSelf();
                 warpMenu.Visible = true;
             }
@@ -237,7 +271,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             DynamicData.For(formationBackdrop).Set("fade", usingMap ? 0f : 1f);
         }
 
-        private void UninitializeScreen() {
+        private void UninitializeScreen()
+        {
             warpMenu.Close();
             mapDisplay?.RemoveSelf();
             mapProgressDisplay?.RemoveSelf();
@@ -246,15 +281,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             Visible = false;
         }
 
-        private void CloseScreen() {
+        private void CloseScreen()
+        {
             Audio.Play(SFX.ui_game_unpause);
-            Add(new Coroutine(TransitionRoutine(onFadeOut: UninitializeScreen, onFadeIn: () => {
+            Add(new Coroutine(TransitionRoutine(onFadeOut: UninitializeScreen, onFadeIn: () =>
+            {
                 Level level = Scene as Level;
                 level.PauseLock = false;
                 level.Session.SetFlag("Map_Opened", false);
                 level.Tracker.GetEntity<CountdownDisplay>()?.StopTimer(false, true);
 
-                if (Scene.Tracker.GetEntity<Player>() is Player player) {
+                if (Scene.Tracker.GetEntity<Player>() is Player player)
+                {
                     player.StateMachine.State = Player.StNormal;
                 }
 
@@ -262,16 +300,19 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             })));
         }
 
-        private IEnumerator TransitionRoutine(float duration = 0.5f, Action onFadeOut = null, Action onFadeIn = null) {
+        private IEnumerator TransitionRoutine(float duration = 0.5f, Action onFadeOut = null, Action onFadeIn = null)
+        {
             duration = Math.Max(0f, duration);
             warpMenu.Focused = false;
 
-            yield return new FadeWipe(Scene, false) {
+            yield return new FadeWipe(Scene, false)
+            {
                 Duration = duration / 2f,
                 OnComplete = onFadeOut
             }.Wait();
 
-            yield return new FadeWipe(Scene, true) {
+            yield return new FadeWipe(Scene, true)
+            {
                 Duration = duration / 2f,
                 OnComplete = onFadeIn
             }.Wait();
@@ -279,11 +320,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             warpMenu.Focused = true;
         }
 
-        private IEnumerator MapRoutine() {
+        private IEnumerator MapRoutine()
+        {
             Level level = SceneAs<Level>();
 
-            if (mapDisplay == null) {
-                Scene.Add(mapDisplay = new MapDisplay(level, "warp") {
+            if (mapDisplay == null)
+            {
+                Scene.Add(mapDisplay = new MapDisplay(level, "warp")
+                {
                     currentRoom = level.Session.Level
                 });
                 yield return mapDisplay.GenerateMap();
@@ -295,32 +339,38 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
             mapDisplay.UpdateMap(Math.Max(0, chapterIndex), SelectedWarp.Room, 0);
 
             mapProgressDisplay?.RemoveSelf();
-            if (mapDisplay.InGameMapControllerData.ShowProgress != "Never") {
+            if (mapDisplay.InGameMapControllerData.ShowProgress != "Never")
+            {
                 Scene.Add(mapProgressDisplay = new MapProgressDisplay(new Vector2(mapDisplay.Grid.X + 18f, mapDisplay.Grid.Y), level, mapDisplay.InGameMapControllerData, mapDisplay.SubAreaControllerData, mapDisplay.RoomControllerData, mapDisplay.TilesControllerData, mapDisplay.EntitiesData, mapDisplay.chapterIndex, mapDisplay.currentRoom));
             }
         }
 
-        private IEnumerator LobbyMapRoutine() {
+        private IEnumerator LobbyMapRoutine()
+        {
             lobbyMapDisplay?.RemoveSelf();
             Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room));
             yield return lobbyMapDisplay.GenerateMap(SelectedWarp.Position);
         }
 
-        private void UpdateMenu() {
+        private void UpdateMenu()
+        {
             progressWiggleDelay -= Engine.DeltaTime;
             closeWiggleDelay -= Engine.DeltaTime;
             zoomWiggleDelay -= Engine.DeltaTime;
             confirmWiggleDelay -= Engine.DeltaTime;
 
-            if (Scene.OnRawInterval(0.3f)) {
+            if (Scene.OnRawInterval(0.3f))
+            {
                 displayIcon = !displayIcon;
             }
 
-            if (!warpMenu.Focused) {
+            if (!warpMenu.Focused)
+            {
                 return;
             }
 
-            if (Input.MenuLeft.Pressed && currentMenu > 0) {
+            if (Input.MenuLeft.Pressed && currentMenu > 0)
+            {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_down");
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
@@ -329,7 +379,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
                 })));*/
                 currentMenu--;
                 InitializeScreen();
-            } else if (Input.MenuRight.Pressed && currentMenu < warpsPerArea.Count - 1) {
+            }
+            else if (Input.MenuRight.Pressed && currentMenu < warpsPerArea.Count - 1)
+            {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_up");
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
@@ -338,30 +390,39 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements {
                 })));*/
                 currentMenu++;
                 InitializeScreen();
-            } else {
-                if (mapDisplay != null) {
-                    if (mapDisplay.currentRoom != SelectedWarp.Room) {
+            }
+            else
+            {
+                if (mapDisplay != null)
+                {
+                    if (mapDisplay.currentRoom != SelectedWarp.Room)
+                    {
                         mapDisplay.currentRoom = SelectedWarp.Room;
                         // FIXME: hackfix for now, MapDisplay.GetRoomOffset should be refactored to accept WarpInfo (?)
                         Vector2 roomOffset = mapDisplay.GetRoomOffset(null, SelectedWarp.Room, 0);
                         mapDisplay.SetCurrentRoomCoordinates(roomOffset);
                     }
 
-                    if (mapProgressDisplay != null && XaphanModule.Settings.MapScreenShowProgressDisplay.Check && progressWiggleDelay <= 0f) {
+                    if (mapProgressDisplay != null && XaphanModule.Settings.MapScreenShowProgressDisplay.Check && progressWiggleDelay <= 0f)
+                    {
                         progressWiggle.Start();
                         progressWiggleDelay = 0.5f;
                     }
                 }
-                if (lobbyMapDisplay != null) {
-                    if (Input.MenuCancel.Check && closeWiggleDelay <= 0f) {
+                if (lobbyMapDisplay != null)
+                {
+                    if (Input.MenuCancel.Check && closeWiggleDelay <= 0f)
+                    {
                         closeWiggle.Start();
                         closeWiggleDelay = 0.5f;
                     }
-                    if (Input.MenuJournal.Check && zoomWiggleDelay <= 0f) {
+                    if (Input.MenuJournal.Check && zoomWiggleDelay <= 0f)
+                    {
                         zoomWiggle.Start();
                         zoomWiggleDelay = 0.5f;
                     }
-                    if (Input.MenuConfirm.Check && confirmWiggleDelay <= 0f) {
+                    if (Input.MenuConfirm.Check && confirmWiggleDelay <= 0f)
+                    {
                         confirmWiggle.Start();
                         confirmWiggleDelay = 0.5f;
                     }

@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.XaphanHelper.NPCs;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.NPCs;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {

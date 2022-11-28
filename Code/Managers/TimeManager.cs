@@ -1,9 +1,7 @@
-﻿using Celeste.Mod.XaphanHelper.Entities;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.Entities;
 using FMOD.Studio;
 using Monocle;
-using System.Collections;
-using On.Celeste;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Managers
 {
@@ -113,7 +111,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
                 currentTime -= Engine.DeltaTime;
                 yield return null;
             }
-            if (currentTime> 3f)
+            if (currentTime > 3f)
             {
                 if (TickingType == "on top" || TickingType == "tick only")
                 {
@@ -141,7 +139,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
                         strawberry.Hide();
                     }
                 }
-                foreach(TimerRefill refill in SceneAs<Level>().Tracker.GetEntities<TimerRefill>())
+                foreach (TimerRefill refill in SceneAs<Level>().Tracker.GetEntities<TimerRefill>())
                 {
                     refill.Hide();
                 }

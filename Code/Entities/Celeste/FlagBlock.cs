@@ -103,7 +103,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                TransitionListener transitionListener = new TransitionListener();
+                TransitionListener transitionListener = new();
                 transitionListener.OnOut = OnTransitionOut;
                 transitionListener.OnOutBegin = OnTransitionOutBegin;
                 transitionListener.OnIn = OnTransitionIn;

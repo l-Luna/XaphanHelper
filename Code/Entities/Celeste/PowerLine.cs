@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -22,9 +22,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string directory;
 
-        Dictionary<Vector2, string> tiles = new Dictionary<Vector2, string>();
+        Dictionary<Vector2, string> tiles = new();
 
-        Dictionary<Vector2, Vector2> tilesSpritePos = new Dictionary<Vector2, Vector2>();
+        Dictionary<Vector2, Vector2> tilesSpritePos = new();
 
         public PowerLine(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position)
         {

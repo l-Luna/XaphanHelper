@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using On.Celeste;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -77,17 +74,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public virtual bool IsRiding(JumpThru jumpThru)
         {
-	        if (IgnoreJumpThrus)
-	        {
-		        return false;
-	        }
-	        return CollideCheckOutside(jumpThru, Position + Vector2.UnitY);
+            if (IgnoreJumpThrus)
+            {
+                return false;
+            }
+            return CollideCheckOutside(jumpThru, Position + Vector2.UnitY);
         }
 
-	    public virtual bool IsRiding(Solid solid)
-	    {
-		    return CollideCheck(solid, Position + Vector2.UnitY);
-	    }
+        public virtual bool IsRiding(Solid solid)
+        {
+            return CollideCheck(solid, Position + Vector2.UnitY);
+        }
 
         public bool OnGround(int downCheck = 1)
         {

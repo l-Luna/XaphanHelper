@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Enemies;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            DynData<Strawberry> strawberryData = new DynData<Strawberry>(this);
+            DynData<Strawberry> strawberryData = new(this);
             BloomPoint strawberryBloom = strawberryData.Get<BloomPoint>("bloom");
             bool isGhostBerry = strawberryData.Get<bool>("isGhostBerry");
             strawberryBloom.Visible = false;
@@ -56,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SceneAs<Level>().ParticlesFG.Emit(StrawberrySeed.P_Burst, 1, Position + Calc.AngleToVector(num, 4f), Vector2.Zero, num);
             }
             Visible = true;
-            DynData<Strawberry> strawberryData = new DynData<Strawberry>(this);
+            DynData<Strawberry> strawberryData = new(this);
             BloomPoint strawberryBloom = strawberryData.Get<BloomPoint>("bloom");
             strawberryBloom.Visible = true;
             Collidable = true;
@@ -80,7 +80,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SceneAs<Level>().ParticlesFG.Emit(StrawberrySeed.P_Burst, 1, Position + Calc.AngleToVector(num, 4f), Vector2.Zero, num);
             }
             Visible = false;
-            DynData<Strawberry> strawberryData = new DynData<Strawberry>(this);
+            DynData<Strawberry> strawberryData = new(this);
             BloomPoint strawberryBloom = strawberryData.Get<BloomPoint>("bloom");
             strawberryBloom.Visible = false;
             Collidable = false;

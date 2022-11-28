@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.XaphanHelper.Cutscenes;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Triggers;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -112,7 +112,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator ShakeLevel()
         {
             Shaking = true;
-            Random rand = new Random();
+            Random rand = new();
             while (ChapterTimerAtStart == -1)
             {
                 yield return null;
@@ -140,7 +140,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             yield return 0.05f;
             while (!SceneAs<Level>().Paused)
             {
-                TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
+                TimerExplosion explosion = new(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
                 SceneAs<Level>().Add(explosion);
                 yield return 0.05f;
             }
@@ -162,7 +162,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     display.RemoveSelf();
                 }
-            }   
+            }
             if (Timetext == null)
             {
                 Timetext = new NormalText("Xaphanhelper_UI_Time", new Vector2(Engine.Width / 2 - 120, Engine.Height / 2 - 510), Color.Gold, 1f, 0.7f)
@@ -277,7 +277,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Input.Rumble(RumbleStrength.Strong, RumbleLength.Long);
             Audio.Play("event:/char/madeline/death", Position);
             player.Sprite.Visible = (player.Hair.Visible = false);
-            CustomDeathEffect deathEffect = new CustomDeathEffect(player.Hair.Color, player.Center);
+            CustomDeathEffect deathEffect = new(player.Hair.Color, player.Center);
             deathEffect.OnUpdate = delegate (float f)
             {
                 player.Light.Alpha = 1f - f;
@@ -296,7 +296,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 Level.DoScreenWipe(false, () => ReturnToOrigChapter(Level));
             }
-            
+
         }
 
         private void ReturnToOrigChapter(Level level)

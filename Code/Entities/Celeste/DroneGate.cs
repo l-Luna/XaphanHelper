@@ -36,7 +36,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             side = data.Attr("side");
             flag = data.Attr("flag");
             directory = data.Attr("directory", "objects/XaphanHelper/DroneGate");
-            Add(gateSprite = new Sprite(GFX.Game, directory +"/"));
+            Add(gateSprite = new Sprite(GFX.Game, directory + "/"));
             gateSprite.Add("closed", "closed", 0f);
             gateSprite.Add("open", "open", 0.05f, 0, 1, 2);
             gateSprite.Add("opened", "opened", 0f);

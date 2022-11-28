@@ -1,12 +1,12 @@
-﻿using Mono.Cecil.Cil;
+﻿using System;
+using System.Collections;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Entities;
+using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
-using System;
-using System.Reflection;
-using System.Collections;
-using Celeste.Mod.XaphanHelper.Entities;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -80,7 +80,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(90f)) && cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Stloc_S && (((VariableDefinition)instr.Operand).Index == 6 || ((VariableDefinition)instr.Operand).Index == 31)))
             {
@@ -99,7 +99,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(-105f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineJumpHeightFactor);
@@ -109,7 +109,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modSuperJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(260f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -124,7 +124,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(130f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -139,7 +139,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modSuperWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(170f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
@@ -154,7 +154,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modDashLength(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(0.3f) || instr.MatchLdcR4(0.15f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineDashLengthFactor);
@@ -164,7 +164,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modClimbUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(45.4545441f)))
             {
                 cursor.EmitDelegate<Func<float>>(determineStaminaUpCostFactor);
@@ -205,7 +205,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modDashTrailCounter(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(instr => instr.MatchStfld<Player>("dashTrailCounter")))
             {
                 cursor.EmitDelegate<Func<int, int>>(applyDashTrailCounter);

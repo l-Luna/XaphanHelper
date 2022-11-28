@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 
 namespace Celeste.Mod.XaphanHelper.Entities
@@ -14,7 +14,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private bool attachRight;
 
         private int closedHeight;
-    
+
         private Sprite sprite;
 
         private Shaker shaker;
@@ -69,7 +69,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 sprite.X = Collider.Width / 2;
             }
-            
+
             sprite.Play("idle");
             Add(shaker = new Shaker(on: false));
             Depth = -9000;
@@ -142,7 +142,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 MoveVExact(height - num);
                 Y = y;
                 Collider.Height = height;
-                
+
             }
             else if (height < Collider.Width)
             {
@@ -188,7 +188,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else if (openOnHeartCollection)
             {
-                if (((!startOpen && !SceneAs<Level>().Session.GetFlag(flag)) || (startOpen && SceneAs<Level>().Session.GetFlag(flag))) && !SceneAs<Level>().Session.HeartGem  && open)
+                if (((!startOpen && !SceneAs<Level>().Session.GetFlag(flag)) || (startOpen && SceneAs<Level>().Session.GetFlag(flag))) && !SceneAs<Level>().Session.HeartGem && open)
                 {
                     Close();
                 }
@@ -199,12 +199,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (horizontal)
             {
-                Vector2 value = new Vector2(0f, Math.Sign(shaker.Value.Y));
+                Vector2 value = new(0f, Math.Sign(shaker.Value.Y));
                 sprite.DrawSubrect(Vector2.Zero + value, new Rectangle(0, (int)(sprite.Height - drawHeight), (int)sprite.Width, (int)drawHeight));
             }
             else
             {
-                Vector2 value = new Vector2(Math.Sign(shaker.Value.X), 0f);
+                Vector2 value = new(Math.Sign(shaker.Value.X), 0f);
                 sprite.DrawSubrect(Vector2.Zero + value, new Rectangle(0, (int)(sprite.Height - drawHeight), (int)sprite.Width, (int)drawHeight));
             }
         }

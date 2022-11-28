@@ -1,7 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
-using Celeste.Mod.XaphanHelper.Entities;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {

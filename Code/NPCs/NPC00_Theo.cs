@@ -1,10 +1,8 @@
-﻿using Celeste;
+﻿using System;
+using System.Collections;
 using Celeste.Mod.Entities;
-using Celeste.Mod.XaphanHelper;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.NPCs
 {
@@ -29,7 +27,7 @@ namespace Celeste.Mod.XaphanHelper.NPCs
             MoveAnim = "walk";
             Maxspeed = 30f;
             Position += new Vector2(0, 8);
-            if (mode =="gemRoomB")
+            if (mode == "gemRoomB")
             {
                 Sprite.Play("sleep");
             }
@@ -73,7 +71,7 @@ namespace Celeste.Mod.XaphanHelper.NPCs
         public override void Update()
         {
             base.Update();
-            if (mode =="gemRoom" && XaphanModule.ModSaveData.WatchedCutscenes.Contains("Xaphan/0_Ch0_Gem_Room_B") && !StartMoving)
+            if (mode == "gemRoom" && XaphanModule.ModSaveData.WatchedCutscenes.Contains("Xaphan/0_Ch0_Gem_Room_B") && !StartMoving)
             {
                 StartMoving = true;
                 Add(new Coroutine(Searching()));

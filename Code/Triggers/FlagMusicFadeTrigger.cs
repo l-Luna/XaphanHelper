@@ -32,7 +32,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public override void OnStay(Player player)
         {
             Level level = base.Scene as Level;
-            if ((level.Session.GetFlag(flag) && !inverted) ||(!level.Session.GetFlag(flag) && inverted))
+            if ((level.Session.GetFlag(flag) && !inverted) || (!level.Session.GetFlag(flag) && inverted))
             {
                 Audio.SetMusicParam((!string.IsNullOrEmpty(Parameter)) ? Parameter : "fade", LeftToRight ? Calc.ClampedMap(player.Center.X, Left, Right, FadeA, FadeB) : Calc.ClampedMap(player.Center.Y, Top, Bottom, FadeA, FadeB));
             }

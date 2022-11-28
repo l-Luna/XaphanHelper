@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections;
+using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -13,7 +13,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool Show = true;
 
-        private Coroutine FadeRoutine = new Coroutine();
+        private Coroutine FadeRoutine = new();
 
         public RadarTile(Vector2 position) : base(position)
         {

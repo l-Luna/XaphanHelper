@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
-using System;
-using Monocle;
+﻿using System;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -87,7 +87,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             if (!manager.activeDetectors.Contains(this))
                             {
                                 manager.activeDetectors.Add(this);
-                                
+
                             }
                             if (manager.inactiveDetectors.Contains(this))
                             {

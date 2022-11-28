@@ -1,4 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
@@ -9,10 +13,6 @@ using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -75,7 +75,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         public MetroidGameplayController(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
-            
+
         }
 
         public static void Load()
@@ -483,7 +483,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                         }
                         else if (self.Speed.Y < 0f && !MorphMode)
                         {
-                            if (Input.MoveY.Value == -1 &&  Input.MoveX.Value == 0)
+                            if (Input.MoveY.Value == -1 && Input.MoveX.Value == 0)
                             {
                                 if (!self.Sprite.LastAnimationID.Contains("jumpLookUp"))
                                 {
@@ -633,7 +633,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                         }
                     }
                 };
-                DynData<Player> playerData = new DynData<Player>(self);
+                DynData<Player> playerData = new(self);
                 Hitbox normalHitbox = playerData.Get<Hitbox>("normalHitbox");
                 Hitbox normalHurtbox = playerData.Get<Hitbox>("normalHurtbox");
                 if (MorphMode)
@@ -923,7 +923,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static void ilPlayerJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(-105f)))
             {
@@ -934,7 +934,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static void ilPlayerNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             // Increase X speed based on MaxRunSpeed value
 
@@ -999,12 +999,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static void ilPlayerRender(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(instr => instr.MatchCallvirt<StateMachine>("get_State"), instr => instr.MatchLdcI4(19)))
             {
                 cursor.Index++;
-                cursor.EmitDelegate<Func<int, int>>(orig => {
+                cursor.EmitDelegate<Func<int, int>>(orig =>
+                {
                     if (determineifMetGameplay())
                     {
                         return 19;
@@ -1077,7 +1078,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static void createTrail(Player player)
         {
-            Vector2 scale = new Vector2(Math.Abs(player.Sprite.Scale.X) * (float)player.Facing, player.Sprite.Scale.Y);
+            Vector2 scale = new(Math.Abs(player.Sprite.Scale.X) * (float)player.Facing, player.Sprite.Scale.Y);
             if (player.StateMachine.State != 14)
             {
                 TrailManager.Add(player.Position + new Vector2(0, -20), player.Get<PlayerSprite>(), player.Get<PlayerHair>(), scale, Calc.HexToColor(GravityJacket.Active(player.SceneAs<Level>()) ? "9E68A5" : VariaJacket.Active(player.SceneAs<Level>()) ? "F8930E" : "D6AD00"), player.Depth + 1, 0.5f);
@@ -1241,7 +1242,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static IEnumerator InitShinespark(Player player)
         {
-            DynData<Player> playerData = new DynData<Player>(player);
+            DynData<Player> playerData = new(player);
             bool playerInControl = playerData.Get<bool>("InControl");
             ShinesparkInitCooldown = true;
             ShinesparkDirection = "Up";

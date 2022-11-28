@@ -1,10 +1,10 @@
-﻿using Monocle;
+﻿using System;
 using System.Collections;
-using Microsoft.Xna.Framework;
-using System;
-using Celeste.Mod.XaphanHelper.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod.XaphanHelper.Data;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -17,7 +17,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private MapDisplay mapDisplay;
 
-        private List<MapDisplay> worldMapMapDisplays = new List<MapDisplay>();
+        private List<MapDisplay> worldMapMapDisplays = new();
 
         public bool ShowUI;
 
@@ -244,7 +244,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Add(new Coroutine(WorldMapRoutine(level)));
             if (!fromStatus)
             {
-                FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+                FadeWipe Wipe = new(SceneAs<Level>(), false)
                 {
                     Duration = duration
                 };
@@ -263,7 +263,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             ShowUI = true;
             duration = 0.25f;
-            FadeWipe Wipe2 = new FadeWipe(SceneAs<Level>(), true)
+            FadeWipe Wipe2 = new(SceneAs<Level>(), true)
             {
                 Duration = duration
             };
@@ -279,7 +279,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator TransitionToGame()
         {
             float duration = 0.5f;
-            FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+            FadeWipe Wipe = new(SceneAs<Level>(), false)
             {
                 Duration = duration
             };
@@ -319,7 +319,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 NoInput = true;
                 Player player = Scene.Tracker.GetEntity<Player>();
                 float duration = 0.5f;
-                FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+                FadeWipe Wipe = new(SceneAs<Level>(), false)
                 {
                     Duration = duration
                 };
@@ -333,7 +333,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Add(new Coroutine(CloseMap(true)));
                 level.Add(new StatusScreen(level, true));
             }
-            
+
         }
 
         public void CalcMoves(int previousLeftMoves = 0, int previousRightMoves = 0, int previousUpMoves = 0, int previousDownMoves = 0)
@@ -450,7 +450,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 Vector2 CurrentRoomPosition = Vector2.Zero;
                 Vector2 PlayerIconPosition = Vector2.Zero;
-                MapDisplay displayWithIndicator = new MapDisplay(level, "empty");
+                MapDisplay displayWithIndicator = new(level, "empty");
                 foreach (MapDisplay display in level.Tracker.GetEntities<MapDisplay>())
                 {
                     if (!display.HideIndicator && display.NoGrid && display.Visible)
@@ -493,7 +493,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 else
                 {
-                    Vector2 Movement = new Vector2(941 - (CurrentRoomPosition.X + PlayerIconPosition.X), 581 - (CurrentRoomPosition.Y + PlayerIconPosition.Y));
+                    Vector2 Movement = new(941 - (CurrentRoomPosition.X + PlayerIconPosition.X), 581 - (CurrentRoomPosition.Y + PlayerIconPosition.Y));
                     int XAutoMoves = (int)Math.Abs(Movement.X) / 40;
                     int YAutoMoves = (int)Math.Abs(Movement.Y) / 40;
                     if (LeftMoves > 0 || RightMoves > 0)
@@ -594,8 +594,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Scene.Add(display);
                 yield return display.GenerateMap();
             }
-            Vector2 ProgressPosition = new Vector2(worldMapMapDisplays[0].Grid.X + 18f, worldMapMapDisplays[0].Grid.Y);
-            List<InGameMapControllerData> InGameMapControllerDatas = new List<InGameMapControllerData>();
+            Vector2 ProgressPosition = new(worldMapMapDisplays[0].Grid.X + 18f, worldMapMapDisplays[0].Grid.Y);
+            List<InGameMapControllerData> InGameMapControllerDatas = new();
             foreach (MapDisplay display in worldMapMapDisplays)
             {
                 InGameMapControllerDatas.Add(display.InGameMapControllerData);
@@ -655,13 +655,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     WorldMapSecretsCustomCollectablesProgress += "," + data.SecretsCustomCollectablesProgress;
                 }
             }
-            InGameMapControllerData WorldMapInGameMapControllerData = new InGameMapControllerData("FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", false, false,
+            InGameMapControllerData WorldMapInGameMapControllerData = new("FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", false, false,
                 WorldMapShowProgress, WorldMapHideMapProgress, WorldMapHideStrawberryProgress, WorldMapHideMoonberryProgress, WorldMapHideUpgradeProgress, WorldMapHideHeartProgress, WorldMapHideCassetteProgress,
                 WorldMapCustomCollectablesProgress, WorldMapSecretsCustomCollectablesProgress, 0, 0);
-            List<InGameMapSubAreaControllerData> WorldMapInGameMapSubAreaControllerData = new List<InGameMapSubAreaControllerData>();
-            List<InGameMapRoomControllerData> WorldMapInGameMapRoomControllerData = new List<InGameMapRoomControllerData>();
-            List<InGameMapTilesControllerData> WorldMapInGameMapTilesControllerData = new List<InGameMapTilesControllerData>();
-            List<InGameMapEntitiesData> WorldMapInGameMapEntitiesData = new List<InGameMapEntitiesData>();
+            List<InGameMapSubAreaControllerData> WorldMapInGameMapSubAreaControllerData = new();
+            List<InGameMapRoomControllerData> WorldMapInGameMapRoomControllerData = new();
+            List<InGameMapTilesControllerData> WorldMapInGameMapTilesControllerData = new();
+            List<InGameMapEntitiesData> WorldMapInGameMapEntitiesData = new();
             foreach (MapDisplay display in worldMapMapDisplays)
             {
                 WorldMapInGameMapSubAreaControllerData.AddRange(display.SubAreaControllerData);
@@ -706,13 +706,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             worldMapWidth = MostRightDisplay - MostLeftDisplay;
             worldMapHeight = MostBottomDisplay - MostTopDisplay;
-            Vector2 displaysCenter = new Vector2(worldMapWidth / 2, worldMapHeight / 2);
+            Vector2 displaysCenter = new(worldMapWidth / 2, worldMapHeight / 2);
             displaysCenter += new Vector2(MostLeftDisplay, MostTopDisplay);
             while (mapDisplay == null)
             {
                 yield return null;
             }
-            Vector2 displayJustify = new Vector2(mapDisplay.MapPosition.X - displaysCenter.X, mapDisplay.MapPosition.Y - displaysCenter.Y);
+            Vector2 displayJustify = new(mapDisplay.MapPosition.X - displaysCenter.X, mapDisplay.MapPosition.Y - displaysCenter.Y);
             foreach (MapDisplay display in level.Tracker.GetEntities<MapDisplay>())
             {
                 if (display.NoGrid)
@@ -762,7 +762,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             while (!Input.ESC.Pressed && !Input.MenuCancel.Pressed && !XaphanSettings.OpenMap.Pressed && player != null)
             {
-                if (mode =="map")
+                if (mode == "map")
                 {
                     if (mapDisplay.MapWidth / 8 > 1640)
                     {
@@ -970,7 +970,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     float num3 = ButtonBindingButtonUI.Width(label3, XaphanSettings.MapScreenShowHints);
                     float num4 = ButtonBindingButtonUI.Width(label4, XaphanSettings.MapScreenShowHints);
                     float num5 = ButtonBindingButtonUI.Width(mode == "map" ? label11 : label12, XaphanSettings.MapScreenShowMapOrWorldMap);
-                    Vector2 position = new Vector2(1830f, 1055f);
+                    Vector2 position = new(1830f, 1055f);
                     ButtonUI.Render(position, label, Input.MenuCancel, scale, 1f, closeWiggle.Value * 0.05f);
                     position.X -= num / 2 + 32;
                     if (XaphanModule.useUpgrades && !XaphanModule.PlayerIsControllingRemoteDrone() && !XaphanModule.DisableStatusScreen)

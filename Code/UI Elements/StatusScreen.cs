@@ -1,6 +1,6 @@
-﻿using Monocle;
-using System.Collections;
+﻿using System.Collections;
 using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -104,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             float duration = 0.5f;
             if (!fromMap)
             {
-                FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+                FadeWipe Wipe = new(SceneAs<Level>(), false)
                 {
                     Duration = duration
                 };
@@ -123,7 +123,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             ShowUI = true;
             duration = 0.25f;
-            FadeWipe Wipe2 = new FadeWipe(SceneAs<Level>(), true)
+            FadeWipe Wipe2 = new(SceneAs<Level>(), true)
             {
                 Duration = duration
             };
@@ -140,7 +140,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Player player = Scene.Tracker.GetEntity<Player>();
             float duration = 0.5f;
-            FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+            FadeWipe Wipe = new(SceneAs<Level>(), false)
             {
                 Duration = duration
             };
@@ -180,7 +180,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 NoInput = true;
                 Player player = Scene.Tracker.GetEntity<Player>();
                 float duration = 0.5f;
-                FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false)
+                FadeWipe Wipe = new(SceneAs<Level>(), false)
                 {
                     Duration = duration
                 };
@@ -399,7 +399,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     string label4 = Dialog.Clean("XaphanHelper_UI_deactivate");
                     float num = ButtonUI.Width(label, Input.MenuCancel);
                     float num2 = ButtonUI.Width(label2, Input.Pause);
-                    Vector2 position = new Vector2(1830f, 1055f);
+                    Vector2 position = new(1830f, 1055f);
                     ButtonUI.Render(position, label, Input.MenuCancel, scale, 1f, closeWiggle.Value * 0.05f);
                     if (XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level))
                     {
@@ -408,11 +408,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     if (Selection != 0 && statusDisplay.SelectedDisplay != null)
                     {
-                        position.X -= num2 /2 + 32;
+                        position.X -= num2 / 2 + 32;
                         ButtonUI.Render(position, statusDisplay.SelectedDisplay.InactiveList.Contains(level.Session.Area.GetLevelSet()) ? label3 : label4, Input.MenuConfirm, scale, 1f, actionWiggle.Value * 0.05f);
                     }
                 }
             }
-        }        
+        }
     }
 }

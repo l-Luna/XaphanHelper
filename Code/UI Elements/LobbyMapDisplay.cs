@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.XaphanHelper.Controllers;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -31,7 +31,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Sprite CustomImage;
 
-        private List<LobbyMapIconsData> LobbyMapIconsData = new List<LobbyMapIconsData>();
+        private List<LobbyMapIconsData> LobbyMapIconsData = new();
 
         private Vector2 basePos;
 
@@ -43,7 +43,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private WarpScreen warpScreen;
 
-        public Coroutine ZoomRoutine = new Coroutine();
+        public Coroutine ZoomRoutine = new();
 
         private int areaId;
 
@@ -69,14 +69,17 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             base.Added(scene);
             Level level = SceneAs<Level>();
 
-            AreaKey area = new AreaKey(areaId);
+            AreaKey area = new(areaId);
             MapData mapData = AreaData.Areas[areaId].Mode[0].MapData;
             levelData = mapData.Get(room);
 
-            if (levelData?.GetEntityData("XaphanHelper/LobbyMapController") is EntityData lobbyMapControllerData) {
+            if (levelData?.GetEntityData("XaphanHelper/LobbyMapController") is EntityData lobbyMapControllerData)
+            {
                 CustomImageDirectory = lobbyMapControllerData.Attr("directory");
                 TotalMaps = lobbyMapControllerData.Int("totalMaps");
-            } else {
+            }
+            else
+            {
                 RemoveSelf();
                 return;
             }
@@ -103,17 +106,22 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private void GetIcons()
         {
-            foreach (EntityData entity in levelData.Entities) {
-                if (entity.Name == "XaphanHelper/WarpStation") {
+            foreach (EntityData entity in levelData.Entities)
+            {
+                if (entity.Name == "XaphanHelper/WarpStation")
+                {
                     LobbyMapIconsData.Add(new LobbyMapIconsData("lobbies/bench", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
-                if (entity.Name == "CollabUtils2/MiniHeartDoor") {
+                if (entity.Name == "CollabUtils2/MiniHeartDoor")
+                {
                     LobbyMapIconsData.Add(new LobbyMapIconsData("lobbies/heartgate", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y)));
                 }
-                if (entity.Name == "CollabUtils2/RainbowBerry") {
+                if (entity.Name == "CollabUtils2/RainbowBerry")
+                {
                     LobbyMapIconsData.Add(new LobbyMapIconsData("lobbies/berry", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
                 }
-                if (entity.Name == "SJ2021/StrawberryJamJar") {
+                if (entity.Name == "SJ2021/StrawberryJamJar")
+                {
                     bool mapCompleted = SaveData.Instance.Areas[areaId].Modes[0].HeartGem;
                     LobbyMapIconsData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
@@ -138,29 +146,41 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
-            if (Input.MenuJournal.Pressed && !ZoomRoutine.Active) {
+            if (Input.MenuJournal.Pressed && !ZoomRoutine.Active)
+            {
                 Add(ZoomRoutine = new Coroutine(ChangeZoom()));
             }
 
-            if (CustomImage != null && CustomImagesTilesSizeX != 0 && CustomImagesTilesSizeY != 0) {
+            if (CustomImage != null && CustomImagesTilesSizeX != 0 && CustomImagesTilesSizeY != 0)
+            {
                 // Camera move to selected warp                 
-                Vector2 target = warpScreen.SelectedWarp.Position;                    
-                if (Scale > 0.5f) {
+                Vector2 target = warpScreen.SelectedWarp.Position;
+                if (Scale > 0.5f)
+                {
                     basePos = new Vector2(Calc.Approach(basePos.X, -(target.X / 2) * Scale + Engine.Width / 2, ZoomRoutine.Active ? 500f : 10f * (0.75f + Scale)), Calc.Approach(basePos.Y, -(target.Y / 2) * Scale + 600, ZoomRoutine.Active ? 500f : 10f * (0.75f + Scale)));
-                    if (basePos != new Vector2(-(target.X / 2) * Scale + Engine.Width / 2, -(target.Y / 2) * Scale + 600)) {
+                    if (basePos != new Vector2(-(target.X / 2) * Scale + Engine.Width / 2, -(target.Y / 2) * Scale + 600))
+                    {
                         CameraIsMoving = true;
-                    } else {
+                    }
+                    else
+                    {
                         CameraIsMoving = false;
                     }
-                } else {
+                }
+                else
+                {
                     basePos = new Vector2(Calc.Approach(basePos.X, (Engine.Width - CustomImage.Width * Scale) / 2, 30f), Calc.Approach(basePos.Y, (900 - CustomImage.Height * Scale) / 2 + 100, 30f));
                 }
             }
 
-            if (Engine.Scene.OnRawInterval(0.3f)) {
-                if (currentPositionIndicator) {
+            if (Engine.Scene.OnRawInterval(0.3f))
+            {
+                if (currentPositionIndicator)
+                {
                     currentPositionIndicator = false;
-                } else {
+                }
+                else
+                {
                     currentPositionIndicator = true;
                 }
             }
@@ -221,7 +241,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 ActiveFont.DrawOutline(Dialog.Clean(warpScreen.SelectedWarp.DialogKey), new Vector2(Celeste.TargetCenter.X, Celeste.TargetHeight - 110f), new Vector2(0.5f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
 
                 Vector2 target = warpScreen.SelectedWarp.Position;
-                if (playerIcon != null && playerIconHair != null && currentPositionIndicator) {
+                if (playerIcon != null && playerIconHair != null && currentPositionIndicator)
+                {
                     playerIcon.CenterOrigin();
                     playerIconHair.CenterOrigin();
                     playerIcon.Position = playerIconHair.Position = new Vector2(basePos.X + target.X / 8f * CustomImagesTilesSizeX * Scale, basePos.Y + (target.Y - 16f) / 8f * CustomImagesTilesSizeY * Scale);

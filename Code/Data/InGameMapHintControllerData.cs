@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace Celeste.Mod.XaphanHelper.Data
+﻿namespace Celeste.Mod.XaphanHelper.Data
 {
     public class InGameMapHintControllerData
     {

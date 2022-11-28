@@ -24,7 +24,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             {
                 if (!XaphanModule.ModSaveData.ExtraUnexploredRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room))
                 {
-                    XaphanModule.ModSaveData.ExtraUnexploredRooms.Add(Prefix + "/Ch" + chapterIndex + "/"+ room);
+                    XaphanModule.ModSaveData.ExtraUnexploredRooms.Add(Prefix + "/Ch" + chapterIndex + "/" + room);
                 }
             }
             MapDisplay mapDisplay = SceneAs<Level>().Tracker.GetEntity<MapDisplay>();

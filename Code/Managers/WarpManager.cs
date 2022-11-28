@@ -1,12 +1,14 @@
-﻿using Celeste.Mod.XaphanHelper.Cutscenes;
+﻿using System;
+using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections.Generic;
 
-namespace Celeste.Mod.XaphanHelper.Managers {
-    public static class WarpManager {
+namespace Celeste.Mod.XaphanHelper.Managers
+{
+    public static class WarpManager
+    {
         public static bool IsUnlocked(string warpId) => UnlockedWarps.Contains(warpId);
         public static bool ActivateWarp(string warpId) => UnlockedWarps.Add(warpId);
         public static bool DeactivateWarp(string warpId) => UnlockedWarps.Remove(warpId);
@@ -14,7 +16,8 @@ namespace Celeste.Mod.XaphanHelper.Managers {
         private static bool UseTempWarps => XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode;
         private static HashSet<string> UnlockedWarps => !UseTempWarps ? XaphanModule.ModSaveData.UnlockedWarps : XaphanModule.ModSaveData.SpeedrunModeUnlockedWarps;
 
-        public static string GetWarpId(Level level, int warpIndex) {
+        public static string GetWarpId(Level level, int warpIndex)
+        {
             string levelSet = level.Session.Area.GetLevelSet();
             int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
             string room = level.Session.Level;
@@ -22,7 +25,8 @@ namespace Celeste.Mod.XaphanHelper.Managers {
             return $"{levelSet}_Ch{chapterIndex}_{room}{warpSuffix}";
         }
 
-        public static List<WarpInfo> GetWarpTargets(int areaId) {
+        public static List<WarpInfo> GetWarpTargets(int areaId)
+        {
             List<WarpInfo> warps = new();
             List<string> invalidWarps = new();
 
@@ -31,33 +35,40 @@ namespace Celeste.Mod.XaphanHelper.Managers {
             MapData mapData = AreaData.Areas[areaId].Mode[0].MapData;
             string start = $"{area.LevelSet}_Ch{index}_";
 
-            foreach (string warpId in UnlockedWarps) {
+            foreach (string warpId in UnlockedWarps)
+            {
                 // Warp name format: $"{levelSet}_Ch{chapterIndex}_{room}{warpSuffix}, where the warp suffix is optional
                 // With the current warp naming scheme, we can't easily tell if there's a warp suffix or if the room name just has an underscore in it.
                 // So, we assume there is none unless the room name can't be found.
-                if (warpId.StartsWith(start)) {
+                if (warpId.StartsWith(start))
+                {
                     int warpIndex = 0;
                     string room = warpId.Substring(start.Length);
                     bool roomFound = mapData.Get(room) != null;
 
-                    if (!roomFound) {
+                    if (!roomFound)
+                    {
                         int i = room.LastIndexOf('_');
-                        if (i != -1 && i < room.Length - 1) {
+                        if (i != -1 && i < room.Length - 1)
+                        {
                             warpIndex = int.Parse(room.Substring(i + 1));
                             room = room.Substring(0, i);
                             roomFound = mapData.Get(room) != null;
                         }
                     }
 
-                    if (!roomFound) {
+                    if (!roomFound)
+                    {
                         Logger.Log(LogLevel.Warn, "XaphanHelper/WarpManager", $"Could not find a matching room for {warpId}, removing...");
                         invalidWarps.Add(warpId);
                         continue;
                     }
 
                     bool warpFound = false;
-                    foreach (EntityData warpStation in mapData.Get(room).GetEntityDatas("XaphanHelper/WarpStation")) {
-                        if (warpStation.Int("index") == warpIndex) {
+                    foreach (EntityData warpStation in mapData.Get(room).GetEntityDatas("XaphanHelper/WarpStation"))
+                    {
+                        if (warpStation.Int("index") == warpIndex)
+                        {
                             string dialogKey = $"{area.LevelSet}_Warp_{warpId.Substring(area.LevelSet.Length + 1)}";
                             warps.Add(new WarpInfo(warpId, dialogKey, areaId, room, warpStation.Position));
                             warpFound = true;
@@ -65,14 +76,16 @@ namespace Celeste.Mod.XaphanHelper.Managers {
                         }
                     }
 
-                    if (!warpFound) {
+                    if (!warpFound)
+                    {
                         Logger.Log(LogLevel.Warn, "XaphanHelper/WarpManager", $"Could not find a matching warp station for {warpId}, removing...");
                         invalidWarps.Add(warpId);
                     }
                 }
             }
 
-            foreach (string warp in invalidWarps) {
+            foreach (string warp in invalidWarps)
+            {
                 UnlockedWarps.Remove(warp);
             }
 
@@ -80,23 +93,31 @@ namespace Celeste.Mod.XaphanHelper.Managers {
             return warps;
         }
 
-        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration) {
-            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player) {
+        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration)
+        {
+            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player)
+            {
                 int currentAreaId = level.Session.Area.ID;
-                if (warp.AreaId == currentAreaId) {
+                if (warp.AreaId == currentAreaId)
+                {
                     level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, wipeType, wipeDuration));
-                } else {
+                }
+                else
+                {
                     XaphanModule.ModSaveData.DestinationRoom = warp.Room;
                     XaphanModule.ModSaveData.Spawn = warp.Position;
                     XaphanModule.ModSaveData.Wipe = wipeType;
                     XaphanModule.ModSaveData.WipeDuration = wipeDuration;
 
                     ScreenWipe wipe = null;
-                    if (typeof(Celeste).Assembly.GetType($"Celeste.{wipeType}Wipe") is Type type) {
+                    if (typeof(Celeste).Assembly.GetType($"Celeste.{wipeType}Wipe") is Type type)
+                    {
                         wipe = (ScreenWipe)Activator.CreateInstance(type, new object[] {
                             level, false, new Action(() => TeleportToChapter(warp.AreaId))
                         });
-                    } else {
+                    }
+                    else
+                    {
                         wipe = new FadeWipe(level, false, new Action(() => TeleportToChapter(warp.AreaId)));
                     }
 
@@ -105,42 +126,52 @@ namespace Celeste.Mod.XaphanHelper.Managers {
             }
         }
 
-        private static void TeleportToChapter(int areaId) {
-            if (Engine.Scene is Level level) {
-                if (level.Tracker.GetEntity<CountdownDisplay>() is CountdownDisplay timerDisplay && timerDisplay.SaveTimer) {
+        private static void TeleportToChapter(int areaId)
+        {
+            if (Engine.Scene is Level level)
+            {
+                if (level.Tracker.GetEntity<CountdownDisplay>() is CountdownDisplay timerDisplay && timerDisplay.SaveTimer)
+                {
                     AreaKey area = level.Session.Area;
                     XaphanModule.ModSaveData.CountdownCurrentTime = timerDisplay.PausedTimer;
                     XaphanModule.ModSaveData.CountdownShake = timerDisplay.Shake;
                     XaphanModule.ModSaveData.CountdownExplode = timerDisplay.Explode;
-                    if (XaphanModule.ModSaveData.CountdownStartChapter == -1) {
+                    if (XaphanModule.ModSaveData.CountdownStartChapter == -1)
+                    {
                         XaphanModule.ModSaveData.CountdownStartChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                     }
                     XaphanModule.ModSaveData.CountdownStartRoom = timerDisplay.startRoom;
                     XaphanModule.ModSaveData.CountdownSpawn = timerDisplay.SpawnPosition;
                 }
-                if (XaphanModule.useMergeChaptersController && (level.Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true)) {
+                if (XaphanModule.useMergeChaptersController && (level.Session.Area.LevelSet == "Xaphan/0" ? !XaphanModule.ModSaveData.SpeedrunMode : true))
+                {
                     long currentTime = level.Session.Time;
-                    LevelEnter.Go(new Session(new AreaKey(areaId)) {
+                    LevelEnter.Go(new Session(new AreaKey(areaId))
+                    {
                         Time = currentTime,
                         DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[level.Session.Area.LevelSet],
                         Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[level.Session.Area.LevelSet]
                     }
                     , fromSaveData: false);
-                } else {
+                }
+                else
+                {
                     LevelEnter.Go(new Session(new AreaKey(areaId)), fromSaveData: false);
                 }
             }
         }
     }
 
-    public struct WarpInfo {
+    public struct WarpInfo
+    {
         public string ID;
         public string DialogKey;
         public int AreaId;
         public string Room;
         public Vector2 Position;
 
-        public WarpInfo(string id, string dialogKey, int areaId, string room, Vector2 position) {
+        public WarpInfo(string id, string dialogKey, int areaId, string room, Vector2 position)
+        {
             ID = id;
             DialogKey = dialogKey;
             AreaId = areaId;

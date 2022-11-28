@@ -1,6 +1,6 @@
-﻿using Monocle;
+﻿using System;
 using Microsoft.Xna.Framework;
-using System;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -116,7 +116,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 return;
             }
-            Vector2 value = new Vector2(textPositionX, textPositionY);
+            Vector2 value = new(textPositionX, textPositionY);
             if (SaveData.Instance != null && SaveData.Instance.Assists.MirrorMode)
             {
                 value.X = 1920f - value.X;

@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.Entities;
-using FMOD.Studio;
-using Monocle;
-using Microsoft.Xna.Framework;
-using System.Collections;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
+using FMOD.Studio;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -56,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
-         public Elevator(Vector2 position, string sprite, bool canTalk, bool usableInSpeedrunMode, float timer, bool endAreaEntrance, int endPosition, int toChapter, string destinationRoom, int spawnRoomX, int spawnRoomY, string flag) : base(position, 32f, 8f, safe: true)
+        public Elevator(Vector2 position, string sprite, bool canTalk, bool usableInSpeedrunMode, float timer, bool endAreaEntrance, int endPosition, int toChapter, string destinationRoom, int spawnRoomX, int spawnRoomY, string flag) : base(position, 32f, 8f, safe: true)
         {
             CanTalk = canTalk;
             Timer = timer;
@@ -214,7 +214,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     int currentChapter = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
                     if (ToChapter != currentChapter)
                     {
-                        FadeWipe Wipe = new FadeWipe(SceneAs<Level>(), false, () => ExitRoom(player))
+                        FadeWipe Wipe = new(SceneAs<Level>(), false, () => ExitRoom(player))
                         {
                             Duration = 1.35f
                         };
@@ -310,7 +310,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         Time = currentTime,
                         DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
                         Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
-                }
+                    }
                     , fromSaveData: false);
                 }
                 else

@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using Celeste.Mod.Entities;
 using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -15,7 +15,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
             private MTexture pathTexture;
 
-            private MTexture clipTexture = new MTexture();
+            private MTexture clipTexture = new();
 
             private float timer = 0f;
 

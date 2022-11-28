@@ -1,6 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.Entities;
+﻿using System.Reflection;
+using Celeste.Mod.XaphanHelper.Entities;
 using Monocle;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {

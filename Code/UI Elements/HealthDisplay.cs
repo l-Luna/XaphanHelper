@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Monocle;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
-using Celeste.Mod.XaphanHelper.Upgrades;
+using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Controllers;
-using Celeste.Mod.XaphanHelper.Entities;
-using FMOD.Studio;
 using Celeste.Mod.XaphanHelper.Cutscenes;
+using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.Upgrades;
+using FMOD.Studio;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -42,7 +42,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public static EventInstance damageSfx;
 
-        public HashSet<Image> EnergyTanks = new HashSet<Image>();
+        public HashSet<Image> EnergyTanks = new();
 
         public bool PlayerWasKilled;
 
@@ -112,7 +112,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             HeatController controler = SceneAs<Level>().Tracker.GetEntity<HeatController>();
             if (player != null)
             {
-                if (TookDamage) 
+                if (TookDamage)
                 {
                     ColorRed = true;
                 }
@@ -141,7 +141,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             string HealthString = DisplayedHealth.ToString();
             if (HealthString.Length == 2)
             {
-                LeftFigure = new Image(GFX.Gui["health/"+ HealthString[0]]);
+                LeftFigure = new Image(GFX.Gui["health/" + HealthString[0]]);
                 RightFigure = new Image(GFX.Gui["health/" + HealthString[1]]);
             }
             else
@@ -311,7 +311,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Level.Shake();
             Input.Rumble(RumbleStrength.Strong, RumbleLength.Long);
             Audio.Play("event:/char/madeline/death", Position);
-            CustomDeathEffect deathEffect = new CustomDeathEffect(player.Hair.Color, player.Center);
+            CustomDeathEffect deathEffect = new(player.Hair.Color, player.Center);
             deathEffect.OnUpdate = delegate (float f)
             {
                 player.Light.Alpha = 1f - f;

@@ -1,9 +1,9 @@
 ﻿using System;
 using Celeste.Mod.Meta;
+using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
-using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -86,7 +86,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     text = Dialog.Clean(string.Concat("areacomplete_", session.Area.Mode, session.FullClear ? "_fullclear" : ""));
                 }
-                Vector2 origin = new Vector2(960f, 200f);
+                Vector2 origin = new(960f, 200f);
                 float scale = Math.Min(1600f / ActiveFont.Measure(text).X, 3f);
                 title = new AreaCompleteTitle(origin, text, scale);
             }
@@ -139,7 +139,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             if (Input.MenuConfirm.Pressed && finishedSlide && canConfirm)
             {
                 canConfirm = false;
-                HiresSnow outSnow = new HiresSnow();
+                HiresSnow outSnow = new();
                 outSnow.Alpha = 0f;
                 outSnow.AttachAlphaTo = new FadeWipe(this, false, delegate
                 {
@@ -190,9 +190,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 return;
             }
-            
+
             MTexture mTexture = Input.GuiButton(Input.MenuConfirm, "controls/keyboard/oemquestion");
-            Vector2 vector = new Vector2(1860f - (float)mTexture.Width, 1020f - (float)mTexture.Height);
+            Vector2 vector = new(1860f - mTexture.Width, 1020f - mTexture.Height);
             float num = buttonTimerEase * buttonTimerEase;
             float num2 = 0.9f + buttonTimerEase * 0.1f;
             for (int i = -1; i <= 1; i++)
@@ -214,7 +214,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (!HideVanillaTimer)
                 {
-                    Vector2 vector = new Vector2(80f - 300f * (1f - Ease.CubeOut(ease)), 1000f);
+                    Vector2 vector = new(80f - 300f * (1f - Ease.CubeOut(ease)), 1000f);
                     if (Settings.Instance.SpeedrunClock == SpeedrunType.Chapter)
                     {
                         SpeedrunTimerDisplay.DrawTime(vector, speedrunTimerChapterString);
@@ -229,7 +229,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 VersionNumberAndVariants(versionText, ease, 1f);
             }
-            Vector2 vectorV = new Vector2(Engine.Width / 2, Engine.Height - 30f + 300f * (1f - Ease.CubeOut(ease)));
+            Vector2 vectorV = new(Engine.Width / 2, Engine.Height - 30f + 300f * (1f - Ease.CubeOut(ease)));
             float paddingText = ((!ShowTime && Strawberries == -1 && MaxStrawberries == -1) ? 50 : 0) + ((ItemPercent == -1 && MapPercent == -1) ? 50 : 0);
             if (!string.IsNullOrEmpty(SubText1))
             {
@@ -251,7 +251,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 float iconStrawberryWidth = iconStrawberry.Width;
                 float counterWidth = ActiveFont.Measure(strawberryCounter).X * 0.8f;
                 float totalStrawberriesWidth = iconStrawberryWidth + counterWidth;
-                Vector2 adjust = new Vector2(15f, 0f);
+                Vector2 adjust = new(15f, 0f);
                 if (ShowTime && Strawberries == -1 && MaxStrawberries == -1)
                 {
                     adjust = new Vector2(2f, 0f);
@@ -261,7 +261,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 else if (!ShowTime && Strawberries != -1 && MaxStrawberries != -1)
                 {
                     adjust = new Vector2(4f, 0f);
-                    iconStrawberry.DrawCentered(vectorV - new Vector2(0f, 75f - padding) - new Vector2(totalStrawberriesWidth / 2, 0f) + new Vector2(iconStrawberryWidth / 2, 0f)- adjust, Color.White, 1f);
+                    iconStrawberry.DrawCentered(vectorV - new Vector2(0f, 75f - padding) - new Vector2(totalStrawberriesWidth / 2, 0f) + new Vector2(iconStrawberryWidth / 2, 0f) - adjust, Color.White, 1f);
                     ActiveFont.DrawOutline(strawberryCounter, vectorV - new Vector2(0f, 75f - padding) - new Vector2(totalStrawberriesWidth / 2, 0f) + new Vector2(iconStrawberryWidth, 0f) - adjust, new Vector2(0f, 0.5f), Vector2.One * 0.8f, Strawberries < MaxStrawberries ? Calc.HexToColor(StrawberriesColor) : Calc.HexToColor(StrawberriesMaxColor), 2f, Color.Black);
                 }
                 else if (ShowTime && Strawberries != -1 && MaxStrawberries != -1)
@@ -292,7 +292,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public static void VersionNumberAndVariants(string version, float ease, float alpha)
         {
             everestTime += Engine.RawDeltaTime;
-            Vector2 vector = new Vector2(1820f + 300f * (1f - Ease.CubeOut(ease)), 1020f);
+            Vector2 vector = new(1820f + 300f * (1f - Ease.CubeOut(ease)), 1020f);
             if (SaveData.Instance.AssistMode || SaveData.Instance.VariantMode)
             {
                 MTexture mTexture = GFX.Gui[SaveData.Instance.AssistMode ? "cs_assistmode" : "cs_variantmode"];

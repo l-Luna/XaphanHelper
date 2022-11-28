@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Monocle;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using On.Celeste;
-using Celeste.Mod.XaphanHelper.Upgrades;
+using System.Reflection;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
-using MonoMod.RuntimeDetour;
-using System.Reflection;
-using MonoMod.Utils;
+using Celeste.Mod.XaphanHelper.Upgrades;
+using Microsoft.Xna.Framework;
+using Monocle;
 using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -24,9 +23,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private MTexture icon = GFX.Gui["stamina/icon"];
 
-        private Image section = new Image(GFX.Gui["stamina/section"]);
+        private Image section = new(GFX.Gui["stamina/section"]);
 
-        public HashSet<Image> Sections = new HashSet<Image>();
+        public HashSet<Image> Sections = new();
 
         public static Player player;
 
@@ -102,10 +101,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private static void patchOutStamina(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(110f)))
             {
-                cursor.EmitDelegate<Func<float, float>>(orig => {
+                cursor.EmitDelegate<Func<float, float>>(orig =>
+                {
                     if (XaphanModule.useUpgrades)
                     {
                         return determineBaseStamina();

@@ -1,14 +1,12 @@
-﻿using Celeste.Mod.XaphanHelper.Data;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.Triggers;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections.Generic;
-using On.Celeste;
-using System;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -41,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private MTexture buttonTexture;
 
-        public List<CustomUpgradesData> CustomUpgradesData = new List<CustomUpgradesData>();
+        public List<CustomUpgradesData> CustomUpgradesData = new();
 
         public BagDisplay(Level level, string type)
         {
@@ -54,7 +52,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Sprite.Scale = new Vector2(0.15f);
             borderColor = Calc.HexToColor("262626");
             Opacity = 1f;
-            VirtualButton Button = new VirtualButton();
+            VirtualButton Button = new();
             ButtonBinding Control = type == "bag" ? Settings.UseBagItemSlot : Settings.UseMiscItemSlot;
             Button.Binding = Control.Binding;
             buttonTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");

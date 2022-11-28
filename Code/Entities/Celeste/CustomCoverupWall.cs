@@ -26,7 +26,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Collider = new Hitbox(data.Width, data.Height);
             Add(cutout = new EffectCutout());
             Depth = -13000;
-            
+
         }
 
         public override void Added(Scene scene)

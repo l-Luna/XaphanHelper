@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Monocle;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
     public class FakePlayer : Player
     {
-        public FakePlayer(Vector2 position, PlayerSpriteMode spriteMode) : base (position, spriteMode)
+        public FakePlayer(Vector2 position, PlayerSpriteMode spriteMode) : base(position, spriteMode)
         {
 
         }

@@ -1,11 +1,11 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Cil;
-using System;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         {
             if (!SceneAs<Level>().Transitioning)
             {
-                Color color = new Color(0.5f, 0.5f, 0.25f, 1f);
+                Color color = new(0.5f, 0.5f, 0.25f, 1f);
                 int i = 0;
                 int length = grid.GetLength(0);
                 int length2 = grid.GetLength(1);
@@ -118,12 +118,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private static void modILPlayerRender(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(instr => instr.MatchCallvirt<StateMachine>("get_State"), instr => instr.MatchLdcI4(19)))
             {
                 cursor.Index++;
-                cursor.EmitDelegate<Func<int, int>>(orig => {
+                cursor.EmitDelegate<Func<int, int>>(orig =>
+                {
                     if (determineifHeatController())
                     {
                         return 19;

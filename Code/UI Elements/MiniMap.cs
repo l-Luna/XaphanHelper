@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
+using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.Managers;
+using Celeste.Mod.XaphanHelper.Triggers;
 using Microsoft.Xna.Framework;
 using Monocle;
-using Celeste.Mod.XaphanHelper.Triggers;
-using Celeste.Mod.XaphanHelper.Managers;
-using Celeste.Mod.XaphanHelper.Entities;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -113,7 +113,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     mapDisplay.currentRoom = currentRoom;
                     mapDisplay.SetCurrentRoomCoordinates(Vector2.Zero);
-                    Vector2 playerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - level.Bounds.X) / mapDisplay.ScreenTilesX), (float)Math.Round(level.Bounds.Width / (float)mapDisplay.ScreenTilesX, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - level.Bounds.Y) / mapDisplay.ScreenTilesY), (float)Math.Round(level.Bounds.Height / (float)mapDisplay.ScreenTilesY, MidpointRounding.AwayFromZero) + 1));
+                    Vector2 playerPosition = new(Math.Min((float)Math.Floor((player.Center.X - level.Bounds.X) / mapDisplay.ScreenTilesX), (float)Math.Round(level.Bounds.Width / (float)mapDisplay.ScreenTilesX, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - level.Bounds.Y) / mapDisplay.ScreenTilesY), (float)Math.Round(level.Bounds.Height / (float)mapDisplay.ScreenTilesY, MidpointRounding.AwayFromZero) + 1));
                     if (playerPosition.Y == -1)
                     {
                         playerPosition.Y = 0;

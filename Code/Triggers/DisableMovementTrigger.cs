@@ -8,7 +8,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
     {
         public DisableMovementTrigger(EntityData data, Vector2 offset) : base(data, offset)
         {
-        
+
         }
 
         public override void OnStay(Player player)

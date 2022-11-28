@@ -1,6 +1,5 @@
 ﻿using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Controllers;
-using Celeste.Mod.XaphanHelper.Entities;
 using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.XaphanHelper.Triggers

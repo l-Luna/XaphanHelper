@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Celeste.Mod.Entities;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -300,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 });
                 bossShield = null;
             }
-            
+
             attackCoroutine.Active = false;
             Moving = true;
             Add(new Coroutine(MoveSequence(player)));
@@ -416,7 +416,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else if (hits < 3 || (hits >= 11 && hits != 15))
             {
-                    nextPosition = nodes[rand.Next(1, 5)];
+                nextPosition = nodes[rand.Next(1, 5)];
             }
             else if (hits < 11)
             {
@@ -450,7 +450,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public void GetAttackPattern()
         {
             var rand = new Random();
-            if (hits == 3 || hits == 5 || hits == 7 || hits == 9 )
+            if (hits == 3 || hits == 5 || hits == 7 || hits == 9)
             {
                 while (patternIndex == previousPatternIndex)
                 {
@@ -582,7 +582,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     GetTarget();
                     for (int i = 0; i < 3; i++)
                     {
-                        
+
                         if (i != 0)
                         {
                             StartShootCharge();
@@ -596,7 +596,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     GetTarget();
                     for (int i = 0; i < 2; i++)
                     {
-                        
+
                         if (i != 0)
                         {
                             StartShootCharge();
@@ -833,7 +833,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static bool _CanChangeMusic(bool value, CustomFinalBoss self)
         {
-            return (self as CustomFinalBoss).CanChangeMusic(value);
+            return self.CanChangeMusic(value);
         }
 
         public bool CanChangeMusic(bool value)

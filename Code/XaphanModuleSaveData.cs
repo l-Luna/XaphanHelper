@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -8,27 +7,27 @@ namespace Celeste.Mod.XaphanHelper
     {
         // Flags
 
-        public HashSet<string> SavedFlags = new HashSet<string>();
+        public HashSet<string> SavedFlags = new();
 
-        public HashSet<string> GlobalFlags = new HashSet<string>();
+        public HashSet<string> GlobalFlags = new();
 
-        public HashSet<string> WatchedCutscenes = new HashSet<string>();
+        public HashSet<string> WatchedCutscenes = new();
 
         // In-Game Map
 
-        public List<string> VisitedChapters = new List<string>();
+        public List<string> VisitedChapters = new();
 
-        public HashSet<string> VisitedRooms = new HashSet<string>();
+        public HashSet<string> VisitedRooms = new();
 
-        public HashSet<string> VisitedRoomsTiles = new HashSet<string>();
+        public HashSet<string> VisitedRoomsTiles = new();
 
-        public HashSet<string> ExtraUnexploredRooms = new HashSet<string>();
+        public HashSet<string> ExtraUnexploredRooms = new();
 
-        public Dictionary<string, bool> ShowHints = new Dictionary<string, bool>();
+        public Dictionary<string, bool> ShowHints = new();
 
-        public Dictionary<string, int> ProgressMode = new Dictionary<string, int>();
+        public Dictionary<string, int> ProgressMode = new();
 
-        public Dictionary<string, int> WorldMapProgressMode = new Dictionary<string, int>();
+        public Dictionary<string, int> WorldMapProgressMode = new();
 
         // Warps
 
@@ -38,79 +37,79 @@ namespace Celeste.Mod.XaphanHelper
 
         // Celeste Upgrades
 
-        public HashSet<string> PowerGripInactive = new HashSet<string>();
+        public HashSet<string> PowerGripInactive = new();
 
-        public HashSet<string> ClimbingKitInactive = new HashSet<string>();
+        public HashSet<string> ClimbingKitInactive = new();
 
-        public HashSet<string> SpiderMagnetInactive = new HashSet<string>();
+        public HashSet<string> SpiderMagnetInactive = new();
 
-        public HashSet<string> LightningDashInactive = new HashSet<string>();
+        public HashSet<string> LightningDashInactive = new();
 
-        public HashSet<string> DroneTeleportInactive = new HashSet<string>();
+        public HashSet<string> DroneTeleportInactive = new();
 
-        public HashSet<string> JumpBoostInactive = new HashSet<string>();
+        public HashSet<string> JumpBoostInactive = new();
 
-        public HashSet<string> BombsInactive = new HashSet<string>();
+        public HashSet<string> BombsInactive = new();
 
-        public HashSet<string> MegaBombsInactive = new HashSet<string>();
+        public HashSet<string> MegaBombsInactive = new();
 
-        public HashSet<string> RemoteDroneInactive = new HashSet<string>();
+        public HashSet<string> RemoteDroneInactive = new();
 
-        public HashSet<string> GoldenFeatherInactive = new HashSet<string>();
+        public HashSet<string> GoldenFeatherInactive = new();
 
-        public HashSet<string> BinocularsInactive = new HashSet<string>();
+        public HashSet<string> BinocularsInactive = new();
 
-        public HashSet<string> EtherealDashInactive = new HashSet<string>(); 
+        public HashSet<string> EtherealDashInactive = new();
 
-        public HashSet<string> PortableStationInactive = new HashSet<string>();
+        public HashSet<string> PortableStationInactive = new();
 
-        public HashSet<string> PulseRadarInactive = new HashSet<string>();
+        public HashSet<string> PulseRadarInactive = new();
 
-        public HashSet<string> DashBootsInactive = new HashSet<string>();
+        public HashSet<string> DashBootsInactive = new();
 
-        public HashSet<string> HoverBootsInactive = new HashSet<string>();
+        public HashSet<string> HoverBootsInactive = new();
 
         // Metroid Upgrades
 
-        public HashSet<string> SpazerInactive = new HashSet<string>();
+        public HashSet<string> SpazerInactive = new();
 
-        public HashSet<string> PlasmaBeamInactive = new HashSet<string>();
+        public HashSet<string> PlasmaBeamInactive = new();
 
-        public HashSet<string> MorphingBallInactive = new HashSet<string>();
+        public HashSet<string> MorphingBallInactive = new();
 
-        public HashSet<string> MorphBombsInactive = new HashSet<string>();
+        public HashSet<string> MorphBombsInactive = new();
 
-        public HashSet<string> SpringBallInactive = new HashSet<string>();
+        public HashSet<string> SpringBallInactive = new();
 
-        public HashSet<string> HighJumpBootsInactive = new HashSet<string>();
+        public HashSet<string> HighJumpBootsInactive = new();
 
-        public HashSet<string> SpeedBoosterInactive = new HashSet<string>();
+        public HashSet<string> SpeedBoosterInactive = new();
 
         // Common Upgrades
 
-        public HashSet<string> LongBeamInactive = new HashSet<string>();
+        public HashSet<string> LongBeamInactive = new();
 
-        public HashSet<string> IceBeamInactive = new HashSet<string>();
+        public HashSet<string> IceBeamInactive = new();
 
-        public HashSet<string> WaveBeamInactive = new HashSet<string>();
+        public HashSet<string> WaveBeamInactive = new();
 
-        public HashSet<string> VariaJacketInactive = new HashSet<string>();
+        public HashSet<string> VariaJacketInactive = new();
 
-        public HashSet<string> GravityJacketInactive = new HashSet<string>();
+        public HashSet<string> GravityJacketInactive = new();
 
-        public HashSet<string> ScrewAttackInactive = new HashSet<string>();
+        public HashSet<string> ScrewAttackInactive = new();
 
-        public HashSet<string> SpaceJumpInactive = new HashSet<string>();
+        public HashSet<string> SpaceJumpInactive = new();
 
         // Other Upgrades
 
-        public HashSet<string> StaminaUpgrades = new HashSet<string>();
+        public HashSet<string> StaminaUpgrades = new();
 
-        public HashSet<string> SpeedrunModeStaminaUpgrades = new HashSet<string>();
+        public HashSet<string> SpeedrunModeStaminaUpgrades = new();
 
-        public HashSet<string> DroneFireRateUpgrades = new HashSet<string>();
+        public HashSet<string> DroneFireRateUpgrades = new();
 
-        public HashSet<string> SpeedrunModeDroneFireRateUpgrades = new HashSet<string>();
+        public HashSet<string> SpeedrunModeDroneFireRateUpgrades = new();
 
         // Countdown
 
@@ -126,7 +125,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public string CountdownStartRoom = "";
 
-        public Vector2 CountdownSpawn = new Vector2();
+        public Vector2 CountdownSpawn = new();
 
         public bool CountdownIntroType = false;
 
@@ -138,7 +137,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public string DestinationRoom = "";
 
-        public Vector2 Spawn = new Vector2();
+        public Vector2 Spawn = new();
 
         public string Wipe = "";
 
@@ -146,53 +145,53 @@ namespace Celeste.Mod.XaphanHelper
 
         public bool ConsiderBeginning = false;
 
-        public Dictionary<string, int> SavedChapter = new Dictionary<string, int>();
+        public Dictionary<string, int> SavedChapter = new();
 
-        public Dictionary<string, string> SavedRoom = new Dictionary<string, string>();
+        public Dictionary<string, string> SavedRoom = new();
 
-        public Dictionary<string, Vector2> SavedSpawn = new Dictionary<string, Vector2>();
+        public Dictionary<string, Vector2> SavedSpawn = new();
 
-        public Dictionary<string, float> SavedLightingAlphaAdd = new Dictionary<string, float>();
+        public Dictionary<string, float> SavedLightingAlphaAdd = new();
 
-        public Dictionary<string, float> SavedBloomBaseAdd = new Dictionary<string, float>();
+        public Dictionary<string, float> SavedBloomBaseAdd = new();
 
-        public Dictionary<string, Session.CoreModes> SavedCoreMode = new Dictionary<string, Session.CoreModes>();
+        public Dictionary<string, Session.CoreModes> SavedCoreMode = new();
 
-        public Dictionary<string, string> SavedMusic = new Dictionary<string, string>();
+        public Dictionary<string, string> SavedMusic = new();
 
-        public Dictionary<string, string> SavedAmbience = new Dictionary<string, string>();
+        public Dictionary<string, string> SavedAmbience = new();
 
-        public Dictionary<string, HashSet<EntityID>> SavedNoLoadEntities = new Dictionary<string, HashSet<EntityID>>();
+        public Dictionary<string, HashSet<EntityID>> SavedNoLoadEntities = new();
 
-        public Dictionary<string, long> SavedTime = new Dictionary<string, long>();
+        public Dictionary<string, long> SavedTime = new();
 
-        public Dictionary<string, bool> SavedFromBeginning = new Dictionary<string, bool>();
+        public Dictionary<string, bool> SavedFromBeginning = new();
 
-        public Dictionary<string, string> SavedSesionFlags = new Dictionary<string, string>();
+        public Dictionary<string, string> SavedSesionFlags = new();
 
-        public Dictionary<string, HashSet<EntityID>> SavedSessionStrawberries = new Dictionary<string, HashSet<EntityID>>();
+        public Dictionary<string, HashSet<EntityID>> SavedSessionStrawberries = new();
 
         // Lobbies variables
 
-        public HashSet<string> VisitedLobbyMapTiles = new HashSet<string>();
+        public HashSet<string> VisitedLobbyMapTiles = new();
 
-        public List<Vector2> GeneratedVisitedLobbyMapTiles = new List<Vector2>();
+        public List<Vector2> GeneratedVisitedLobbyMapTiles = new();
 
-        public List<Vector2> GeneratedVisitedLobbyMapTiles2 = new List<Vector2>();
+        public List<Vector2> GeneratedVisitedLobbyMapTiles2 = new();
 
         // Metroid variables
 
-        public Dictionary<string, int> MaxHealth = new Dictionary<string, int>();
+        public Dictionary<string, int> MaxHealth = new();
 
-        public Dictionary<string, int> MaxMissiles = new Dictionary<string, int>();
+        public Dictionary<string, int> MaxMissiles = new();
 
-        public Dictionary<string, int> MaxSuperMissiles = new Dictionary<string, int>();
+        public Dictionary<string, int> MaxSuperMissiles = new();
 
-        public Dictionary<string, int> MaxPowerBombs = new Dictionary<string, int>();
+        public Dictionary<string, int> MaxPowerBombs = new();
 
-        public HashSet<string> DoorsOpened = new HashSet<string>();
+        public HashSet<string> DoorsOpened = new();
 
-        public HashSet<string> AmmoCollected = new HashSet<string>();
+        public HashSet<string> AmmoCollected = new();
 
         public bool IgnoreSavedChapter = false;
 
@@ -200,13 +199,13 @@ namespace Celeste.Mod.XaphanHelper
 
         // Sides Unlock variables
 
-        public HashSet<string> CSideUnlocked = new HashSet<string>();
+        public HashSet<string> CSideUnlocked = new();
 
         public int LastPlayedSide = 0;
 
         // Checkpoints (Merged chapters)
 
-        public HashSet<string> Checkpoints = new HashSet<string>();
+        public HashSet<string> Checkpoints = new();
 
         // Others
 

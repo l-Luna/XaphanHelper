@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Celeste.Mod.Entities;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -11,9 +11,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/CustomBadelineBoss")]
     public class CustomBadelineBoss : Entity
     {
-        public static ParticleType P_Burst = new ParticleType();
+        public static ParticleType P_Burst = new();
 
-        public static ParticleType P_Dash = new ParticleType();
+        public static ParticleType P_Dash = new();
 
         public bool cameraLockY;
 
@@ -516,7 +516,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 FallingBlock obj = fallingBlocks[0] as FallingBlock;
                 obj.StartShaking();
                 obj.Triggered = true;
-                obj.FallDelay = 0.4f * (float)num;
+                obj.FallDelay = 0.4f * num;
                 num++;
                 fallingBlocks.RemoveAt(0);
             }

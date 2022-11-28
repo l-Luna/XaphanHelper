@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections.Generic;
 using CelesteTags = Celeste.Tags;
 
 namespace Celeste.Mod.XaphanHelper.Effects
@@ -56,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.Effects
             Level level = scene as Level;
             if (ID == -1)
             {
-                HashSet<int> glows = new HashSet<int>();
+                HashSet<int> glows = new();
                 foreach (BgGlow glow in scene.Tracker.GetEntities<BgGlow>())
                 {
                     glows.Add(glow.ID);

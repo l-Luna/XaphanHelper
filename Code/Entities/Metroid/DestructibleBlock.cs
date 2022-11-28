@@ -1,11 +1,11 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Colliders;
 using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Enemies;
 using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -112,7 +112,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private EnemyBarrier barrier;
 
-        private Coroutine BreakRoutine = new Coroutine();
+        private Coroutine BreakRoutine = new();
 
         private string tilesetMask = "000-010-000";
 
@@ -422,7 +422,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public IEnumerator BreakSequence()
         {
-            
+
             indicator.RevealSequence();
             if (mode == "Crumble")
             {
@@ -507,10 +507,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int seed = positionXLastDigit + positionYLastDigit;
             int variation = 0;
             int variationPadding = 0;
-            if (seed == 1 || seed == 5 || seed ==  9 || seed == 13 || seed == 17)
+            if (seed == 1 || seed == 5 || seed == 9 || seed == 13 || seed == 17)
             {
                 variation = 1;
-            } else if (seed == 2 || seed == 6 || seed == 10 || seed == 14 || seed == 18)
+            }
+            else if (seed == 2 || seed == 6 || seed == 10 || seed == 14 || seed == 18)
             {
                 variation = 2;
             }

@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Reflection;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

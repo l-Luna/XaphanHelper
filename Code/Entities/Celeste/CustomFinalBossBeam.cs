@@ -1,5 +1,4 @@
-﻿using Celeste;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 
@@ -77,7 +76,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             activeTimer = 0.12f;
             beamSprite.Play("charge");
             sideFadeAlpha = 0f;
-            beamAlpha = 0f; 
+            beamAlpha = 0f;
             int num = (target.Y <= boss.Y + 16f) ? 1 : (-1);
             if (target.X >= boss.X)
             {
@@ -166,7 +165,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     level.ParticlesFG.Emit(P_Dissipate, vector + value * i + vector4 * 2f * j + Calc.Random.Range(min, max), direction);
                     level.ParticlesFG.Emit(P_Dissipate, vector + value * i - vector4 * 2f * j + Calc.Random.Range(min, max), direction2);
-                    if (i != 0 && (float)i < num)
+                    if (i != 0 && i < num)
                     {
                         level.ParticlesFG.Emit(P_Dissipate, vector - value * i + vector4 * 2f * j + Calc.Random.Range(min, max), direction);
                         level.ParticlesFG.Emit(P_Dissipate, vector - value * i - vector4 * 2f * j + Calc.Random.Range(min, max), direction2);

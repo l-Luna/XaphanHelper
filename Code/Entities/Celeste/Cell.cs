@@ -1,9 +1,9 @@
 ﻿//extern alias Viv;
+using System;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Colliders;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

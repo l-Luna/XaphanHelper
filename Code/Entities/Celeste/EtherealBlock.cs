@@ -1,9 +1,7 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using Celeste.Mod.XaphanHelper.Upgrades;
-using On.Celeste;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 
 namespace Celeste.Mod.XaphanHelper.Entities
@@ -116,7 +116,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Render()
         {
-            Vector2 value = new Vector2(Math.Sign(shaker.Value.X), 0f);
+            Vector2 value = new(Math.Sign(shaker.Value.X), 0f);
             Draw.Rect(X - 2f, Y - 8f, 14f, 10f, Color.Black);
             sprite.DrawSubrect(Vector2.Zero + value, new Rectangle(0, (int)(sprite.Height - drawHeight), (int)sprite.Width, (int)drawHeight));
         }

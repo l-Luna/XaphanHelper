@@ -14,7 +14,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Triple
         }
 
-        public static ParticleType P_Trail = new ParticleType();
+        public static ParticleType P_Trail = new();
 
         private const float MoveSpeed = 100f;
 

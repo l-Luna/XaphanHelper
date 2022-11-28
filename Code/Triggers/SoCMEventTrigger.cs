@@ -1,5 +1,5 @@
-﻿using Celeste.Mod.XaphanHelper.Events;
-using Celeste.Mod.Entities;
+﻿using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Events;
 using Microsoft.Xna.Framework;
 using Monocle;
 

@@ -1,11 +1,11 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Reflection;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
-using System;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Triggers
 {
@@ -109,7 +109,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private static void ilHookCameraTarget(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<Player>("get_CameraTarget")))
             {
                 cursor.EmitDelegate<Func<Vector2, Vector2>>(modCameraTarget);
@@ -118,7 +118,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private static void ilHookGetFullCameraTarget(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<Level>("GetFullCameraTargetAt")))
             {
                 cursor.EmitDelegate<Func<Vector2, Vector2>>(modCameraTarget);
@@ -130,7 +130,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             Player p = Engine.Scene.Tracker.GetEntity<Player>();
             if (p == null) return orig;
 
-            Rectangle viewpoint = new Rectangle((int)orig.X, (int)orig.Y, 320, 180);
+            Rectangle viewpoint = new((int)orig.X, (int)orig.Y, 320, 180);
             foreach (CameraBlocker border in Engine.Scene.Tracker.GetEntities<CameraBlocker>())
             {
                 while (border.Collidable && border.CollideRect(viewpoint))

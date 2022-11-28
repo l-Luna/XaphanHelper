@@ -1,7 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.UI_Elements;
+﻿using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using Monocle;
-using System.Collections.Generic;
-using System;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -18,9 +17,9 @@ namespace Celeste.Mod.XaphanHelper
         [Command("clear_ingamemap", "Clear the In-Game map for the current chapter or all chapters")]
         public static void Cmd_Clear_InGameMap(bool allChapters = false, bool includeCurrentRoom = false)
         {
-            List<string> TilesToRemove = new List<string>();
-            List<string> ExtraUnexploredRoomsTilesToRemove = new List<string>();
-            List<string> FlagsToRemove = new List<string>();
+            List<string> TilesToRemove = new();
+            List<string> ExtraUnexploredRoomsTilesToRemove = new();
+            List<string> FlagsToRemove = new();
             if (!allChapters)
             {
                 foreach (string visitedRoom in XaphanModule.ModSaveData.VisitedRooms)
@@ -92,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper
             {
                 XaphanModule.ModSaveData.ExtraUnexploredRooms.Remove(value);
             }
-            foreach ( string value in FlagsToRemove)
+            foreach (string value in FlagsToRemove)
             {
                 XaphanModule.ModSaveData.SavedFlags.Remove(value);
             }
@@ -125,7 +124,7 @@ namespace Celeste.Mod.XaphanHelper
         [Command("clear_warps", "Clear all warps unlocked in this campaign")]
         public static void Cmd_Clear_Warps()
         {
-            List<string> ToRemove = new List<string>();
+            List<string> ToRemove = new();
             foreach (string warp in XaphanModule.ModSaveData.UnlockedWarps)
             {
                 if (warp.Contains(prefix))
@@ -151,7 +150,7 @@ namespace Celeste.Mod.XaphanHelper
                     upg = "PowerGrip;ClimbingKit;SpiderMagnet;DashBoots;SpaceJump;HoverBoots;LightningDash;LongBeam;IceBeam;WaveBeam;DroneTeleport;VariaJacket;GravityJacket;Bombs;MegaBombs;RemoteDrone;GoldenFeather;EtherealDash;ScrewAttack;Binoculars;PortableStation;PulseRadar";
                 }
                 string[] upgrades = upg.Split(';');
-                foreach(string u in upgrades)
+                foreach (string u in upgrades)
                 {
                     foreach (XaphanModule.Upgrades upgrade in XaphanModule.Instance.UpgradeHandlers.Keys)
                     {

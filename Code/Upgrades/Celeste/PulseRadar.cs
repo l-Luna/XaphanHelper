@@ -1,8 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.UI_Elements;
+﻿using Celeste.Mod.XaphanHelper.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
-using Celeste.Mod.XaphanHelper.Entities;
-using Monocle;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {

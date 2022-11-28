@@ -1,9 +1,8 @@
 ﻿using System;
-using On.Celeste;
 using System.Reflection;
-using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using Monocle;
+using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
@@ -56,7 +55,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private static void ilPlayerJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(-105f)))
             {
@@ -67,7 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void ilWallJump(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(-105f)))
             {

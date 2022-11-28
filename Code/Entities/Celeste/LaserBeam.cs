@@ -1,8 +1,7 @@
-﻿using Celeste.Mod.XaphanHelper.Managers;
+﻿using System.Collections;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -49,7 +48,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Offset = new Vector2(8f, 3f);
             }
-            else if(Emitter.side == "Right")
+            else if (Emitter.side == "Right")
             {
                 Offset = new Vector2(0f, 3f);
             }

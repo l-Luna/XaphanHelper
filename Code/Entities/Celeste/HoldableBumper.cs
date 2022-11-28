@@ -11,7 +11,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             Collider = new Hitbox(data.Width, 4f, -8, -3f);
             Add(new HoldableCollider(OnHoldable));
-            
+
         }
 
         private void OnHoldable(Holdable h)

@@ -36,7 +36,7 @@
 
         public bool IgonreIcons;
 
-        public  InGameMapRoomAdjustControllerData(string room, int positionX, int positionY, int sizeX, int sizeY, string hiddenTiles, bool removeEntrance0, bool removeEntrance1, bool removeEntrance2, bool removeEntrance3, bool removeEntrance4, bool removeEntrance5, bool removeEntrance6, bool removeEntrance7, bool removeEntrance8, bool removeEntrance9, bool ignoreIcons)
+        public InGameMapRoomAdjustControllerData(string room, int positionX, int positionY, int sizeX, int sizeY, string hiddenTiles, bool removeEntrance0, bool removeEntrance1, bool removeEntrance2, bool removeEntrance3, bool removeEntrance4, bool removeEntrance5, bool removeEntrance6, bool removeEntrance7, bool removeEntrance8, bool removeEntrance9, bool ignoreIcons)
         {
             Room = room;
             PositionX = positionX;

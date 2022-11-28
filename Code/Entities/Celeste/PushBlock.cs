@@ -1,9 +1,9 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -269,10 +269,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (direction == -Vector2.UnitX)
             {
-                Vector2 vector = new Vector2(0f, 2f);
+                Vector2 vector = new(0f, 2f);
                 for (int i = 0; i < Height / 8f; i++)
                 {
-                    Vector2 vector2 = new Vector2(Left - 1f, Top + 4f + (i * 8));
+                    Vector2 vector2 = new(Left - 1f, Top + 4f + (i * 8));
                     if (Scene.CollideCheck<Solid>(vector2))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(CrushBlock.P_Impact, vector2 + vector, 0f);
@@ -282,10 +282,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else if (direction == Vector2.UnitX)
             {
-                Vector2 vector3 = new Vector2(0f, 2f);
+                Vector2 vector3 = new(0f, 2f);
                 for (int j = 0; j < Height / 8f; j++)
                 {
-                    Vector2 vector4 = new Vector2(Right + 1f, Top + 4f + (j * 8));
+                    Vector2 vector4 = new(Right + 1f, Top + 4f + (j * 8));
                     if (Scene.CollideCheck<Solid>(vector4))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(CrushBlock.P_Impact, vector4 + vector3, (float)Math.PI);
@@ -295,10 +295,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else if (direction == -Vector2.UnitY)
             {
-                Vector2 vector5 = new Vector2(2f, 0f);
+                Vector2 vector5 = new(2f, 0f);
                 for (int k = 0; k < Width / 8f; k++)
                 {
-                    Vector2 vector6 = new Vector2(Left + 4f + (k * 8), Top - 1f);
+                    Vector2 vector6 = new(Left + 4f + (k * 8), Top - 1f);
                     if (Scene.CollideCheck<Solid>(vector6))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(CrushBlock.P_Impact, vector6 + vector5, (float)Math.PI / 2f);
@@ -308,10 +308,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else if (direction == Vector2.UnitY)
             {
-                Vector2 vector7 = new Vector2(2f, 0f);
+                Vector2 vector7 = new(2f, 0f);
                 for (int l = 0; l < Width / 8f; l++)
                 {
-                    Vector2 vector8 = new Vector2(Left + 4f + (l * 8), Bottom + 1f);
+                    Vector2 vector8 = new(Left + 4f + (l * 8), Bottom + 1f);
                     if (Scene.CollideCheck<Solid>(vector8))
                     {
                         SceneAs<Level>().ParticlesFG.Emit(CrushBlock.P_Impact, vector8 + vector7, -(float)Math.PI / 2f);
@@ -362,7 +362,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void CorrectionH(float direction)
         {
-            if (Scene.CollideCheck<PushBlockTrack>(new Rectangle((int)(X - 1f),(int)Y, 1, 1)) && Scene.CollideCheck<PushBlockTrack>(new Rectangle((int)(X - 1f), (int)(Y + Height - 1), 1, 1)) && !CollideCheck<Solid>(Position - Vector2.UnitX) && direction == -1)
+            if (Scene.CollideCheck<PushBlockTrack>(new Rectangle((int)(X - 1f), (int)Y, 1, 1)) && Scene.CollideCheck<PushBlockTrack>(new Rectangle((int)(X - 1f), (int)(Y + Height - 1), 1, 1)) && !CollideCheck<Solid>(Position - Vector2.UnitX) && direction == -1)
             {
                 MoveHExact(-1);
                 CorrectionH(direction);
@@ -438,7 +438,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     int num3 = ((i < num) ? Math.Min(i, 1) : 2);
                     int num4 = ((j < num2) ? Math.Min(j, 1) : 2);
-                    
+
                     if (mustDash)
                     {
                         dashNineSlice[num3, num4].Draw(Position + Shake + new Vector2(i * 8, j * 8));

@@ -1,8 +1,7 @@
-﻿using Celeste;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -10,7 +9,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [Tracked(false)]
     public class CustomBadelineBossBeam : Entity
     {
-        public static ParticleType P_Dissipate = new ParticleType();
+        public static ParticleType P_Dissipate = new();
 
         public const float ChargeTime = 1.4f;
 

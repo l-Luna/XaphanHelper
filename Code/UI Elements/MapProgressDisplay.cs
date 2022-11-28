@@ -1,8 +1,7 @@
-﻿using Celeste.Mod.XaphanHelper.Data;
+﻿using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -13,11 +12,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<InGameMapSubAreaControllerData> SubAreaControllerData;
 
-        public List<InGameMapRoomControllerData> RoomControllerData = new List<InGameMapRoomControllerData>();
+        public List<InGameMapRoomControllerData> RoomControllerData = new();
 
-        public List<InGameMapTilesControllerData> TilesControllerData = new List<InGameMapTilesControllerData>();
+        public List<InGameMapTilesControllerData> TilesControllerData = new();
 
-        public List<InGameMapEntitiesData> EntitiesData = new List<InGameMapEntitiesData>();
+        public List<InGameMapEntitiesData> EntitiesData = new();
 
         public string MapPercent;
 
@@ -183,10 +182,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
         }
-        
+
         public List<string> getSubAreaRooms(int subAreaIndex)
         {
-            List<string> subAreaRooms = new List<string>();
+            List<string> subAreaRooms = new();
             foreach (InGameMapRoomControllerData roomControllerData in RoomControllerData)
             {
                 if (roomControllerData.SubAreaIndex == subAreaIndex)
@@ -961,11 +960,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 int valueWidth = 0;
                 int characterInline = 5;
                 int characterImageHeight = (int)new Image(GFX.Gui["maps/keys/0"]).Height;
-                List<int> linesYPos = new List<int>();
+                List<int> linesYPos = new();
 
                 if (!InGameMapControllerData.HideMapProgress && !NoMapTiles)
                 {
-                    Image mapIcon = new Image(GFX.Gui["maps/keys/map"]);
+                    Image mapIcon = new(GFX.Gui["maps/keys/map"]);
                     mapIcon.Position = new Vector2(Position.X, Position.Y + mapIcon.Height / 4);
                     mapIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + mapIcon.Height / 4) + (mapIcon.Height - characterImageHeight) / 2));
@@ -975,18 +974,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     if (!InGameMapControllerData.HideCassetteProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalCassette(getSubAreaIndex()) != 0 : getTotalCassette() != 0)
                     {
-                        Image cassetteIcon = new Image(GFX.Gui["maps/keys/cassette"]);
+                        Image cassetteIcon = new(GFX.Gui["maps/keys/cassette"]);
                         cassetteIcon.Position = new Vector2(Position.X + iconXPos, Position.Y + cassetteIcon.Height / 4);
                         cassetteIcon.Render();
                         if (getCurrentCassette() == getTotalCassette())
                         {
-                            Image checkmark = new Image(GFX.Gui["maps/keys/checkmark"]);
+                            Image checkmark = new(GFX.Gui["maps/keys/checkmark"]);
                             checkmark.Position = cassetteIcon.Position + new Vector2(10f, 0f);
                             checkmark.Render();
                         }
                         else
                         {
-                            Image crossmark = new Image(GFX.Gui["maps/keys/crossmark"]);
+                            Image crossmark = new(GFX.Gui["maps/keys/crossmark"]);
                             crossmark.Position = cassetteIcon.Position + new Vector2(10f, 0f);
                             crossmark.Render();
                         }
@@ -994,18 +993,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     if (!InGameMapControllerData.HideHeartProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalHeart(getSubAreaIndex()) != 0 : getTotalHeart() != 0)
                     {
-                        Image heartIcon = new Image(GFX.Gui["maps/keys/heart"]);
+                        Image heartIcon = new(GFX.Gui["maps/keys/heart"]);
                         heartIcon.Position = new Vector2(Position.X + iconXPos, Position.Y + heartIcon.Height / 4);
                         heartIcon.Render();
                         if (getCurrentHeart() == getTotalHeart())
                         {
-                            Image checkmark = new Image(GFX.Gui["maps/keys/checkmark"]);
+                            Image checkmark = new(GFX.Gui["maps/keys/checkmark"]);
                             checkmark.Position = heartIcon.Position + new Vector2(10f, 0f);
                             checkmark.Render();
                         }
                         else
                         {
-                            Image crossmark = new Image(GFX.Gui["maps/keys/crossmark"]);
+                            Image crossmark = new(GFX.Gui["maps/keys/crossmark"]);
                             crossmark.Position = heartIcon.Position + new Vector2(10f, 0f);
                             crossmark.Render();
                         }
@@ -1013,7 +1012,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (!InGameMapControllerData.HideStrawberryProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalStrawberries(getSubAreaIndex()) != 0 : getTotalStrawberries() != 0)
                 {
-                    Image strawberryIcon = new Image(GFX.Gui["maps/keys/strawberry"]);
+                    Image strawberryIcon = new(GFX.Gui["maps/keys/strawberry"]);
                     strawberryIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + strawberryIcon.Height / 4);
                     strawberryIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + strawberryIcon.Height / 4) + (strawberryIcon.Height - characterImageHeight) / 2));
@@ -1021,7 +1020,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (!InGameMapControllerData.HideMoonberryProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalMoonberries(getSubAreaIndex()) != 0 && getCurrentMoonberries() != 0 : getCurrentMoonberries() != 0)
                 {
-                    Image moonberryIcon = new Image(GFX.Gui["maps/keys/moonberry"]);
+                    Image moonberryIcon = new(GFX.Gui["maps/keys/moonberry"]);
                     moonberryIcon.Position = new Vector2(Position.X - 10f, Position.Y + lineHeight * iconYPos + moonberryIcon.Height / 4);
                     moonberryIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + moonberryIcon.Height / 4) + (moonberryIcon.Height - characterImageHeight) / 2));
@@ -1029,7 +1028,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalStaminaUpgrades(getSubAreaIndex()) != 0 : getTotalStaminaUpgrades() != 0)
                 {
-                    Image staminaUpgradeIcon = new Image(GFX.Gui["maps/keys/energyTank"]);
+                    Image staminaUpgradeIcon = new(GFX.Gui["maps/keys/energyTank"]);
                     staminaUpgradeIcon.Position = new Vector2(Position.X - 2f, Position.Y - 2f + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4);
                     staminaUpgradeIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4) + (staminaUpgradeIcon.Height - characterImageHeight) / 2));
@@ -1037,7 +1036,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalDroneFireRateUpgrades(getSubAreaIndex()) != 0 : getTotalDroneFireRateUpgrades() != 0)
                 {
-                    Image fireRateUpgradeIcon = new Image(GFX.Gui["maps/keys/fireRateModule"]);
+                    Image fireRateUpgradeIcon = new(GFX.Gui["maps/keys/fireRateModule"]);
                     fireRateUpgradeIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + fireRateUpgradeIcon.Height / 4);
                     fireRateUpgradeIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + fireRateUpgradeIcon.Height / 4) + (fireRateUpgradeIcon.Height - characterImageHeight) / 2));
@@ -1049,7 +1048,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if ((getSubAreaIndex() != -1 && mode == 1) ? getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i], getSubAreaIndex()) != 0 : getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]) != 0)
                         {
-                            Image customCollectableIcon = new Image(GFX.Gui["maps/" + Prefix + "/" + "keys/" + InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]]);
+                            Image customCollectableIcon = new(GFX.Gui["maps/" + Prefix + "/" + "keys/" + InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]]);
                             customCollectableIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + customCollectableIcon.Height / 4);
                             customCollectableIcon.Render();
                             linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + customCollectableIcon.Height / 4) + (customCollectableIcon.Height - characterImageHeight) / 2));
@@ -1060,7 +1059,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if ((getSubAreaIndex() != -1 && mode == 1) ? getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i], getSubAreaIndex()) != 0 && getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]) != 0 : getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]) != 0)
                         {
-                            Image customCollectableIcon = new Image(GFX.Gui["maps/" + Prefix + "/" + "keys/" + InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]]);
+                            Image customCollectableIcon = new(GFX.Gui["maps/" + Prefix + "/" + "keys/" + InGameMapControllerData.CustomCollectablesProgress.Split(',')[i]]);
                             customCollectableIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + customCollectableIcon.Height / 4);
                             customCollectableIcon.Render();
                             linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + customCollectableIcon.Height / 4) + (customCollectableIcon.Height - characterImageHeight) / 2));
@@ -1072,7 +1071,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     if (!InGameMapControllerData.HideCassetteProgress && getTotalCassette() != 0)
                     {
-                        Image cassetteIcon = new Image(GFX.Gui["maps/keys/cassette"]);
+                        Image cassetteIcon = new(GFX.Gui["maps/keys/cassette"]);
                         cassetteIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + cassetteIcon.Height / 4);
                         cassetteIcon.Render();
                         linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + cassetteIcon.Height / 4) + (cassetteIcon.Height - characterImageHeight) / 2));
@@ -1080,7 +1079,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     if (!InGameMapControllerData.HideHeartProgress && getTotalHeart() != 0)
                     {
-                        Image heartIcon = new Image(GFX.Gui["maps/keys/heart"]);
+                        Image heartIcon = new(GFX.Gui["maps/keys/heart"]);
                         heartIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + heartIcon.Height / 4);
                         heartIcon.Render();
                         linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + heartIcon.Height / 4) + (heartIcon.Height - characterImageHeight) / 2));
@@ -1089,7 +1088,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalUpgrades(getSubAreaIndex()) != 0 : getTotalUpgrades() != 0)
                 {
-                    Image upgradeIcon = new Image(GFX.Gui["maps/keys/upgrade"]);
+                    Image upgradeIcon = new(GFX.Gui["maps/keys/upgrade"]);
                     upgradeIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + upgradeIcon.Height / 4);
                     upgradeIcon.Render();
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + upgradeIcon.Height / 4) + (upgradeIcon.Height - characterImageHeight) / 2));
@@ -1113,7 +1112,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = MapPercentDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentMapTiles() == getTotalMapTiles() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1136,7 +1135,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = StrawberriesDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentStrawberries() == getTotalStrawberries() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1159,7 +1158,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = MoonberriesDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentMoonberries() == getTotalMoonberries() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1182,7 +1181,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = StaminaUpgradeDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentStaminaUpgrades() == getTotalStaminaUpgrades() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1205,7 +1204,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = FireRateUpgradeDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentDroneFireRateUpgrades() == getTotalDroneFireRateUpgrades() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1232,7 +1231,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                     {
                                         character = CustomCollectableDisplay[i].ToString();
                                     }
-                                    Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                    Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                     characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                     characterImage.Color = getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c]) == getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c]) ? Color.Gold : Color.White;
                                     characterImage.Render();
@@ -1257,7 +1256,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                     {
                                         character = CustomCollectableDisplay[i].ToString();
                                     }
-                                    Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                    Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                     characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                     characterImage.Color = getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c]) == getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c]) ? Color.Gold : Color.White;
                                     characterImage.Render();
@@ -1284,7 +1283,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = CassettesDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentCassette() == getTotalCassette() ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1306,7 +1305,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = HeartsDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentHeart() == getTotalHeart() ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1330,7 +1329,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 character = UpgradeDisplay[i].ToString();
                             }
-                            Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentUpgrades() == getTotalUpgrades() ? Color.Gold : Color.White;
                             characterImage.Render();
@@ -1357,7 +1356,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = SubAreaMapPerecentDisplay[j].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentMapTiles(getSubAreaIndex()) == getTotalMapTiles(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1380,7 +1379,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = StrawberriesDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentStrawberries(getSubAreaIndex()) == getTotalStrawberries(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1403,7 +1402,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = MoonberriesDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentMoonberries(getSubAreaIndex()) == getTotalMoonberries(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1426,7 +1425,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = StaminaUpgradeDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentStaminaUpgrades(getSubAreaIndex()) == getTotalStaminaUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1449,7 +1448,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = FireRateUpgradeDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentDroneFireRateUpgrades(getSubAreaIndex()) == getTotalDroneFireRateUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
@@ -1476,7 +1475,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                         {
                                             character = CustomCollectableDisplay[i].ToString();
                                         }
-                                        Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                        Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                         characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                         characterImage.Color = getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c], getSubAreaIndex()) == getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c], getSubAreaIndex()) ? Color.Gold : Color.White;
                                         characterImage.Render();
@@ -1501,7 +1500,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                         {
                                             character = CustomCollectableDisplay[i].ToString();
                                         }
-                                        Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                        Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                         characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                         characterImage.Color = getCurrentCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c], getSubAreaIndex()) == getTotalCustomCollectable(InGameMapControllerData.CustomCollectablesProgress.Split(',')[c], getSubAreaIndex()) ? Color.Gold : Color.White;
                                         characterImage.Render();
@@ -1526,7 +1525,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     character = UpgradeDisplay[i].ToString();
                                 }
-                                Image characterImage = new Image(GFX.Gui["maps/keys/" + character]);
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentUpgrades(getSubAreaIndex()) == getTotalUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();

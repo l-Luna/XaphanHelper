@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Controllers
 {
@@ -108,7 +108,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             Scene.Add(new BgFlash(0.4f));
             yield return 0.3f;
             Scene.Add(new BgFlash(1f));
-            Scene.Add(new LightningStrike(new Vector2(SceneAs<Level>().Camera.Left  + rand.Next(100, 220), SceneAs<Level>().Bounds.Top), rand.Next(50, 100), 240f));
+            Scene.Add(new LightningStrike(new Vector2(SceneAs<Level>().Camera.Left + rand.Next(100, 220), SceneAs<Level>().Bounds.Top), rand.Next(50, 100), 240f));
             yield return 8.3f;
             Scene.Add(new BgFlash(0.4f));
             yield return 0.2f;

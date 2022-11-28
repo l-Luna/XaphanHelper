@@ -1,9 +1,7 @@
-﻿using Celeste.Mod.Entities;
-using FMOD.Studio;
+﻿using System.Collections;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {

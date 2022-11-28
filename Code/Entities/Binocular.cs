@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using Celeste.Mod.Entities;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -13,7 +12,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Binocular(EntityData data, Vector2 offset) : base(data, offset)
         {
-            
+
         }
 
         public static void Load()

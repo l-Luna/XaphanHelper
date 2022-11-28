@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System.Reflection;
+using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Microsoft.Xna.Framework;
 using Monocle;
-using Celeste.Mod.XaphanHelper.Cutscenes;
-using System.Reflection;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -65,7 +65,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     StatsFlags.ResetStats();
                 }
-            }            
+            }
         }
     }
 }

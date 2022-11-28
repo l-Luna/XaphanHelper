@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Monocle;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -87,7 +87,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void AddOrb(bool silent = false)
         {
-            BossShieldOrb shieldOrb = new BossShieldOrb();
+            BossShieldOrb shieldOrb = new();
             shieldOrb.Add(new Coroutine(Appear(shieldOrb)));
             Scene.Add(shieldOrb);
         }

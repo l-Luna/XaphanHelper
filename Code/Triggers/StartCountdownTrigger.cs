@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using Celeste.Mod.XaphanHelper.Entities;
 
 namespace Celeste.Mod.XaphanHelper.Triggers
 {
@@ -156,7 +156,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                 yield return 0.05f;
                 while (true)
                 {
-                    TimerExplosion explosion = new TimerExplosion(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
+                    TimerExplosion explosion = new(SceneAs<Level>().Camera.Position + new Vector2(rand.Next(0, 320), rand.Next(0, 184)));
                     SceneAs<Level>().Add(explosion);
                     yield return 0.05f;
                 }

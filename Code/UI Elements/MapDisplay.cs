@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.XaphanHelper.Data;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -20,33 +20,33 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public InGameMapControllerData InGameMapControllerData;
 
-        public List<string> HeatedRooms = new List<string>();
+        public List<string> HeatedRooms = new();
 
-        public List<InGameMapRoomControllerData> RoomControllerData = new List<InGameMapRoomControllerData>();
+        public List<InGameMapRoomControllerData> RoomControllerData = new();
 
-        public List<InGameMapRoomAdjustControllerData> RoomAdjustControllerData = new List<InGameMapRoomAdjustControllerData>();
+        public List<InGameMapRoomAdjustControllerData> RoomAdjustControllerData = new();
 
-        public List<InGameMapImageControllerData> ImageControllerData = new List<InGameMapImageControllerData>();
+        public List<InGameMapImageControllerData> ImageControllerData = new();
 
-        public List<InGameMapTilesControllerData> TilesControllerData = new List<InGameMapTilesControllerData>();
+        public List<InGameMapTilesControllerData> TilesControllerData = new();
 
-        public static List<InGameMapTilesControllerData> OldTilesControllerData = new List<InGameMapTilesControllerData>();
+        public static List<InGameMapTilesControllerData> OldTilesControllerData = new();
 
-        public List<InGameMapSubAreaControllerData> SubAreaControllerData = new List<InGameMapSubAreaControllerData>();
+        public List<InGameMapSubAreaControllerData> SubAreaControllerData = new();
 
-        public List<InGameMapHintControllerData> HintControllerData = new List<InGameMapHintControllerData>();
+        public List<InGameMapHintControllerData> HintControllerData = new();
 
-        public List<InGameMapEntitiesData> EntitiesData = new List<InGameMapEntitiesData>();
+        public List<InGameMapEntitiesData> EntitiesData = new();
 
-        public List<InGameMapIconsData> Icons = new List<InGameMapIconsData>();
+        public List<InGameMapIconsData> Icons = new();
 
-        public List<InGameMapTilesData> TilesImage = new List<InGameMapTilesData>();
+        public List<InGameMapTilesData> TilesImage = new();
 
-        public List<InGameMapEntrancesData> Entrances = new List<InGameMapEntrancesData>();
+        public List<InGameMapEntrancesData> Entrances = new();
 
-        public HashSet<string> UnexploredRooms = new HashSet<string>();
+        public HashSet<string> UnexploredRooms = new();
 
-        public HashSet<string> ExtraUnexploredRooms = new HashSet<string>();
+        public HashSet<string> ExtraUnexploredRooms = new();
 
         public bool currentRoomIndicator;
 
@@ -985,7 +985,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
-                List<string> SkippedRooms = new List<string>();
+                List<string> SkippedRooms = new();
                 if (NoGrid)
                 {
                     foreach (InGameMapImageControllerData data in ImageControllerData)
@@ -1195,7 +1195,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<int> GetMapShards()
         {
-            List<int> mapShards = new List<int>();
+            List<int> mapShards = new();
             foreach (InGameMapRoomControllerData inGameMapRoomControllerData in RoomControllerData)
             {
                 if (!mapShards.Contains(inGameMapRoomControllerData.MapShardIndex))
@@ -1208,7 +1208,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<int> GetUnlockedMapShards()
         {
-            List<int> mapShards = new List<int>();
+            List<int> mapShards = new();
             foreach (string savedFlag in XaphanModule.ModSaveData.SavedFlags)
             {
                 if (savedFlag.Contains(Prefix + "_Ch" + chapterIndex + "_MapShard"))
@@ -1240,7 +1240,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 getMapColors(level.Name);
                 if (XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + level.Name) || (ExtraUnexploredRooms.Contains("Ch" + chapterIndex + "/" + level.Name)) || ForceRevealUnexploredRooms)
                 {
-                    List<InGameMapTilesData> ToDelete = new List<InGameMapTilesData>();
+                    List<InGameMapTilesData> ToDelete = new();
                     string[] TilesTypes = GetTilesType(level.Name);
                     Vector2[] TilesPosition = GetTilesPosition(level.Name);
                     string[] EntrancesTypes = GetEntrancesType(level.Name);
@@ -1390,7 +1390,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     if ((UnexploredRooms.Contains("Ch" + chapterIndex + "/" + level.Name + ":" + mapShard) && (MapCollected || RevealUnexploredRooms())))
                     {
-                        List<InGameMapTilesData> ToDelete = new List<InGameMapTilesData>();
+                        List<InGameMapTilesData> ToDelete = new();
                         string[] TilesTypes = GetTilesType(level.Name);
                         Vector2[] TilesPosition = GetTilesPosition(level.Name);
                         string[] EntrancesTypes = GetEntrancesType(level.Name);
@@ -1702,7 +1702,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             Icons.Add(new InGameMapIconsData("collectableDoor/collectableDoorBG" + (entity.CollectableDoorOrientation == "Horizontal" ? "H" : ""), entity.Room, Vector2.One + entity.MapTilesPosition * 40, level.Session.GetFlag("XaphanHelper_Opened_Collectable_Door_" + entity.CollectableDoorFlagID), entity.CollectableDoorInteriorColor));
                             Icons.Add(new InGameMapIconsData("collectableDoor/collectableDoorBorder" + (entity.CollectableDoorOrientation == "Horizontal" ? "H" : ""), entity.Room, Vector2.One + entity.MapTilesPosition * 40, level.Session.GetFlag("XaphanHelper_Opened_Collectable_Door_" + entity.CollectableDoorFlagID), entity.CollectableDoorEdgesColor));
-                            Vector2 iconPosition = new Vector2(10f, (entity.Type == "collectableDoor/goldenStrawberry" || level.Session.GetFlag("XaphanHelper_Opened_Collectable_Door_" + entity.CollectableDoorFlagID)) ? 10f : 4f);
+                            Vector2 iconPosition = new(10f, (entity.Type == "collectableDoor/goldenStrawberry" || level.Session.GetFlag("XaphanHelper_Opened_Collectable_Door_" + entity.CollectableDoorFlagID)) ? 10f : 4f);
                             if (!string.IsNullOrEmpty(entity.CollectableDoorMapIcon))
                             {
                                 Icons.Add(new InGameMapIconsData(Prefix + "/" + entity.CollectableDoorMapIcon, entity.Room, Vector2.One + entity.MapTilesPosition * 40 + iconPosition, false));
@@ -1975,7 +1975,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public Dictionary<string, int> GetRoomEntrances(string room)
         {
-            Dictionary<string, int> Entrances = new Dictionary<string, int>();
+            Dictionary<string, int> Entrances = new();
             foreach (InGameMapRoomControllerData roomControllerData in RoomControllerData)
             {
                 if (roomControllerData.Room == room)
@@ -2440,7 +2440,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
                 // Delete visted rooms if they do not exist anymore
 
-                HashSet<string> DeleteRoomsList = new HashSet<string>();
+                HashSet<string> DeleteRoomsList = new();
                 foreach (string visitedRoom in XaphanModule.ModSaveData.VisitedRooms)
                 {
                     string[] str = visitedRoom.Split('/');
@@ -2518,14 +2518,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                         else if (tile.BackgroundPattern != null)
                         {
-                            Image TileBGImage = new Image(GFX.Gui["maps/tiles/background/" + tile.BackgroundPattern]);
+                            Image TileBGImage = new(GFX.Gui["maps/tiles/background/" + tile.BackgroundPattern]);
                             TileBGImage.Position = RoomPosition + tile.Position;
                             TileBGImage.Color = tile.BackgroundColor * Opacity;
                             TileBGImage.Render();
                         }
                         if (tile.ElevatorPattern != null)
                         {
-                            Image TileElevatorImage = new Image(GFX.Gui["maps/tiles/background/" + tile.ElevatorPattern]);
+                            Image TileElevatorImage = new(GFX.Gui["maps/tiles/background/" + tile.ElevatorPattern]);
                             TileElevatorImage.Position = RoomPosition + tile.Position;
                             TileElevatorImage.Color = tile.ElevatorColor * Opacity;
                             TileElevatorImage.Render();
@@ -2597,7 +2597,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         if (XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + image.Room) || (ExtraUnexploredRooms.Contains("Ch" + chapterIndex + "/" + image.Room)) || RevealUnexploredRooms())
                         {
                             Vector2 RoomPosition = CalcRoomPosition(GetRoomPosition(image.Room) + (roomIsAdjusted(image.Room) ? GetAdjustedPosition(image.Room) : Vector2.Zero), currentRoomPosition, currentRoomJustify, worldmapPosition);
-                            Image Image = new Image(GFX.Gui["maps/" + Prefix + "/areas/" + image.ImagePath + (Settings.Instance.Language == "french" ? "-" + Settings.Instance.Language : "")]);
+                            Image Image = new(GFX.Gui["maps/" + Prefix + "/areas/" + image.ImagePath + (Settings.Instance.Language == "french" ? "-" + Settings.Instance.Language : "")]);
                             Image.Color = Calc.HexToColor(string.IsNullOrEmpty(image.Color) ? "FFFFFF" : image.Color);
                             Image.Position = RoomPosition;
                             Image.Render();
@@ -2607,7 +2607,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             if (!XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + image.Room) && (((UnexploredRooms.Contains("Ch" + chapterIndex + "/" + image.Room + ":" + mapShard) && MapCollected))))
                             {
                                 Vector2 RoomPosition = CalcRoomPosition(GetRoomPosition(image.Room) + (roomIsAdjusted(image.Room) ? GetAdjustedPosition(image.Room) : Vector2.Zero), currentRoomPosition, currentRoomJustify, worldmapPosition);
-                                Image Image = new Image(GFX.Gui["maps/" + Prefix + "/areas/" + image.ImagePath + (Settings.Instance.Language == "french" ? "-" + Settings.Instance.Language : "")]);
+                                Image Image = new(GFX.Gui["maps/" + Prefix + "/areas/" + image.ImagePath + (Settings.Instance.Language == "french" ? "-" + Settings.Instance.Language : "")]);
                                 Image.Color = Calc.HexToColor(string.IsNullOrEmpty(image.Color) ? "FFFFFF" : image.Color);
                                 Image.Position = RoomPosition;
                                 Image.Render();

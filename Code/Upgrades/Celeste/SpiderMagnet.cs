@@ -1,7 +1,7 @@
-﻿using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using System;
+﻿using System;
+using Mono.Cecil.Cil;
 using Monocle;
+using MonoMod.Cil;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         private void modNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             // find out where the constant 900 (downward acceleration) is loaded into the stack
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(900f)))
@@ -47,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 // add two instructions to multiply those constants with the "gravity factor"
                 cursor.EmitDelegate<Func<float>>(determineGravityFactor);
                 cursor.Emit(OpCodes.Mul);
-            }          
+            }
         }
 
         private float determineGravityFactor()

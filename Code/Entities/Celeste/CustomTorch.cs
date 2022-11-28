@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -11,7 +11,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
     {
         public ParticleType P_OnLight;
 
-        public  Color Color;
+        public Color Color;
 
         private EntityID eid;
 
@@ -42,7 +42,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private string sound;
 
         public CustomTorch(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position)
-	    {
+        {
             eid = ID;
             playLitSound = data.Bool("playLitSound");
             startLit = data.Bool("startLit");
@@ -59,7 +59,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             startFade = data.Int("startFade", 48);
             endFade = data.Int("endFade", 64);
-            if(endFade < startFade)
+            if (endFade < startFade)
             {
                 endFade = startFade;
             }
@@ -183,7 +183,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void OnPlayer(Player player)
         {
-            if (flag =="" && !lit)
+            if (flag == "" && !lit)
             {
                 if (playLitSound)
                 {

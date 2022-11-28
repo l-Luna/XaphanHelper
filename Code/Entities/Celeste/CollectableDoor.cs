@@ -1,10 +1,10 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -86,11 +86,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public static ParticleType P_Shimmer = new ParticleType();
+        public static ParticleType P_Shimmer = new();
 
-        public static ParticleType P_SliceH = new ParticleType();
+        public static ParticleType P_SliceH = new();
 
-        public static ParticleType P_SliceV = new ParticleType();
+        public static ParticleType P_SliceV = new();
 
         public readonly int Requires;
 
@@ -110,7 +110,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Vector2 mist;
 
-        private MTexture temp = new MTexture();
+        private MTexture temp = new();
 
         private List<MTexture> icon;
 
@@ -665,7 +665,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     for (int i = 4; i < height; i += 4)
                     {
-                        level.ParticlesBG.Emit(P_Shimmer, 1, new Vector2(TopSolid.Right -2f , TopSolid.Top + i + 1f), new Vector2(2f, 2f), -(float)Math.PI / 2f);
+                        level.ParticlesBG.Emit(P_Shimmer, 1, new Vector2(TopSolid.Right - 2f, TopSolid.Top + i + 1f), new Vector2(2f, 2f), -(float)Math.PI / 2f);
                         level.ParticlesBG.Emit(P_Shimmer, 1, new Vector2(BotSolid.Left + 2f, BotSolid.Top + i + 1f), new Vector2(2f, 2f), (float)Math.PI / 2f);
                     }
                 }
@@ -855,7 +855,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Color color = Opened ? (Calc.HexToColor(edgesColor) * 0.25f) : Calc.HexToColor(edgesColor);
             if (!Opened && TopSolid.Visible && BotSolid.Visible)
             {
-                Rectangle bounds = new Rectangle();
+                Rectangle bounds = new();
                 if (orientation == "Vertical")
                 {
                     bounds = new Rectangle((int)TopSolid.X, (int)TopSolid.Y, Size, (int)(TopSolid.Height + BotSolid.Height));
@@ -871,7 +871,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (TopSolid.Visible)
                 {
-                    Rectangle bounds2 = new Rectangle(); 
+                    Rectangle bounds2 = new();
                     if (orientation == "Vertical")
                     {
                         bounds2 = new Rectangle((int)TopSolid.X, (int)TopSolid.Y, Size, (int)TopSolid.Height);
@@ -885,7 +885,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (BotSolid.Visible)
                 {
-                    Rectangle bounds3 = new Rectangle();
+                    Rectangle bounds3 = new();
                     if (orientation == "Vertical")
                     {
                         bounds3 = new Rectangle((int)BotSolid.X, (int)BotSolid.Y, Size, (int)BotSolid.Height);

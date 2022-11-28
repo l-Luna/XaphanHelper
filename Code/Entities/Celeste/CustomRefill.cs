@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -123,7 +123,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         public CustomRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Bool("twoDash"), data.Bool("oneUse"), data.Float("respawnTime"))
-	    {
+        {
 
         }
 

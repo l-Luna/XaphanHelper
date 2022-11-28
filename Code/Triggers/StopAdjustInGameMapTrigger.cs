@@ -1,9 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Controllers;
-using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Triggers
 {

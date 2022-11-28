@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public GemSlot(EntityData data, Vector2 position) : base(data.Position + position)
-		{
+        {
             Depth = 2000;
             Add(Sprite = new Sprite(GFX.Game, "collectables/Xaphan/CustomCollectable/gems/Ch" + data.Int("chapter") + "/gem"));
             Chapter = data.Int("chapter");
@@ -29,7 +29,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Sprite.Add("spin", "", 0.05f, "idle");
             Sprite.Play("idle");
             Sprite.CenterOrigin();
-            Sprite.Position.Y -=6;
+            Sprite.Position.Y -= 6;
             Visible = false;
         }
 

@@ -1,12 +1,10 @@
-﻿using Celeste;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.UI_Elements;
-using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Celeste.Mod.XaphanHelper.Cutscenes
 {
@@ -157,7 +155,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             BG.CenterOrigin();
             BG.Position = Vector2.Zero + new Vector2(Engine.Width, Engine.Height) / 2;
             BG.Visible = true;
-            for (int l = 140; l>0; l--)
+            for (int l = 140; l > 0; l--)
             {
                 BG.Scale = new Vector2(Math.Max(1, l * 0.03f), Math.Max(1, l * 0.03f));
                 yield return 0.01f;
@@ -179,7 +177,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             }
             if (skipedIntro)
             {
-                FadeWipe fadeWipe = new FadeWipe(this, false);
+                FadeWipe fadeWipe = new(this, false);
                 fadeWipe.OnUpdate = delegate (float f)
                 {
                     textAlpha = Math.Min(textAlpha, 1f - f);
@@ -343,7 +341,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 menu.RemoveSelf();
                 menu = null;
             }
-            FadeWipe fadeWipe = new FadeWipe(this, false, delegate
+            FadeWipe fadeWipe = new(this, false, delegate
             {
                 Engine.Scene = new LevelLoader(session);
             });
@@ -358,7 +356,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
         public override void Render()
         {
             base.Render();
-            Draw.SpriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, SamplerState.LinearClamp, (DepthStencilState)null, RasterizerState.CullNone, (Effect)null, Engine.ScreenMatrix);
+            Draw.SpriteBatch.Begin(0, BlendState.AlphaBlend, SamplerState.LinearClamp, null, RasterizerState.CullNone, null, Engine.ScreenMatrix);
             if (BG.Visible == true)
             {
                 BG.Color = Color.White * fade;
@@ -394,7 +392,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         private void StopSfx()
         {
-            List<Component> components = new List<Component>();
+            List<Component> components = new();
             components.AddRange(Tracker.GetComponents<SoundSource>());
             foreach (SoundSource sound in components)
             {

@@ -1,8 +1,8 @@
-﻿using Celeste.Mod.Entities;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -577,7 +577,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         if (dashSwitch != this && dashSwitch.pressed && dashSwitch.flag == flag)
                         {
                             if (dashSwitch.mode == "SetInverted" || (dashSwitch.mode == "SetFalse" && SceneAs<Level>().Session.GetFlag(flag)) || (dashSwitch.mode == "SetTrue" && !SceneAs<Level>().Session.GetFlag(flag)))
-                            dashSwitch.ResetSwitch();
+                                dashSwitch.ResetSwitch();
                         }
                     }
                 }

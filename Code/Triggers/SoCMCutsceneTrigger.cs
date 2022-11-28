@@ -1,5 +1,5 @@
-﻿using Celeste.Mod.XaphanHelper.Cutscenes;
-using Celeste.Mod.Entities;
+﻿using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Cutscenes;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -132,7 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                         Scene.Add(new CS02_Gem(player));
                     }
                     break;
-            } 
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿
 
 using System.Collections;
-using System.Linq;
 using Celeste.Mod.XaphanHelper.Triggers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using FMOD.Studio;
@@ -75,7 +74,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public override void OnEnd(Level level)
         {
-            
+
         }
     }
 }

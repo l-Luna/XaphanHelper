@@ -1,4 +1,6 @@
-﻿using Celeste.Mod.XaphanHelper.Colliders;
+﻿using System;
+using System.Collections;
+using Celeste.Mod.XaphanHelper.Colliders;
 using Celeste.Mod.XaphanHelper.Enemies;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Upgrades;
@@ -7,8 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
-using System;
-using System.Collections;
 
 namespace Celeste.Mod.XaphanHelper.Managers
 {
@@ -29,7 +29,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
 
         public bool CannotScrewAttack;
 
-        private Coroutine QuicksandDelayRoutine = new Coroutine();
+        private Coroutine QuicksandDelayRoutine = new();
 
         public ScrewAttackManager(Vector2 position) : base(position)
         {
@@ -83,7 +83,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
 
         private static void modNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(90f)) && cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Stloc_S && (((VariableDefinition)instr.Operand).Index == 6 || ((VariableDefinition)instr.Operand).Index == 31)))
             {
@@ -161,7 +161,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
                     Add(QuicksandDelayRoutine = new Coroutine(QuicksandDelay(player)));
                 }
                 PlayerSprite.Color = player.Sprite.Color;
-                Position = player.Position + new Vector2 (0f, -4f);
+                Position = player.Position + new Vector2(0f, -4f);
                 PlayerSprite.FlipX = player.Facing == Facings.Left ? true : false;
                 PlayerHairSprite.FlipX = player.Facing == Facings.Left ? true : false;
                 ScrewAttackSprite.FlipX = player.Facing == Facings.Left ? true : false;

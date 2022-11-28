@@ -1,7 +1,7 @@
-﻿using Celeste.Mod.XaphanHelper.Managers;
+﻿using System;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 
 namespace Celeste.Mod.XaphanHelper.Colliders
 {
