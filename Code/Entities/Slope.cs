@@ -374,7 +374,51 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
             List<Entity> slopes = actor.Scene.Tracker.GetEntities<Slope>().ToList();
-            slopes.ForEach(entity => entity.Collidable = true);
+            //slopes.ForEach(entity => entity.Collidable = true);
+            foreach (Slope slope in slopes)
+            {
+                if (slope.CanJumpThrough)
+                {
+                    if (!slope.UpsideDown)
+                    {
+                        if (slope.Side == "Right")
+                        {
+                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) >= 0)
+                            {
+                                slope.Collidable = true;
+                            }
+                        }
+                        else if (slope.Side == "Left")
+                        {
+                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) <= 0)
+                            {
+                                slope.Collidable = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (slope.Side == "Right")
+                        {
+                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopRight.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopRight.X - slope.SlopeTop.X) >= 0)
+                            {
+                                slope.Collidable = true;
+                            }
+                        }
+                        else if (slope.Side == "Left")
+                        {
+                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopLeft.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopLeft.X - slope.SlopeTop.X) <= 0)
+                            {
+                                slope.Collidable = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    slope.Collidable = true;
+                }
+            }
             foreach (PlayerPlatform platform in playerPlatforms)
             {
                 platform.Collidable = false;
@@ -459,7 +503,39 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));
                 }
             }
+
+            if (!UpsideDown)
+            {
+                if (Side == "Left")
+                {
+                    SlopeTop = Position + new Vector2(7, 0);
+                    SlopeBottom =   Position + new Vector2(7 + (Gentle ? 16 : 8) * SlopeHeight, 8 * SlopeHeight);
+                }
+                else if (Side == "Right")
+                {
+                    SlopeTop = Position + new Vector2(17, 0);
+                    SlopeBottom = Position + new Vector2(17 + (Gentle ? 16 : 8) * -SlopeHeight, 8 * SlopeHeight);
+                }
+            }
+            else
+            {
+                if (Side == "Left")
+                {
+                    SlopeTop = Position + new Vector2(7 + (Gentle ? 16 : 8) * SlopeHeight, -16);
+                    SlopeBottom = Position + new Vector2(7, -16 + 8 * SlopeHeight);
+                }
+                else if (Side == "Right")
+                {
+                    SlopeTop = Position + new Vector2(17 + (Gentle ? 16 : 8) * -SlopeHeight, -16);
+                    SlopeBottom = Position + new Vector2(17, -16 + 8 * SlopeHeight);
+                }
+            }
+            Logger.Log(LogLevel.Info, "Xh", "Point A : " + SlopeTop + " Point B : " + SlopeBottom);
         }
+
+        public Vector2 SlopeTop;
+
+        public Vector2 SlopeBottom;
 
         private Color GetHue(Vector2 position)
         {
