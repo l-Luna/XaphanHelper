@@ -374,7 +374,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             List<Entity> playerPlatforms = actor.Scene.Tracker.GetEntities<PlayerPlatform>().ToList();
             List<Entity> slopes = actor.Scene.Tracker.GetEntities<Slope>().ToList();
-            //slopes.ForEach(entity => entity.Collidable = true);
             foreach (Slope slope in slopes)
             {
                 if (slope.CanJumpThrough)
@@ -530,7 +529,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     SlopeBottom = Position + new Vector2(17, -16 + 8 * SlopeHeight);
                 }
             }
-            Logger.Log(LogLevel.Info, "Xh", "Point A : " + SlopeTop + " Point B : " + SlopeBottom);
         }
 
         public Vector2 SlopeTop;
