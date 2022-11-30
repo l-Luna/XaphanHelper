@@ -73,6 +73,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool registerInSaveData;
 
+        private bool canRespawn;
+
         private bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -104,6 +106,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             completeSpeedrun = data.Bool("completeSpeedrun");
             registerInSaveData = data.Bool("registerInSaveData");
             ignoreGolden = data.Bool("ignoreGolden");
+            canRespawn = data.Bool("canRespawn");
             if (sprite == "")
             {
                 sprite = "collectables/XaphanHelper/CustomCollectable/collectable";
@@ -163,11 +166,28 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
-            if (!haveGolden || (haveGolden && ignoreGolden))
+            if (string.IsNullOrEmpty(flag))
             {
-                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
+                RemoveSelf();
+            }
+            else
+            {
+                if (!canRespawn)
                 {
-                    RemoveSelf();
+                    if (!haveGolden || (haveGolden && ignoreGolden))
+                    {
+                        if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
+                        {
+                            RemoveSelf();
+                        }
+                    }
+                }
+                else
+                {
+                    if (SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        RemoveSelf();
+                    }
                 }
             }
         }
@@ -286,7 +306,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 session.Audio.Apply(forceSixteenthNoteHack: false);
             }
-            session.DoNotLoad.Add(ID);
+            if (!canRespawn)
+            {
+                session.DoNotLoad.Add(ID);
+            }
             RemoveSelf();
         }
 

@@ -6,7 +6,7 @@ local CustomCollectable = {}
 CustomCollectable.name = "XaphanHelper/CustomCollectable"
 CustomCollectable.depth = 0
 CustomCollectable.fieldOrder = {
-    "x", "y", "sprite", "flag", "collectSound", "mustDash", "changeMusic", "newMusic", "mapIcon", "collectGoldenStrawberry", "endChapter", "registerInSaveData", "ignoreGolden", "completeSpeedrun"
+    "x", "y", "sprite", "flag", "collectSound", "newMusic", "mapIcon", "collectGoldenStrawberry", "mustDash", "canRespawn", "changeMusic", "endChapter", "registerInSaveData", "ignoreGolden", "completeSpeedrun"
 }
 CustomCollectable.placements = {
     name = "CustomCollectable",
@@ -22,7 +22,8 @@ CustomCollectable.placements = {
         endChapter = false,
         completeSpeedrun = false,
         registerInSaveData = false,
-        ignoreGolden = false
+        ignoreGolden = false,
+        canRespawn = false
     }
 }
 

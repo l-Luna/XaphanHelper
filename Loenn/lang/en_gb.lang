@@ -125,7 +125,7 @@ entities.XaphanHelper/CustomCollectable.attributes.description.sprite=The full p
 entities.XaphanHelper/CustomCollectable.attributes.description.collectSound=Sound event that play when the player collect this collectable.
 entities.XaphanHelper/CustomCollectable.attributes.description.changeMusic=If true, the current music will stop while the collectSound play when the collectable has been collected.
 entities.XaphanHelper/CustomCollectable.attributes.description.newMusic=Only if changeMusic is set.\nThe music event that play after the collectable has been collected. Leave blank to use the same music as the one that played before the collectable was collected.
-entities.XaphanHelper/CustomCollectable.attributes.description.flag=The flag that will be set once the player collect the collectable.
+entities.XaphanHelper/CustomCollectable.attributes.description.flag=The flag that will be set once the player collect the collectable.\nIf empty, the collectable will not spawn.
 entities.XaphanHelper/CustomCollectable.attributes.description.mapIcon=Name of the sprite that will be displayed on the In-game map.\nMust be in Atlases/Gui/maps/(yourname)/(yourcampaignname)/.
 entities.XaphanHelper/CustomCollectable.attributes.description.mustDash=If true, the player must dash to collect the collectable.
 entities.XaphanHelper/CustomCollectable.attributes.description.collectGoldenStrawberry=If true, the golden strawberry will collect when the player collect the collectable.
@@ -133,6 +133,7 @@ entities.XaphanHelper/CustomCollectable.attributes.description.endChapter=If tru
 entities.XaphanHelper/CustomCollectable.attributes.description.completeSpeedrun=Only used in SoCM. Leave not set.
 entities.XaphanHelper/CustomCollectable.attributes.description.registerInSaveData=If true, the flag will be registered in the player Save file and will be set forever.
 entities.XaphanHelper/CustomCollectable.attributes.description.ignoreGolden=If true, the collectable will not re-appear when the player carry a golden berry if it has already been collected.
+entities.XaphanHelper/CustomCollectable.attributes.description.canRespawn=If true, the collectable will respawn when player re-enter the room it is in if the flag set by the collectable is not set.
 
 # CustomCoverupWall
 entities.XaphanHelper/CustomCoverupWall.placements.name.CustomCoverupWall=Custom Coverup Wall
