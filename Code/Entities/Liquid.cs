@@ -730,7 +730,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     riseSoundSource.stop(STOP_MODE.ALLOWFADEOUT);
                 }
             }
-            if (Top > SceneAs<Level>().Bounds.Bottom + (liquidType == "lava" ? 8 : 0))
+            if (Top > SceneAs<Level>().Bounds.Bottom + (liquidType == "lava" ? 8 : 0) && riseDistance < 0)
             {
                 Visible = false;
                 Add(new Coroutine(LevelBottomDelay()));

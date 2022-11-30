@@ -21,6 +21,7 @@ Version 1.0.49 :
 - Countdown Display timer is now draw closer to the top of the screen
 - Updated sprites for Countdown Displays timers explosions
 - Fixed Loenn plugin for Drone Switchs side attribute having a "Bottom" option instead of "Down", preventing placing switches on the ceiling
+- Liquids will no longer remove themselves if their surface is starting from bellow the room while being set to rise. Draining liquids will still remove themsleves
 - Slopes should no longer prevent the player from falling after throwing the Remote Drone
 - Slopes should no longer create collisions issues with nearby solids entities
 - Slopes will now try to move the player out of them if the player manage to get stuck into them
