@@ -418,6 +418,18 @@ namespace Celeste.Mod.XaphanHelper
             return false;
         }
 
+        public static bool startAsDrone;
+
+        public static string droneStartRoom;
+
+        public static Vector2? droneCurrentSpawn;
+
+        public static Facings fakePlayerFacing;
+
+        public static Vector2 fakePlayerPosition;
+
+        public static int fakePlayerSpriteFrame;
+
         public static bool useIngameMap;
 
         public static string inGameMapProgressDisplayMode;
@@ -587,6 +599,8 @@ namespace Celeste.Mod.XaphanHelper
             UI_Elements.StaminaDisplay.Load();
             LaserDetectorManager.Load();
             PushBlock.Load();
+            FakePlayer.Load();
+            PlayerDeadAction.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -667,6 +681,8 @@ namespace Celeste.Mod.XaphanHelper
             UI_Elements.StaminaDisplay.Unload();
             LaserDetectorManager.Unload();
             PushBlock.Unload();
+            FakePlayer.Unload();
+            PlayerDeadAction.Unload();
         }
 
         // Custom States

@@ -89,6 +89,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool canDestroy;
 
+        public bool startedAsDrone;
+
         private static FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -97,6 +99,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Drone(Vector2 position, Player player) : base(position)
         {
+            Tag = Tags.Persistent;
             this.player = player;
             Collider = new Hitbox(8f, 8f, -4f, -8f);
             Add(droneSprite = new Sprite(GFX.Game, "characters/Xaphan/remote_drone/"));
@@ -138,6 +141,46 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Die += OnCelestePlayerDie;
             On.Celeste.Player.Jump += OnPlayerjump;
             On.Celeste.Player.Throw += OnPlayerThrow;
+            On.Celeste.Level.LoadLevel += OnLevelLoadLevel;
+        }
+
+        private static void OnLevelLoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
+        {
+            orig(self, playerIntro, isFromLoader);
+            if (XaphanModule.startAsDrone)
+            {
+                Player player = self.Tracker.GetEntity<Player>();
+                player.Position = (self.Session.Level == XaphanModule.droneStartRoom && self.Session.RespawnPoint.GetValueOrDefault() == XaphanModule.droneCurrentSpawn) ? XaphanModule.fakePlayerPosition : self.Session.RespawnPoint.GetValueOrDefault();
+                self.Add(new Drone(player.Position, player)
+                {
+                    canDestroy = true,
+                    startRoom = XaphanModule.droneStartRoom,
+                    startedAsDrone = true
+                });
+                XaphanModule.droneStartRoom = null;
+                player.Visible = false;
+                DynData<Player> playerData = new(player);
+                Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
+                normalPlayerHitbox.Height = 7f;
+                normalPlayerHitbox.Width = 6f;
+                normalPlayerHitbox.Left = -3f;
+                normalPlayerHitbox.Top = -7f;
+                Hitbox normalPlayerHurtbox = playerData.Get<Hitbox>("normalHurtbox");
+                normalPlayerHurtbox.Height = 5f;
+                normalPlayerHurtbox.Width = 6f;
+                normalPlayerHurtbox.Left = -3f;
+                normalPlayerHurtbox.Top = -7f;
+                Hitbox duckPlayerHitbox = playerData.Get<Hitbox>("duckHitbox");
+                duckPlayerHitbox.Height = 7f;
+                duckPlayerHitbox.Width = 6f;
+                duckPlayerHitbox.Left = -3f;
+                duckPlayerHitbox.Top = -7f;
+                Hitbox duckPlayerHurtbox = playerData.Get<Hitbox>("duckHurtbox");
+                duckPlayerHurtbox.Height = 5f;
+                duckPlayerHurtbox.Width = 6f;
+                duckPlayerHurtbox.Left = -3f;
+                duckPlayerHurtbox.Top = -7f;
+            }
         }
 
         private static void OnPlayerThrow(On.Celeste.Player.orig_Throw orig, Player self)
@@ -264,14 +307,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.UseBagItemSlot.Check)
+            if (!Settings.UseBagItemSlot.Check && !XaphanModule.startAsDrone)
             {
                 RemoveSelf();
             }
             else
-            {
-                SceneAs<Level>().PauseLock = true;
+            {                
+                if (startedAsDrone)
+                {
+                    Scene.Add(FakePlayer = new FakePlayer(XaphanModule.fakePlayerPosition, SceneAs<Level>().Session.Inventory.Backpack ? PlayerSpriteMode.Madeline : PlayerSpriteMode.MadelineNoBackpack, true));
+                    CurrentSpawn = XaphanModule.droneCurrentSpawn;
+                }
+                else
+                {
+                    SceneAs<Level>().PauseLock = true;
+                }
             }
+            XaphanModule.startAsDrone = false;
+            XaphanModule.droneCurrentSpawn = null;
+            XaphanModule.fakePlayerFacing = 0;
+            XaphanModule.fakePlayerPosition = Vector2.Zero;
         }
 
         public override void Removed(Scene scene)
@@ -457,6 +512,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
                 player.Position.Y = (float)Math.Floor(player.Position.Y);
             }
+
             player.StateMachine.State = 0;
         }
 
@@ -624,10 +680,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 droneGates.ForEach(entity => entity.Collidable = false);
             }
-            if (CurrentSpawn != null && !Teleport)
+            /*if (CurrentSpawn != null && !Teleport)
             {
                 SceneAs<Level>().Session.RespawnPoint = CurrentSpawn;
-            }
+            }*/
             if (!enabled)
             {
                 Light.Visible = false;
@@ -733,12 +789,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (player != null || player.StateMachine.State == Player.StBoost || player.StateMachine.State == Player.StRedDash)
                 {
-                    if (Input.Grab.Check && !Settings.SelectItem.Check && !Hold.IsHeld && canDestroy)
+                    if (Input.Grab.Check && !Settings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
                     {
                         DestroyTimer += Engine.DeltaTime;
-                        if (DestroyTimer >= 1.5f)
+                        if (DestroyTimer >= 0.5f)
                         {
-                            Add(new Coroutine(Destroy()));
+                            Add(new Coroutine(Destroy(forced: true)));
                         }
                     }
                     else
@@ -893,7 +949,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public IEnumerator Destroy(bool normalRespawn = false, bool silence = false)
+        public IEnumerator Destroy(bool normalRespawn = false, bool silence = false, bool forced = false)
         {
             dead = true;
             Level Level = Engine.Scene as Level;
@@ -913,88 +969,110 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Audio.Play("event:/game/xaphan/drone_destroy", Position);
             }
             Visible = false;
+            DroneDebris.Burst(Position, Calc.HexToColor("DEAC75"), 12);
+            yield return 0.5f;
             if (player != null)
             {
-                DroneDebris.Burst(Position, Calc.HexToColor("DEAC75"), 12);
-                yield return 0.5f;
-                if (startRoom == Level.Session.Level && !respawnPlayerInSameRoom)
+                if (forced || !enabled)
                 {
-                    respawnPlayerInSameRoom = true;
-                    DynData<Player> playerData = new(player);
-                    Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
-                    normalPlayerHitbox.Height = 11f;
-                    normalPlayerHitbox.Width = 8f;
-                    normalPlayerHitbox.Left = -4f;
-                    normalPlayerHitbox.Top = -11f;
-                    Hitbox normalPlayerHurtbox = playerData.Get<Hitbox>("normalHurtbox");
-                    normalPlayerHurtbox.Height = 9f;
-                    normalPlayerHurtbox.Width = 8f;
-                    normalPlayerHurtbox.Left = -4f;
-                    normalPlayerHurtbox.Top = -11f;
-                    Hitbox duckPlayerHitbox = playerData.Get<Hitbox>("duckHitbox");
-                    duckPlayerHitbox.Height = 6f;
-                    duckPlayerHitbox.Width = 8f;
-                    duckPlayerHitbox.Left = -4f;
-                    duckPlayerHitbox.Top = -6f;
-                    Hitbox duckPlayerHurtbox = playerData.Get<Hitbox>("duckHurtbox");
-                    duckPlayerHurtbox.Height = 4f;
-                    duckPlayerHurtbox.Width = 8f;
-                    duckPlayerHurtbox.Left = -4f;
-                    duckPlayerHurtbox.Top = -6f;
-                    if (FakePlayer != null && !normalRespawn)
+                    Level.Session.RespawnPoint = CurrentSpawn;
+                    if (startRoom == Level.Session.Level)
                     {
-                        player.Position = FakePlayer.Position;
-                        player.DummyGravity = true;
+                        DynData<Player> playerData = new(player);
+                        Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
+                        normalPlayerHitbox.Height = 11f;
+                        normalPlayerHitbox.Width = 8f;
+                        normalPlayerHitbox.Left = -4f;
+                        normalPlayerHitbox.Top = -11f;
+                        Hitbox normalPlayerHurtbox = playerData.Get<Hitbox>("normalHurtbox");
+                        normalPlayerHurtbox.Height = 9f;
+                        normalPlayerHurtbox.Width = 8f;
+                        normalPlayerHurtbox.Left = -4f;
+                        normalPlayerHurtbox.Top = -11f;
+                        Hitbox duckPlayerHitbox = playerData.Get<Hitbox>("duckHitbox");
+                        duckPlayerHitbox.Height = 6f;
+                        duckPlayerHitbox.Width = 8f;
+                        duckPlayerHitbox.Left = -4f;
+                        duckPlayerHitbox.Top = -6f;
+                        Hitbox duckPlayerHurtbox = playerData.Get<Hitbox>("duckHurtbox");
+                        duckPlayerHurtbox.Height = 4f;
+                        duckPlayerHurtbox.Width = 8f;
+                        duckPlayerHurtbox.Left = -4f;
+                        duckPlayerHurtbox.Top = -6f;
+                        if (FakePlayer != null && !normalRespawn)
+                        {
+                            player.Position = FakePlayer.Position;
+                            player.DummyGravity = true;
+                        }
+                        if (!normalRespawn)
+                        {
+                            if (player != null && !player.Dead)
+                            {
+                                Add(new Coroutine(CutsceneEntity.CameraTo(new Vector2(player.CameraTarget.X, player.CameraTarget.Y), 0.5f, Ease.SineInOut)));
+                            }
+                            if (FakePlayer != null)
+                            {
+                                player.Facing = FakePlayer.Facing;
+                                FakePlayer.RemoveSelf();
+                            }
+                            player.Visible = true;
+                            player.Light.Position = new Vector2(0f, -8f);
+                            player.DummyAutoAnimate = false;
+                            player.Sprite.Play("wakeUp");
+                            player.Sprite.Rate = 2f;
+                            while (player.Sprite.CurrentAnimationID == "wakeUp")
+                            {
+                                yield return null;
+                            }
+                            player.StateMachine.Locked = false;
+                            player.StateMachine.State = 0;
+                            Level.PauseLock = false;
+                        }
+                    }
+                    else
+                    {
+                        if (FakePlayer != null)
+                        {
+                            bool faceLeft = false;
+                            if (FakePlayer.Facing == Facings.Left)
+                            {
+                                faceLeft = true;
+                            }
+                            if (!FakePlayer.Dead)
+                            {
+                                if (normalRespawn)
+                                {
+                                    Scene.Add(new TeleportCutscene(player, startRoom, FakePlayer.Position, 0, 0, true, 0f, "Fade", respawnAnim: true, oldRespawn: true));
+                                }
+                                else
+                                {
+                                    Scene.Add(new TeleportCutscene(player, startRoom, Vector2.Zero, (int)cameraPosition.X, (int)cameraPosition.Y, true, 0f, "Fade", wakeUpAnim: true, spawnPositionX: FakePlayer.Position.X, spawnPositionY: FakePlayer.Position.Y, faceLeft: faceLeft));
+                                }
+                            }
+                        }
+                        yield return 0.5f;
                     }
                     if (!normalRespawn)
                     {
-                        if (player != null && !player.Dead)
-                        {
-                            Add(new Coroutine(CutsceneEntity.CameraTo(new Vector2(player.CameraTarget.X, player.CameraTarget.Y), 0.5f, Ease.SineInOut)));
-                        }
-                        if (FakePlayer != null)
-                        {
-                            player.Facing = FakePlayer.Facing;
-                            FakePlayer.RemoveSelf();
-                        }
-                        player.Visible = true;
-                        player.Light.Position = new Vector2(0f, -8f);
-                        player.DummyAutoAnimate = false;
-                        player.Sprite.Play("wakeUp");
-                        player.Sprite.Rate = 2f;
-                        while (player.Sprite.CurrentAnimationID == "wakeUp")
-                        {
-                            yield return null;
-                        }
-                        player.StateMachine.Locked = false;
-                        player.StateMachine.State = 0;
-                        Level.PauseLock = false;
+                        RemoveSelf();
                     }
                 }
                 else
                 {
-                    bool faceLeft = false;
-                    if (FakePlayer != null && FakePlayer.Facing == Facings.Left)
+                    Level.DoScreenWipe(false, delegate
                     {
-                        faceLeft = true;
-                    }
-                    if (FakePlayer != null && !FakePlayer.Dead)
-                    {
-                        if (normalRespawn)
-                        {
-                            Scene.Add(new TeleportCutscene(player, startRoom, FakePlayer.Position, 0, 0, true, 0f, "Fade", respawnAnim: true, oldRespawn: true));
-                        }
-                        else
-                        {
-                            Scene.Add(new TeleportCutscene(player, startRoom, Vector2.Zero, (int)cameraPosition.X, (int)cameraPosition.Y, false, 0f, "Fade", wakeUpAnim: true, spawnPositionX: FakePlayer.Position.X, spawnPositionY: FakePlayer.Position.Y, faceLeft: faceLeft));
-                        }
-                    }
-                    yield return 0.5f;
+                        player.StateMachine.Locked = false;
+                        player.StateMachine.State = 0;
+                        Level.PauseLock = false;
+                        XaphanModule.startAsDrone = true;
+                        XaphanModule.droneStartRoom = startRoom;
+                        XaphanModule.droneCurrentSpawn = CurrentSpawn;
+                        XaphanModule.fakePlayerFacing = FakePlayer.Facing;
+                        XaphanModule.fakePlayerPosition = FakePlayer.Position;
+                        XaphanModule.fakePlayerSpriteFrame = FakePlayer.Sprite.CurrentAnimationFrame;
+                        Level.Reload();
+                    });
                 }
-            }
-            if (!normalRespawn)
-            {
-                RemoveSelf();
             }
         }
     }
