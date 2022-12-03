@@ -4,6 +4,9 @@ local DroneSwitch = {}
 
 DroneSwitch.name = "XaphanHelper/DroneSwitch"
 DroneSwitch.depth = 0
+DroneSwitch.fieldOrder = {
+    "x", "y", "side", "flag", "registerInSaveData", "saveDataOnlyAfterCheckpoint", "persistent"
+}
 DroneSwitch.canResize = {false, false}
 DroneSwitch.fieldInformation = {
     side = {
@@ -15,7 +18,10 @@ DroneSwitch.placements = {
     name = "DroneSwitch",
     data = {
         flag = "",
-        side = "Left"
+        side = "Left",
+        persistent = false,
+        registerInSaveData = false,
+        saveDataOnlyAfterCheckpoint = false
     }
 }
 

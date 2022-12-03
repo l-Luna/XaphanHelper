@@ -601,6 +601,7 @@ namespace Celeste.Mod.XaphanHelper
             PushBlock.Load();
             FakePlayer.Load();
             PlayerDeadAction.Load();
+            DroneSwitch.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -683,6 +684,7 @@ namespace Celeste.Mod.XaphanHelper
             PushBlock.Unload();
             FakePlayer.Unload();
             PlayerDeadAction.Unload();
+            DroneSwitch.Unload();
         }
 
         // Custom States

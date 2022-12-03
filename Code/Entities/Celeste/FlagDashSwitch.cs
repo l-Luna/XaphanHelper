@@ -222,12 +222,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public static void Load()
         {
             On.Celeste.Glider.OnCollideH += onGliderCollideH;
+            On.Celeste.PlayerDeadBody.End += onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
         }
 
         public static void Unload()
         {
             On.Celeste.Glider.OnCollideH -= onGliderCollideH;
+            On.Celeste.PlayerDeadBody.End -= onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
         }
 
@@ -240,7 +242,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             orig(self, data);
         }
 
-
+        private static void onPlayerDeaDBodyEnd(On.Celeste.PlayerDeadBody.orig_End orig, PlayerDeadBody self)
+        {
+            if (self.SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>().Count > 0)
+            {
+                self.DeathAction = DeathAction;
+            }
+            orig(self);
+        }
 
         private static void onChangeRespawnTriggerOnEnter(On.Celeste.ChangeRespawnTrigger.orig_OnEnter orig, ChangeRespawnTrigger self, Player player)
         {
@@ -275,6 +284,33 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
         }
+
+        public static void DeathAction()
+        {
+            if (Engine.Scene is Level)
+            {
+                Level level = (Level)Engine.Scene;
+                int chapterIndex = level.Session.Area.ChapterIndex;
+                foreach (FlagDashSwitch flagSwitch in level.Tracker.GetEntities<FlagDashSwitch>())
+                {
+                    level.Session.SetFlag("Ch" + chapterIndex + "_" + flagSwitch.flag + "_true", false);
+                    level.Session.SetFlag("Ch" + chapterIndex + "_" + flagSwitch.flag + "_false", false);
+                    if (!flagSwitch.persistent && !flagSwitch.FlagRegiseredInSaveData() && flagSwitch.startSpawnPoint == level.Session.RespawnPoint)
+                    {
+                        if (flagSwitch.flagState)
+                        {
+                            level.Session.SetFlag(flagSwitch.flag, true);
+                        }
+                        else
+                        {
+                            level.Session.SetFlag(flagSwitch.flag, false);
+                        }
+                    }
+                }
+                level.Reload();
+            }
+        }
+
 
         public override void Added(Scene scene)
         {
