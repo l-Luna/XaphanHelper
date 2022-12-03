@@ -35,8 +35,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public float noGravityTimer;
 
-        private Vector2 previousPosition;
-
         public Player player;
 
         public FakePlayer FakePlayer;
@@ -52,8 +50,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private float swatTimer;
 
         private string startRoom;
-
-        private string ExtrenalFlags;
 
         public bool lookUp;
 
@@ -101,7 +97,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             Tag = Tags.Persistent;
             this.player = player;
-            Collider = new Hitbox(8f, 8f, -4f, -8f);
+            Collider = new Hitbox(8f, 6f, -4f, -6f);
             Add(droneSprite = new Sprite(GFX.Game, "characters/Xaphan/remote_drone/"));
             droneSprite.Add("egg", "egg", 1, 0);
             droneSprite.Add("hatch", "egg", 0.08f, 1, 2, 3, 4, 5, 6, 7);
@@ -118,7 +114,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             droneSprite.Justify = new Vector2(0.5f, 1f);
             droneSprite.Play("egg");
             Add(Hold = new Holdable(0.1f));
-            Hold.PickupCollider = new Hitbox(6f, 5f, -3f, -7f);
+            Hold.PickupCollider = new Hitbox(6f, 4f, -3f, -6f);
             Hold.SlowFall = false;
             Hold.SlowRun = false;
             Hold.OnPickup = OnPickup;
@@ -163,25 +159,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     player.Visible = false;
                     DynData<Player> playerData = new(player);
                     Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
-                    normalPlayerHitbox.Height = 7f;
+                    normalPlayerHitbox.Height = 6f;
                     normalPlayerHitbox.Width = 6f;
                     normalPlayerHitbox.Left = -3f;
-                    normalPlayerHitbox.Top = -7f;
+                    normalPlayerHitbox.Top = -6f;
                     Hitbox normalPlayerHurtbox = playerData.Get<Hitbox>("normalHurtbox");
-                    normalPlayerHurtbox.Height = 5f;
+                    normalPlayerHurtbox.Height = 4f;
                     normalPlayerHurtbox.Width = 6f;
                     normalPlayerHurtbox.Left = -3f;
-                    normalPlayerHurtbox.Top = -7f;
+                    normalPlayerHurtbox.Top = -6f;
                     Hitbox duckPlayerHitbox = playerData.Get<Hitbox>("duckHitbox");
-                    duckPlayerHitbox.Height = 7f;
+                    duckPlayerHitbox.Height = 6f;
                     duckPlayerHitbox.Width = 6f;
                     duckPlayerHitbox.Left = -3f;
-                    duckPlayerHitbox.Top = -7f;
+                    duckPlayerHitbox.Top = -6f;
                     Hitbox duckPlayerHurtbox = playerData.Get<Hitbox>("duckHurtbox");
-                    duckPlayerHurtbox.Height = 5f;
+                    duckPlayerHurtbox.Height = 4f;
                     duckPlayerHurtbox.Width = 6f;
                     duckPlayerHurtbox.Left = -3f;
-                    duckPlayerHurtbox.Top = -7f;
+                    duckPlayerHurtbox.Top = -6f;
                 }
             }
         }
@@ -366,25 +362,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 DynData<Player> playerData = new(player);
                 Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
-                normalPlayerHitbox.Height = 7f;
+                normalPlayerHitbox.Height = 6f;
                 normalPlayerHitbox.Width = 6f;
                 normalPlayerHitbox.Left = -3f;
-                normalPlayerHitbox.Top = -7f;
+                normalPlayerHitbox.Top = -6f;
                 Hitbox normalPlayerHurtbox = playerData.Get<Hitbox>("normalHurtbox");
-                normalPlayerHurtbox.Height = 5f;
+                normalPlayerHurtbox.Height = 4f;
                 normalPlayerHurtbox.Width = 6f;
                 normalPlayerHurtbox.Left = -3f;
-                normalPlayerHurtbox.Top = -7f;
+                normalPlayerHurtbox.Top = -6f;
                 Hitbox duckPlayerHitbox = playerData.Get<Hitbox>("duckHitbox");
-                duckPlayerHitbox.Height = 7f;
+                duckPlayerHitbox.Height = 6f;
                 duckPlayerHitbox.Width = 6f;
                 duckPlayerHitbox.Left = -3f;
-                duckPlayerHitbox.Top = -7f;
+                duckPlayerHitbox.Top = -6f;
                 Hitbox duckPlayerHurtbox = playerData.Get<Hitbox>("duckHurtbox");
-                duckPlayerHurtbox.Height = 5f;
+                duckPlayerHurtbox.Height = 4f;
                 duckPlayerHurtbox.Width = 6f;
                 duckPlayerHurtbox.Left = -3f;
-                duckPlayerHurtbox.Top = -7f;
+                duckPlayerHurtbox.Top = -6f;
                 CurrentSpawn = SceneAs<Level>().Session.RespawnPoint;
                 cameraPosition = new Vector2(SceneAs<Level>().Camera.Position.X - SceneAs<Level>().Bounds.Left, SceneAs<Level>().Camera.Position.Y - SceneAs<Level>().Bounds.Top);
                 released = true;
@@ -791,7 +787,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
                         }
-                        previousPosition = ExactPosition;
                         MoveH(Speed.X * Engine.DeltaTime, onCollideH);
                         MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
                     }
@@ -941,20 +936,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 BeamDelay -= Engine.DeltaTime;
                 yield return null;
-            }
-        }
-
-        public void GetExtrenalFlags(string flags)
-        {
-            ExtrenalFlags = flags;
-        }
-
-        public void UnsetExtrenalFalgs(string flags)
-        {
-            string[] Flags = flags.Split(',');
-            foreach (string flag in Flags)
-            {
-                SceneAs<Level>().Session.SetFlag(flag, false);
             }
         }
 
@@ -1127,6 +1108,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     });
                 }
             }
+        }
+
+        public override void DebugRender(Camera camera)
+        {
+
         }
     }
 }

@@ -16,6 +16,7 @@ Version 1.0.49 :
 - Slightly increased Bombs explosion radius
 - Decreased Mega Bombs explosion radius
 - Increased Drone Switches hitbox
+- Decreased Remote Drone hitbox height
 - Bombs, Mega Bombs and Remote Drone abilities will now be used when the player land on the ground if the "Use Bag Item Slot" button is hold while the player is not on the ground yet
 - Warps registered in the player Save data that no longer exist are now automatically removed from the player Save data
 - Bombs and Mega Bombs are now correctly affected by the momentum of moving solids entities
