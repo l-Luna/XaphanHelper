@@ -70,21 +70,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             switch (side)
             {
                 case "Left":
-                    Collider = new Hitbox(3f, 4f, 0f, 2f);
+                    Collider = new Hitbox(4f, 6f, 0f, 1f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position - Vector2.UnitX));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position - Vector2.UnitX));
                     Add(staticMover);
                     buttonSprite.Rotation = (float)Math.PI / 2f;
                     break;
                 case "Right":
-                    Collider = new Hitbox(3f, 4f, 5f, 2f);
+                    Collider = new Hitbox(4f, 6f, 4f, 1f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position + Vector2.UnitX));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position + Vector2.UnitX));
                     Add(staticMover);
                     buttonSprite.Rotation = -(float)Math.PI / 2f;
                     break;
                 case "Down":
-                    Collider = new Hitbox(4f, 3f, 2f, 0f);
+                    Collider = new Hitbox(6f, 4f, 1f, 0f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position - Vector2.UnitY));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position - Vector2.UnitY));
                     Add(staticMover);
