@@ -149,6 +149,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if(player != null)
                 {
                     player.Position = (self.Session.Level == XaphanModule.droneStartRoom && self.Session.RespawnPoint.GetValueOrDefault() == XaphanModule.droneCurrentSpawn) ? XaphanModule.fakePlayerPosition : self.Session.RespawnPoint.GetValueOrDefault();
+                    self.Camera.Position = player.CameraTarget;
                     self.Add(new Drone(player.Position, player)
                     {
                         canDestroy = true,
@@ -330,8 +331,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             XaphanModule.startAsDrone = false;
             XaphanModule.droneCurrentSpawn = null;
-            XaphanModule.fakePlayerFacing = 0;
-            XaphanModule.fakePlayerPosition = Vector2.Zero;
         }
 
         public override void Removed(Scene scene)
@@ -391,6 +390,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 FakePlayer.DummyAutoAnimate = false;
                 FakePlayer.Sprite.Play("throw");
                 FakePlayer.Depth = 100;
+                XaphanModule.fakePlayerFacing = FakePlayer.Facing;
+                XaphanModule.fakePlayerPosition = FakePlayer.Position;
                 player.Visible = false;
                 if (force.X != 0f && force.Y == 0f)
                 {
@@ -966,6 +967,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (forced || !enabled)
                 {
                     Level.Session.RespawnPoint = CurrentSpawn;
+                    XaphanModule.fakePlayerFacing = 0;
+                    XaphanModule.fakePlayerPosition = Vector2.Zero;
                     if (startRoom == Level.Session.Level)
                     {
                         DynData<Player> playerData = new(player);
@@ -1080,8 +1083,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         XaphanModule.droneCurrentSpawn = CurrentSpawn;
                         if (FakePlayer != null)
                         {
-                            XaphanModule.fakePlayerFacing = FakePlayer.Facing;
-                            XaphanModule.fakePlayerPosition = FakePlayer.Position;
                             XaphanModule.fakePlayerSpriteFrame = FakePlayer.Sprite.CurrentAnimationFrame;
                         }
                         int chapterIndex = Level.Session.Area.ChapterIndex;
