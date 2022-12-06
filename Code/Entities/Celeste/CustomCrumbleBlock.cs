@@ -34,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float outlineColorTimer;
 
-        private float crumbleTime;
+        private float crumbleDelay;
 
         private bool oneUse;
 
@@ -42,19 +42,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string texture;
 
+        private string rotation;
+
         private HashSet<CustomCrumbleBlock> groupedCustomCrumbleBlocks = new();
 
         public CustomCrumbleBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: false)
         {
             EnableAssistModeChecks = false;
             respawnTime = data.Float("respawnTime", 2f);
-            crumbleTime = data.Float("crumbleTime", 0.4f);
+            crumbleDelay = data.Float("crumbleDelay", 0.4f);
             oneUse = data.Bool("oneUse", false);
             triggerAdjacents = data.Bool("triggerAdjacents", false);
             texture = data.Attr("texture");
             if (string.IsNullOrEmpty(texture))
             {
-                texture = "objects/XaphanHelper/DestructibleBlock/Crumble00";
+                texture = "objects/crumbleBlock/default";
+            }
+            rotation = data.Attr("rotation");
+            if (string.IsNullOrEmpty(rotation))
+            {
+                rotation = "0°";
             }
         }
 
@@ -148,13 +155,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             images = new List<Image>();
             falls = new List<Coroutine>();
             fallOrder = new List<int>();
+            MTexture mTexture = GFX.Game[texture];
             for (int i = 0; i < Width; i += 8)
             {
                 for (int j = 0; j < Height; j += 8)
                 {
-                    Image image = new Image(GFX.Game[texture]);
+                    Image image = new Image(mTexture.GetSubtexture(Calc.Random.Next(mTexture.Width / 8) * 8, 0, 8, 8));
                     image.Position = new Vector2(4 + i, 4f + j);
                     image.CenterOrigin();
+                    if (rotation != "0°")
+                    {
+                        image.Rotation = rotation == "90°" ? (float)Math.PI / 2 : (rotation == "180°" ? (float)Math.PI : -(float)Math.PI / 2);
+                    }              
                     Add(image);
                     images.Add(image);
                     Coroutine coroutine = new Coroutine();
@@ -204,8 +216,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     Audio.Play("event:/game/general/platform_disintegrate", Center);
                 }
-                shaker.ShakeFor(onTop ? crumbleTime + 0.2f : crumbleTime + 0.6f, removeOnFinish: false);
-                StartShaking(onTop ? crumbleTime + 0.2f : crumbleTime + 0.6f);
+                shaker.ShakeFor(onTop ? crumbleDelay + 0.2f : crumbleDelay + 0.6f, removeOnFinish: false);
+                StartShaking(onTop ? crumbleDelay + 0.2f : crumbleDelay + 0.6f);
                 foreach (Image image in images)
                 {
                     SceneAs<Level>().Particles.Emit(CrumblePlatform.P_Crumble, 2, Position + image.Position + new Vector2(0f, 2f), Vector2.One * 3f);
@@ -218,7 +230,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         SceneAs<Level>().Particles.Emit(CrumblePlatform.P_Crumble, 2, Position + image.Position + new Vector2(0f, 2f), Vector2.One * 3f);
                     }
                 }
-                float timer = crumbleTime;
+                float timer = crumbleDelay;
                 if (onTop)
                 {
                     while (timer > 0f && getOneBlockWithPlayerOnTop() != null)
@@ -242,14 +254,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 occluder.Visible = false;
                 Collidable = false;
                 DisableStaticMovers();
-                float num = 0.05f;
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < Width / 8; j++)
                 {
                     for (int k = 0; k < images.Count; k++)
                     {
-                        if (k % 4 - j == 0)
+                        if (k % 2 - j == 0)
                         {
-                            falls[k].Replace(TileOut(images[k], num * j));
+                            falls[k].Replace(TileOut(images[k], 0.05f * j));
                         }
                     }
                 }
@@ -277,13 +288,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 occluder.Visible = true;
                 Collidable = true;
                 EnableStaticMovers();
-                for (int l = 0; l < 4; l++)
+                for (int j = 0; j < Width / 8; j++)
                 {
-                    for (int m = 0; m < images.Count; m++)
+                    for (int k = 0; k < images.Count; k++)
                     {
-                        if (m % 4 - l == 0)
+                        if (k % 2 - j == 0)
                         {
-                            falls[m].Replace(TileIn(m, images[m], 0.05f * l));
+                            falls[k].Replace(TileIn(k, images[k], 0.05f * j));
                         }
                     }
                 }
