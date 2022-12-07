@@ -29,6 +29,7 @@ Version 1.0.49 :
 - Drone Switches now reset their flag when the drone respawn if they are not set to be permanent, unless the drone is destroyed on purpose
 - Drone Switches now register the current state of their flag when the drone activate a Custom Checkpoint or a Change Respawn Trigger and will use this updated state when the drone respawn
 - Reduced the time the Grab button must be hold to destroy the Remote Drone from 1.5 seconds to 0.5 seconds. This can now only be done if the Remote Drone is on safe ground and is not moving.
+- Slopes now decrease or increases the player walking speed based on the player walking direction and position on the slope
 - Fixed Loenn plugin for Drone Switchs side attribute having a "Bottom" option instead of "Down", preventing placing switches on the ceiling
 - Liquids will no longer remove themselves if their surface is starting from bellow the room while being set to rise. Draining liquids will still remove themsleves
 - Slopes should no longer prevent the player from falling after throwing the Remote Drone

@@ -26,7 +26,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string Side;
 
-        private bool Gentle;
+        public bool Gentle;
 
         private bool CanSlide;
 

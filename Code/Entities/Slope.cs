@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
 using Monocle;
+using MonoMod.Cil;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -73,7 +75,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public ColliderList colliderList;
 
         private List<LightOccludeBlock> lightOccludeBlocks = new();
-
 
         public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool visualOnly = false) : base(position + offset, 0, 0, true)
         {
@@ -255,6 +256,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Puffer.Update += PufferOnUpdate;
             On.Celeste.Seeker.Update += SeekerOnUpdate;
             On.Celeste.Debris.Update += DebrisOnUpdate;
+            On.Celeste.Player.Update += modPlayerUpdate;
+            IL.Celeste.Player.NormalUpdate += ilPlayerNormalUpdate;
         }
 
         public static void Unload()
@@ -267,6 +270,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Puffer.Update -= PufferOnUpdate;
             On.Celeste.Seeker.Update -= SeekerOnUpdate;
             On.Celeste.Debris.Update -= DebrisOnUpdate;
+            On.Celeste.Player.Update -= modPlayerUpdate;
+            IL.Celeste.Player.NormalUpdate -= ilPlayerNormalUpdate;
+
         }
 
         private static bool onActorMoveH(On.Celeste.Actor.orig_MoveH orig, Actor self, float moveH, Collision onCollide, Solid pusher)
@@ -368,6 +374,85 @@ namespace Celeste.Mod.XaphanHelper.Entities
             SetCollisionBeforeUpdate(self);
             orig(self);
             SetCollisionAfterUpdate(self);
+        }
+
+        private static void modPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
+        {
+            if (XaphanModule.onSlope && self.Bottom != XaphanModule.onSlopeTop && self.Speed.X != 0)
+            {
+                XaphanModule.MaxRunSpeed += 0.025f;
+            }
+            else
+            {
+                if (self.Speed.X == 0)
+                {
+                    XaphanModule.MaxRunSpeed = 0f;
+                }
+                if (XaphanModule.MaxRunSpeed != 0)
+                {
+                    XaphanModule.MaxRunSpeed -= 0.025f;
+                }
+            }
+            if (XaphanModule.MaxRunSpeed > 0.4f)
+            {
+                XaphanModule.MaxRunSpeed = 0.4f;
+            }
+            if (XaphanModule.MaxRunSpeed < 0)
+            {
+                XaphanModule.MaxRunSpeed = 0;
+            }
+            orig(self);
+        }
+
+        private static void ilPlayerNormalUpdate(ILContext il)
+        {
+            ILCursor cursor = new ILCursor(il);
+
+            // Increase X speed based on MaxRunSpeed value
+
+            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(90f))
+                && cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Stloc_S
+                    && (((VariableDefinition)instr.Operand).Index == 6 || ((VariableDefinition)instr.Operand).Index == 31)))
+            {
+                VariableDefinition variable = (VariableDefinition)cursor.Next.Operand;
+                if (cursor.TryGotoNext(MoveType.Before, instr => instr.OpCode == OpCodes.Ldflda))
+                {
+                    cursor.Emit(OpCodes.Pop);
+                    cursor.Emit(OpCodes.Ldloc_S, variable);
+                    cursor.EmitDelegate<Func<float>>(determineSpeedXFactor);
+                    cursor.Emit(OpCodes.Mul);
+                    cursor.Emit(OpCodes.Stloc_S, variable);
+                    cursor.Emit(OpCodes.Ldarg_0);
+                }
+            }
+        }
+
+        private static float determineSpeedXFactor()
+        {
+            float speedFactor = 0f;
+            if (Engine.Scene is Level)
+            {
+                Level level = (Level)Engine.Scene;
+                Player player = level.Tracker.GetEntity<Player>();
+                bool wasAccelerating = false;
+                if (XaphanModule.onSlope && player.Bottom != XaphanModule.onSlopeTop)
+                {
+                    if ((XaphanModule.onSlopeDir == -1 && player.Speed.X < 0) || (XaphanModule.onSlopeDir == 1 && player.Speed.X > 0))
+                    {
+                        speedFactor = -(XaphanModule.onSlopeGentle ? XaphanModule.MaxRunSpeed / 2 : XaphanModule.MaxRunSpeed);
+                    }
+                    else if ((XaphanModule.onSlopeDir == -1 && player.Speed.X > 0) || (XaphanModule.onSlopeDir == 1 && player.Speed.X < 0))
+                    {
+                        wasAccelerating = true;
+                        speedFactor = (XaphanModule.onSlopeGentle ? XaphanModule.MaxRunSpeed / 2 : XaphanModule.MaxRunSpeed);
+                    }
+                }
+                else if (XaphanModule.MaxRunSpeed > 0)
+                {
+                    speedFactor = wasAccelerating ? XaphanModule.MaxRunSpeed : -XaphanModule.MaxRunSpeed;
+                }
+            }
+            return 1f + speedFactor;
         }
 
         public static void SetCollisionBeforeUpdate(Actor actor)

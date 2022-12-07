@@ -68,6 +68,14 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool onSlope;
 
+        public static int onSlopeDir;
+
+        public static bool onSlopeGentle;
+
+        public static float onSlopeTop;
+
+        public static float MaxRunSpeed;
+
         public static bool ChangingSide;
 
         private Postcard oldExtVariantsPostcard;
@@ -3102,11 +3110,17 @@ namespace Celeste.Mod.XaphanHelper
                 if (player != null && playerPlatform.HasPlayerOnTop())
                 {
                     onSlope = true;
+                    onSlopeDir = playerPlatform.Side == "Right" ? 1 : -1;
+                    onSlopeGentle = playerPlatform.Gentle;
+                    onSlopeTop = playerPlatform.slopeTop;
                     break;
                 }
                 else
                 {
                     onSlope = false;
+                    onSlopeDir = 0;
+                    onSlopeGentle = false;
+                    onSlopeTop = 0;
                 }
             }
         }
