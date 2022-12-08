@@ -42,11 +42,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public float slopeTop;
 
+        public bool AffectPlayerSpeed;
+
         public bool Sliding;
 
         public bool preventCollision;
 
-        public PlayerPlatform(Vector2 position, int width, bool gentle, string side, int soundIndex, int slopeHeight, bool canSlide, float top, bool upsideDown = false, bool stickyDash = false, bool canJumpThrough = false) : base(position, width, 4, true)
+        public PlayerPlatform(Vector2 position, int width, bool gentle, string side, int soundIndex, int slopeHeight, bool canSlide, float top, bool affectPlayerSpeed, bool upsideDown = false, bool stickyDash = false, bool canJumpThrough = false) : base(position, width, 4, true)
         {
             AllowStaticMovers = false;
             Gentle = gentle;
@@ -58,6 +60,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             platfromWidth = width;
             CanSlide = canSlide;
             slopeTop = top;
+            AffectPlayerSpeed = affectPlayerSpeed;
             StickyDash = stickyDash;
             CanJumpThrough = canJumpThrough;
             Add(PlayerSprite = GFX.SpriteBank.Create("XaphanHelper_player_slide"));

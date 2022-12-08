@@ -54,7 +54,7 @@ local Slope = {}
 Slope.name = "XaphanHelper/Slope"
 Slope.depth = -10001
 Slope.fieldOrder = {
-    "x", "y", "side", "flag", "customDirectory", "flagCustomDirectory", "texture", "flagTexture", "soundIndex", "slopeHeight", "tilesTop", "tilesBottom", "gentle", "canSlide", "upsideDown", "stickyDash", "noRender", "rainbow", "canJumpThrough"
+    "x", "y", "side", "flag", "customDirectory", "flagCustomDirectory", "texture", "flagTexture", "soundIndex", "slopeHeight", "tilesTop", "tilesBottom", "gentle", "canSlide", "upsideDown", "stickyDash", "noRender", "rainbow", "canJumpThrough", "affectPlayerSpeed"
 }
 Slope.fieldInformation = {
     side = {
@@ -102,7 +102,8 @@ Slope.placements = {
         noRender = false,
         stickyDash  = false,
         rainbow = false,
-        canJumpThrough = false
+        canJumpThrough = false,
+        affectPlayerSpeed = true
     }
 }
 

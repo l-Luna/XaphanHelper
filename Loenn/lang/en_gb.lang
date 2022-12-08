@@ -492,6 +492,7 @@ entities.XaphanHelper/Slope.attributes.description.noRender=If true, the slope w
 entities.XaphanHelper/Slope.attributes.description.stickyDash=If true, the player will stick to the slope while dashing away from it.
 entities.XaphanHelper/Slope.attributes.description.rainbow=If true, the slope will have a rainbow effect. (No effect if No Render is true)
 entities.XaphanHelper/Slope.attributes.description.canJumpThrough=If true, the player can jump through the slope.
+entities.XaphanHelper/Slope.attributes.description.affectPlayerSpeed=If true, reduces the player's speed when going up the slope and increases it when going down
 
 
 # TeleportStrawberry

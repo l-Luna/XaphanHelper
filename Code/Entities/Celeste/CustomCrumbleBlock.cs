@@ -42,7 +42,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string texture;
 
-        private string rotation;
+        private int rotation;
 
         private HashSet<CustomCrumbleBlock> groupedCustomCrumbleBlocks = new();
 
@@ -58,11 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 texture = "objects/crumbleBlock/default";
             }
-            rotation = data.Attr("rotation");
-            if (string.IsNullOrEmpty(rotation))
-            {
-                rotation = "0°";
-            }
+            rotation = data.Int("rotation");
         }
 
         private void addRange(HashSet<CustomCrumbleBlock> set, IEnumerable<CustomCrumbleBlock> elements)
@@ -163,9 +159,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Image image = new Image(mTexture.GetSubtexture(Calc.Random.Next(mTexture.Width / 8) * 8, 0, 8, 8));
                     image.Position = new Vector2(4 + i, 4f + j);
                     image.CenterOrigin();
-                    if (rotation != "0°")
+                    if (rotation != 0)
                     {
-                        image.Rotation = rotation == "90°" ? (float)Math.PI / 2 : (rotation == "180°" ? (float)Math.PI : -(float)Math.PI / 2);
+                        image.Rotation = rotation == 1 ? (float)Math.PI / 2 : (rotation == 2 ? (float)Math.PI : -(float)Math.PI / 2);
                     }              
                     Add(image);
                     images.Add(image);

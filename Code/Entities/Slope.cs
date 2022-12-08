@@ -70,13 +70,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool VisualOnly;
 
+        private bool AffectPlayerSpeed;
+
         public string Flag;
 
         public ColliderList colliderList;
 
         private List<LightOccludeBlock> lightOccludeBlocks = new();
 
-        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool visualOnly = false) : base(position + offset, 0, 0, true)
+        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool affectPlayerSpeed, bool visualOnly = false) : base(position + offset, 0, 0, true)
         {
 
             Tag = Tags.TransitionUpdate;
@@ -99,6 +101,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             CanJumpThrough = canJumpThrough;
             VisualOnly = visualOnly;
             Flag = flag;
+            AffectPlayerSpeed = affectPlayerSpeed;
             if (!VisualOnly)
             {
                 if (!upsideDown)
@@ -241,7 +244,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Slope(EntityData data, Vector2 offset) : this(data.Position, offset, data.Bool("gentle"), data.Attr("side"), data.Int("soundIndex"), data.Int("slopeHeight", 1), data.Attr("tilesTop"), data.Attr("tilesBottom"),
             data.Attr("texture", "cement"), data.Attr("flagTexture", ""), data.Bool("canSlide", false), data.Attr("customDirectory", ""), data.Attr("flagCustomDirectory", ""), data.Bool("upsideDown", false), data.Bool("noRender", false), data.Bool("stickyDash", false), data.Bool("rainbow", false),
-            data.Bool("canJumpThrough", false), data.Attr("flag", ""))
+            data.Bool("canJumpThrough", false), data.Attr("flag", ""), data.Bool("affectPlayerSpeed", false))
         {
 
         }
@@ -377,8 +380,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         private static void modPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
-        {
-            if (XaphanModule.onSlope && self.Bottom != XaphanModule.onSlopeTop && self.Speed.X != 0)
+        {   
+            if (XaphanModule.onSlope && self.Bottom != XaphanModule.onSlopeTop && self.Speed.X != 0 && XaphanModule.onSlopeAffectPlayerSpeed)
             {
                 XaphanModule.MaxRunSpeed += 0.025f;
             }
@@ -581,7 +584,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (!VisualOnly)
             {
-                SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, UpsideDown, StickyDash, CanJumpThrough));
+                SceneAs<Level>().Add(new PlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, CanSlide, Top, AffectPlayerSpeed, UpsideDown, StickyDash, CanJumpThrough));
                 if (!UpsideDown)
                 {
                     SceneAs<Level>().Add(new FakePlayerPlatform(Position + new Vector2(Side == "Right" ? ((Gentle ? -(SlopeHeight - 1) * 16 : -(SlopeHeight - 1) * 8) + 8) * (UpsideDown ? -1 : 1) : 0 + 0, (8 * (SlopeHeight - 1) + 4)) * (UpsideDown ? -1 : 1), Gentle ? 8 + 16 * SlopeHeight : 8 + 8 * SlopeHeight, Gentle, Side, SoundIndex, SlopeHeight, Top, UpsideDown, StickyDash, CanJumpThrough));

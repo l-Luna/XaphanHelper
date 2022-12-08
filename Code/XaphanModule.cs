@@ -74,6 +74,8 @@ namespace Celeste.Mod.XaphanHelper
 
         public static float onSlopeTop;
 
+        public static bool onSlopeAffectPlayerSpeed;
+
         public static float MaxRunSpeed;
 
         public static bool ChangingSide;
@@ -3113,6 +3115,7 @@ namespace Celeste.Mod.XaphanHelper
                     onSlopeDir = playerPlatform.Side == "Right" ? 1 : -1;
                     onSlopeGentle = playerPlatform.Gentle;
                     onSlopeTop = playerPlatform.slopeTop;
+                    onSlopeAffectPlayerSpeed = playerPlatform.AffectPlayerSpeed;
                     break;
                 }
                 else
@@ -3121,6 +3124,7 @@ namespace Celeste.Mod.XaphanHelper
                     onSlopeDir = 0;
                     onSlopeGentle = false;
                     onSlopeTop = 0;
+                    onSlopeAffectPlayerSpeed = false;
                 }
             }
         }
