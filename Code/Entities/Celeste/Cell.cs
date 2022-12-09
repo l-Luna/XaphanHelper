@@ -168,6 +168,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
+                foreach (Slope slope in SceneAs<Level>().Tracker.GetEntities<Slope>())
+                {
+                    if (slope.UpsideDown && CollideCheck(slope))
+                    {
+                        Position.Y += 1;
+                    }
+                }
                 if (OnGround())
                 {
                     float target = (!OnGround(Position + Vector2.UnitX * 3f)) ? 20f : (OnGround(Position - Vector2.UnitX * 3f) ? 0f : (-20f));

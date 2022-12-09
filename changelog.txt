@@ -10,7 +10,7 @@ Version 1.0.49 :
 - Added "Flag", "Flag Custom Directory", "Flag texture' and "Affect Player Speed" attributes to Slopes
 - Added "Can Respawn" attribute to Custom Collectables
 - Added "Register In Save Data", "Save Data Only After Checkpoint" and "Persistent" attributes to Drone Switches
-- Improved performances of SLopes
+- Improved performances of Slopes
 - Reduced fire rate of the Remote Drone
 - Multiple Lasers Detectors in the same room affecting the same flag will now set the flag to true if at least one of them detect a laser
 - Slightly increased Bombs explosion radius
@@ -25,7 +25,7 @@ Version 1.0.49 :
 - Countdown Display timer is now draw closer to the top of the screen
 - Updated sprites for Countdown Displays timers explosions
 - Updated sprites of Drone Switches
-- Dying when the Remote Drone ability now send the drone back to the last checkpoint instead of giving back the control to Madeline
+- Dying whith the Remote Drone ability now send the drone back to the last checkpoint instead of giving back the control to Madeline
 - Drone Switches now reset their flag when the drone respawn if they are not set to be permanent, unless the drone is destroyed on purpose
 - Drone Switches now register the current state of their flag when the drone activate a Custom Checkpoint or a Change Respawn Trigger and will use this updated state when the drone respawn
 - Reduced the time the Grab button must be hold to destroy the Remote Drone from 1.5 seconds to 0.5 seconds. This can now only be done if the Remote Drone is on safe ground and is not moving.

@@ -248,6 +248,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     bombSprite.FlipX = false;
                 }
             }
+            else
+            {
+                foreach (Slope slope in SceneAs<Level>().Tracker.GetEntities<Slope>())
+                {
+                    if (slope.UpsideDown && CollideCheck(slope))
+                    {
+                        Position.Y += 1;
+                    }
+                }
+            }
             if (swatTimer > 0f)
             {
                 swatTimer -= Engine.DeltaTime;

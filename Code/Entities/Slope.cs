@@ -296,6 +296,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             SetCollisionBeforeUpdate(self);
             orig(self);
+            if (!self.Hold.IsHeld)
+            {
+                foreach (Slope slope in self.SceneAs<Level>().Tracker.GetEntities<Slope>())
+                {
+                    if (slope.UpsideDown && self.CollideCheck(slope))
+                    {
+                        self.Position.Y += 1;
+                    }
+                }
+            }
             SetCollisionAfterUpdate(self);
         }
 
@@ -320,6 +330,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             SetCollisionBeforeUpdate(self);
             orig(self);
+            if (!self.Hold.IsHeld)
+            {
+                foreach (Slope slope in self.SceneAs<Level>().Tracker.GetEntities<Slope>())
+                {
+                    if (slope.UpsideDown && self.CollideCheck(slope))
+                    {
+                        self.Position.Y += 1;
+                    }
+                }
+            }
             SetCollisionAfterUpdate(self);
         }
 
@@ -352,6 +372,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             SetCollisionBeforeUpdate(self);
             orig(self);
+            foreach (Slope slope in self.SceneAs<Level>().Tracker.GetEntities<Slope>())
+            {
+                if (slope.UpsideDown && self.CollideCheck(slope))
+                {
+                    self.Position.Y += 1;
+                }
+            }
             SetCollisionAfterUpdate(self);
         }
 
@@ -364,6 +391,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             SetCollisionBeforeUpdate(self);
             orig(self);
+            foreach (Slope slope in self.SceneAs<Level>().Tracker.GetEntities<Slope>())
+            {
+                if (slope.UpsideDown && self.CollideCheck(slope))
+                {
+                    self.Position.Y += 1;
+                }
+            }
             SetCollisionAfterUpdate(self);
         }
 
@@ -376,6 +410,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             SetCollisionBeforeUpdate(self);
             orig(self);
+            foreach (Slope slope in self.SceneAs<Level>().Tracker.GetEntities<Slope>())
+            {
+                if (slope.UpsideDown && self.CollideCheck(slope))
+                {
+                    self.Position.Y += 1;
+                }
+            }
             SetCollisionAfterUpdate(self);
         }
 
