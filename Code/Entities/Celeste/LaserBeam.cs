@@ -115,7 +115,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Update()
         {
-            //ActorBarrier.SetCollisionBeforeUpdate(this);
+            foreach (PlayerPlatform plateform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
+            {
+                plateform.Collidable = false;
+            }
             base.Update();
             if (alphaStatus == 0 || (alphaStatus == 1 && laserAlpha != 0.9f))
             {
@@ -299,7 +302,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Collider.Height += 4;
                 }
             }
-            //ActorBarrier.SetCollisionAfterUpdate(this);
+            foreach (PlayerPlatform plateform in SceneAs<Level>().Tracker.GetEntities<PlayerPlatform>())
+            {
+                plateform.Collidable = true;
+            }
         }
 
         private void OnCollide(Player player)
