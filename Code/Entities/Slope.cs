@@ -505,46 +505,53 @@ namespace Celeste.Mod.XaphanHelper.Entities
             List<Entity> slopes = actor.Scene.Tracker.GetEntities<Slope>().ToList();
             foreach (Slope slope in slopes)
             {
-                if (slope.CanJumpThrough)
+                if (slope.CollideCheck(actor))
                 {
-                    if (!slope.UpsideDown)
-                    {
-                        if (slope.Side == "Right")
-                        {
-                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) >= 0)
-                            {
-                                slope.Collidable = true;
-                            }
-                        }
-                        else if (slope.Side == "Left")
-                        {
-                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) <= 0)
-                            {
-                                slope.Collidable = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (slope.Side == "Right")
-                        {
-                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopRight.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopRight.X - slope.SlopeTop.X) >= 0)
-                            {
-                                slope.Collidable = true;
-                            }
-                        }
-                        else if (slope.Side == "Left")
-                        {
-                            if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopLeft.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopLeft.X - slope.SlopeTop.X) <= 0)
-                            {
-                                slope.Collidable = true;
-                            }
-                        }
-                    }
+                    slope.Collidable = false;
                 }
                 else
                 {
-                    slope.Collidable = true;
+                    if (slope.CanJumpThrough)
+                    {
+                        if (!slope.UpsideDown)
+                        {
+                            if (slope.Side == "Right")
+                            {
+                                if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) >= 0)
+                                {
+                                    slope.Collidable = true;
+                                }
+                            }
+                            else if (slope.Side == "Left")
+                            {
+                                if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.BottomCenter.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.BottomCenter.X - slope.SlopeTop.X) <= 0)
+                                {
+                                    slope.Collidable = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (slope.Side == "Right")
+                            {
+                                if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopRight.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopRight.X - slope.SlopeTop.X) >= 0)
+                                {
+                                    slope.Collidable = true;
+                                }
+                            }
+                            else if (slope.Side == "Left")
+                            {
+                                if ((slope.SlopeBottom.X - slope.SlopeTop.X) * (actor.TopLeft.Y - slope.SlopeTop.Y) - (slope.SlopeBottom.Y - slope.SlopeTop.Y) * (actor.TopLeft.X - slope.SlopeTop.X) <= 0)
+                                {
+                                    slope.Collidable = true;
+                                }
+                            }
+                        }
+                    }
+                    else if (slope.UpsideDown && ((slope.Side == "Right" && actor.Right < slope.Right) || (slope.Side == "Left" && actor.Left > slope.Left)))
+                    {
+                        slope.Collidable = true;
+                    }
                 }
             }
             foreach (PlayerPlatform platform in playerPlatforms)
