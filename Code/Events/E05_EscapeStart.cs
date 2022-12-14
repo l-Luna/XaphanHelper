@@ -34,45 +34,48 @@ namespace Celeste.Mod.XaphanHelper.Events
             {
                 yield return null;
             }
-            alarmSfx = Audio.Play("event:/game/xaphan/alarm");
-            StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
-            Vector2 triggerStartPosition = trigger.Position;
-            trigger.Position = player.Position - Vector2.UnitY * 16;
-            yield return 0.01f;
-            level.Session.SetFlag("Lab_Escape", true);
-            trigger.Position = triggerStartPosition;
-            float timer = 2f;
-            bool countdownStarted = false;
-            while (timer > 0 && !countdownStarted)
+            if (!level.Session.GetFlag("Lab_Escape"))
             {
-                timer -= Engine.DeltaTime;
-                yield return null;
-                if (player.SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>() != null)
+                alarmSfx = Audio.Play("event:/game/xaphan/alarm");
+                StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
+                Vector2 triggerStartPosition = trigger.Position;
+                trigger.Position = player.Position - Vector2.UnitY * 16;
+                yield return 0.01f;
+                level.Session.SetFlag("Lab_Escape", true);
+                trigger.Position = triggerStartPosition;
+                float timer = 2f;
+                bool countdownStarted = false;
+                while (timer > 0 && !countdownStarted)
                 {
-                    countdownStarted = true;
-                }
-            }
-            level.Session.Audio.Music.Event = SFX.EventnameByHandle("event:/music/xaphan/lvl_0_escape");
-            level.Session.Audio.Apply(forceSixteenthNoteHack: false);
-            CountdownDisplay display = null;
-            while (true)
-            {
-                if (Scene != null)
-                {
-                    if (Scene.Tracker.GetEntities<CountdownDisplay>().Count == 1)
+                    timer -= Engine.DeltaTime;
+                    yield return null;
+                    if (level.Tracker.GetEntity<CountdownDisplay>() != null)
                     {
-                        if (display == null)
-                        {
-                            display = Scene.Tracker.GetEntity<CountdownDisplay>();
-                        }
-                        else if (display.TimerRanOut)
-                        {
-                            alarmSfx.stop(STOP_MODE.IMMEDIATE);
-                            break;
-                        }
+                        countdownStarted = true;
                     }
                 }
-                yield return null;
+                level.Session.Audio.Music.Event = SFX.EventnameByHandle("event:/music/xaphan/lvl_0_escape");
+                level.Session.Audio.Apply(forceSixteenthNoteHack: false);
+                CountdownDisplay display = null;
+                while (true)
+                {
+                    if (Scene != null)
+                    {
+                        if (Scene.Tracker.GetEntities<CountdownDisplay>().Count == 1)
+                        {
+                            if (display == null)
+                            {
+                                display = Scene.Tracker.GetEntity<CountdownDisplay>();
+                            }
+                            else if (display.TimerRanOut)
+                            {
+                                alarmSfx.stop(STOP_MODE.IMMEDIATE);
+                                break;
+                            }
+                        }
+                    }
+                    yield return null;
+                }
             }
         }
 
