@@ -137,7 +137,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             List<Entity> pushBlocks = self.Scene.Tracker.GetEntities<PushBlock>().ToList();
             foreach (PushBlock pushBlock in pushBlocks)
             {
-                if (pushBlock.canKill && !self.DashAttacking)
+                if (!SaveData.Instance.Assists.Invincible && pushBlock.canKill && (!self.DashAttacking || self.DashAttacking && (self.Bottom <= pushBlock.Top && self.DashDir.Y <= 0)))
                 {
                     pushBlock.Collidable = false;
                 }
