@@ -30,6 +30,10 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public IEnumerator Cutscene(Level level)
         {
+            while (!level.Session.GetFlag("Gem_Collected"))
+            {
+                yield return null;
+            }
             alarmSfx = Audio.Play("event:/game/xaphan/alarm");
             StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
             Vector2 triggerStartPosition = trigger.Position;
