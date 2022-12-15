@@ -35,6 +35,7 @@ Version 1.0.49 :
 - Slopes should no longer create collisions issues with nearby solids entities
 - Slopes will now try to move the player out of them if the player manage to get stuck into them
 - Throwables should no longer get stuck when the player throw them toward an upside down Slope
+- Fixed a bug that respawned the player in the wrong room if they entered an other room and exited the map after triggering a Countdown, but before the timer appear on screen
 
 Version 1.0.48 :
 

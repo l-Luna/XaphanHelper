@@ -172,6 +172,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 };
                 SceneAs<Level>().Add(Timetext);
             }
+            XaphanModule.TriggeredCountDown = false;
         }
 
         public override void Removed(Scene scene)

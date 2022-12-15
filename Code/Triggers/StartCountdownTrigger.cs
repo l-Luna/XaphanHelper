@@ -102,6 +102,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             if ((string.IsNullOrEmpty(startFlag) ? true : SceneAs<Level>().Session.GetFlag(startFlag)) && display == null && !HasBeenTriggered)
             {
                 HasBeenTriggered = true;
+                XaphanModule.TriggeredCountDown = true;
                 if (shake && !SceneAs<Level>().Session.GetFlag("Countdown_" + eid.Key))
                 {
                     Add(new Coroutine(ShakeLevel()));

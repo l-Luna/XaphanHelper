@@ -468,6 +468,8 @@ namespace Celeste.Mod.XaphanHelper
 
         public float cassetteTimer;
 
+        public static bool TriggeredCountDown;
+
         public XaphanModule()
         {
             Instance = this;
@@ -2239,6 +2241,7 @@ namespace Celeste.Mod.XaphanHelper
             ModSaveData.LoadedPlayer = false;
             startedAnySoCMChapter = false;
             minimapEnabled = false;
+            TriggeredCountDown = false;
             SaveSettings();
         }
 
@@ -2779,7 +2782,7 @@ namespace Celeste.Mod.XaphanHelper
 
                 // Save the room as the one that the player must load into when starting the campaign if using a MergeChaptersController with mode set to Rooms
 
-                else if (useMergeChaptersController && MergeChaptersControllerMode == "Rooms" && !self.Session.GrabbedGolden && !self.Frozen && self.Tracker.GetEntity<CountdownDisplay>() == null && self.Tracker.GetEntity<Player>() != null && self.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !PlayerIsControllingRemoteDrone() && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
+                else if (useMergeChaptersController && MergeChaptersControllerMode == "Rooms" && !self.Session.GrabbedGolden && !self.Frozen && self.Tracker.GetEntity<CountdownDisplay>() == null && !TriggeredCountDown && self.Tracker.GetEntity<Player>() != null && self.Tracker.GetEntity<Player>().StateMachine.State != Player.StDummy && !PlayerIsControllingRemoteDrone() && (self.Session.Area.LevelSet == "Xaphan/0" ? !ModSaveData.SpeedrunMode : true) && !((MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)))
                 {
                     ModSaveData.LoadedPlayer = true;
                     if (!ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet))
