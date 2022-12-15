@@ -72,6 +72,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                 {
                     if (SceneAs<Level>().Session.GetFlag(flag))
                     {
+                        SceneAs<Level>().Session.SetFlag(flag, false);
                         if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + SceneAs<Level>().Session.Area.ChapterIndex + "_" + flag))
                         {
                             SceneAs<Level>().Session.SetFlag(flag, false);

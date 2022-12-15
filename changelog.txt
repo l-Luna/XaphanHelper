@@ -1,3 +1,7 @@
+Version 1.0.50 :
+- Custom Collectables with the "Respawn" and "Register in Save Data" attributes set to true now respawn corectly if their flag is no longer saved in the save data
+- Reset Flags Triggers now correctly set flags specified in the "Set False Flags" attribute to false for the current session if the "Register in Save Data" attribute is set to true
+
 Version 1.0.49 :
 
 - Added Flag Block
