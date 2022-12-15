@@ -75,6 +75,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool canRespawn;
 
+        private bool shouldWaitBeforeRemoving;
+
         private bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -94,6 +96,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public CustomCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {
+            Tag = Tags.TransitionUpdate;
             ID = id;
             sprite = data.Attr("sprite");
             changeMusic = data.Bool("changeMusic");
@@ -186,15 +189,35 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (SceneAs<Level>().Session.GetFlag(flag))
                     {
-                        RemoveSelf();
+                        shouldWaitBeforeRemoving = true;
                     }
                 }
             }
         }
 
+        public IEnumerator WaitBeforeRemoveRoutine()
+        {
+            float timer = 0.02f;
+            while (timer > 0)
+            {
+                timer -= Engine.DeltaTime;
+                if (!SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    yield break;
+                }
+                yield return null;
+            }
+            RemoveSelf();
+        }
+
         public override void Update()
         {
             base.Update();
+            if (shouldWaitBeforeRemoving)
+            {
+                shouldWaitBeforeRemoving = false;
+                Add(new Coroutine(WaitBeforeRemoveRoutine()));
+            }
             bounceSfxDelay -= Engine.DeltaTime;
             collectable.Position = moveWiggleDir * moveWiggler.Value * -8f;
             collectable.Position = collectable.Position + new Vector2(8, 8);
