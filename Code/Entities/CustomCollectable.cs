@@ -187,7 +187,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 else
                 {
-                    if (SceneAs<Level>().Session.GetFlag(flag))
+                    Session session = SceneAs<Level>().Session;
+                    string Prefix = session.Area.GetLevelSet();
+                    int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
+                    if (!registerInSaveData ? SceneAs<Level>().Session.GetFlag(flag) : XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                     {
                         shouldWaitBeforeRemoving = true;
                     }
@@ -195,13 +198,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public IEnumerator WaitBeforeRemoveRoutine()
+        public IEnumerator WaitBeforeRemoveRoutine(bool registerInSaveData)
         {
             float timer = 0.02f;
+            Session session = SceneAs<Level>().Session;
+            string Prefix = session.Area.GetLevelSet();
+            int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
             while (timer > 0)
             {
                 timer -= Engine.DeltaTime;
-                if (!SceneAs<Level>().Session.GetFlag(flag))
+                if (!registerInSaveData ? !SceneAs<Level>().Session.GetFlag(flag) : !XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                 {
                     yield break;
                 }
@@ -216,7 +222,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (shouldWaitBeforeRemoving)
             {
                 shouldWaitBeforeRemoving = false;
-                Add(new Coroutine(WaitBeforeRemoveRoutine()));
+                Add(new Coroutine(WaitBeforeRemoveRoutine(registerInSaveData)));
             }
             bounceSfxDelay -= Engine.DeltaTime;
             collectable.Position = moveWiggleDir * moveWiggler.Value * -8f;
