@@ -46,19 +46,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private HashSet<CustomCrumbleBlock> groupedCustomCrumbleBlocks = new();
 
-        public CustomCrumbleBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: false)
+        public CustomCrumbleBlock(EntityData data, Vector2 offset) : this (data.Position, offset, data.Width, data.Height, data.Float("respawnTime", 2f), data.Float("crumbleDelay", 0.4f), data.Bool("oneUse", false), data.Bool("triggerAdjacents", false),
+            data.Int("rotation"), data.Attr("texture"))
+        {
+            
+        }
+
+        public CustomCrumbleBlock(Vector2 position, Vector2 offset, int width, int height, float respawnTime, float crumbleDelay, bool oneUse, bool triggerAdjacents, int rotation = 0, string texture = null) : base(position + offset, width, height, safe: false)
         {
             EnableAssistModeChecks = false;
-            respawnTime = data.Float("respawnTime", 2f);
-            crumbleDelay = data.Float("crumbleDelay", 0.4f);
-            oneUse = data.Bool("oneUse", false);
-            triggerAdjacents = data.Bool("triggerAdjacents", false);
-            texture = data.Attr("texture");
+            this.respawnTime = respawnTime;
+            this.crumbleDelay = crumbleDelay;
+            this.oneUse = oneUse;
+            this.triggerAdjacents = triggerAdjacents;
+            this.texture = texture;
             if (string.IsNullOrEmpty(texture))
             {
-                texture = "objects/crumbleBlock/default";
+                this.texture = "objects/crumbleBlock/default";
             }
-            rotation = data.Int("rotation");
+            this.rotation = rotation;
         }
 
         private void addRange(HashSet<CustomCrumbleBlock> set, IEnumerable<CustomCrumbleBlock> elements)
