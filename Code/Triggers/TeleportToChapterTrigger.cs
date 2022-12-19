@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
@@ -186,6 +187,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             }
             int chapterOffset = ToChapter - currentChapter;
             int currentChapterID = SceneAs<Level>().Session.Area.ID;
+            Logger.Log(LogLevel.Info, "XH", "currentChapterID : " + currentChapterID + " chapterOffset : " + chapterOffset);
             if (RegisterCurrentChapterAsCompelete)
             {
                 SceneAs<Level>().RegisterAreaComplete();
@@ -194,10 +196,10 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             {
                 long currentTime = SceneAs<Level>().Session.Time;
                 LevelEnter.Go(new Session(new AreaKey(currentChapterID + chapterOffset))
-                {
+               {
                     Time = currentTime,
-                    DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet],
-                    Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet]
+                    DoNotLoad = XaphanModule.ModSaveData.SavedNoLoadEntities.ContainsKey(SceneAs<Level>().Session.Area.LevelSet) ? XaphanModule.ModSaveData.SavedNoLoadEntities[SceneAs<Level>().Session.Area.LevelSet] : new HashSet<EntityID>(),
+                    Strawberries = XaphanModule.ModSaveData.SavedSessionStrawberries.ContainsKey(SceneAs<Level>().Session.Area.LevelSet) ? XaphanModule.ModSaveData.SavedSessionStrawberries[SceneAs<Level>().Session.Area.LevelSet] : new HashSet<EntityID>()
                 }
                 , fromSaveData: false);
             }
