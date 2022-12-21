@@ -1,4 +1,6 @@
 Version 1.0.50 :
+- Mobe Blocks now collide correctly with Slopes
+- Fixced a bug preventing Slopes to be collidable for Actors if not set to be upside down
 - Custom Collectables with the "Respawn" and "Register in Save Data" attributes set to true now respawn corectly if their flag is no longer saved in the save data
 - Reset Flags Triggers now correctly set flags specified in the "Set False Flags" attribute to false for the current session if the "Register in Save Data" attribute is set to true
 - Fixed a crash happening in campaigns using a Merge Chapter Controller when teleporting the player from one chapter to another if the player had collected no strawberries or never activated entities that should not be reloaded
