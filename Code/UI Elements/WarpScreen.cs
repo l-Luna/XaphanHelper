@@ -138,18 +138,20 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Draw.Rect(new Vector2(90, 1020), 1740, 8, Color.White);
             }
 
+            float colorAlpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(SceneAs<Level>().FormationBackdrop).Get("fade") : 1f;
+
             if (!string.IsNullOrEmpty(title))
             {
-                ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray, 4f, Color.DarkSlateBlue, 2f, Color.Black);
+                ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray * colorAlpha, 4f, Color.DarkSlateBlue * colorAlpha, 2f, Color.Black * colorAlpha);
                 if (lobbyMapDisplay?.Scene == null)
                 {
                     if (currentMenu > 0)
                     {
-                        arrowTex.DrawCentered(new Vector2(960f - ActiveFont.Measure(title).X - 100f, 80f), Color.White);
+                        arrowTex.DrawCentered(new Vector2(960f - ActiveFont.Measure(title).X - 100f, 80f), Color.White * colorAlpha);
                     }
                     if (currentMenu < warpsPerArea.Count - 1)
                     {
-                        arrowTex.DrawCentered(new Vector2(960f + ActiveFont.Measure(title).X + 100f, 80f), Color.White, 1f, (float)Math.PI);
+                        arrowTex.DrawCentered(new Vector2(960f + ActiveFont.Measure(title).X + 100f, 80f), Color.White * colorAlpha , 1f, (float)Math.PI);
                     }
                 }
             }
@@ -266,12 +268,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 warpMenu.Visible = true;
             }
 
-            FormationBackdrop formationBackdrop = SceneAs<Level>().FormationBackdrop;
-            formationBackdrop.Display = !usingMap;
-            DynamicData.For(formationBackdrop).Set("fade", usingMap ? 0f : 1f);
+            SceneAs<Level>().FormationBackdrop.Display = !usingMap;
         }
 
-        private void UninitializeScreen()
+        public void UninitializeScreen()
         {
             warpMenu.Close();
             mapDisplay?.RemoveSelf();
@@ -279,6 +279,26 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             lobbyMapDisplay?.RemoveSelf();
             SceneAs<Level>().FormationBackdrop.Display = false;
             Visible = false;
+        }
+
+        public void StartDelay()
+        {
+            Add(new Coroutine(ControlDelayRoutine()));
+        }
+
+        private IEnumerator ControlDelayRoutine()
+        {
+            float timer = 0.05f;
+            while (timer > 0)
+            {
+                yield return null;
+                timer -= Engine.DeltaTime;
+            }
+            if (Scene.Tracker.GetEntity<Player>() is Player player)
+            {
+                player.StateMachine.State = Player.StNormal;
+            }
+            RemoveSelf();
         }
 
         private void CloseScreen()
@@ -303,20 +323,27 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator TransitionRoutine(float duration = 0.5f, Action onFadeOut = null, Action onFadeIn = null)
         {
             duration = Math.Max(0f, duration);
+            MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
             warpMenu.Focused = false;
 
-            yield return new FadeWipe(Scene, false)
+            if (mapData.HasEntity("XaphanHelper/InGameMapController"))
             {
-                Duration = duration / 2f,
-                OnComplete = onFadeOut
-            }.Wait();
+                yield return new FadeWipe(Scene, false)
+                {
+                    Duration = duration / 2f,
+                    OnComplete = onFadeOut
+                }.Wait();
 
-            yield return new FadeWipe(Scene, true)
+                yield return new FadeWipe(Scene, true)
+                {
+                    Duration = duration / 2f,
+                    OnComplete = onFadeIn
+                }.Wait();
+            }
+            else
             {
-                Duration = duration / 2f,
-                OnComplete = onFadeIn
-            }.Wait();
-
+                InitializeScreen();
+            }
             warpMenu.Focused = true;
         }
 

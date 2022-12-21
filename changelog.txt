@@ -1,5 +1,7 @@
 Version 1.0.50 :
 - Mobe Blocks now collide correctly with Slopes
+- Warps Stations will no longer display a Wipe Screen when the player interact with them if the chapter doses not use the In-Game map
+- Fixed a bug allowing the teleport sequence to be triggered multiple times if the player was selecting a destination from the Warp Station menu multiple times in a row
 - Fixced a bug preventing Slopes to be collidable for Actors if not set to be upside down
 - Custom Collectables with the "Respawn" and "Register in Save Data" attributes set to true now respawn corectly if their flag is no longer saved in the save data
 - Reset Flags Triggers now correctly set flags specified in the "Set False Flags" attribute to false for the current session if the "Register in Save Data" attribute is set to true

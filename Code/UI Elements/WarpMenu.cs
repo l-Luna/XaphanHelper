@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Managers;
+using IL.Monocle;
+using Microsoft.Xna.Framework;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -17,6 +21,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         }
 
         public WarpInfo SelectedWarp => ((WarpButton)Current).Warp;
+
+        public override void Update()
+        {
+            base.Update();
+            FormationBackdrop formationBackdrop = SceneAs<Level>().FormationBackdrop;
+            Alpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(formationBackdrop).Get("fade") : 1f;
+        }
 
         public void UpdateWarps(List<WarpInfo> warps)
         {
@@ -36,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         ConfirmSfx = SFX.ui_game_unpause,
                         Label = Dialog.Clean("XaphanHelper_Warp_Stay"),
-                        OnPressed = OnCancel
+                        OnPressed = () => OnConfirm(warp)
                     });
                 }
                 else
@@ -44,9 +55,28 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Add(new WarpButton(warp)
                     {
                         ConfirmSfx = ConfirmSfx,
-                        OnPressed = () => WarpManager.Teleport(warp, WipeType, WipeDuration)
+                        OnPressed = () => OnConfirm(warp)
                     });
                 }
+            }
+        }
+
+        private void OnConfirm(WarpInfo warp)
+        {
+            Focused = false;
+            MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
+            if ((SceneAs<Level>().Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/InGameMapController")))
+            {
+                WarpScreen warpScreen = SceneAs<Level>().Tracker.GetEntity<WarpScreen>();
+                if (warpScreen != null)
+                {
+                    warpScreen.UninitializeScreen();
+                    warpScreen.StartDelay();
+                }
+            }
+            else
+            {
+                WarpManager.Teleport(warp, WipeType, WipeDuration);
             }
         }
 
@@ -58,6 +88,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 : base(Dialog.Clean(warp.DialogKey))
             {
                 Warp = warp;
+            }
+
+            public override void Render(Vector2 position, bool highlighted)
+            {
+                base.Render(position, highlighted);
             }
         }
     }

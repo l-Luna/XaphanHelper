@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
@@ -100,7 +101,8 @@ namespace Celeste.Mod.XaphanHelper.Managers
                 int currentAreaId = level.Session.Area.ID;
                 if (warp.AreaId == currentAreaId)
                 {
-                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, wipeType, wipeDuration));
+                    MapData mapData = AreaData.Areas[level.Session.Area.ID].Mode[0].MapData;
+                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, (level.Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/InGameMapController")) ? "None" : wipeType, wipeDuration));
                 }
                 else
                 {
