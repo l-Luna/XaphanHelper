@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -14,7 +15,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
     {
         private List<Image> images;
 
-        private List<Image> outline;
+        private List<OutlinePoint> outline;
 
         private List<Coroutine> falls;
 
@@ -96,58 +97,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            outline = new List<Image>();
-            for (int i = (int)Width / 2; i < Width; i+= 4)
-            {
-                Image image = new Image(GFX.Game["objects/XaphanHelper/CustomCrumbleBlock/outlineTop"])
-                {
-                    Position = new Vector2(i, 0f),
-                    Color = Color.White * 0f
-                };
-                Add(image);
-                outline.Add(image);
-            }
-            for (int j = 0; j < Height; j += 4)
-            {
-                Image image = new Image(GFX.Game["objects/XaphanHelper/CustomCrumbleBlock/outlineRight"])
-                {
-                    Position = new Vector2(Width - 4f, j),
-                    Color = Color.White * 0f
-                };
-                Add(image);
-                outline.Add(image);
-            }
-            for (int i = (int)Width - 4; i >= 0; i-= 4)
-            {
-                Image image = new Image(GFX.Game["objects/XaphanHelper/CustomCrumbleBlock/outlineBottom"])
-                {
-                    Position = new Vector2(i, Height - 4f),
-                    Color = Color.White * 0f
-                };
-                Add(image);
-                outline.Add(image);
-            }
-            for (int j = (int)Height - 4; j >= 0; j -= 4)
-            {
-                Image image = new Image(GFX.Game["objects/XaphanHelper/CustomCrumbleBlock/outlineLeft"])
-                {
-                    Position = new Vector2(0, j),
-                    Color = Color.White * 0f
-                };
-                Add(image);
-                outline.Add(image);
-            }
-            for (int i = 0; i < Width / 2; i += 4)
-            {
-                Image image = new Image(GFX.Game["objects/XaphanHelper/CustomCrumbleBlock/outlineTop"])
-                {
-                    Position = new Vector2(i, 0f),
-                    Color = Color.White * 0f,
-                };
-                Add(image);
-                outline.Add(image);
-            }
-            outline.Reverse();
+            outline = OutlinePoint.GenerateSolidOutline(this);
             outlineColorTimer = respawnTime / outline.Count;
             if (!oneUse)
             {
@@ -394,11 +344,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (respawnTimer < i * outlineColorTimer)
                 {
-                    outline[i].Color = Color.DimGray * outlineColorStrength;
+                    Draw.Point(Position + new Vector2(outline[i].x, outline[i].y), Color.DimGray * (outline[i].visible ? outlineColorStrength : 0f));
                 }
                 else
                 {
-                    outline[i].Color = Color.White * outlineColorStrength;
+                    Draw.Point(Position + new Vector2(outline[i].x, outline[i].y), Color.White * (outline[i].visible ? outlineColorStrength : 0f));
                 }
             }
         }
