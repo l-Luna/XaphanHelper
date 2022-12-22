@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
 using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -217,6 +219,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float respawnTime;
 
+        private float respawnTimer;
+
         private Player noSquish;
 
         private List<Image> body = new();
@@ -264,6 +268,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private bool glow;
 
         private float alpha = 0f;
+
+        private List<OutlinePoint> outline;
+
+        private float outlineColorStrength;
+
+        private float outlineColorTimer;
+
+        private bool Destroyed;
+
+        private Coroutine outlineFader;
 
         public CustomMoveBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, false)
         {
@@ -386,6 +400,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (addBorder)
             {
                 scene.Add(border = new Border(this));
+            }
+        }
+
+        public override void Added(Scene scene)
+        {
+            base.Added(scene);
+            outline = OutlinePoint.GenerateSolidOutline(this);
+            outlineColorTimer = respawnTime / outline.Count;
+            if (!oneUse)
+            {
+                Add(outlineFader = new Coroutine());
+                outlineFader.RemoveOnComplete = false;
             }
         }
 
@@ -524,6 +550,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     yield return null;
                 }
+                if (!oneUse)
+                {
+                    outlineFader.Replace(OutlineFade(1f));
+                }
                 Audio.Play("event:/game/04_cliffside/arrowblock_break", Position);
                 moveSfx.Stop();
                 state = MovementState.Breaking;
@@ -549,15 +579,22 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 DisableStaticMovers();
                 moveBlock.MoveStaticMovers(amount);
                 Position = startPosition;
-                Visible = (Collidable = false);
+                Collidable = false;
+                Destroyed = true;
                 if (!oneUse)
                 {
-                    yield return respawnTime;
+                    respawnTimer = respawnTime;
+                    while (respawnTimer > 0)
+                    {
+                        respawnTimer -= Engine.DeltaTime;
+                        yield return null;
+                    }
                     while (CollideCheck<Actor>() || CollideCheck<Solid>())
                     {
                         yield return null;
                     }
                     Collidable = true;
+                    outlineFader.Replace(OutlineFade(0f));
                     EventInstance instance = Audio.Play("event:/game/04_cliffside/arrowblock_reform_begin", debris[0].Position);
                     CustomMoveBlock moveBlock2 = this;
                     Coroutine component;
@@ -565,7 +602,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     moveBlock2.Add(component);
                     routine.RemoveSelf();
                     Audio.Play("event:/game/04_cliffside/arrowblock_reappear", Position);
-                    Visible = true;
+                    Destroyed = false;
                     EnableStaticMovers();
                     currentSpeed = (targetSpeed = 0f);
                     angle = (targetAngle = homeAngle);
@@ -779,49 +816,66 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Render()
         {
-            float opacity = glow ? (0.9f * (0.9f + ((float)Math.Sin(alpha) + 1f) * 0.125f)) : 1;
-            Vector2 position = Position;
-            Position += Shake;
-            Draw.Rect(X + 2f, Y + 2f, Width - 4f, Height - 4f, Color.Black);
-            foreach (Image item in leftButton)
+            if (!Destroyed)
             {
-                item.Render();
-            }
-            foreach (Image item in rightButton)
-            {
-                item.Render();
-            }
-            foreach (Image item in topButton)
-            {
-                item.Render();
-            }
-            foreach (Image item in bottomButton)
-            {
-                item.Render();
-            }
-            float rectSize = 2f;
-            if (directory == "objects/moveBlock")
-            {
-                rectSize = 3f;
-            }
-            Draw.Rect(X + rectSize, Y + rectSize, Width - rectSize * 2, Height - rectSize * 2, fillColor * opacity);
-            foreach (Image item4 in body)
-            {
-                item4.Render();
-            }
-            Draw.Rect(Center.X - 4f, Center.Y - 4f, 8f, 8f, fillColor * opacity);
-            if (state != MovementState.Breaking)
-            {
-                int value = (int)Math.Floor((0f - angle + (float)Math.PI * 2f) % ((float)Math.PI * 2f) / ((float)Math.PI * 2f) * 8f + 0.5f);
-                arrows[Calc.Clamp(value, 0, 7)].DrawCentered(Center);
+                float opacity = glow ? (0.9f * (0.9f + ((float)Math.Sin(alpha) + 1f) * 0.125f)) : 1;
+                Vector2 position = Position;
+                Position += Shake;
+                Draw.Rect(X + 2f, Y + 2f, Width - 4f, Height - 4f, Color.Black);
+                foreach (Image item in leftButton)
+                {
+                    item.Render();
+                }
+                foreach (Image item in rightButton)
+                {
+                    item.Render();
+                }
+                foreach (Image item in topButton)
+                {
+                    item.Render();
+                }
+                foreach (Image item in bottomButton)
+                {
+                    item.Render();
+                }
+                float rectSize = 2f;
+                if (directory == "objects/moveBlock")
+                {
+                    rectSize = 3f;
+                }
+                Draw.Rect(X + rectSize, Y + rectSize, Width - rectSize * 2, Height - rectSize * 2, fillColor * opacity);
+                foreach (Image item4 in body)
+                {
+                    item4.Render();
+                }
+                Draw.Rect(Center.X - 4f, Center.Y - 4f, 8f, 8f, fillColor * opacity);
+                if (state != MovementState.Breaking)
+                {
+                    int value = (int)Math.Floor((0f - angle + (float)Math.PI * 2f) % ((float)Math.PI * 2f) / ((float)Math.PI * 2f) * 8f + 0.5f);
+                    arrows[Calc.Clamp(value, 0, 7)].DrawCentered(Center);
+                }
+                else
+                {
+                    GFX.Game[directory + "/x"].DrawCentered(Center);
+                }
+                float num = flash * 4f;
+                Draw.Rect(X - num, Y - num, Width + num * 2f, Height + num * 2f, Color.White * flash);
+                Position = position;
             }
             else
             {
-                GFX.Game[directory + "/x"].DrawCentered(Center);
+                for (int i = 0; i < outline.Count; i++)
+                {
+                    if (respawnTimer < i * outlineColorTimer)
+                    {
+                        Draw.Point(Position + new Vector2(outline[i].x, outline[i].y), idleBgFill * (outline[i].visible ? outlineColorStrength : 0f));
+                    }
+                    else
+                    {
+                        Draw.Point(Position + new Vector2(outline[i].x, outline[i].y), Color.White * (outline[i].visible ? outlineColorStrength : 0f));
+                    }
+                }
             }
-            float num = flash * 4f;
-            Draw.Rect(X - num, Y - num, Width + num * 2f, Height + num * 2f, Color.White * flash);
-            Position = position;
         }
 
         private void ActivateParticles()
@@ -931,6 +985,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             Collidable = true;
+        }
+
+        private IEnumerator OutlineFade(float to)
+        {
+            float from = 1f - to;
+            for (float t = 0f; t < 1f; t += Engine.DeltaTime * 2f)
+            {
+                outlineColorStrength = from + (to - from) * Ease.CubeInOut(t);
+                yield return null;
+            }
         }
     }
 }
