@@ -108,11 +108,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             falls = new List<Coroutine>();
             fallOrder = new List<int>();
             MTexture mTexture = GFX.Game[texture];
+            int previousTexturePosition = -1;
+            int secondPreviousTexturePosition = -1;
             for (int i = 0; i < Width; i += 8)
             {
                 for (int j = 0; j < Height; j += 8)
                 {
-                    Image image = new Image(mTexture.GetSubtexture(Calc.Random.Next(mTexture.Width / 8) * 8, 0, 8, 8));
+                    int texture = Calc.Random.Next(mTexture.Width / 8);
+                    while ((texture == previousTexturePosition || texture == secondPreviousTexturePosition) && mTexture.Width / 8 >= 2)
+                    {
+                        texture = Calc.Random.Next(mTexture.Width / 8);
+                    }
+                    Image image = new Image(mTexture.GetSubtexture(texture * 8, 0, 8, 8));
                     image.Position = new Vector2(4 + i, 4f + j);
                     image.CenterOrigin();
                     if (rotation != 0)
@@ -121,6 +128,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }              
                     Add(image);
                     images.Add(image);
+                    if (previousTexturePosition != -1)
+                    {
+                        secondPreviousTexturePosition = previousTexturePosition;
+                    }
+                    previousTexturePosition = texture;
                     Coroutine coroutine = new Coroutine();
                     coroutine.RemoveOnComplete = false;
                     falls.Add(coroutine);
