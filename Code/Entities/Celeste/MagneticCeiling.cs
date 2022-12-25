@@ -253,7 +253,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (player.CollideCheck(this, player.Position - Vector2.UnitY) && (SpiderMagnet.Active(SceneAs<Level>()) || !XaphanModule.useUpgrades) && !XaphanModule.PlayerIsControllingRemoteDrone())
                 {
-                    if (Input.Grab.Check && (!CanJump || player.Speed.Y >= 0) && player.Left > Left - 6 && player.Right < Right + 6 && player.Top > Top && player.Stamina > 0 && !player.Dead && !player.CollideCheck<Spikes>())
+                    if (Input.GrabCheck && (!CanJump || player.Speed.Y >= 0) && player.Left > Left - 6 && player.Right < Right + 6 && player.Top > Top && player.Stamina > 0 && !player.Dead && !player.CollideCheck<Spikes>())
                     {
                         playerWasAttached = true;
                         if (playSfx)
