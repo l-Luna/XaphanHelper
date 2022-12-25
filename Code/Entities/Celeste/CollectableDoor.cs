@@ -126,12 +126,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     return Requires;
                 }
+                string levelSetToCheck = (string.IsNullOrEmpty(levelSet) ? SceneAs<Level>().Session.Area.GetLevelSet() : levelSet);
                 if (mode == "TotalHearts")
                 {
                     int TotalheartCount = 0;
                     foreach (AreaStats item in SaveData.Instance.Areas_Safe)
                     {
-                        if (item.GetLevelSet() == SceneAs<Level>().Session.Area.GetLevelSet())
+                        if (item.GetLevelSet() == levelSetToCheck)
                         {
                             int heartCount = 0;
                             for (int i = 0; i < item.Modes.Length; i++)
@@ -169,7 +170,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     int TotalCassetteCount = 0;
                     foreach (AreaStats item in SaveData.Instance.Areas_Safe)
                     {
-                        if (item.GetLevelSet() == SceneAs<Level>().Session.Area.GetLevelSet())
+                        if (item.GetLevelSet() == levelSetToCheck)
                         {
                             int cassetteCount = 0;
                             if (item.Cassette)
@@ -204,7 +205,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     int TotalStrawberryCount = 0;
                     foreach (AreaStats item in SaveData.Instance.Areas_Safe)
                     {
-                        if (item.GetLevelSet() == SceneAs<Level>().Session.Area.GetLevelSet())
+                        if (item.GetLevelSet() == levelSetToCheck)
                         {
                             AreaData areaData = AreaData.Get(item.ID_Safe);
                             int strawberryCount = 0;
@@ -329,6 +330,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool registerInSaveData;
 
+        private string levelSet;
+
         private bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -373,6 +376,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             edgesAnimationMode = data.Attr("edgesAnimationMode", "Clockwise");
             mapIcon = data.Attr("mapIcon");
             registerInSaveData = data.Bool("registerInSaveData");
+            levelSet = data.Attr("levelSet");
             Add(new CustomBloom(RenderBloom));
             Size = data.Width;
             openDistance = 32f;

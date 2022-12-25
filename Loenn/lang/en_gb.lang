@@ -93,6 +93,7 @@ entities.XaphanHelper/CollectableDoor.attributes.description.unlockSound=The sou
 entities.XaphanHelper/CollectableDoor.attributes.description.fillSound=The soud event that play each time a collectable check is meet.
 entities.XaphanHelper/CollectableDoor.attributes.description.soundIndex=Sound that play when the player land or walk on the door.
 entities.XaphanHelper/CollectableDoor.attributes.description.registerInSaveData=If true, the door ID will be registered in the player save file and will stay open forever once the requirements are meet and the player opened the door.
+entities.XaphanHelper/CollectableDoor.attributes.description.levelSet=The level set the door will check when the mode is set to TotalHearts, TotalCassettes or TotalStrawberries. Leave empty to check this campaign level set.
 
 # CustomBadelineBoss
 entities.XaphanHelper/CustomBadelineBoss.placements.name.CustomBadelineBoss=Custom Badeline Boss

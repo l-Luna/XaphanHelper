@@ -10,7 +10,7 @@ CollectableDoor.name = "XaphanHelper/CollectableDoor"
 CollectableDoor.depth = 0
 CollectableDoor.nodeLimits = {0, 1}
 CollectableDoor.fieldOrder = {
-    "x", "y", "width", "height", "orientation", "mode", "edges", "edgesAnimationMode", "directory", "mapIcon", "interiorColor", "mistColor", "iconsColor", "edgesColor", "interiorParticlesColor", "openingParticlesColor1", "openingParticlesColor2", "sliceColor", "sliceParticlesColor1", "sliceParticlesColor2", "requires", "flags", "openSpeedMultiplier", "beforeSliceDelay", "afterSliceDelay", "checkDistance", "checkDisplaySpeed", "unlockSound", "fillSound", "soundIndex", "registerInSaveData"
+    "x", "y", "width", "height", "orientation", "mode", "edges", "edgesAnimationMode", "directory", "mapIcon", "interiorColor", "mistColor", "iconsColor", "edgesColor", "interiorParticlesColor", "openingParticlesColor1", "openingParticlesColor2", "sliceColor", "sliceParticlesColor1", "sliceParticlesColor2", "requires", "flags", "openSpeedMultiplier", "beforeSliceDelay", "afterSliceDelay", "checkDistance", "checkDisplaySpeed", "unlockSound", "fillSound", "soundIndex", "levelSet", "registerInSaveData"
 }
 CollectableDoor.minimumSize = {24, 24}
 CollectableDoor.fieldInformation = {
@@ -110,7 +110,8 @@ CollectableDoor.placements = {
         edges = "All",
         edgesAnimationMode = "Clockwise",
         mapIcon = "",
-        registerInSaveData = false
+        registerInSaveData = false,
+        levelSet = ""
     }
 }
 
