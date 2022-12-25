@@ -666,11 +666,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     item.Scale = new Vector2(1f, -1f);
                     item.Y = Height + (flag4 ? buttonPressedOffset : 0);
                 }
-                if ((flag && !leftPressed) || (flag3 && !topPressed) || (flag2 && !rightPressed) || flag4 && !bottomPressed)
+                if ((flag && !leftPressed) || (flag3 && !topPressed) || (flag2 && !rightPressed) || (flag4 && !bottomPressed))
                 {
                     Audio.Play("event:/game/04_cliffside/arrowblock_side_depress", Position);
                 }
-                if ((!flag && leftPressed) || (!flag3 && topPressed) || (!flag2 && rightPressed) || flag4 && bottomPressed)
+                if ((!flag && leftPressed) || (!flag3 && topPressed) || (!flag2 && rightPressed) || (!flag4 && bottomPressed && !SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling")))
                 {
                     Audio.Play("event:/game/04_cliffside/arrowblock_side_release", Position);
                 }
