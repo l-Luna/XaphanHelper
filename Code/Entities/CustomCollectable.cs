@@ -169,31 +169,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
-            if (string.IsNullOrEmpty(flag))
+            if (!canRespawn)
             {
-                RemoveSelf();
+                if (!haveGolden || (haveGolden && ignoreGolden))
+                {
+                    if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        RemoveSelf();
+                    }
+                }
             }
             else
             {
-                if (!canRespawn)
+                Session session = SceneAs<Level>().Session;
+                string Prefix = session.Area.GetLevelSet();
+                int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
+                if (!registerInSaveData ? SceneAs<Level>().Session.GetFlag(flag) : XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                 {
-                    if (!haveGolden || (haveGolden && ignoreGolden))
-                    {
-                        if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
-                        {
-                            RemoveSelf();
-                        }
-                    }
-                }
-                else
-                {
-                    Session session = SceneAs<Level>().Session;
-                    string Prefix = session.Area.GetLevelSet();
-                    int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
-                    if (!registerInSaveData ? SceneAs<Level>().Session.GetFlag(flag) : XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
-                    {
-                        shouldWaitBeforeRemoving = true;
-                    }
+                    shouldWaitBeforeRemoving = true;
                 }
             }
         }
