@@ -102,7 +102,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
                 if (warp.AreaId == currentAreaId)
                 {
                     MapData mapData = AreaData.Areas[level.Session.Area.ID].Mode[0].MapData;
-                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, (level.Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/InGameMapController")) ? "None" : wipeType, wipeDuration));
+                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, (level.Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/LobbyMapController") && !mapData.HasEntity("XaphanHelper/InGameMapController")) ? "None" : wipeType, wipeDuration));
                 }
                 else
                 {

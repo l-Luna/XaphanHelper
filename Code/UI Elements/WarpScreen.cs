@@ -326,7 +326,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
             warpMenu.Focused = false;
 
-            if (mapData.HasEntity("XaphanHelper/InGameMapController"))
+            if (mapData.HasEntity("XaphanHelper/InGameMapController") || mapData.HasEntity("XaphanHelper/LobbyMapController"))
             {
                 yield return new FadeWipe(Scene, false)
                 {

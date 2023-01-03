@@ -12,15 +12,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public int TotalMaps;
 
-        public int LobbyIndex;
-
-        public LobbyHeartsDisplay(Vector2 position, string levelSet, int totalMaps, int lobbyIndex) : base(position)
+        public LobbyHeartsDisplay(Vector2 position, string levelSet, int totalMaps, float lobbyIndex) : base(position)
         {
             Tag = Tags.HUD;
             this.levelSet = levelSet;
             TotalMaps = totalMaps;
-            LobbyIndex = lobbyIndex;
-            Add(Heart = new Sprite(GFX.Gui, (LobbyIndex <= 3) ? "collectables/heartgem/" + (LobbyIndex - 1) + "/" : "CollabUtils2/crystalHeart/" + (LobbyIndex == 4 ? "expert" : "grandmaster") + "/"));
+            Add(Heart = new Sprite(GFX.Gui, (lobbyIndex <= 3) ? "collectables/heartgem/" + (lobbyIndex - 1) + "/" : "CollabUtils2/crystalHeart/" + (lobbyIndex == 4 ? "expert" : "grandmaster") + "/"));
             Heart.AddLoop("spin", "spin", 0.08f);
             Heart.Scale = Vector2.One / 2;
             Heart.Play("spin");

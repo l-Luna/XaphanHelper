@@ -72,11 +72,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             AreaKey area = new(areaId);
             MapData mapData = AreaData.Areas[areaId].Mode[0].MapData;
             levelData = mapData.Get(room);
+            int lobbyIndex = 0;
 
             if (levelData?.GetEntityData("XaphanHelper/LobbyMapController") is EntityData lobbyMapControllerData)
             {
                 CustomImageDirectory = lobbyMapControllerData.Attr("directory");
                 TotalMaps = lobbyMapControllerData.Int("totalMaps");
+                lobbyIndex = lobbyMapControllerData.Int("lobbyIndex");
             }
             else
             {
@@ -84,7 +86,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 return;
             }
 
-            level.Add(HeartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), area.LevelSet, TotalMaps, area.ChapterIndex == -1 ? 0 : area.ChapterIndex));
+            level.Add(HeartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), area.LevelSet, TotalMaps, lobbyIndex));
 
             Add(CustomImage = new Sprite(GFX.Gui, CustomImageDirectory));
             CustomImage.AddLoop("idle", "", 1f);
