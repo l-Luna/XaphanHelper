@@ -5,7 +5,7 @@ local CellLock = {}
 CellLock.name = "XaphanHelper/CellLock"
 CellLock.depth = 8999
 CellLock.fieldOrder = {
-    "x", "y", "sprite", "color", "type", "instant", "cellInside", "keepCell", "flag", "registerInSaveData", "sound", "slotSound"
+    "x", "y", "sprite", "color", "type", "flag", "sound", "slotSound", "instant", "cellInside", "keepCell", "registerInSaveData"
 }
 CellLock.fieldInformation = {
     type = {
@@ -55,22 +55,20 @@ function CellLock.sprite(room, entity)
     end
 
     if typeSprite then
-        typeSprite:addPosition(4, 0)
         typeSprite:setColor("White")
         table.insert(sprites, typeSprite)
     end
     if colorSprite then
-        colorSprite:addPosition(4, 0)
         colorSprite:setColor("White")
         table.insert(sprites, colorSprite)
     end
     if cellSprite then
-        cellSprite:addPosition(4, 5)
+        cellSprite:addPosition(0, 5)
         cellSprite:setColor("White")
         table.insert(sprites, cellSprite)
     end
     if leverSprite then
-        leverSprite:addPosition(4, 5)
+        leverSprite:addPosition(0, 5)
         leverSprite:setColor("White")
         table.insert(sprites, leverSprite)
     end

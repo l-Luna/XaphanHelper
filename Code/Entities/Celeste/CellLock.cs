@@ -117,6 +117,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Add(talk = new TalkComponent(new Rectangle(-20, 12, 40, 8), new Vector2(-0.5f, -20f), Interact));
                     talk.PlayerMustBeFacing = false;
                 }
+                else
+                {
+                    SlotCell();
+                }
             }
             bool haveGolden = false;
             foreach (Strawberry item in Scene.Entities.FindAll<Strawberry>())
@@ -127,7 +131,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
-            if ((!haveGolden && (SceneAs<Level>().Session.GetFlag(flag) || FlagRegiseredInSaveData())) || (haveGolden && SceneAs<Level>().Session.GetFlag(flag)))
+            if ((keepCell || cellInside) && ((!haveGolden && (SceneAs<Level>().Session.GetFlag(flag) || FlagRegiseredInSaveData())) || (haveGolden && SceneAs<Level>().Session.GetFlag(flag))))
             {
                 if (!instant)
                 {
@@ -137,6 +141,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 lightningSprite.Play("lightningSprite");
                 leverSprite.Play("leverIdle");
                 Add(new VertexLight(lightningSprite.Center, Color.White, 1f, 32, 64));
+            }
+            else if (!cellInside && !FlagRegiseredInSaveData())
+            {
+                if (SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    SceneAs<Level>().Session.SetFlag(flag, false);
+                }
+                if (SceneAs<Level>().Session.GetFlag(flag + "_sloted"))
+                {
+                    SceneAs<Level>().Session.SetFlag(flag + "_sloted", false);
+                }
             }
         }
 
@@ -187,7 +202,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void OnCell(Cell cell)
         {
-            if (!cell.Hold.IsHeld && !SceneAs<Level>().Session.GetFlag(flag + "_sloted") && !triggered)
+            if (!cell.Hold.IsHeld && !SceneAs<Level>().Session.GetFlag(flag + "_sloted") && !triggered && !cellInside)
             {
                 triggered = true;
                 Add(new Coroutine(MoveCell(cell)));
@@ -220,16 +235,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        private void SlotCell(Cell cell)
+        private void SlotCell(Cell cell = null)
         {
             cellInside = true;
             if (keepCell)
             {
                 SceneAs<Level>().Session.SetFlag(flag + "_sloted", true);
             }
-            cell.RemoveSelf();
-            Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
-            Audio.Play(string.IsNullOrEmpty(slotSound) ? "event:/game/05_mirror_temple/button_activate" : slotSound, Position);
+            if (cell != null)
+            {
+                cell.RemoveSelf();
+                Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
+                Audio.Play(string.IsNullOrEmpty(slotSound) ? "event:/game/05_mirror_temple/button_activate" : slotSound, Position);
+            }
             cellSprite.Play("cellSprite");
             Add(new VertexLight(cellSprite.Center, Color.White, 1f, 32, 64));
             leverSprite.Play("leverIdle");

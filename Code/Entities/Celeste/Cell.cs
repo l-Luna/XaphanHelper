@@ -132,9 +132,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Level = SceneAs<Level>();
             string Prefix = Level.Session.Area.GetLevelSet();
             int chapterIndex = Level.Session.Area.ChapterIndex;
-            if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+            if (!string.IsNullOrEmpty(flag))
             {
-                RemoveSelf();
+                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+                {
+                    RemoveSelf();
+                }
             }
             if (tutorial)
             {
@@ -148,6 +151,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             Slope.SetCollisionBeforeUpdate(this);
             base.Update();
+            string Prefix = Level.Session.Area.GetLevelSet();
+            int chapterIndex = Level.Session.Area.ChapterIndex;
+            if (!string.IsNullOrEmpty(flag))
+            {
+                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+                {
+                    RemoveSelf();
+                }
+            }
             if (dead)
             {
                 return;

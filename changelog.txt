@@ -6,8 +6,11 @@ Version 1.0.50 :
 - Fixed a bug allowing the teleport sequence to be triggered multiple times if the player was selecting a destination from the Warp Station menu multiple times in a row
 - Fixed a bug preventing Slopes to be collidable for Actors if not set to be upside down
 - Custom Collectables with the "Respawn" and "Register in Save Data" attributes set to true now respawn corectly if their flag is no longer saved in the save data
+- The "Keep Cell" attribute of Cell Locks now work corectly.
+- Made various improvements on how Cell Locks interact with flags
 - Reset Flags Triggers now correctly set flags specified in the "Set False Flags" attribute to false for the current session if the "Register in Save Data" attribute is set to true
 - The Cell Lock plugin should now work correctly when the helper is zipped
+- Cell Locks should now be aligned correctly in the editor compared to in game
 - Fixed a crash happening in campaigns using a Merge Chapter Controller when teleporting the player from one chapter to another if the player had collected no strawberries or never activated entities that should not be reloaded
 - Fixed a bug preventing Magnetic Ceilings to be grabbed correctly if the Grab mode was set to Toggle or Invert in the Options menu
 
