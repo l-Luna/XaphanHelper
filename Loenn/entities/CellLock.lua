@@ -39,6 +39,9 @@ function CellLock.sprite(room, entity)
     local sprite = entity.Sprite or "objects/XaphanHelper/CellLock"
     local type = entity.type or "Normal"
 
+    color = string.lower(color)
+    type = string.lower(type)
+
     local sprites = {}
 
     local typeSprite = drawableSprite.fromTexture(sprite .. "/" .. type .. "00", entity)
