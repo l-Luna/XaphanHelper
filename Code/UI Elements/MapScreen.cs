@@ -122,6 +122,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (mode == "map")
                 {
+                    Audio.Play("event:/ui/main/message_confirm");
                     mapDisplay.Display = false;
                     MapProgressDisplay.Visible = false;
                     mode = "worldmap";
@@ -134,6 +135,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 else
                 {
+                    Audio.Play("event:/ui/main/button_back");
                     mapDisplay.Display = true;
                     MapProgressDisplay.Visible = true;
                     mode = "map";
@@ -161,8 +163,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         mapDisplay.MostRightRoomX = mapDisplay.BeforeHintsMostRightRoomX;
                         mapDisplay.MostBottomRoomY = mapDisplay.BeforeHintsMostBottomRoomY;
                         mapDisplay.SetCurrentMapCoordinates();
-                        MoveMapX((int)-MapOffset.X);
-                        MoveMapY((int)-MapOffset.Y);
+                        MoveMapX((int)-MapOffset.X, silence: true);
+                        MoveMapY((int)-MapOffset.Y, silence: true);
                         if (mode == "map")
                         {
                             CalcMoves();
@@ -180,8 +182,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         mapDisplay.MostBottomRoomY = mapDisplay.AfterHintsMostBottomRoomY;
                         mapDisplay.GetMapSize();
                         mapDisplay.SetCurrentMapCoordinates();
-                        MoveMapX((int)-MapOffset.X);
-                        MoveMapY((int)-MapOffset.Y);
+                        MoveMapX((int)-MapOffset.X, silence: true);
+                        MoveMapY((int)-MapOffset.Y, silence: true);
                         if (mode == "map")
                         {
                             CalcMoves();
@@ -398,28 +400,28 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         int YAutoMoves = Math.Abs(((int)(CurrentRoomPosition.Y + PlayerIconPosition.Y) - mapDisplay.Grid.Top - 1) / 40);
                         UpMoves -= YAutoMoves;
                         DownMoves += YAutoMoves;
-                        MoveMapY(YAutoMoves * 40);
+                        MoveMapY(YAutoMoves * 40, silence: true);
                     }
                     if ((CurrentRoomPosition.Y + PlayerIconPosition.Y) > mapDisplay.Grid.Bottom)
                     {
                         int YAutoMoves = ((int)(CurrentRoomPosition.Y + PlayerIconPosition.Y) - mapDisplay.Grid.Bottom - 1) / 40 + 2;
                         UpMoves += YAutoMoves;
                         DownMoves -= YAutoMoves;
-                        MoveMapY(YAutoMoves * -40);
+                        MoveMapY(YAutoMoves * -40, silence: true);
                     }
                     if ((CurrentRoomPosition.X + PlayerIconPosition.X) < mapDisplay.Grid.Left)
                     {
                         int XAutoMoves = Math.Abs(((int)(CurrentRoomPosition.X + PlayerIconPosition.X) - mapDisplay.Grid.Left - 1) / 40) + 1;
                         LeftMoves -= XAutoMoves;
                         RightMoves += XAutoMoves;
-                        MoveMapX(XAutoMoves * 40);
+                        MoveMapX(XAutoMoves * 40, silence: true);
                     }
                     if ((CurrentRoomPosition.X + PlayerIconPosition.X) > mapDisplay.Grid.Right)
                     {
                         int XAutoMoves = ((int)(CurrentRoomPosition.X + PlayerIconPosition.X) - mapDisplay.Grid.Right - 1) / 40 + 2;
                         LeftMoves += XAutoMoves;
                         RightMoves -= XAutoMoves;
-                        MoveMapX(XAutoMoves * -40);
+                        MoveMapX(XAutoMoves * -40, silence: true);
                     }
                 }
             }
@@ -507,7 +509,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             LeftMoves += XAutoMoves;
                             RightMoves -= XAutoMoves;
-                            MoveMapX(XAutoMoves * -40, true);
+                            MoveMapX(XAutoMoves * -40, true, true);
                         }
                         else if (Movement.X > 0)
                         {
@@ -518,7 +520,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             LeftMoves -= XAutoMoves;
                             RightMoves += XAutoMoves;
-                            MoveMapX(XAutoMoves * 40, true);
+                            MoveMapX(XAutoMoves * 40, true, true);
                         }
                     }
                     if (UpMoves > 0 || DownMoves > 0)
@@ -532,7 +534,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             UpMoves += YAutoMoves;
                             DownMoves -= YAutoMoves;
-                            MoveMapY(YAutoMoves * -40, true);
+                            MoveMapY(YAutoMoves * -40, true, true);
                         }
                         else if (Movement.Y > 0)
                         {
@@ -543,7 +545,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             UpMoves -= YAutoMoves;
                             DownMoves += YAutoMoves;
-                            MoveMapY(YAutoMoves * 40, true);
+                            MoveMapY(YAutoMoves * 40, true, true);
                         }
                     }
                 }
@@ -846,7 +848,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Add(new Coroutine(TransitionToGame()));
         }
 
-        public void MoveMapX(int direction, bool worldmap = false)
+        public void MoveMapX(int direction, bool worldmap = false, bool silence = false)
         {
             if (!worldmap)
             {
@@ -861,10 +863,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     display.adjustMapPosition(new Vector2(direction, 0));
                 }
             }
-            Audio.Play("event:/ui/main/rollover_up");
+            if (!silence)
+            {
+                Audio.Play("event:/ui/main/rollover_up");
+            }
         }
 
-        public void MoveMapY(int direction, bool worldmap = false)
+        public void MoveMapY(int direction, bool worldmap = false, bool silence = false)
         {
             if (!worldmap)
             {
@@ -879,7 +884,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     display.adjustMapPosition(new Vector2(0, direction));
                 }
             }
-            Audio.Play("event:/ui/main/rollover_up");
+            if (!silence)
+            {
+                Audio.Play("event:/ui/main/rollover_up");
+            }
         }
 
         private IEnumerator CloseMap(bool switchtoStatus)

@@ -13,6 +13,7 @@ Version 1.0.50 :
 - Cell Locks should now be aligned correctly in the editor compared to in game
 - Fixed a crash happening in campaigns using a Merge Chapter Controller when teleporting the player from one chapter to another if the player had collected no strawberries or never activated entities that should not be reloaded
 - Fixed a bug preventing Magnetic Ceilings to be grabbed correctly if the Grab mode was set to Toggle or Invert in the Options menu
+- Fixed sounds playing when opening the In-Game map while in a room outside of the initial display of the map, opening the World Map and enabling or disabling hints on the In-Game map.
 
 Version 1.0.49 :
 
