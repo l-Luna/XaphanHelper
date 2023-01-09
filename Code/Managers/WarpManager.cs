@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
@@ -21,6 +22,11 @@ namespace Celeste.Mod.XaphanHelper.Managers
         {
             string levelSet = level.Session.Area.GetLevelSet();
             int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
+            MapData mapData = AreaData.Areas[level.Session.Area.ID].Mode[0].MapData;
+            if (mapData.HasEntity("XaphanHelper/LobbyMapController"))
+            {
+                chapterIndex = mapData.GetEntityData("XaphanHelper/LobbyMapController").Int("lobbyIndex");
+            }
             string room = level.Session.Level;
             string warpSuffix = warpIndex != 0 ? "_" + warpIndex : "";
             return $"{levelSet}_Ch{chapterIndex}_{room}{warpSuffix}";
@@ -34,6 +40,10 @@ namespace Celeste.Mod.XaphanHelper.Managers
             AreaKey area = new(areaId);
             int index = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
             MapData mapData = AreaData.Areas[areaId].Mode[0].MapData;
+            if (mapData.HasEntity("XaphanHelper/LobbyMapController"))
+            {
+                index = mapData.GetEntityData("XaphanHelper/LobbyMapController").Int("lobbyIndex");
+            }
             string start = $"{area.LevelSet}_Ch{index}_";
 
             foreach (string warpId in UnlockedWarps)

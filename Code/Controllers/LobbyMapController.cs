@@ -22,6 +22,8 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         public Vector2 PlayerPosition;
 
+        public static int LobbyIndex;
+
         public LobbyMapController(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
             Tag = Tags.Persistent;
@@ -29,12 +31,13 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             CustomImagesTilesSizeX = 4;
             CustomImagesTilesSizeY = 4;
             CustomImage = GFX.Gui[Directory];
+            LobbyIndex = data.Int("lobbyIndex");
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            GenerateLobbyTiles(SceneAs<Level>().Session.Area.ID, CustomImage);
+            GenerateLobbyTiles(SceneAs<Level>().Session.Area.ID, LobbyIndex, CustomImage);
         }
 
         public override void Update()
@@ -52,7 +55,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 }
                 Level level = SceneAs<Level>();
                 string Prefix = level.Session.Area.GetLevelSet();
-                int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
+                int chapterIndex = LobbyIndex;
                 if (player != null && !level.Paused && !level.Transitioning)
                 {
                     PlayerPosition = new Vector2(Math.Min((float)Math.Floor((player.Center.X - level.Bounds.X) / 8f), (float)Math.Round(level.Bounds.Width / 8f, MidpointRounding.AwayFromZero) - 1), Math.Min((float)Math.Floor((player.Center.Y - level.Bounds.Y) / 8f), (float)Math.Round(level.Bounds.Height / 8f, MidpointRounding.AwayFromZero) + 1));
@@ -90,11 +93,11 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             }
         }
 
-        public static void GenerateLobbyTiles(int areaId, MTexture mapTexture)
+        public static void GenerateLobbyTiles(int areaId, int lobbyIndex, MTexture mapTexture)
         {
             AreaKey area = new(areaId);
             string Prefix = area.LevelSet;
-            int chapterIndex = area.ChapterIndex == -1 ? 0 : area.ChapterIndex;
+            int chapterIndex = lobbyIndex;
 
             if (XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Count == 0)
             {

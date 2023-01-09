@@ -51,13 +51,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private LevelData levelData;
 
-        public LobbyMapDisplay(WarpScreen warpScreen, int areaId, string room)
+        public LobbyMapDisplay(WarpScreen warpScreen, int areaId, string room, float scale)
         {
             this.warpScreen = warpScreen;
             this.areaId = areaId;
             this.room = room;
             Tag = Tags.HUD;
-            Scale = 1f;
+            Scale = scale;
             playerIcon = new Image(GFX.Gui["maps/player"]);
             playerIconHair = new Image(GFX.Gui["maps/player_hair"]);
             CustomImagesTilesSizeX = 4;
@@ -95,7 +95,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             CustomImage.Visible = false;
 
             XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles.Clear();
-            LobbyMapController.GenerateLobbyTiles(areaId, CustomImage.Texture);
+            LobbyMapController.GenerateLobbyTiles(areaId, lobbyIndex, CustomImage.Texture);
             CustomImageTilesCoordinates = XaphanModule.ModSaveData.GeneratedVisitedLobbyMapTiles;
         }
 
