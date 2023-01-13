@@ -165,9 +165,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             foreach (PlayerPlatform platform in self.Scene.Tracker.GetEntities<PlayerPlatform>())
             {
-                if ((!platform.HasPlayerRider() && platform.CollideFirst<Player>(platform.Position + Vector2.UnitY) == null && !platform.UpsideDown) || platform.preventCollision)
+                if (platform.InView())
                 {
-                    platform.Collidable = false;
+                    if ((!platform.HasPlayerRider() && platform.CollideFirst<Player>(platform.Position + Vector2.UnitY) == null && !platform.UpsideDown) || platform.preventCollision)
+                    {
+                        platform.Collidable = false;
+                    }
                 }
             }
             orig(self);
@@ -367,6 +370,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public void TurnOffCollision(bool state)
         {
             preventCollision = state;
+        }
+
+        public bool InView()
+        {
+            Camera camera = (base.Scene as Level).Camera;
+            if (base.X > camera.X - 16f && base.Y > camera.Y - 16f && base.X < camera.X + 320f + 16f)
+            {
+                return base.Y < camera.Y + 180f + 16f;
+            }
+            return false;
         }
 
         public void SetCollision(Player player)
