@@ -1,5 +1,6 @@
 Version 1.0.50 :
 - Added "Level Set" attribute to Collectable Doors
+- Added "Condition Flags" attribute to Reset Flags Trigger
 - Move Blocks now collide correctly with Slopes
 - Warps Stations will no longer display a Wipe Screen when the player interact with them if the chapter doses not use the In-Game map
 - Custom Collectables will now spawn even if their "Flag" attribute is empty
