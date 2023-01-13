@@ -19,6 +19,8 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         public bool entered;
 
+        private string conditionFlags;
+
         public ResetFlagsTrigger(EntityData data, Vector2 offset) : base(data, offset)
         {
             setTrueFlags = data.Attr("setTrueFlags");
@@ -26,6 +28,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             transitionUpdate = data.Bool("transitionUpdate");
             removeWhenOutside = data.Bool("removeWhenOutside");
             registerInSaveData = data.Bool("registerInSaveData");
+            conditionFlags = data.Attr("conditionFlags");
             if (transitionUpdate)
             {
                 Tag = Tags.TransitionUpdate;
@@ -38,7 +41,21 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-            if (player != null && CollideCheck(player) && !entered)
+            bool allConditionFlagsSet = true;
+            if (!string.IsNullOrEmpty(conditionFlags))
+            {
+                string[] flags = conditionFlags.Split(',');
+                
+                foreach (string flag in flags)
+                {
+                    if (!SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        allConditionFlagsSet = false;
+                        break;
+                    }
+                }
+            }
+            if (player != null && CollideCheck(player) && !entered && allConditionFlagsSet)
             {
                 entered = true;
                 string[] trueFlags = setTrueFlags.Split(',');

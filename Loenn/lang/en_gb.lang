@@ -661,6 +661,7 @@ triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.setFalseFlags=The
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.transitionUpdate=If true, the trigger will also work during room transitions.
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.removeWhenOutside=If true, the trigger is removed if the player spawn or move outside of it.
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.registerInSaveData=If true, the flags in "Set True Flags" will be registered in the player save file and will be true forever. The flags in "Set False Flags" will be removed from the player save file.
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.conditionFlags=The flags that must be set for this trigger to take effect, separated by a comma (,).\nLeave empty if you want this trigger to always take effect.
 
 # StartCountdownTrigger
 triggers.XaphanHelper/StartCountdownTrigger.placements.name.StartCountdownTrigger=Start Countdown
