@@ -37,6 +37,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private ParticleType P_Explode;
 
+        private bool shouldExplodeImmediately;
+
         protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public MegaBomb(Vector2 position, Player player) : base(position)
@@ -229,7 +231,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                Add(new Coroutine(Explode(false)));
+                Add(new Coroutine(Explode()));
             }
         }
 
@@ -321,7 +323,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 previousPosition = ExactPosition;
                 MoveH(Speed.X * Engine.DeltaTime, onCollideH);
                 MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
-                bool shouldExplodeImmediately = false;
                 foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
                 {
                     if (entityList.Key == typeof(Liquid))
@@ -348,10 +349,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                     }
                 }
-                if (shouldExplodeImmediately)
-                {
-                    Add(new Coroutine(Explode(true)));
-                }
                 if (Left > SceneAs<Level>().Bounds.Right || Right < SceneAs<Level>().Bounds.Left || Top > SceneAs<Level>().Bounds.Bottom)
                 {
                     RemoveSelf();
@@ -364,20 +361,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Slope.SetCollisionAfterUpdate(this);
         }
 
-        public IEnumerator Explode(bool immediate)
+        public IEnumerator Explode()
         {
             while (Hold.IsHeld)
             {
                 yield return null;
             }
             bombSprite.Play("countdown");
-            if (!immediate)
+            float timer = 4f;
+            while (timer >= 0 && !shouldExplodeImmediately)
             {
-                yield return 4f;
+                yield return null;
+                timer -= Engine.DeltaTime;
             }
             AllowPushing = false;
-            explode = true;
             Collider = new Circle(21f, 0f, -6f);
+            Hold.PickupCollider = Collider;
+            Speed = Vector2.Zero;
+            noGravityTimer = 0.01f;
+            yield return 0.01f;
+            Hold.RemoveSelf();
+            explode = true;
             bombSprite.Position += new Vector2(0, 26);
             Audio.Play("event:/new_content/game/10_farewell/puffer_splode", Position);
             bombSprite.Play("explode", false);
@@ -386,7 +390,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 yield return null;
             }
-            Hold.RemoveSelf();
             Player player = CollideFirst<Player>();
             if (player != null && player.StateMachine.State != 11 && !Scene.CollideCheck<Solid>(Position + new Vector2(0, -10f), player.Center))
             {
