@@ -173,11 +173,12 @@ namespace Celeste.Mod.XaphanHelper
 
         // Lobbies variables
 
-        public HashSet<string> VisitedLobbyMapTiles = new();
-
-        public List<Vector2> GeneratedVisitedLobbyMapTiles = new();
-
-        public List<Vector2> GeneratedVisitedLobbyMapTiles2 = new();
+        public Dictionary<string, string> VisitedLobbyPositions = new();
+        // public HashSet<string> VisitedLobbyMapTiles = new();
+        //
+        // public List<Vector2> GeneratedVisitedLobbyMapTiles = new();
+        //
+        // public List<Vector2> GeneratedVisitedLobbyMapTiles2 = new();
 
         // Metroid variables
 
