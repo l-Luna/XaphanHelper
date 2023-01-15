@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.XaphanHelper.UI_Elements
+namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 {
     public class LobbyHeartsDisplay : Entity
     {

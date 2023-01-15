@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Managers;
+using Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
@@ -126,7 +128,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Draw.Rect(new Vector2(90, 1020), 940, 8, Color.White);
             }
 
-            if (lobbyMapDisplay?.Scene != null)
+            if (lobbyMapDisplay != null)
             {
                 Draw.Rect(new Vector2(-10, -10), 1940, 182, Color.Black);
                 Draw.Rect(new Vector2(-10, 172), 100, 856, Color.Black);
@@ -143,7 +145,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             if (!string.IsNullOrEmpty(title))
             {
                 ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray * colorAlpha, 4f, Color.DarkSlateBlue * colorAlpha, 2f, Color.Black * colorAlpha);
-                if (lobbyMapDisplay?.Scene == null)
+                if (lobbyMapDisplay != null)
                 {
                     if (currentMenu > 0)
                     {
@@ -192,7 +194,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
 
-            if (lobbyMapDisplay?.Scene != null)
+            if (lobbyMapDisplay != null)
             {
                 float inputEase = 0f;
                 inputEase = Calc.Approach(inputEase, 1, Engine.DeltaTime * 4f);
@@ -374,10 +376,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private IEnumerator LobbyMapRoutine()
         {
-            float scale = lobbyMapDisplay != null ? lobbyMapDisplay.Scale : 1f;
+            float scale = lobbyMapDisplay?.Scale ?? 1f;
             lobbyMapDisplay?.RemoveSelf();
+            SceneAs<Level>()?.Tracker.GetEntity<LobbyMapController>()?.VisitManager.Save();
             Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room, scale));
-            yield return lobbyMapDisplay.GenerateMap(SelectedWarp.Position);
+            yield return null;
         }
 
         private void UpdateMenu()
