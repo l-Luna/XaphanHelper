@@ -75,15 +75,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             Draw.SpriteBatch.Draw(overlay, position, null, Color.Black, 0, origin, scale, SpriteEffects.None, 0);
         
             // draw a thin border to make sure we cover any flickering lines
-            const float thickness = 2f;
-            var lineColor = Color.Black;
+            const float thickness = 960f;
+            var borderColor = Color.Black;
             var topLeft = position - origin * scale;
             var bottomRight = topLeft + new Vector2(overlay.Width * scale.X, overlay.Height * scale.Y);
         
-            Draw.Line(topLeft.X, topLeft.Y, topLeft.X, bottomRight.Y, lineColor, thickness);
-            Draw.Line(topLeft.X, topLeft.Y, bottomRight.X, topLeft.Y, lineColor, thickness);
-            Draw.Line(bottomRight.X, topLeft.Y, bottomRight.X, bottomRight.Y, lineColor, thickness);
-            Draw.Line(topLeft.X, bottomRight.Y, bottomRight.X, bottomRight.Y, lineColor, thickness);
+            Draw.Rect(topLeft.X - thickness, topLeft.Y, thickness, bottomRight.Y - topLeft.Y, borderColor);
+            Draw.Rect(topLeft.X - thickness, topLeft.Y - thickness, bottomRight.X - topLeft.X + 2 * thickness, thickness, borderColor);
+            Draw.Rect(bottomRight.X, topLeft.Y, thickness, bottomRight.Y - topLeft.Y, borderColor);
+            Draw.Rect(topLeft.X - thickness, bottomRight.Y, bottomRight.X - topLeft.X + 2 * thickness, thickness, borderColor);
         }
     }
 }
