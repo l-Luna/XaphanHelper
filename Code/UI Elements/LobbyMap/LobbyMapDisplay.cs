@@ -59,9 +59,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             var totalMaps = lobbyMapControllerData.Int("totalMaps");
             var imageScaleX = lobbyMapControllerData.Int("imageScaleX", 4);
             var imageScaleY = lobbyMapControllerData.Int("imageScaleY", 4);
+            var levelSet = lobbyMapControllerData.Attr("levelSet");
             LobbyIndex = lobbyMapControllerData.Int("lobbyIndex");
 
-            scene.Add(heartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), new AreaKey(AreaId).LevelSet, totalMaps, LobbyIndex));
+            scene.Add(heartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), levelSet, totalMaps, LobbyIndex));
 
             Add(Sprite = new LobbyMapSprite(directory, imageScaleX, imageScaleY));
             Add(Overlay = new LobbyMapOverlay());
