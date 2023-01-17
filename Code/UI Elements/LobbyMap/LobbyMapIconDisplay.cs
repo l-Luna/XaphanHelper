@@ -44,6 +44,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                     string mapIcon = GetMapIcon(entity);
                     iconData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
+
+                if (entity.Name == "MaxHelpingHand/MoreCustomNPC" || entity.Name == "MaxHelpingHand/CustomNPCSprite")
+                {
+                    if (entity.Attr("dialogId").Contains("Credits"))
+                    {
+                        iconData.Add(new LobbyMapIconsData("lobbies/berry", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
+                    }
+                }
             }
 
             foreach (EntityData trigger in levelData.Triggers)
