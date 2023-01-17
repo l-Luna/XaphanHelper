@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
 
-namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
+namespace Celeste.Mod.XaphanHelper
 {
     public class ByteArray2D
     {
@@ -36,14 +35,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             data = new byte[width * height];
         }
 
-        public ByteArray2D(int width, int height, byte defaultValue)
-        {
-            Width = width;
-            Height = height;
-            data = Enumerable.Repeat(defaultValue, width * height).ToArray();
-        }
-
-        public void Min(ByteArray2D other, int dx, int dy)
+        public void Max(ByteArray2D other, int dx, int dy)
         {
             int minX = Math.Max(dx, 0);
             int minY = Math.Max(dy, 0);
@@ -56,7 +48,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 {
                     var dest = data[x + y * Width];
                     var src = other.data[sx + sy * other.Width];
-                    data[x + y * Width] = Math.Min(dest, src);
+                    data[x + y * Width] = Math.Max(dest, src);
                 }
             }
         }

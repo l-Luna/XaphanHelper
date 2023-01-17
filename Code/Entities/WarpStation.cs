@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using Celeste.Mod.Entities;
-using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using MonoMod.Utils;
 
@@ -274,7 +272,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return player.DummyWalkToExact((int)X + 16, false, 1f, true);
                 player.Facing = Facings.Right;
 
-                if (InSJLobby && player.Scene.Tracker.GetEntity<LobbyMapController>() is { } lobbyMapController)
+                if (InSJLobby)
                 {
                     player.Sprite.Visible = player.Hair.Visible = false;
 
@@ -287,13 +285,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     PlayerHairSprite.CenterOrigin();
                     PlayerHairSprite.Position += new Vector2(16f, -16f);
                     PlayerHairSprite.Color = player.Hair.Color;
-
-                    if (lobbyMapController.Facing == Facings.Left)
-                    {
-                        PlayerSprite.Effects = SpriteEffects.FlipHorizontally;
-                        PlayerHairSprite.Effects = SpriteEffects.FlipHorizontally;
-                    }
-                    
                     PlayerSprite.Play("sit");
                     PlayerHairSprite.Play("sit");
 

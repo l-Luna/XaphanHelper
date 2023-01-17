@@ -2,6 +2,7 @@
 using System.Linq;
 using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
@@ -29,6 +30,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         private const float tweenTimeSeconds = 0.5f;
         private Coroutine zoomRoutine = new();
         private LobbyHeartsDisplay heartDisplay;
+        private VirtualRenderTarget target;
+        private bool disposed;
 
         public Vector2 OriginForPosition(Vector2 point)
         {
@@ -46,6 +49,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             Scale = scale;
         }
 
+        public void Finished()
+        {
+            // we dispose here to make sure it doesn't render both maps at once for a frame
+            Dispose();
+            RemoveSelf();
+        }
+        
         public override void Added(Scene scene)
         {
             base.Added(scene);
@@ -67,6 +77,40 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             Add(Sprite = new LobbyMapSprite(directory, imageScaleX, imageScaleY));
             Add(Overlay = new LobbyMapOverlay());
             Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId]));
+
+            Sprite.Visible = Overlay.Visible = false;
+            
+            var tex = Sprite.Animations[Sprite.CurrentAnimationID].Frames[0].Texture.Texture;
+            target = VirtualContent.CreateRenderTarget("map", tex.Width, tex.Height);
+            Add(new BeforeRenderHook(BeforeRender));
+        }
+
+        private void BeforeRender()
+        {
+            if (disposed) return;
+            
+            Engine.Graphics.GraphicsDevice.SetRenderTarget(target);
+            Engine.Graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            Draw.SpriteBatch.Begin(SpriteSortMode.Immediate, new BlendState
+            {
+                AlphaSourceBlend = Blend.One,
+                AlphaDestinationBlend = Blend.Zero,
+                ColorSourceBlend = Blend.Zero,
+                ColorDestinationBlend = Blend.Zero,
+            });
+            Overlay.Render();
+            Draw.SpriteBatch.End();
+            
+            Draw.SpriteBatch.Begin(SpriteSortMode.Immediate, new BlendState
+            {
+                AlphaSourceBlend = Blend.Zero,
+                AlphaDestinationBlend = Blend.One,
+                ColorSourceBlend = Blend.DestinationAlpha,
+                ColorDestinationBlend = Blend.Zero,
+            });
+            Sprite.Render();
+            Draw.SpriteBatch.End();
         }
 
         public override void Update()
@@ -141,6 +185,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         public override void Render()
         {
             Draw.Rect(new Vector2(100, 180), 1720, 840, Color.Black * 0.9f);
+            
+            // if we've been removed, don't try to draw anything other than the dark tint
+            if (disposed) return;
+            Draw.SpriteBatch.Draw(target, Vector2.Zero, Color.White);
             base.Render();
             ActiveFont.DrawOutline(Dialog.Clean(warpScreen.SelectedWarp.DialogKey), new Vector2(Celeste.TargetCenter.X, Celeste.TargetHeight - 110f), new Vector2(0.5f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
         }
@@ -149,6 +197,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         {
             base.Removed(scene);
             heartDisplay?.RemoveSelf();
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            target?.Dispose();
+            target = null;
+            disposed = true;
         }
     }
 }
