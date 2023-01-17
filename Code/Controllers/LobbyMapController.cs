@@ -15,7 +15,6 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public readonly string LevelSet;
         public readonly int LobbyIndex;
         public readonly int TotalMaps;
-        public readonly Facings Facing;
         public readonly int ImageScaleX;
         public readonly int ImageScaleY;
         public LobbyVisitManager VisitManager;
@@ -29,7 +28,6 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             TotalMaps = data.Int("totalMaps");
             ImageScaleX = data.Int("imageScaleX", 4);
             ImageScaleY = data.Int("imageScaleY", 4);
-            Facing = (Facings) data.Int("facing", (int) Facings.Right);
         }
 
         public override void Added(Scene scene)

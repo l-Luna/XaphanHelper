@@ -377,7 +377,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator LobbyMapRoutine()
         {
             float scale = lobbyMapDisplay?.Scale ?? 1f;
-            lobbyMapDisplay?.RemoveSelf();
+            lobbyMapDisplay?.Finished();
             SceneAs<Level>()?.Tracker.GetEntity<LobbyMapController>()?.VisitManager.Save();
             Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room, scale));
             yield return null;
