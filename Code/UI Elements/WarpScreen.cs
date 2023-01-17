@@ -201,8 +201,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (inputEase > 0f)
                 {
                     float scale = 0.5f;
-                    DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f), changeDestinationLabel, Input.MenuUp, Input.MenuDown, scale, warpMenu.Selection > 1, warpMenu.Selection < warpMenu.LastPossibleSelection, 1f, warpMenu.Current.SelectWiggler.Value * 0.05f);
-                    DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuLeft, Input.MenuRight) - Input.GuiButton(Input.MenuRight, "controls/keyboard/oemquestion").Width / 2, 1055f), changeLobbyLabel, Input.MenuLeft, Input.MenuRight, scale, currentMenu > 0, currentMenu < warpsPerArea.Count - 1, 1f, lobbyWiggle.Value * 0.05f);
+                    if (warpMenu.Items.Count > 2)
+                    {
+                        DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f), changeDestinationLabel, Input.MenuUp, Input.MenuDown, scale, true, true, 1f, warpMenu.Current.SelectWiggler.Value * 0.05f);
+                    }
+                    if (currentMenu > 0 || currentMenu < warpsPerArea.Count - 1)
+                    {
+                        DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeLobbyLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f) + (warpMenu.Items.Count > 2 ? new Vector2(32f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 0f) : Vector2.Zero), changeLobbyLabel, Input.MenuLeft, Input.MenuRight, scale, currentMenu > 0, currentMenu < warpsPerArea.Count - 1, 1f, lobbyWiggle.Value * 0.05f);
+                    }
 
                     float num = ButtonUI.Width(closeLabel, Input.MenuCancel);
                     float num2 = ButtonUI.Width(confirmLabel, Input.MenuConfirm);

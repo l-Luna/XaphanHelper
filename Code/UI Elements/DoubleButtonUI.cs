@@ -19,12 +19,17 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             float num = ActiveFont.Measure(label).X + 8f + mTexture1.Width;
             position.X -= scale * num * (justifyX - 0.5f) + mTexture2.Width / 2;
             DrawText(label, position, num / 2f, scale + wiggle, alpha);
-            if (displayButton1)
+            if (displayButton1 && !displayButton2)
             {
                 mTexture1.Draw(position, new Vector2(mTexture1.Width - num / 2f, mTexture1.Height / 2f), Color.White * alpha, scale + wiggle);
             }
-            if (displayButton2)
+            if (!displayButton1 && displayButton2)
             {
+                mTexture2.Draw(position, new Vector2(mTexture2.Width - num / 2f, mTexture2.Height / 2f), Color.White * alpha, scale + wiggle);
+            }
+            if (displayButton1 && displayButton2)
+            {
+                mTexture1.Draw(position, new Vector2(mTexture1.Width - num / 2f, mTexture1.Height / 2f), Color.White * alpha, scale + wiggle);
                 mTexture2.Draw(position + new Vector2(mTexture1.Width / 2, 0f), new Vector2(mTexture2.Width - num / 2f, mTexture2.Height / 2f), Color.White * alpha, scale + wiggle);
             }
         }
