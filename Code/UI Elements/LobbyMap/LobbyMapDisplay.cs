@@ -16,6 +16,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         public string Room { get; }
         public int LobbyIndex { get; private set; }
 
+        public int ExplorationRadius { get; private set; }
         public LobbyMapSprite Sprite { get; private set; }
         public LobbyMapOverlay Overlay { get; private set; }
         public LobbyMapIconDisplay IconDisplay { get; private set; }
@@ -71,6 +72,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             var imageScaleY = lobbyMapControllerData.Int("imageScaleY", 4);
             var levelSet = lobbyMapControllerData.Attr("levelSet");
             LobbyIndex = lobbyMapControllerData.Int("lobbyIndex");
+            ExplorationRadius = lobbyMapControllerData.Int("explorationRadius", 20);
 
             scene.Add(heartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), levelSet, totalMaps, LobbyIndex));
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IL.Monocle;
 using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
@@ -86,12 +87,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             return Convert.ToBase64String(bytes);
         }
 
-        public void VisitPoint(Vector2 point)
+        public void VisitPoint(Vector2 point, int explorationRadius)
         {
-            const float generate_distance = 10f;
-            const float sort_threshold = 20f;
             const int nearby_point_count = 50;
 
+            float generate_distance = explorationRadius / 2;
+            float sort_threshold = explorationRadius;
             var lenSq = lastVisitedPoint == null ? float.MaxValue : (point - lastVisitedPoint.Point).LengthSquared();
             var shouldGenerate = !VisitedPoints.Any();
             if (!shouldGenerate && lenSq > generate_distance * generate_distance)

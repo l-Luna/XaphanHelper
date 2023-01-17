@@ -23,11 +23,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         {
             base.Added(entity);
 
-            const int viewRadiusInTiles = 20;
-
             var visitManager = LobbyVisitManager.ForLobby(new AreaKey(Entity.AreaId), Entity.LobbyIndex);
             if (visitManager == null) return;
 
+            int viewRadiusInTiles = Entity.ExplorationRadius;
             int widthInTiles = (int) Entity.Sprite.Width / Entity.Sprite.ImageScaleX;
             int heightInTiles = (int) Entity.Sprite.Height / Entity.Sprite.ImageScaleY;
 

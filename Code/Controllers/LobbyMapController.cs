@@ -17,6 +17,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public readonly int TotalMaps;
         public readonly int ImageScaleX;
         public readonly int ImageScaleY;
+        public readonly int ExplorationRadius;
         public LobbyVisitManager VisitManager;
 
         public LobbyMapController(EntityData data, Vector2 offset) : base(data.Position + offset)
@@ -28,6 +29,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             TotalMaps = data.Int("totalMaps");
             ImageScaleX = data.Int("imageScaleX", 4);
             ImageScaleY = data.Int("imageScaleY", 4);
+            ExplorationRadius = data.Int("explorationRadius", 20);
         }
 
         public override void Added(Scene scene)
@@ -58,7 +60,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
                 {
                     var playerPosition = new Vector2(Math.Min((float) Math.Floor((player.Center.X - level.Bounds.X) / 8f), (float) Math.Round(level.Bounds.Width / 8f, MidpointRounding.AwayFromZero) - 1),
                         Math.Min((float) Math.Floor((player.Center.Y - level.Bounds.Y) / 8f), (float) Math.Round(level.Bounds.Height / 8f, MidpointRounding.AwayFromZero) + 1));
-                    VisitManager?.VisitPoint(playerPosition);
+                    VisitManager?.VisitPoint(playerPosition, ExplorationRadius);
                 }
             }
         }
