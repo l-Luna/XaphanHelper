@@ -30,7 +30,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         private float tweenRemainingSeconds;
         private const float tweenTimeSeconds = 0.5f;
         private Coroutine zoomRoutine = new();
-        private LobbyHeartsDisplay heartDisplay;
+        public LobbyHeartsDisplay heartDisplay;
         private VirtualRenderTarget target;
         private bool disposed;
 
@@ -74,7 +74,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             LobbyIndex = lobbyMapControllerData.Int("lobbyIndex");
             ExplorationRadius = lobbyMapControllerData.Int("explorationRadius", 20);
 
-            scene.Add(heartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), levelSet, totalMaps, LobbyIndex));
+            scene.Add(heartDisplay = new LobbyHeartsDisplay(new Vector2(100, 180), levelSet, totalMaps, LobbyIndex, warpScreen.currentLobbyHeartAnimation));
 
             Add(Sprite = new LobbyMapSprite(directory, imageScaleX, imageScaleY));
             Add(Overlay = new LobbyMapOverlay());

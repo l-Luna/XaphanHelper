@@ -383,6 +383,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             yield return null;
         }
 
+        public int currentLobbyHeartAnimation = 0;
+
         private void UpdateMenu()
         {
             progressWiggleDelay -= Engine.DeltaTime;
@@ -404,6 +406,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_down");
+                if (lobbyMapDisplay.heartDisplay != null)
+                {
+                    currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
+                }
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu--;
                     InitializeScreen();
@@ -415,6 +421,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_up");
+                if (lobbyMapDisplay.heartDisplay != null)
+                {
+                    currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
+                }
                 /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
                     currentMenu++;
                     InitializeScreen();

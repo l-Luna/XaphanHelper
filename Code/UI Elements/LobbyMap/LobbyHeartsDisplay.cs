@@ -4,6 +4,7 @@ using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 {
+    [Tracked(true)]
     public class LobbyHeartsDisplay : Entity
     {
         public Sprite Heart;
@@ -12,15 +13,16 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         public int TotalMaps;
 
-        public LobbyHeartsDisplay(Vector2 position, string levelSet, int totalMaps, float lobbyIndex) : base(position)
+        public LobbyHeartsDisplay(Vector2 position, string levelSet, int totalMaps, float lobbyIndex, int heartStartAnimation) : base(position)
         {
             Tag = Tags.HUD;
             this.levelSet = levelSet;
             TotalMaps = totalMaps;
             Add(Heart = new Sprite(GFX.Gui, (lobbyIndex <= 3) ? "collectables/heartgem/" + (lobbyIndex - 1) + "/" : "CollabUtils2/crystalHeart/" + (lobbyIndex == 4 ? "expert" : "grandmaster") + "/"));
-            Heart.AddLoop("spin", "spin", 0.08f);
+            Heart.AddLoop("spin", "spin", 0.1f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             Heart.Scale = Vector2.One / 2;
             Heart.Play("spin");
+            Heart.SetAnimationFrame(heartStartAnimation + 1);
         }
 
         public override void Render()
