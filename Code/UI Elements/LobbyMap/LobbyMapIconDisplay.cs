@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using Celeste.Mod.XaphanHelper.Data;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -38,7 +40,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
                 if (entity.Name == "SJ2021/StrawberryJamJar")
                 {
-                    bool mapCompleted = stats.Modes[0].HeartGem;
+                    bool mapCompleted = GetMapCompleted(entity);
+                    string mapIcon = GetMapIcon(entity);
                     iconData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
             }
@@ -47,7 +50,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             {
                 if (trigger.Name == "CollabUtils2/ChapterPanelTrigger")
                 {
-                    bool mapCompleted = stats.Modes[0].HeartGem;
+                    bool mapCompleted = GetMapCompleted(trigger);
+                    string mapIcon = GetMapIcon(trigger);
                     iconData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
                 }
 
@@ -58,14 +62,30 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             }
         }
 
+        public bool GetMapCompleted(EntityData entity)
+        {
+            AreaData areaData = AreaData.Get(entity.Attr("map"));
+            if (areaData != null)
+            {
+                AreaStats areaStatsFor = SaveData.Instance.GetAreaStatsFor(areaData.ToKey());
+                return areaStatsFor != null && areaStatsFor.Modes[0].Completed;
+            }
+            return false;
+        }
+
+        public string GetMapIcon(EntityData entity)
+        {
+            return AreaData.Get(entity.Attr("map"))?.Icon;
+        }
+
         public override void Added(Entity entity)
         {
             base.Added(entity);
 
             foreach (LobbyMapIconsData icon in iconData)
             {
-                var tileX = (int) Math.Floor(icon.Position.X / 8);
-                var tileY = (int) Math.Floor(icon.Position.Y / 8);
+                var tileX = (int)Math.Floor(icon.Position.X / 8);
+                var tileY = (int)Math.Floor(icon.Position.Y / 8);
                 if (Entity.Overlay.IsVisited(tileX, tileY))
                 {
                     var image = new Image(GFX.Gui[$"maps/{icon.Type}"]);
