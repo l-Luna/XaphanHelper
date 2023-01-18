@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -25,38 +26,50 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             playerVisibleForceTime = 0.8f;
         }
 
-        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats)
+        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats, string miniHeartDoorIcon, string journalIcon, string mapIcon, string rainbowsBerryIcon, string warpIcon, string extraEntitiesNames, string extraEntitiesIcons)
             : base(true, true)
         {
             foreach (EntityData entity in levelData.Entities)
             {
                 if (entity.Name == "XaphanHelper/WarpStation")
                 {
-                    iconData.Add(new LobbyMapIconsData("lobbies/bench", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(warpIcon) ? "lobbies/warp" : warpIcon), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
 
                 if (entity.Name == "CollabUtils2/MiniHeartDoor")
                 {
-                    iconData.Add(new LobbyMapIconsData("lobbies/heartgate", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y)));
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(miniHeartDoorIcon) ? "lobbies/heartgate" : miniHeartDoorIcon), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y)));
                 }
 
                 if (entity.Name == "CollabUtils2/RainbowBerry")
                 {
-                    iconData.Add(new LobbyMapIconsData("lobbies/berry", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(rainbowsBerryIcon) ? "lobbies/rainbowBerry" : rainbowsBerryIcon), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
                 }
 
                 if (entity.Name == "SJ2021/StrawberryJamJar")
                 {
                     bool mapCompleted = GetMapCompleted(entity);
-                    string mapIcon = GetMapIcon(entity);
-                    iconData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
+                    string mapDifficulty = GetMapIcon(entity);
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapCompleted ? "Completed" : ""), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
 
-                if (entity.Name == "MaxHelpingHand/MoreCustomNPC" || entity.Name == "MaxHelpingHand/CustomNPCSprite")
+                if (!string.IsNullOrEmpty(extraEntitiesNames) && !string.IsNullOrEmpty(extraEntitiesIcons))
                 {
-                    if (entity.Attr("dialogId").Contains("Credits"))
+                    string[] EntitiesNames = extraEntitiesNames.Split(',');
+                    string[] EntitiesIcons = extraEntitiesIcons.Split(',');
+                    foreach (string EntityName in EntitiesNames)
                     {
-                        iconData.Add(new LobbyMapIconsData("lobbies/berry", levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
+                        if (entity.Name == EntityName)
+                        {
+                            if (EntitiesIcons.Count() >= Array.IndexOf(EntitiesNames, EntityName) + 1)
+                            {
+                                iconData.Add(new LobbyMapIconsData(EntitiesIcons[Array.IndexOf(EntitiesNames, EntityName)], levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f)));
+                            }
+                            else
+                            {
+                                Logger.Log(LogLevel.Warn, "XaphanHelper/LobbyMapIconDisplay", $"No icon found for {EntityName}! {EntityName} will not be displayed...");
+                            }
+                        }
                     }
                 }
             }
@@ -66,13 +79,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 if (trigger.Name == "CollabUtils2/ChapterPanelTrigger")
                 {
                     bool mapCompleted = GetMapCompleted(trigger);
-                    string mapIcon = GetMapIcon(trigger);
-                    iconData.Add(new LobbyMapIconsData(mapCompleted ? "lobbies/jarfull" : "lobbies/jar", levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    string mapDifficulty = GetMapIcon(trigger);
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapCompleted ? "Completed" : ""), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
                 }
 
                 if (trigger.Name == "CollabUtils2/JournalTrigger")
                 {
-                    iconData.Add(new LobbyMapIconsData("lobbies/journal", levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(journalIcon) ? "lobbies/journal" : journalIcon), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
                 }
             }
         }
