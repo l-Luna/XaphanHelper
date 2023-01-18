@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using Celeste.Mod.XaphanHelper.Data;
-using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -17,6 +15,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         public Image playerIcon;
         public Image playerIconHair;
+
+        private float playerVisibleIntervalOffset;
+        private float playerVisibleForceTime;
+
+        public void ResetPlayerVisible()
+        {
+            playerIcon.Visible = playerIconHair.Visible = true;
+            playerVisibleForceTime = 0.8f;
+        }
 
         public LobbyMapIconDisplay(LevelData levelData, AreaStats stats)
             : base(true, true)
@@ -115,7 +122,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
             playerIconHair.Color = Scene?.Tracker.GetEntity<Player>()?.Hair.Color ?? Color.White;
 
-            if (Engine.Scene.OnRawInterval(0.3f))
+            if (playerVisibleForceTime > 0)
+            {
+                playerVisibleForceTime -= Engine.RawDeltaTime;
+                if (playerVisibleForceTime <= 0)
+                {
+                    playerVisibleIntervalOffset = Scene?.RawTimeActive ?? 0f;
+                }
+            }
+            else if (Engine.Scene.OnRawInterval(0.3f, playerVisibleIntervalOffset))
             {
                 playerIcon.Visible = !playerIcon.Visible;
             }
@@ -123,19 +138,20 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         public override void Render()
         {
-            var offset = Entity.Sprite.Position - Entity.Origin * Entity.Sprite.Size * Entity.Scale;
+            var offset = new Vector2(Engine.Width / 2f, Engine.Height / 2f) - Entity.Origin * Entity.Sprite.Size * Entity.Scale;
             var scale = new Vector2(Entity.Scale / 8f * Entity.Sprite.ImageScaleX, Entity.Scale / 8f * Entity.Sprite.ImageScaleY);
+            var iconScale = Calc.LerpClamp(0.4f, 0.6f, Entity.ScaleRatio);
 
             foreach (var pair in iconImages)
             {
                 pair.Value.Position = offset + pair.Key.Position * scale;
-                pair.Value.Scale = new Vector2(Math.Max(0.4f, Entity.Scale - 0.5f), Math.Max(0.4f, Entity.Scale - 0.5f));
+                pair.Value.Scale = new Vector2(iconScale);
                 pair.Value.Render();
             }
 
             if (playerIcon.Visible)
             {
-                playerIcon.Position = playerIconHair.Position = offset + Entity.SelectedWarp.Position * scale;
+                playerIcon.Position = playerIconHair.Position = offset + (Entity.SelectedWarp.Position - Vector2.UnitY * 16f) * scale;
                 playerIcon.Render();
                 playerIconHair.Render();
             }

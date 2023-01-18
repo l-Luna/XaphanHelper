@@ -382,10 +382,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private IEnumerator LobbyMapRoutine()
         {
-            float scale = lobbyMapDisplay?.Scale ?? 1f;
+            int zoomLevel = lobbyMapDisplay?.ZoomLevel ?? LobbyMapDisplay.DefaultZoomLevel;
             lobbyMapDisplay?.Finished();
             SceneAs<Level>()?.Tracker.GetEntity<LobbyMapController>()?.VisitManager.Save();
-            Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room, scale));
+            Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room, zoomLevel));
             yield return null;
         }
 

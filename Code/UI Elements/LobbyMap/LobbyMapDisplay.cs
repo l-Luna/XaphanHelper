@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
@@ -10,11 +11,24 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
     [Tracked(true)]
     public class LobbyMapDisplay : Entity
     {
+        public static int DefaultZoomLevel => Scales.Length / 2;
+        public static readonly float[] Scales = { 0.4f, 0.8f, 1.4f };
+        public float ScaleRatio => (Scale - Scales[0]) / (Scales[Scales.Length - 1] - Scales[0]); 
         public Vector2 Origin { get; set; }
         public float Scale { get; set; }
         public int AreaId { get; }
         public string Room { get; }
         public int LobbyIndex { get; private set; }
+        public int ZoomLevel { get; private set; }
+
+        private float targetScale = 1f;
+        private Vector2 targetOrigin = Vector2.Zero;
+        private Vector2 selectedOrigin = Vector2.Zero;
+        private bool shouldCentreOrigin;
+        private float scaleTimeRemaining;
+        private float translateTimeRemaining;
+        private const float scale_time_seconds = 0.3f;
+        private const float translate_time_seconds = 0.3f;
 
         public int ExplorationRadius { get; private set; }
         public LobbyMapSprite Sprite { get; private set; }
@@ -24,12 +38,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         private readonly WarpScreen warpScreen;
         private LevelData levelData;
-        private Vector2 tweenSource;
-        private Vector2 tweenTarget;
         private WarpInfo lastSelectedWarpInfo;
-        private float tweenRemainingSeconds;
-        private const float tweenTimeSeconds = 0.5f;
-        private Coroutine zoomRoutine = new();
         public LobbyHeartsDisplay heartDisplay;
         private VirtualRenderTarget target;
         private bool disposed;
@@ -41,13 +50,16 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             return new Vector2(tileX / Sprite.WidthInTiles, tileY / Sprite.HeightInTiles);
         }
 
-        public LobbyMapDisplay(WarpScreen warpScreen, int areaId, string room, float scale)
+        public LobbyMapDisplay(WarpScreen warpScreen, int areaId, string room, int zoomLevel)
         {
             this.warpScreen = warpScreen;
             AreaId = areaId;
             Room = room;
             Tag = Tags.HUD;
-            Scale = scale;
+            ZoomLevel = zoomLevel;
+            Scale = Scales[zoomLevel];
+
+            shouldCentreOrigin = zoomLevel == 0;
         }
 
         public void Finished()
@@ -80,11 +92,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             Add(Overlay = new LobbyMapOverlay());
             Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId]));
 
-            Sprite.Visible = Overlay.Visible = false;
-            
-            var tex = Sprite.Animations[Sprite.CurrentAnimationID].Frames[0].Texture.Texture;
+            var tex = Sprite.MapTexture;
             target = VirtualContent.CreateRenderTarget("map", tex.Width, tex.Height);
             Add(new BeforeRenderHook(BeforeRender));
+            
+            Add(new Coroutine(MapFocusRoutine()));
         }
 
         private void BeforeRender()
@@ -101,7 +113,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 ColorSourceBlend = Blend.Zero,
                 ColorDestinationBlend = Blend.Zero,
             });
-            Overlay.Render();
+            Draw.SpriteBatch.Draw(Overlay.OverlayTexture, new Rectangle(0, 0, target.Width, target.Height), Color.White);
             Draw.SpriteBatch.End();
             
             Draw.SpriteBatch.Begin(SpriteSortMode.Immediate, new BlendState
@@ -111,77 +123,76 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 ColorSourceBlend = Blend.DestinationAlpha,
                 ColorDestinationBlend = Blend.Zero,
             });
-            Sprite.Render();
+            var tex = Sprite.MapTexture;
+            Draw.SpriteBatch.Draw(tex, new Rectangle(0, 0, target.Width, target.Height), Color.White);
             Draw.SpriteBatch.End();
         }
 
         public override void Update()
         {
+            var first = lastSelectedWarpInfo.ID == default;
+            
+            if (lastSelectedWarpInfo.ID != warpScreen.SelectedWarp.ID)
+            {
+                IconDisplay.ResetPlayerVisible();
+                
+                lastSelectedWarpInfo = warpScreen.SelectedWarp;
+                selectedOrigin = OriginForPosition(warpScreen.SelectedWarp.Position);
+
+                if (first)
+                    Origin = shouldCentreOrigin ? new Vector2(0.5f) : selectedOrigin;
+                else if (!shouldCentreOrigin)
+                {
+                    targetOrigin = selectedOrigin;
+                    translateTimeRemaining = translate_time_seconds;
+                }
+            }
+
+            if (Input.MenuJournal.Pressed)
+            {
+                ZoomLevel--;
+                if (ZoomLevel < 0) ZoomLevel += Scales.Length;
+
+                targetScale = Scales[ZoomLevel];
+                scaleTimeRemaining = scale_time_seconds;
+                shouldCentreOrigin = ZoomLevel == 0;
+                
+                if (shouldCentreOrigin || ZoomLevel == Scales.Length - 1)
+                {
+                    targetOrigin = shouldCentreOrigin ? new Vector2(0.5f) : selectedOrigin;
+                    translateTimeRemaining = translate_time_seconds;
+                }
+            }
+            
             base.Update();
-
-            if (Input.MenuJournal.Pressed && !zoomRoutine.Active)
-            {
-                Add(zoomRoutine = new Coroutine(ChangeZoom()));
-            }
-
-            if (Sprite != null && !zoomRoutine.Active)
-            {
-                if (lastSelectedWarpInfo.ID == default)
-                {
-                    lastSelectedWarpInfo = warpScreen.SelectedWarp;
-                    tweenTarget = OriginForPosition(warpScreen.SelectedWarp.Position);
-                }
-
-                if (lastSelectedWarpInfo.ID != warpScreen.SelectedWarp.ID)
-                {
-                    lastSelectedWarpInfo = warpScreen.SelectedWarp;
-                    tweenSource = Origin;
-                    tweenTarget = OriginForPosition(warpScreen.SelectedWarp.Position);
-                    tweenRemainingSeconds = tweenTimeSeconds;
-                }
-
-                if (tweenRemainingSeconds > 0)
-                {
-                    tweenRemainingSeconds -= Engine.DeltaTime;
-                    var tweenAmount = 1 - tweenRemainingSeconds / tweenTimeSeconds;
-                    Origin = Vector2.Lerp(tweenSource, tweenTarget, Ease.QuintOut(tweenAmount));
-                }
-
-                if (tweenRemainingSeconds <= 0)
-                {
-                    Origin = OriginForPosition(warpScreen.SelectedWarp.Position);
-                }
-            }
         }
 
-        private IEnumerator ChangeZoom()
+        private IEnumerator MapFocusRoutine()
         {
-            tweenRemainingSeconds = 0;
-
-            if (Scale != 0.5f)
+            float scaleFrom = Scale;
+            Vector2 translateFrom = Origin;
+            
+            while (true)
             {
-                float finalScale = Scale - 0.25f;
-                while (Scale > finalScale)
+                if (scaleTimeRemaining == scale_time_seconds) scaleFrom = Scale;
+                if (translateTimeRemaining == translate_time_seconds) translateFrom = Origin;
+
+                if (scaleTimeRemaining > 0)
                 {
-                    Scale -= Engine.DeltaTime * 1.25f;
-                    yield return null;
+                    Scale = Calc.LerpClamp(scaleFrom, targetScale, Ease.QuintOut(1 - scaleTimeRemaining / scale_time_seconds));
+                    scaleTimeRemaining -= Engine.DeltaTime;
+                    if (scaleTimeRemaining <= 0) Scale = targetScale;
+                }
+                
+                if (translateTimeRemaining > 0)
+                {
+                    Origin = Vector2.Lerp(translateFrom, targetOrigin, Ease.QuintOut(1 - translateTimeRemaining / translate_time_seconds));
+                    translateTimeRemaining -= Engine.DeltaTime;
+                    if (translateTimeRemaining <= 0) Origin = targetOrigin;
                 }
 
-                Scale = finalScale;
+                yield return null;
             }
-            else
-            {
-                float finalScale = 1f;
-                while (Scale < finalScale)
-                {
-                    Scale += Engine.DeltaTime * 2.5f;
-                    yield return null;
-                }
-
-                Scale = finalScale;
-            }
-
-            yield return null;
         }
 
         public override void Render()
@@ -190,7 +201,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             
             // if we've been removed, don't try to draw anything other than the dark tint
             if (disposed) return;
-            Draw.SpriteBatch.Draw(target, Vector2.Zero, Color.White);
+            
+            Draw.SpriteBatch.Draw(target, new Vector2(Engine.Width / 2f, Engine.Height / 2f), null, Color.White, 0, new Vector2(Origin.X * target.Width, Origin.Y * target.Height), new Vector2(Scale), SpriteEffects.None, 0);
             base.Render();
             ActiveFont.DrawOutline(Dialog.Clean(warpScreen.SelectedWarp.DialogKey), new Vector2(Celeste.TargetCenter.X, Celeste.TargetHeight - 110f), new Vector2(0.5f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
         }
