@@ -134,6 +134,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             
             if (lastSelectedWarpInfo.ID != warpScreen.SelectedWarp.ID)
             {
+                IconDisplay.ResetPlayerVisible();
+                
                 lastSelectedWarpInfo = warpScreen.SelectedWarp;
                 selectedOrigin = OriginForPosition(warpScreen.SelectedWarp.Position);
 

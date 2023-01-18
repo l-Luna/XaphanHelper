@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using Celeste.Mod.XaphanHelper.Data;
-using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -17,6 +15,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         public Image playerIcon;
         public Image playerIconHair;
+
+        private float playerVisibleIntervalOffset;
+        private float playerVisibleForceTime;
+
+        public void ResetPlayerVisible()
+        {
+            playerIcon.Visible = playerIconHair.Visible = true;
+            playerVisibleForceTime = 0.8f;
+        }
 
         public LobbyMapIconDisplay(LevelData levelData, AreaStats stats)
             : base(true, true)
@@ -115,7 +122,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
             playerIconHair.Color = Scene?.Tracker.GetEntity<Player>()?.Hair.Color ?? Color.White;
 
-            if (Engine.Scene.OnRawInterval(0.3f))
+            if (playerVisibleForceTime > 0)
+            {
+                playerVisibleForceTime -= Engine.RawDeltaTime;
+                if (playerVisibleForceTime <= 0)
+                {
+                    playerVisibleIntervalOffset = Scene?.RawTimeActive ?? 0f;
+                }
+            }
+            else if (Engine.Scene.OnRawInterval(0.3f, playerVisibleIntervalOffset))
             {
                 playerIcon.Visible = !playerIcon.Visible;
             }
@@ -136,7 +151,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
             if (playerIcon.Visible)
             {
-                playerIcon.Position = playerIconHair.Position = offset + Entity.SelectedWarp.Position * scale;
+                playerIcon.Position = playerIconHair.Position = offset + (Entity.SelectedWarp.Position - Vector2.UnitY * 16f) * scale;
                 playerIcon.Render();
                 playerIconHair.Render();
             }
