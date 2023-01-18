@@ -1,12 +1,16 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 {
     public class LobbyMapSprite : Sprite
     {
-        public new LobbyMapDisplay Entity => base.Entity as LobbyMapDisplay;
-
+        public Texture2D MapTexture => Animations.TryGetValue(CurrentAnimationID, out var animation)
+            ? animation.Frames.ElementAtOrDefault(CurrentAnimationFrame)?.Texture.Texture
+            : null;
+        
         public readonly int WidthInTiles;
         public readonly int HeightInTiles;
 
@@ -20,20 +24,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             ImageScaleX = imageScaleX;
             ImageScaleY = imageScaleY;
 
-            Position = new Vector2(Engine.Width / 2f, Engine.Height / 2f);
+            Visible = false;
 
             AddLoop("idle", string.Empty, 1f);
             Play("idle");
 
             WidthInTiles = (int) (Width / imageScaleX);
             HeightInTiles = (int) (Height / imageScaleY);
-        }
-
-        public override void Render()
-        {
-            Scale = new Vector2(Entity.Scale);
-            JustifyOrigin(Entity.Origin);
-            base.Render();
         }
     }
 }

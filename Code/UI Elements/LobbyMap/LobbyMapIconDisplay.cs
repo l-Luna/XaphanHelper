@@ -123,13 +123,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
         public override void Render()
         {
-            var offset = Entity.Sprite.Position - Entity.Origin * Entity.Sprite.Size * Entity.Scale;
+            var offset = new Vector2(Engine.Width / 2f, Engine.Height / 2f) - Entity.Origin * Entity.Sprite.Size * Entity.Scale;
             var scale = new Vector2(Entity.Scale / 8f * Entity.Sprite.ImageScaleX, Entity.Scale / 8f * Entity.Sprite.ImageScaleY);
+            var iconScale = Calc.LerpClamp(0.4f, 0.6f, Entity.ScaleRatio);
 
             foreach (var pair in iconImages)
             {
                 pair.Value.Position = offset + pair.Key.Position * scale;
-                pair.Value.Scale = new Vector2(Math.Max(0.4f, Entity.Scale - 0.5f), Math.Max(0.4f, Entity.Scale - 0.5f));
+                pair.Value.Scale = new Vector2(iconScale);
                 pair.Value.Render();
             }
 

@@ -10,12 +10,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
         public new LobbyMapDisplay Entity => base.Entity as LobbyMapDisplay;
 
         private ByteArray2D visitedTiles;
-        private Texture2D overlay;
+        public Texture2D OverlayTexture;
 
         public bool IsVisited(int x, int y, byte threshold = 0x7F) =>
             visitedTiles.TryGet(x, y, out var value) && value > threshold;
 
-        public LobbyMapOverlay() : base(false, true)
+        public LobbyMapOverlay() : base(false, false)
         {
         }
 
@@ -56,8 +56,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 visitedTiles[widthInTiles - 2, y] = Math.Min(visitedTiles[widthInTiles - 2, y], quarter);
             }
             
-            overlay = new Texture2D(Engine.Instance.GraphicsDevice, widthInTiles, heightInTiles, false, SurfaceFormat.Alpha8);
-            overlay.SetData(visitedTiles.Data);
+            OverlayTexture = new Texture2D(Engine.Instance.GraphicsDevice, widthInTiles, heightInTiles, false, SurfaceFormat.Alpha8);
+            OverlayTexture.SetData(visitedTiles.Data);
         }
 
         /// <summary>
@@ -82,14 +82,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             }
 
             return array;
-        }
-
-        public override void Render()
-        {
-            var origin = new Vector2(Entity.Origin.X * overlay.Width, Entity.Origin.Y * overlay.Height);
-            var position = new Vector2(Engine.Width / 2f, Engine.Height / 2f);
-            var scale = new Vector2(Entity.Scale * Entity.Sprite.ImageScaleX, Entity.Scale * Entity.Sprite.ImageScaleY);
-            Draw.SpriteBatch.Draw(overlay, position, null, Color.Black, 0, origin, scale, SpriteEffects.None, 0);
         }
     }
 }
