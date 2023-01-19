@@ -97,11 +97,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             var shouldGenerate = !VisitedPoints.Any();
             if (!shouldGenerate && lenSq > generate_distance * generate_distance)
             {
-                Logger.Log(LogLevel.Warn, nameof(XaphanModule), $"We may need to generate a new point at {point.X},{point.Y}");
                 // if the distance has gone past the sort threshold, recalculate and sort the list
                 if (lenSq > sort_threshold * sort_threshold)
                 {
-                    Logger.Log(LogLevel.Warn, nameof(XaphanModule), $"=== Sorting ===");
                     foreach (var vp in VisitedPoints)
                     {
                         vp.DistanceSquared = (vp.Point - point).LengthSquared();
@@ -118,7 +116,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
             if (shouldGenerate)
             {
-                Logger.Log(LogLevel.Warn, nameof(XaphanModule), $"*** Generating point at {point.X},{point.Y} ***");
                 VisitedPoints.Add(lastVisitedPoint = new VisitedPoint(point, 0f));
             }
         }
