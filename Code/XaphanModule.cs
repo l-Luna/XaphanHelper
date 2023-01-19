@@ -2769,7 +2769,7 @@ namespace Celeste.Mod.XaphanHelper
                         }
                         self.Session.Strawberries = ModSaveData.SavedSessionStrawberries[self.Session.Area.LevelSet];
                         ModSaveData.LoadedPlayer = true;
-                        self.Add(new TeleportCutscene(player, ModSaveData.SavedRoom[self.Session.Area.LevelSet], ModSaveData.SavedSpawn[self.Session.Area.LevelSet], 0, 0, true, 0f, "Fade", skipFirstWipe: true, respawnAnim: true, useLevelWipe: true));
+                        self.Add(new TeleportCutscene(player, ModSaveData.SavedRoom[self.Session.Area.LevelSet], MergeChaptersControllerMode == "Warps" ? Vector2.Zero : ModSaveData.SavedSpawn[self.Session.Area.LevelSet], 0, 0, true, 0f, "Fade", skipFirstWipe: true, respawnAnim: true, useLevelWipe: true, spawnPositionX: MergeChaptersControllerMode == "Warps" ? ModSaveData.SavedSpawn[self.Session.Area.LevelSet].X : 0f, spawnPositionY: MergeChaptersControllerMode == "Warps" ? ModSaveData.SavedSpawn[self.Session.Area.LevelSet].Y : 0f));
                     }
                     else
                     {

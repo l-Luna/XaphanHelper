@@ -17,6 +17,7 @@ Version 1.0.50 :
 - Fixed a bug preventing Magnetic Ceilings to be grabbed correctly if the Grab mode was set to Toggle or Invert in the Options menu
 - Fixed sounds playing when opening the In-Game map while in a room outside of the initial display of the map, opening the World Map and enabling or disabling hints on the In-Game map
 - Fixed a bug sometimes playing Bombs and Mega Bombs explosions sounds multiple times
+- Fixed a bug preventing the player to respawn at the correct position when using a Merge Chapter Controller with the "Mode" attribute set to "Warps"
 
 Version 1.0.49 :
 

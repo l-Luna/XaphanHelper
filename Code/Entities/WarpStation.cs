@@ -132,13 +132,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (!XaphanModule.ModSaveData.SavedSpawn.ContainsKey(prefix))
                 {
-                    XaphanModule.ModSaveData.SavedSpawn.Add(prefix, Position);
+                    XaphanModule.ModSaveData.SavedSpawn.Add(prefix, level.Session.GetSpawnPoint(Position));
                 }
                 else
                 {
-                    if (XaphanModule.ModSaveData.SavedSpawn[prefix] != Position)
+                    if (XaphanModule.ModSaveData.SavedSpawn[prefix] != level.Session.GetSpawnPoint(Position))
                     {
-                        XaphanModule.ModSaveData.SavedSpawn[prefix] = Position;
+                        XaphanModule.ModSaveData.SavedSpawn[prefix] = level.Session.GetSpawnPoint(Position);
                         ShouldSave = true;
                     }
                 }
