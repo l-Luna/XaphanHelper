@@ -9,6 +9,19 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 {
     public class LobbyMapIconDisplay : Component
     {
+        public class MapInfo
+        {
+            public bool completed;
+
+            public int difficulty;
+
+            public MapInfo(bool completed, int difficulty)
+            {
+                this.completed = completed;
+                this.difficulty = difficulty;
+            }
+        }
+
         public new LobbyMapDisplay Entity => base.Entity as LobbyMapDisplay;
 
         private readonly List<LobbyMapIconsData> iconData = new();
@@ -26,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             playerVisibleForceTime = 0.8f;
         }
 
-        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats, string miniHeartDoorIcon, string journalIcon, string mapIcon, string rainbowsBerryIcon, string warpIcon, string extraEntitiesNames, string extraEntitiesIcons)
+        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats, string miniHeartDoorIcon, string journalIcon, string mapIcon, string rainbowsBerryIcon, string warpIcon, string extraEntitiesNames, string extraEntitiesIcons, bool difficultyBasedMapIcons)
             : base(true, true)
         {
             foreach (EntityData entity in levelData.Entities)
@@ -48,9 +61,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
 
                 if (entity.Name == "SJ2021/StrawberryJamJar")
                 {
-                    bool mapCompleted = GetMapCompleted(entity);
-                    string mapDifficulty = GetMapIcon(entity);
-                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapCompleted ? "Completed" : ""), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
+                    MapInfo mapInfo = GetMapInfo(entity, difficultyBasedMapIcons);
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapInfo.difficulty != -1 ? mapInfo.difficulty : "") + (mapInfo.completed ? "Completed" : ""), levelData.Name, new Vector2(entity.Position.X + entity.Width / 2f, entity.Position.Y + entity.Height / 2f - 16f)));
                 }
 
                 if (!string.IsNullOrEmpty(extraEntitiesNames) && !string.IsNullOrEmpty(extraEntitiesIcons))
@@ -78,9 +90,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             {
                 if (trigger.Name == "CollabUtils2/ChapterPanelTrigger")
                 {
-                    bool mapCompleted = GetMapCompleted(trigger);
-                    string mapDifficulty = GetMapIcon(trigger);
-                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapCompleted ? "Completed" : ""), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    MapInfo mapInfo = GetMapInfo(trigger, difficultyBasedMapIcons);
+                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapInfo.difficulty != -1 ? mapInfo.difficulty : "") + (mapInfo.completed ? "Completed" : ""), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
                 }
 
                 if (trigger.Name == "CollabUtils2/JournalTrigger")
@@ -90,20 +101,40 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             }
         }
 
-        public bool GetMapCompleted(EntityData entity)
+        public MapInfo GetMapInfo(EntityData data, bool useDifficulty)
         {
-            AreaData areaData = AreaData.Get(entity.Attr("map"));
+            AreaData areaData = AreaData.Get(data.Attr("map"));
+            bool mapCompleted = false;
             if (areaData != null)
             {
                 AreaStats areaStatsFor = SaveData.Instance.GetAreaStatsFor(areaData.ToKey());
-                return areaStatsFor != null && areaStatsFor.Modes[0].Completed;
+                mapCompleted = areaStatsFor != null && areaStatsFor.Modes[0].Completed;
             }
-            return false;
-        }
-
-        public string GetMapIcon(EntityData entity)
-        {
-            return AreaData.Get(entity.Attr("map"))?.Icon;
+            int difficulty = -1;
+            if (useDifficulty)
+            {
+                string mapDifficultyIcon = AreaData.Get(data.Attr("map"))?.Icon;
+                if (mapDifficultyIcon != null)
+                {
+                    if (mapDifficultyIcon.Contains("1"))
+                    {
+                        difficulty = 1;
+                    }
+                    else if (mapDifficultyIcon.Contains("2"))
+                    {
+                        difficulty = 2;
+                    }
+                    else if (mapDifficultyIcon.Contains("3"))
+                    {
+                        difficulty = 3;
+                    }
+                    else if (mapDifficultyIcon.Contains("4"))
+                    {
+                        difficulty = 4;
+                    }
+                }
+            }            
+            return new MapInfo(mapCompleted, difficulty);
         }
 
         public override void Added(Entity entity)

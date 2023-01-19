@@ -98,7 +98,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             var warpIcon = lobbyMapControllerData.Attr("warpIcon");
             var extraEntitiesNames = lobbyMapControllerData.Attr("extraEntitiesNames");
             var extraEntitiesIcons = lobbyMapControllerData.Attr("extraEntitiesIcons");
-            Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId], miniHeartDoorIcon, journalIcon, mapIcon, rainbowsBerryIcon, warpIcon, extraEntitiesNames, extraEntitiesIcons));
+            var difficultyBasedMapIcons = lobbyMapControllerData.Bool("difficultyBasedMapIcons");
+            Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId], miniHeartDoorIcon, journalIcon, mapIcon, rainbowsBerryIcon, warpIcon, extraEntitiesNames, extraEntitiesIcons, difficultyBasedMapIcons));
 
             var tex = Sprite.MapTexture;
             target = VirtualContent.CreateRenderTarget("map", tex.Width, tex.Height);
