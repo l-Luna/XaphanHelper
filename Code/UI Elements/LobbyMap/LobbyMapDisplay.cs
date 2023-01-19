@@ -91,6 +91,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             Add(Sprite = new LobbyMapSprite(directory, imageScaleX, imageScaleY));
             Add(Overlay = new LobbyMapOverlay());
 
+            var gymIcon = lobbyMapControllerData.Attr("gymIcon");
             var miniHeartDoorIcon = lobbyMapControllerData.Attr("miniHeartDoorIcon");
             var journalIcon = lobbyMapControllerData.Attr("journalIcon");
             var mapIcon = lobbyMapControllerData.Attr("mapIcon");
@@ -99,7 +100,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             var extraEntitiesNames = lobbyMapControllerData.Attr("extraEntitiesNames");
             var extraEntitiesIcons = lobbyMapControllerData.Attr("extraEntitiesIcons");
             var difficultyBasedMapIcons = lobbyMapControllerData.Bool("difficultyBasedMapIcons");
-            Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId], miniHeartDoorIcon, journalIcon, mapIcon, rainbowsBerryIcon, warpIcon, extraEntitiesNames, extraEntitiesIcons, difficultyBasedMapIcons));
+            Add(IconDisplay = new LobbyMapIconDisplay(levelData, SaveData.Instance.Areas[AreaId], gymIcon, miniHeartDoorIcon, journalIcon, mapIcon, rainbowsBerryIcon, warpIcon, extraEntitiesNames, extraEntitiesIcons, difficultyBasedMapIcons));
 
             var tex = Sprite.MapTexture;
             target = VirtualContent.CreateRenderTarget("map", tex.Width, tex.Height);

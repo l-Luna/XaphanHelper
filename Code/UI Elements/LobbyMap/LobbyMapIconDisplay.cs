@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             playerVisibleForceTime = 0.8f;
         }
 
-        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats, string miniHeartDoorIcon, string journalIcon, string mapIcon, string rainbowsBerryIcon, string warpIcon, string extraEntitiesNames, string extraEntitiesIcons, bool difficultyBasedMapIcons)
+        public LobbyMapIconDisplay(LevelData levelData, AreaStats stats, string gymIcon, string miniHeartDoorIcon, string journalIcon, string mapIcon, string rainbowsBerryIcon, string warpIcon, string extraEntitiesNames, string extraEntitiesIcons, bool difficultyBasedMapIcons)
             : base(true, true)
         {
             foreach (EntityData entity in levelData.Entities)
@@ -91,7 +91,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 if (trigger.Name == "CollabUtils2/ChapterPanelTrigger")
                 {
                     MapInfo mapInfo = GetMapInfo(trigger, difficultyBasedMapIcons);
-                    iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapInfo.difficulty != -1 ? mapInfo.difficulty : "") + (mapInfo.completed ? "Completed" : ""), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    if (trigger.Attr("map").Contains("0-Gyms"))
+                    {
+                        iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(gymIcon) ? "lobbies/gym" : gymIcon), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    }
+                    else
+                    {
+                        iconData.Add(new LobbyMapIconsData((string.IsNullOrEmpty(mapIcon) ? "lobbies/map" : mapIcon) + (mapInfo.difficulty != -1 ? mapInfo.difficulty : "") + (mapInfo.completed ? "Completed" : ""), levelData.Name, new Vector2(trigger.Position.X + trigger.Width / 2f, trigger.Position.Y + trigger.Height / 2f)));
+                    }
                 }
 
                 if (trigger.Name == "CollabUtils2/JournalTrigger")
