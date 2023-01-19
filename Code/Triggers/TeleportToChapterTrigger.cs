@@ -187,7 +187,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             }
             int chapterOffset = ToChapter - currentChapter;
             int currentChapterID = SceneAs<Level>().Session.Area.ID;
-            Logger.Log(LogLevel.Info, "XH", "currentChapterID : " + currentChapterID + " chapterOffset : " + chapterOffset);
             if (RegisterCurrentChapterAsCompelete)
             {
                 SceneAs<Level>().RegisterAreaComplete();

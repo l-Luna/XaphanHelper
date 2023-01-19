@@ -120,22 +120,24 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
             int difficulty = -1;
             if (useDifficulty)
             {
-                string mapDifficultyIcon = AreaData.Get(data.Attr("map"))?.Icon;
-                if (mapDifficultyIcon != null)
+                string mapDifficultyIconPath = AreaData.Get(data.Attr("map"))?.Icon;
+                if (mapDifficultyIconPath != null)
                 {
-                    if (mapDifficultyIcon.Contains("1-easy"))
+                    string[] str = mapDifficultyIconPath.Split('/');
+                    string iconFilename = str[str.Length - 1];
+                    if (iconFilename.StartsWith("1-"))
                     {
                         difficulty = 1;
                     }
-                    else if (mapDifficultyIcon.Contains("2-med"))
+                    else if (iconFilename.StartsWith("2-"))
                     {
                         difficulty = 2;
                     }
-                    else if (mapDifficultyIcon.Contains("3-hard"))
+                    else if (iconFilename.StartsWith("3-"))
                     {
                         difficulty = 3;
                     }
-                    else if (mapDifficultyIcon.Contains("4-cracked"))
+                    else if (iconFilename.StartsWith("4-"))
                     {
                         difficulty = 4;
                     }
