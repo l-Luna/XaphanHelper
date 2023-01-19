@@ -123,19 +123,19 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap
                 string mapDifficultyIcon = AreaData.Get(data.Attr("map"))?.Icon;
                 if (mapDifficultyIcon != null)
                 {
-                    if (mapDifficultyIcon.Contains("1"))
+                    if (mapDifficultyIcon.Contains("1-easy"))
                     {
                         difficulty = 1;
                     }
-                    else if (mapDifficultyIcon.Contains("2"))
+                    else if (mapDifficultyIcon.Contains("2-med"))
                     {
                         difficulty = 2;
                     }
-                    else if (mapDifficultyIcon.Contains("3"))
+                    else if (mapDifficultyIcon.Contains("3-hard"))
                     {
                         difficulty = 3;
                     }
-                    else if (mapDifficultyIcon.Contains("4"))
+                    else if (mapDifficultyIcon.Contains("4-cracked"))
                     {
                         difficulty = 4;
                     }
