@@ -104,15 +104,15 @@ namespace Celeste.Mod.XaphanHelper.Managers
             return warps;
         }
 
-        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration)
+        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration, bool isCurrent)
         {
-            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player)
+            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player && !isCurrent)
             {
                 int currentAreaId = level.Session.Area.ID;
                 if (warp.AreaId == currentAreaId)
                 {
                     MapData mapData = AreaData.Areas[level.Session.Area.ID].Mode[0].MapData;
-                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, (level.Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/LobbyMapController") && !mapData.HasEntity("XaphanHelper/InGameMapController")) ? "None" : wipeType, wipeDuration));
+                    level.Add(new TeleportCutscene(player, warp.Room, warp.Position, 0, 0, true, 0f, wipeType, wipeDuration));
                 }
                 else
                 {

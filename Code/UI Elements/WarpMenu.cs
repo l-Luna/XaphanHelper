@@ -47,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         ConfirmSfx = SFX.ui_game_unpause,
                         Label = Dialog.Clean("XaphanHelper_Warp_Stay"),
-                        OnPressed = () => OnConfirm(warp)
+                        OnPressed = () => OnConfirm(warp, true)
                     });
                 }
                 else
@@ -61,7 +61,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
         }
 
-        private void OnConfirm(WarpInfo warp)
+        private void OnConfirm(WarpInfo warp, bool isCurrent = false)
         {
             Focused = false;
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
@@ -74,10 +74,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     warpScreen.StartDelay();
                 }
             }
-            else
-            {
-                WarpManager.Teleport(warp, (mapData.HasEntity("XaphanHelper/LobbyMapController") && warp.ID == CurrentWarp ? "Fade" : WipeType), WipeDuration);
-            }
+            WarpManager.Teleport(warp, (mapData.HasEntity("XaphanHelper/LobbyMapController") && warp.ID == CurrentWarp ? "Fade" : WipeType), WipeDuration, isCurrent);
         }
 
         public class WarpButton : Button
