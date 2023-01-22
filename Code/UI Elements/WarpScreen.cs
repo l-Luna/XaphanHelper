@@ -145,7 +145,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             if (!string.IsNullOrEmpty(title))
             {
                 ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray * colorAlpha, 4f, Color.DarkSlateBlue * colorAlpha, 2f, Color.Black * colorAlpha);
-                if (lobbyMapDisplay != null)
+                if (lobbyMapDisplay == null)
                 {
                     if (currentMenu > 0)
                     {
@@ -412,7 +412,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_down");
-                if (lobbyMapDisplay.heartDisplay != null)
+                if (lobbyMapDisplay?.heartDisplay != null)
                 {
                     currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
                 }
@@ -427,7 +427,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_up");
-                if (lobbyMapDisplay.heartDisplay != null)
+                if (lobbyMapDisplay?.heartDisplay != null)
                 {
                     currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
                 }

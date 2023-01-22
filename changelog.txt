@@ -1,3 +1,8 @@
+Version 1.0.51 :
+- Fixed a crash when trying to switch chapter on the Warp selection menu
+- Fixed a bug preventing arrows near the current area name to appear if more than one chapter was avaiable on the Warp selection menu
+- Fixed a bug allowing the player to grab sides of slopes in unintended places
+
 Version 1.0.50 :
 - Added "Level Set" attribute to Collectable Doors
 - Added "Condition Flags" attribute to Reset Flags Trigger
