@@ -312,20 +312,35 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private void CloseScreen()
         {
             Audio.Play(SFX.ui_game_unpause);
-            Add(new Coroutine(TransitionRoutine(onFadeOut: UninitializeScreen, onFadeIn: () =>
+            MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
+            if (!mapData.HasEntity("XaphanHelper/LobbyMapController") && !mapData.HasEntity("XaphanHelper/InGameMapController"))
             {
                 Level level = Scene as Level;
+                UninitializeScreen();
                 level.PauseLock = false;
-                level.Session.SetFlag("Map_Opened", false);
                 level.Tracker.GetEntity<CountdownDisplay>()?.StopTimer(false, true);
-
                 if (Scene.Tracker.GetEntity<Player>() is Player player)
                 {
                     player.StateMachine.State = Player.StNormal;
                 }
-
                 RemoveSelf();
-            })));
+            }
+            else
+            {
+                Add(new Coroutine(TransitionRoutine(onFadeOut: UninitializeScreen, onFadeIn: () =>
+                {
+                    Level level = Scene as Level;
+                    level.PauseLock = false;
+                    level.Session.SetFlag("Map_Opened", false);
+                    level.Tracker.GetEntity<CountdownDisplay>()?.StopTimer(false, true);
+
+                    if (Scene.Tracker.GetEntity<Player>() is Player player)
+                    {
+                        player.StateMachine.State = Player.StNormal;
+                    }
+                    RemoveSelf();
+                })));
+            }
         }
 
         private IEnumerator TransitionRoutine(float duration = 0.5f, Action onFadeOut = null, Action onFadeIn = null)
