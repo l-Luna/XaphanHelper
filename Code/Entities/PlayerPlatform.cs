@@ -210,148 +210,154 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     PlayerSprite.Visible = false;
                     PlayerHairSprite.Visible = false;
                 }
-                if (player.Right <= Left || player.Left >= Right)
+                if (player.Right <= Left - 16 || player.Left >= Right + 16)
                 {
                     Position = StartPosition;
-                    return;
-                }
-                if (!UpsideDown)
-                {
-                    if (Position.Y > StartPosition.Y)
-                    {
-                        Position.Y = StartPosition.Y;
-                    }
                 }
                 else
                 {
-                    if (Position.Y < StartPosition.Y)
+                    if (player.Right <= Left || player.Left >= Right)
                     {
-                        Position.Y = StartPosition.Y;
+                        Position = StartPosition;
                     }
-                }
-                if ((player.Sprite.Rate != 2 || (player.Sprite.Rate == 2 && player.Sprite.CurrentAnimationID == "wakeUp")))
-                {
                     if (!UpsideDown)
                     {
-                        if (XaphanModule.PlayerIsControllingRemoteDrone() && CollideCheck(player))
+                        if (Position.Y > StartPosition.Y)
                         {
-                            player.MoveToY(player.Position.Y - 1);
-                        }
-                        if (player.Bottom > StartPosition.Y + 4)
-                        {
-                            Collidable = false;
-                        }
-                        else
-                        {
-                            SetCollision(player);
-                        }
-                        if (Side == "Left")
-                        {
-                            if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != -1 && player.Left >= Left && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
-                            {
-                                Sliding = true;
-                                player.Sprite.Visible = false;
-                                player.Hair.Visible = false;
-                                PlayerSprite.Visible = true;
-                                PlayerHairSprite.Visible = true;
-                                if (player.Facing != Facings.Right)
-                                {
-                                    player.Facing = Facings.Right;
-                                }
-                                if (player.Speed.X <= 250f - (Gentle ? 15f : 18f))
-                                {
-                                    player.Speed.X += Gentle ? 15f : 18f;
-                                }
-                                else
-                                {
-                                    player.Speed.X = 250f;
-                                }
-                            }
-                            if (player.BottomCenter.X < Right + 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
-                            {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
-                                Add(new Coroutine(MoveSlope()));
-                            }
-                        }
-                        else if (Side == "Right")
-                        {
-                            if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != 1 && player.Right <= Right && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
-                            {
-                                Sliding = true;
-                                player.Sprite.Visible = false;
-                                player.Hair.Visible = false;
-                                PlayerSprite.Visible = true;
-                                PlayerHairSprite.Visible = true;
-                                if (player.Facing != Facings.Left)
-                                {
-                                    player.Facing = Facings.Left;
-                                }
-                                if (player.Speed.X >= -250f + (Gentle ? 15f : 18f))
-                                {
-                                    player.Speed.X -= Gentle ? 15f : 18f;
-                                }
-                                else
-                                {
-                                    player.Speed.X = -250f;
-                                }
-                            }
-                            if (player.BottomCenter.X > Left - 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
-                            {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
-                                Add(new Coroutine(MoveSlope()));
-                            }
+                            Position.Y = StartPosition.Y;
                         }
                     }
-                    else if (!SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
+                    else
                     {
-                        if (XaphanModule.PlayerIsControllingRemoteDrone() && CollideCheck(player))
+                        if (Position.Y < StartPosition.Y)
                         {
-                            player.MoveToY(player.Position.Y + 1);
+                            Position.Y = StartPosition.Y;
                         }
-                        if (player.Top < StartPosition.Y + 12)
+                    }
+                    if ((player.Sprite.Rate != 2 || (player.Sprite.Rate == 2 && player.Sprite.CurrentAnimationID == "wakeUp")))
+                    {
+                        if (!UpsideDown)
                         {
-                            Collidable = false;
+                            if (XaphanModule.PlayerIsControllingRemoteDrone() && CollideCheck(player))
+                            {
+                                player.MoveToY(player.Position.Y - 1);
+                            }
+                            if (player.Bottom > StartPosition.Y + 4)
+                            {
+                                Collidable = false;
+                            }
+                            else
+                            {
+                                SetCollision(player);
+                            }
+                            if (Side == "Left")
+                            {
+                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != -1 && player.Left >= Left && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
+                                {
+                                    Sliding = true;
+                                    player.Sprite.Visible = false;
+                                    player.Hair.Visible = false;
+                                    PlayerSprite.Visible = true;
+                                    PlayerHairSprite.Visible = true;
+                                    if (player.Facing != Facings.Right)
+                                    {
+                                        player.Facing = Facings.Right;
+                                    }
+                                    if (player.Speed.X <= 250f - (Gentle ? 15f : 18f))
+                                    {
+                                        player.Speed.X += Gentle ? 15f : 18f;
+                                    }
+                                    else
+                                    {
+                                        player.Speed.X = 250f;
+                                    }
+                                }
+                                if (player.BottomCenter.X < Right + 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                                {
+                                    EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                    Add(new Coroutine(MoveSlope()));
+                                }
+                            }
+                            else if (Side == "Right")
+                            {
+                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != 1 && player.Right <= Right && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
+                                {
+                                    Sliding = true;
+                                    player.Sprite.Visible = false;
+                                    player.Hair.Visible = false;
+                                    PlayerSprite.Visible = true;
+                                    PlayerHairSprite.Visible = true;
+                                    if (player.Facing != Facings.Left)
+                                    {
+                                        player.Facing = Facings.Left;
+                                    }
+                                    if (player.Speed.X >= -250f + (Gentle ? 15f : 18f))
+                                    {
+                                        player.Speed.X -= Gentle ? 15f : 18f;
+                                    }
+                                    else
+                                    {
+                                        player.Speed.X = -250f;
+                                    }
+                                }
+                                if (player.BottomCenter.X > Left - 16 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                                {
+                                    EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? 16f : 4f)) / (Gentle ? 2 : 1));
+                                    Add(new Coroutine(MoveSlope()));
+                                }
+                            }
                         }
-                        else
+                        else if (!SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
                         {
-                            SetCollision(player);
-                        }
-                        if (Side == "Left")
-                        {
-                            if (player.BottomCenter.X < Right && player.BottomCenter.X > Left + 7 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                            if (XaphanModule.PlayerIsControllingRemoteDrone() && CollideCheck(player))
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
-                                Add(new Coroutine(MoveSlope()));
+                                player.MoveToY(player.Position.Y + 1);
                             }
-                            if (player.BottomCenter.X < Left + 7)
+                            if (player.Top < StartPosition.Y + 12)
                             {
-                                Position.Y = StartPosition.Y + SlopeHeight * 8 + 4;
+                                Collidable = false;
                             }
-                        }
-                        else if (Side == "Right")
-                        {
-                            if (player.BottomCenter.X > Left && player.BottomCenter.X < Right - 7 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                            else
                             {
-                                EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
-                                Add(new Coroutine(MoveSlope()));
+                                SetCollision(player);
                             }
-                            if (player.BottomCenter.X > Right - 7)
+                            if (Side == "Left")
                             {
-                                Position.Y = StartPosition.Y + SlopeHeight * 8 + 4;
+                                if (player.BottomCenter.X < Right && player.BottomCenter.X > Left + 7 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                                {
+                                    EndPosition = new Vector2(StartPosition.X, StartPosition.Y - (Right - (Gentle ? -4 : 0) - player.BottomCenter.X + (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                    Add(new Coroutine(MoveSlope()));
+                                }
+                                if (player.BottomCenter.X < Left + 7)
+                                {
+                                    Position.Y = StartPosition.Y + SlopeHeight * 8 + 4;
+                                }
                             }
+                            else if (Side == "Right")
+                            {
+                                if (player.BottomCenter.X > Left && player.BottomCenter.X < Right - 7 && Position.Y >= StartPosition.Y - 8 * SlopeHeight - 4)
+                                {
+                                    EndPosition = new Vector2(StartPosition.X, StartPosition.Y + (Left + (Gentle ? -4 : 0) - player.BottomCenter.X - (((XaphanModule.useMetroidGameplay && MetroidGameplayController.Shinesparking) || (!XaphanModule.useMetroidGameplay && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))) ? (Gentle ? 16f : 8f) : (Gentle ? 8f : 4f))) / (Gentle ? 2 : 1) * -1 - (Gentle ? 2 : 0));
+                                    Add(new Coroutine(MoveSlope()));
+                                }
+                                if (player.BottomCenter.X > Right - 7)
+                                {
+                                    Position.Y = StartPosition.Y + SlopeHeight * 8 + 4;
+                                }
 
+                            }
                         }
                     }
-                }
-                if (Collidable && !SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
-                {
-                    if (!UpsideDown && CollideCheck<Player>())
+                    if (Collidable && !SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
                     {
-                        player.Position -= Vector2.UnitY;
-                    }
-                    if (UpsideDown && CollideCheck<Player>())
-                    {
-                        player.Position += Vector2.UnitY;
+                        if (!UpsideDown && CollideCheck<Player>())
+                        {
+                            player.Position -= Vector2.UnitY;
+                        }
+                        if (UpsideDown && CollideCheck<Player>())
+                        {
+                            player.Position += Vector2.UnitY;
+                        }
                     }
                 }
             }
