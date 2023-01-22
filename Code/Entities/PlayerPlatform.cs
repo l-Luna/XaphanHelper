@@ -210,7 +210,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     PlayerSprite.Visible = false;
                     PlayerHairSprite.Visible = false;
                 }
-                if (player.Right <= Left - 16 || player.Left >= Right + 16)
+                if (player.Right <= Left || player.Left >= Right)
                 {
                     Position = StartPosition;
                     return;
