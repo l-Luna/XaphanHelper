@@ -183,11 +183,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public static void Load()
         {
             On.Celeste.Glider.OnCollideH += onGliderCollideH;
+            On.Celeste.Seeker.SlammedIntoWall += onSeekerSlammedIntoWall;
         }
 
         public static void Unload()
         {
             On.Celeste.Glider.OnCollideH -= onGliderCollideH;
+            On.Celeste.Seeker.SlammedIntoWall -= onSeekerSlammedIntoWall;
         }
 
         private static void onGliderCollideH(On.Celeste.Glider.orig_OnCollideH orig, Glider self, CollisionData data)
@@ -195,6 +197,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (data.Hit is TimedDashSwitch)
             {
                 (data.Hit as TimedDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+            }
+            orig(self, data);
+        }
+
+        private static void onSeekerSlammedIntoWall(On.Celeste.Seeker.orig_SlammedIntoWall orig, Seeker self, CollisionData data)
+        {
+            if (data.Hit is FlagDashSwitch)
+            {
+                (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
             }
             orig(self, data);
         }
