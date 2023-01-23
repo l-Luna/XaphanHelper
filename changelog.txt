@@ -1,4 +1,5 @@
 Version 1.0.51 :
+- Theo Crystals and Seekers can now activate Flag Dash Switches and Timed Dash Switches
 - Fixed a crash when trying to switch chapter on the Warp selection menu
 - Fixed a bug preventing arrows near the current area name to appear if more than one chapter was avaiable on the Warp selection menu
 - Fixed a bug preventing warps to work correctly when not using the In-Game map
