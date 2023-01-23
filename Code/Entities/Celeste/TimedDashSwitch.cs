@@ -184,12 +184,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             On.Celeste.Glider.OnCollideH += onGliderCollideH;
             On.Celeste.Seeker.SlammedIntoWall += onSeekerSlammedIntoWall;
+            On.Celeste.TheoCrystal.OnCollideH += onTheoCrystalCollideH;
+            On.Celeste.TheoCrystal.OnCollideV += onTheoCrystalCollideV;
         }
 
         public static void Unload()
         {
             On.Celeste.Glider.OnCollideH -= onGliderCollideH;
             On.Celeste.Seeker.SlammedIntoWall -= onSeekerSlammedIntoWall;
+            On.Celeste.TheoCrystal.OnCollideH -= onTheoCrystalCollideH;
+            On.Celeste.TheoCrystal.OnCollideV -= onTheoCrystalCollideV;
         }
 
         private static void onGliderCollideH(On.Celeste.Glider.orig_OnCollideH orig, Glider self, CollisionData data)
@@ -203,9 +207,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void onSeekerSlammedIntoWall(On.Celeste.Seeker.orig_SlammedIntoWall orig, Seeker self, CollisionData data)
         {
-            if (data.Hit is FlagDashSwitch)
+            if (data.Hit is TimedDashSwitch)
             {
-                (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+                (data.Hit as TimedDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+            }
+            orig(self, data);
+        }
+
+        private static void onTheoCrystalCollideH(On.Celeste.TheoCrystal.orig_OnCollideH orig, TheoCrystal self, CollisionData data)
+        {
+            if (data.Hit is TimedDashSwitch)
+            {
+                (data.Hit as TimedDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+            }
+            orig(self, data);
+        }
+
+        private static void onTheoCrystalCollideV(On.Celeste.TheoCrystal.orig_OnCollideV orig, TheoCrystal self, CollisionData data)
+        {
+            if (data.Hit is TimedDashSwitch)
+            {
+                (data.Hit as TimedDashSwitch).OnDashCollide(null, Vector2.UnitY * Math.Sign(self.Speed.Y));
             }
             orig(self, data);
         }

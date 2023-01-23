@@ -223,6 +223,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             On.Celeste.Glider.OnCollideH += onGliderCollideH;
             On.Celeste.Seeker.SlammedIntoWall += onSeekerSlammedIntoWall;
+            On.Celeste.TheoCrystal.OnCollideH += onTheoCrystalCollideH;
+            On.Celeste.TheoCrystal.OnCollideV += onTheoCrystalCollideV;
             On.Celeste.PlayerDeadBody.End += onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
         }
@@ -231,6 +233,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             On.Celeste.Glider.OnCollideH -= onGliderCollideH;
             On.Celeste.Seeker.SlammedIntoWall -= onSeekerSlammedIntoWall;
+            On.Celeste.TheoCrystal.OnCollideH -= onTheoCrystalCollideH;
+            On.Celeste.TheoCrystal.OnCollideV -= onTheoCrystalCollideV;
             On.Celeste.PlayerDeadBody.End -= onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
         }
@@ -249,6 +253,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (data.Hit is FlagDashSwitch)
             {
                 (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+            }
+            orig(self, data);
+        }
+
+        private static void onTheoCrystalCollideH(On.Celeste.TheoCrystal.orig_OnCollideH orig, TheoCrystal self, CollisionData data)
+        {
+            if (data.Hit is FlagDashSwitch)
+            {
+                (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitX * Math.Sign(self.Speed.X));
+            }
+            orig(self, data);
+        }
+
+        private static void onTheoCrystalCollideV(On.Celeste.TheoCrystal.orig_OnCollideV orig, TheoCrystal self, CollisionData data)
+        {
+            if (data.Hit is FlagDashSwitch)
+            {
+                (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitY * Math.Sign(self.Speed.Y));
             }
             orig(self, data);
         }
