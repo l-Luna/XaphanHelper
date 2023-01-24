@@ -41,18 +41,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             AreaKey area = level.Session.Area;
             MapData MapData = AreaData.Areas[area.ID].Mode[(int)area.Mode].MapData;
-            foreach (LevelData levelData in MapData.Levels)
+            string entity = "XaphanHelper/UpgradeController";
+            if (MapData.HasEntity(entity))
             {
-                foreach (EntityData entity in levelData.Entities)
-                {
-                    if (entity.Name == "XaphanHelper/UpgradeController")
-                    {
-                        BaseStamina = entity.Float("baseStamina", 110f);
-                        ShowStaminaBar = entity.Bool("showStaminaBar", false);
-                        Prefix = area.LevelSet;
-                        break;
-                    }
-                }
+                BaseStamina = MapData.GetEntityData(entity).Float("baseStamina");
+                ShowStaminaBar = MapData.GetEntityData(entity).Bool("showStaminaBar", false);
+                Prefix = area.LevelSet;
             }
         }
 
