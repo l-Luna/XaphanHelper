@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Reflection;
+using System.Xml.Linq;
 using Celeste.Mod.XaphanHelper.Entities;
 using Celeste.Mod.XaphanHelper.Managers;
 using Celeste.Mod.XaphanHelper.Upgrades;
@@ -13,17 +15,21 @@ using MonoMod.Utils;
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
     [Tracked(true)]
-    class StaminaDisplay : Entity
+    class UpgradesDisplay : Entity
     {
         private static ILHook playerUpdateHook;
 
         private static ILHook summitGemSmashRoutineHook;
 
-        private MTexture bg = GFX.Gui["stamina/BG"];
+        private MTexture bg = GFX.Gui["upgrades/displayBG"];
 
-        private MTexture icon = GFX.Gui["stamina/icon"];
+        private MTexture staminaIcon = GFX.Gui["upgrades/stamina/icon"];
 
-        private Image section = new(GFX.Gui["stamina/section"]);
+        private MTexture missileIcon = GFX.Gui["upgrades/ammo/missile"];
+
+        private MTexture superMissileIcon = GFX.Gui["upgrades/ammo/superMissile"];
+
+        private Image section = new(GFX.Gui["upgrades/stamina/section"]);
 
         public HashSet<Image> Sections = new();
 
@@ -50,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
         }
 
-        public StaminaDisplay()
+        public UpgradesDisplay()
         {
             Tag = (Tags.HUD | Tags.Persistent | Tags.PauseUpdate | Tags.TransitionUpdate);
             Position.Y = -50f;
@@ -151,7 +157,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private static void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
         {
             orig(self);
-            if (XaphanModule.useUpgrades && ShowStaminaBar)
+            if (XaphanModule.useUpgrades)
             {
                 bool sliding = false;
                 player = self.Tracker.GetEntity<Player>();
@@ -164,18 +170,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                 }
                 if ((self.Frozen || self.RetryPlayerCorpse != null || self.SkippingCutscene || self.InCutscene) || (player != null && !player.Sprite.Visible && !self.Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (self.Tracker.GetEntity<ScrewAttackManager>() != null ? !self.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || (self.Tracker.GetEntity<MapScreen>() != null && self.Tracker.GetEntity<MapScreen>().ShowUI)
-                    || (self.Tracker.GetEntity<StatusScreen>() != null && self.Tracker.GetEntity<StatusScreen>().ShowUI) || (self.Tracker.GetEntity<WarpScreen>() != null && self.Tracker.GetEntity<WarpScreen>().ShowUI) || XaphanModule.PlayerIsControllingRemoteDrone() || !PowerGrip.isActive)
+                    || (self.Tracker.GetEntity<StatusScreen>() != null && self.Tracker.GetEntity<StatusScreen>().ShowUI) || (self.Tracker.GetEntity<WarpScreen>() != null && self.Tracker.GetEntity<WarpScreen>().ShowUI))
                 {
-                    if (self.Tracker.GetEntity<StaminaDisplay>() != null)
+                    if (self.Tracker.GetEntity<UpgradesDisplay>() != null)
                     {
-                        self.Tracker.GetEntity<StaminaDisplay>().RemoveSelf();
+                        self.Tracker.GetEntity<UpgradesDisplay>().RemoveSelf();
                     }
                 }
                 else
                 {
-                    if (self.Tracker.GetEntity<StaminaDisplay>() == null && PowerGrip.isActive)
+                    if (self.Tracker.GetEntity<UpgradesDisplay>() == null)
                     {
-                        self.Add(new StaminaDisplay());
+                        self.Add(new UpgradesDisplay());
                     }
                 }
             }
@@ -237,10 +243,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     if ((int)Math.Ceiling(player.Stamina / 5) >= i)
                     {
-                        Sections.Add(new Image(GFX.Gui["stamina/section" + (i <= 4 ? "Low" : "")]));
+                        Sections.Add(new Image(GFX.Gui["upgrades/stamina/section" + (i <= 4 ? "Low" : "")]));
                         continue;
                     }
-                    Sections.Add(new Image(GFX.Gui["stamina/sectionEmpty"]));
+                    Sections.Add(new Image(GFX.Gui["upgrades/stamina/sectionEmpty"]));
                 }
             }
             return Sections;
@@ -249,15 +255,28 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Render()
         {
             base.Render();
-            bg.Draw(Position + new Vector2(-bg.Width + 32f + icon.Width + 15f + TotalSections * 9 + section.Width, 0f));
-            icon.Draw(Position + new Vector2(32f, -1));
-            int Col = 0;
-            foreach (Image section in Sections)
+            if (ShowStaminaBar && PowerGrip.isActive && !XaphanModule.PlayerIsControllingRemoteDrone())
             {
-                section.Position = Position + (new Vector2(32f + icon.Width + 15f + Col, 3f));
-                section.Color = Color.White;
-                section.Render();
-                Col += 9;
+                bg.Draw(Position + new Vector2(-bg.Width + 32f + staminaIcon.Width + 15f + TotalSections * 9 + section.Width, 0f));
+                staminaIcon.Draw(Position + new Vector2(32f, -1));
+                int Col = 0;
+                foreach (Image section in Sections)
+                {
+                    section.Position = Position + (new Vector2(32f + staminaIcon.Width + 15f + Col, 3f));
+                    section.Color = Color.White;
+                    section.Render();
+                    Col += 9;
+                }
+            }
+            else if (XaphanModule.PlayerIsControllingRemoteDrone())
+            {
+                int missileIconPos = 32;
+                int superMissileIconPos = 145;
+                bg.Draw(Position + new Vector2(-bg.Width + 100f + missileIcon.Width + superMissileIconPos, 0f));
+                missileIcon.Draw(Position + new Vector2(missileIconPos, -11));
+                superMissileIcon.Draw(Position + new Vector2(superMissileIconPos, -11));
+                ActiveFont.DrawOutline("5", Position + new Vector2(missileIconPos + missileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, Color.White, 2f, Color.Black);
+                ActiveFont.DrawOutline("2", Position + new Vector2(superMissileIconPos + superMissileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, Color.White, 2f, Color.Black);
             }
         }
     }

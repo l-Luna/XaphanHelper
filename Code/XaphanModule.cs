@@ -608,7 +608,7 @@ namespace Celeste.Mod.XaphanHelper
             Binocular.Load();
             EtherealBlock.Load();
             TilesetsSwap.Load();
-            UI_Elements.StaminaDisplay.Load();
+            UpgradesDisplay.Load();
             LaserDetectorManager.Load();
             PushBlock.Load();
             FakePlayer.Load();
@@ -691,7 +691,7 @@ namespace Celeste.Mod.XaphanHelper
             Binocular.Unload();
             EtherealBlock.Unload();
             TilesetsSwap.Unload();
-            UI_Elements.StaminaDisplay.Unload();
+            UpgradesDisplay.Unload();
             LaserDetectorManager.Unload();
             PushBlock.Unload();
             FakePlayer.Unload();
