@@ -87,6 +87,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool startedAsDrone;
 
+        public int CurrentMissiles;
+
+        public int CurrentSuperMissiles;
+
         private static FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -323,6 +327,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     FakePlayer.Depth = 100;
                     Scene.Add(FakePlayer);
                     CurrentSpawn = XaphanModule.droneCurrentSpawn;
+                    GiveAmmo();
                 }
                 else
                 {
@@ -359,6 +364,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (player != null)
             {
+                GiveAmmo();
                 DynData<Player> playerData = new(player);
                 Hitbox normalPlayerHitbox = playerData.Get<Hitbox>("normalHitbox");
                 normalPlayerHitbox.Height = 6f;
@@ -593,9 +599,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             RemoveSelf();
         }
 
+        public void GiveAmmo()
+        {
+            CurrentMissiles = 5;
+            CurrentSuperMissiles = 2;
+        }
+
         public override void Update()
         {
             base.Update();
+            UpgradesDisplay display = SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
+            if (display != null)
+            {
+                display.CurrentMissiles = CurrentMissiles;
+                display.CurrentSuperMissiles = CurrentSuperMissiles;
+            }
             if (!dead && !Teleport)
             {
                 SceneAs<Level>().CanRetry = false;

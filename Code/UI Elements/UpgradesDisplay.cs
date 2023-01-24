@@ -43,6 +43,20 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public static string Prefix;
 
+        public int CurrentMissiles;
+
+        public int CurrentSuperMissiles;
+
+        public bool MissileSelected;
+
+        public bool SuperMissileSelected;
+
+        private bool HasMissilesUpgrade;
+
+        private bool HasSuperMissilesUpgrade;
+
+        protected XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
+
         public static void getStaminaData(Level level)
         {
             AreaKey area = level.Session.Area;
@@ -232,6 +246,49 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 TotalSections = (int)determineBaseStamina() / 5;
                 Sections = GetSections();
             }
+            if (!SceneAs<Level>().Paused && !SceneAs<Level>().PauseLock && XaphanModule.PlayerIsControllingRemoteDrone())
+            {
+                HasMissilesUpgrade = /* Has Missiles Upgrade */ true;
+                HasSuperMissilesUpgrade = /* Has Super Missiles Upgrade */ true;
+                bool NoneSelected = !MissileSelected && !SuperMissileSelected;
+                if (NoneSelected && XaphanSettings.SelectItem.Pressed)
+                {
+                    if (HasMissilesUpgrade && CurrentMissiles > 0)
+                    {
+                        MissileSelected = true;
+                    }
+                    else if (HasSuperMissilesUpgrade && CurrentSuperMissiles > 0)
+                    {
+                        SuperMissileSelected = true;
+                    }
+                }
+                else if (MissileSelected && XaphanSettings.SelectItem.Pressed)
+                {
+                    MissileSelected = false;
+                    if (HasSuperMissilesUpgrade && CurrentSuperMissiles > 0)
+                    {
+                        SuperMissileSelected = true;
+                    }
+                }
+                else if (SuperMissileSelected && XaphanSettings.SelectItem.Pressed)
+                {
+                    SuperMissileSelected = false;
+                }
+                if (MissileSelected && CurrentMissiles == 0)
+                {
+                    MissileSelected = false;
+                    Audio.Play("event:/game/xaphan/item_select");
+                }
+                else if (SuperMissileSelected && CurrentSuperMissiles == 0)
+                {
+                    SuperMissileSelected = false;
+                    Audio.Play("event:/game/xaphan/item_select");
+                }
+                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0) && XaphanSettings.SelectItem.Pressed)
+                {
+                    Audio.Play("event:/game/xaphan/item_select");
+                }
+            }
         }
 
         private HashSet<Image> GetSections()
@@ -268,15 +325,29 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Col += 9;
                 }
             }
-            else if (XaphanModule.PlayerIsControllingRemoteDrone())
+            else if (XaphanModule.PlayerIsControllingRemoteDrone() && (HasMissilesUpgrade || HasSuperMissilesUpgrade))
             {
                 int missileIconPos = 32;
                 int superMissileIconPos = 145;
-                bg.Draw(Position + new Vector2(-bg.Width + 100f + missileIcon.Width + superMissileIconPos, 0f));
-                missileIcon.Draw(Position + new Vector2(missileIconPos, -11));
-                superMissileIcon.Draw(Position + new Vector2(superMissileIconPos, -11));
-                ActiveFont.DrawOutline("5", Position + new Vector2(missileIconPos + missileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, Color.White, 2f, Color.Black);
-                ActiveFont.DrawOutline("2", Position + new Vector2(superMissileIconPos + superMissileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, Color.White, 2f, Color.Black);
+                int bgWidth = (HasMissilesUpgrade && HasSuperMissilesUpgrade) ? 270 : 157;
+                bg.Draw(Position + new Vector2(-bg.Width + bgWidth, 0f));
+                if (HasMissilesUpgrade)
+                {
+                    missileIcon.Draw(Position + new Vector2(missileIconPos, -11));
+                    ActiveFont.DrawOutline(CurrentMissiles.ToString(), Position + new Vector2(missileIconPos + missileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, MissileSelected ? Color.Gold : Color.White, 2f, Color.Black);
+                }
+                if (HasSuperMissilesUpgrade && !HasMissilesUpgrade)
+                {
+                    superMissileIcon.Draw(Position + new Vector2(missileIconPos, -11));
+                }
+                else if (HasMissilesUpgrade && HasSuperMissilesUpgrade)
+                {
+                    superMissileIcon.Draw(Position + new Vector2(superMissileIconPos, -11));
+                }
+                if (HasSuperMissilesUpgrade)
+                {
+                    ActiveFont.DrawOutline(CurrentSuperMissiles.ToString(), Position + new Vector2((HasMissilesUpgrade ? superMissileIconPos : missileIconPos) + superMissileIcon.Width + 15f, 17f), new Vector2(0f, 0.5f), Vector2.One * 0.7f, SuperMissileSelected ? Color.Gold : Color.White, 2f, Color.Black);
+                }
             }
         }
     }
