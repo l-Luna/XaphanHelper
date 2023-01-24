@@ -37,40 +37,101 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public int damage;
 
-        public Missile(Player player, Vector2 position, bool superMissile) : base(position)
+        public Missile(Player player, Vector2 position, bool superMissile, bool fromDrone = false) : base(position)
         {
             Player = player;
             SuperMissile = superMissile;
             playerSpeedY = Player.Speed.Y < 0 ? Player.Speed.Y : 0;
+            ShootOffset = new Vector2(0f, -6f);
             Direction = Vector2.UnitX;
-            if (Input.MoveY == 0 || (Input.MoveY == -1 && Input.MoveX != 0) || (Input.MoveY == 1 && Player.OnGround()))
+            if (Input.MoveY == 0 || (Input.MoveY == -1 && Input.MoveX != 0 && XaphanModule.useMetroidGameplay) || (Input.MoveY == 1 && (XaphanModule.useMetroidGameplay ? Player.OnGround() : true)))
             {
-                ShootOffset.Y = -8f;
                 if (Player.Facing == Facings.Left)
                 {
-                    ShootOffset.X = 0f;
+                    ShootOffset.X = -5f;
                     Direction.X *= -1;
+                }
+                else
+                {
+                    ShootOffset.X = 0f;
+                }
+            }
+            else
+            {
+                Direction = Vector2.UnitY;
+                if (Input.MoveY != 1)
+                {
+                    Direction.Y *= -1;
+                    ShootOffset.Y = -10f;
+                }
+                if (Player.Facing == Facings.Left)
+                {
+                    ShootOffset.X = -3f;
+                }
+                else
+                {
+                    ShootOffset.X = 0f;
+                }
+            }
+            if (Direction.X != 0)
+            {
+                ShootOffset.Y = -7f;
+                if (Player.Facing == Facings.Left)
+                {
+                    ShootOffset.X = -3f;
                 }
                 else
                 {
                     ShootOffset.X = -5f;
                 }
             }
-            else
+            if (Direction.Y != 0)
             {
-                Direction = Vector2.UnitY;
-                ShootOffset.Y = Input.MoveY == -1 ? -13f : -8f;
-                if (Input.MoveY != 1)
-                {
-                    Direction.Y *= -1;
-                }
                 if (Player.Facing == Facings.Left)
                 {
-                    ShootOffset.X = 1f;
+                    ShootOffset.X = 2f;
                 }
                 else
                 {
-                    ShootOffset.X = -4f;
+                    ShootOffset.X = -3f;
+                }
+                ShootOffset.Y = Input.MoveY == -1 ? -16f : -8f;
+            }
+            if (!XaphanModule.useMetroidGameplay)
+            {
+                colliderWidth = 5f;
+                colliderHeight = 3f;
+                if (Direction.X != 0)
+                {
+                    ShootOffset.Y = -7f;
+                    if (Player.Facing == Facings.Left)
+                    {
+                        ShootOffset.X = -5f;
+                    }
+                    else
+                    {
+                        ShootOffset.X = 0f;
+                    }
+                }
+                if (Direction.Y != 0)
+                {
+                    if (Player.Facing == Facings.Left)
+                    {
+                        ShootOffset.X = -2f;
+                        if (Player.Speed.X != 0 && !Player.CollideCheck<Solid>(Player.Position + new Vector2(-1, 0)))
+                        {
+                            ShootOffset.X = -5f;
+                        }
+                    }
+                    else
+                    {
+                        ShootOffset.X = -1f;
+                        if (Player.Speed.X != 0 && !Player.CollideCheck<Solid>(Player.Position + new Vector2(1, 0)))
+                        {
+                            ShootOffset.X = 2f;
+                        }
+                    }
+                    ShootOffset.Y = -10f;
                 }
             }
             missileSpritePath = "upgrades/" + (SuperMissile ? "SuperMissile" : "Missile") + "/";

@@ -601,8 +601,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void GiveAmmo()
         {
-            CurrentMissiles = 5;
-            CurrentSuperMissiles = 2;
+            CurrentMissiles = 99;
+            CurrentSuperMissiles = 50;
         }
 
         public override void Update()
@@ -938,19 +938,38 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private IEnumerator Shoot(Level level)
         {
-            string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
-            string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
-            level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
-            int droneFireRateUpgradesCount = 0;
-            if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+            UpgradesDisplay ammoDisplay = player.SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
+            if (ammoDisplay != null)
             {
-                droneFireRateUpgradesCount = XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Count;
+                if (!ammoDisplay.MissileSelected && !ammoDisplay.SuperMissileSelected)
+                {
+                    string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
+                    string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
+                    level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
+                    int droneFireRateUpgradesCount = 0;
+                    if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                    {
+                        droneFireRateUpgradesCount = XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Count;
+                    }
+                    else
+                    {
+                        droneFireRateUpgradesCount = XaphanModule.ModSaveData.DroneFireRateUpgrades.Count;
+                    }
+                    BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.035f;
+                }
+                else if (ammoDisplay.MissileSelected)
+                {
+                    player.SceneAs<Level>().Add(new Missile(player, Position, false, true));
+                    CurrentMissiles--;
+                    BeamDelay = 0.5f;
+                }
+                else if (ammoDisplay.SuperMissileSelected)
+                {
+                    player.SceneAs<Level>().Add(new Missile(player, Position, true, true));
+                    CurrentSuperMissiles--;
+                    BeamDelay = 0.75f;
+                }
             }
-            else
-            {
-                droneFireRateUpgradesCount = XaphanModule.ModSaveData.DroneFireRateUpgrades.Count;
-            }
-            BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.035f;
             while (BeamDelay > 0f)
             {
                 BeamDelay -= Engine.DeltaTime;
