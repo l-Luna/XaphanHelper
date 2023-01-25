@@ -202,10 +202,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Scene.Add(BigTitle = new BigTitle(Title, new Vector2(960, 80), true));
             Scene.Add(statusDisplay = new StatusDisplay(level, XaphanModule.useIngameMap));
             yield return statusDisplay.GennerateUpgradesDisplay();
-            int firstLeftUpgradeIndex = 11;
-            int firstRightUpgradeIndex = 22;
-            int lastLeftUpgradeIndex = 1;
-            int lastRightUpgradeIndex = 12;
+            int firstLeftUpgradeIndex = 110;
+            int firstRightUpgradeIndex = 220;
+            int lastLeftUpgradeIndex = 10;
+            int lastRightUpgradeIndex = 120;
+            int lastBeamIndex = 70;
+            int lastAmmoIndex = 80;
             foreach (int upgradeIndex in statusDisplay.LeftDisplays)
             {
                 if (upgradeIndex < firstLeftUpgradeIndex)
@@ -215,6 +217,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (upgradeIndex > lastLeftUpgradeIndex)
                 {
                     lastLeftUpgradeIndex = upgradeIndex;
+                }
+                if (upgradeIndex > 70 && upgradeIndex < 80 && upgradeIndex > lastBeamIndex)
+                {
+                    lastBeamIndex = upgradeIndex;
+                }
+                if (upgradeIndex > 80 && upgradeIndex < 90 && upgradeIndex > lastAmmoIndex)
+                {
+                    lastAmmoIndex = upgradeIndex;
                 }
             }
             foreach (int upgradeIndex in statusDisplay.RightDisplays)
@@ -244,53 +254,62 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (Selection > 0)
                 {
-                    if (Selection <= 11)
+                    if (Selection <= 110)
                     {
                         if (Input.MenuUp.Pressed && Selection > firstLeftUpgradeIndex)
                         {
-                            while (!statusDisplay.LeftDisplays.Contains(Selection - 1))
+                            if (!statusDisplay.LeftDisplays.Contains(Selection - 10))
                             {
-                                Selection--;
+                                Selection -= (Selection % 10);
                             }
-                            Selection--;
+                            while (!statusDisplay.LeftDisplays.Contains(Selection - 10))
+                            {
+                                Selection -= 10;
+                            }
+                            Selection -= 10;
                             Audio.Play("event:/ui/main/rollover_up");
                         }
                         else if (Input.MenuDown.Pressed && Selection < lastLeftUpgradeIndex)
                         {
-                            while (!statusDisplay.LeftDisplays.Contains(Selection + 1))
+                            if (!statusDisplay.LeftDisplays.Contains(Selection + 10))
                             {
-                                Selection++;
+                                Selection -= (Selection % 10);
                             }
-                            Selection++;
+                            while (!statusDisplay.LeftDisplays.Contains(Selection + 10))
+                            {
+                                Selection += 10;
+                            }
+                            Selection += 10;
                             Audio.Play("event:/ui/main/rollover_down");
                         }
                         else
                         {
-                            if (Input.MenuRight.Pressed && statusDisplay.RightDisplays.Count > 0)
+                            if (Input.MenuRight.Pressed && ((Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                             {
-                                Selection += 11;
-                                if (Selection == 12)
+                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                                 {
-                                    while (!statusDisplay.RightDisplays.Contains(Selection))
-                                    {
-                                        Selection++;
-                                    }
+                                    Selection ++;
                                 }
-                                else
-                                {
-                                    while (!statusDisplay.RightDisplays.Contains(Selection))
-                                    {
-                                        if (Selection == 22)
-                                        {
-                                            Selection = statusDisplay.RightDisplays.Count;
-                                        }
-                                        else
-                                        {
-                                            Selection++;
-                                        }
-                                    }
-                                }
+                                Selection++;
                                 Audio.Play("event:/ui/main/rollover_up");
+
+                            }
+                            else if ((Selection > lastBeamIndex && Selection < 80) || (Selection > lastAmmoIndex && Selection < 90))
+                            {
+                                SelectRightDisplay(false);
+                            }
+                            else if (Input.MenuLeft.Pressed && ((Selection > 70 && Selection <= lastBeamIndex) || ((Selection > 80 && Selection <= lastAmmoIndex))))
+                            {
+                                while (!statusDisplay.LeftDisplays.Contains(Selection - 1))
+                                {
+                                    Selection--;
+                                }
+                                Selection--;
+                                Audio.Play("event:/ui/main/rollover_down");
+                            }
+                            else if (Input.MenuRight.Pressed && statusDisplay.RightDisplays.Count > 0)
+                            {
+                                SelectRightDisplay();
                             }
                         }
                     }
@@ -298,45 +317,56 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (Input.MenuUp.Pressed && Selection > firstRightUpgradeIndex)
                         {
-                            while (!statusDisplay.RightDisplays.Contains(Selection - 1))
+                            while (!statusDisplay.RightDisplays.Contains(Selection - 10))
                             {
-                                Selection--;
+                                Selection -= 10 ;
                             }
-                            Selection--;
+                            Selection -= 10;
                             Audio.Play("event:/ui/main/rollover_up");
                         }
                         else if (Input.MenuDown.Pressed && Selection < lastRightUpgradeIndex)
                         {
-                            while (!statusDisplay.RightDisplays.Contains(Selection + 1))
+                            while (!statusDisplay.RightDisplays.Contains(Selection + 10))
                             {
-                                Selection++;
+                                Selection += 10;
                             }
-                            Selection++;
+                            Selection += 10;
                             Audio.Play("event:/ui/main/rollover_down");
                         }
                         else
                         {
                             if (Input.MenuLeft.Pressed && statusDisplay.LeftDisplays.Count > 0)
                             {
-                                Selection -= 11;
-                                if (Selection == 1)
+                                if (Selection == 180)
                                 {
-                                    while (!statusDisplay.LeftDisplays.Contains(Selection))
-                                    {
-                                        Selection--;
-                                    }
+                                    Selection = lastBeamIndex;
+                                }
+                                else if (Selection == 190)
+                                {
+                                    Selection = lastAmmoIndex;
                                 }
                                 else
                                 {
-                                    while (!statusDisplay.LeftDisplays.Contains(Selection))
+                                    Selection -= 110;
+                                    if (Selection == 10)
                                     {
-                                        if (Selection == 11)
+                                        while (!statusDisplay.LeftDisplays.Contains(Selection))
                                         {
-                                            Selection = statusDisplay.LeftDisplays.Count;
+                                            Selection -= 10;
                                         }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        while (!statusDisplay.LeftDisplays.Contains(Selection))
                                         {
-                                            Selection++;
+                                            if (Selection == 110)
+                                            {
+                                                Selection = statusDisplay.LeftDisplays.Count * 10;
+                                            }
+                                            else
+                                            {
+                                                Selection += 10;
+                                            }
                                         }
                                     }
                                 }
@@ -353,6 +383,40 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             Audio.Play("event:/ui/game/unpause");
             Add(new Coroutine(TransitionToGame()));
+        }
+
+        private void SelectRightDisplay(bool playSound = true)
+        {
+            Selection += 110;
+            if (Selection % 10 != 0)
+            {
+                Selection -= (Selection % 10);
+            }
+            if (Selection == 120)
+            {
+                while (!statusDisplay.RightDisplays.Contains(Selection))
+                {
+                    Selection += 10;
+                }
+            }
+            else
+            {
+                while (!statusDisplay.RightDisplays.Contains(Selection))
+                {
+                    if (Selection == 220)
+                    {
+                        Selection = statusDisplay.RightDisplays.Count * 10;
+                    }
+                    else
+                    {
+                        Selection += 10;
+                    }
+                }
+            }
+            if (playSound)
+            {
+                Audio.Play("event:/ui/main/rollover_up");
+            }
         }
 
         private IEnumerator CloseStatus(bool switchtoMap)

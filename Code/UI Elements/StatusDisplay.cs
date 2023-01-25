@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
@@ -16,7 +18,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public int ID;
 
-            public float width = 550f;
+            public float width;
 
             public float height = 50f;
 
@@ -40,9 +42,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public string internalName;
 
-            public UpgradeDisplay(Level level, StatusDisplay display, Vector2 position, int id, string name, string spritePath, string spriteName, HashSet<string> inactiveList) : base(position)
+            public UpgradeDisplay(Level level, StatusDisplay display, Vector2 position, int id, string name, string spritePath, string spriteName, HashSet<string> inactiveList, float width = 550f) : base(position)
             {
                 Tag = Tags.HUD;
+                this.width = width;
                 Display = display;
                 ID = id;
                 Name = Dialog.Clean(name);
@@ -51,7 +54,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Sprite.AddLoop("on", spriteName, 0.05f, 0);
                 Sprite.Play("on");
                 Sprite.Scale = new Vector2(0.1f, 0.1f);
-                Sprite.Position = position + new Vector2(1, 1);
+                Sprite.Position = position + Vector2.One;
                 StatusScreen = level.Tracker.GetEntity<StatusScreen>();
                 LevelSet = level.Session.Area.GetLevelSet();
                 internalName = spriteName;
@@ -96,6 +99,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Selected = false;
                 }
+                if (!InactiveList.Contains(LevelSet))
+                {
+                    Sprite.Color = Color.White;
+                }
+                else
+                {
+                    Sprite.Color = Color.Gray;
+                }
             }
 
             public override void Render()
@@ -133,6 +144,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<CustomUpgradesData> CustomUpgradesData = new();
 
+        private string beamStr;
+
+        private string ammoStr;
+
+        private float padding;
+
         public StatusDisplay(Level level, bool useMap)
         {
             this.level = level;
@@ -151,6 +168,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            beamStr = "BEAMS : ";
+            ammoStr = "AMMO : ";
+            padding = Math.Max(ActiveFont.Measure(beamStr).X * 0.85f, ActiveFont.Measure(ammoStr).X * 0.85f);
             foreach (string VisitedChapter in XaphanModule.ModSaveData.VisitedChapters)
             {
                 string[] str = VisitedChapter.Split('_');
@@ -194,14 +214,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             foreach (UpgradeDisplay display in Scene.Tracker.GetEntities<UpgradeDisplay>())
             {
-                if (display.ID <= 11)
+                if (display.ID <= 110)
                 {
                     if (!LeftDisplays.Contains(display.ID))
                     {
                         LeftDisplays.Add(display.ID);
                     }
                 }
-                if (display.ID >= 12)
+                if (display.ID >= 120)
                 {
                     if (!RightDisplays.Contains(display.ID))
                     {
@@ -253,154 +273,162 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (Settings.PowerGrip)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 225f), 1, getCustomName("PowerGrip"), getCustomSpritePath("PowerGrip"), "PowerGrip", XaphanModule.ModSaveData.PowerGripInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 225f), 10, getCustomName("PowerGrip"), getCustomSpritePath("PowerGrip"), "PowerGrip", XaphanModule.ModSaveData.PowerGripInactive));
                 }
                 if (Settings.ClimbingKit)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 275f), 2, getCustomName("ClimbingKit"), getCustomSpritePath("ClimbingKit"), "ClimbingKit", XaphanModule.ModSaveData.ClimbingKitInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 275f), 20, getCustomName("ClimbingKit"), getCustomSpritePath("ClimbingKit"), "ClimbingKit", XaphanModule.ModSaveData.ClimbingKitInactive));
                 }
                 if (Settings.SpiderMagnet)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 325f), 3, getCustomName("SpiderMagnet"), getCustomSpritePath("SpiderMagnet"), "SpiderMagnet", XaphanModule.ModSaveData.SpiderMagnetInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 325f), 30, getCustomName("SpiderMagnet"), getCustomSpritePath("SpiderMagnet"), "SpiderMagnet", XaphanModule.ModSaveData.SpiderMagnetInactive));
                 }
                 if (Settings.DashBoots)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 430f), 4, getCustomName("DashBoots"), getCustomSpritePath("DashBoots"), "DashBoots", XaphanModule.ModSaveData.DashBootsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 430f), 40, getCustomName("DashBoots"), getCustomSpritePath("DashBoots"), "DashBoots", XaphanModule.ModSaveData.DashBootsInactive));
                 }
                 if (Settings.SpaceJump == 2)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 480f), 5, getCustomName("SpaceJump"), getCustomSpritePath("SpaceJump"), "SpaceJump", XaphanModule.ModSaveData.SpaceJumpInactive));
-                }
-                if (Settings.HoverBoots)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 530f), 6, getCustomName("HoverBoots"), getCustomSpritePath("HoverBoots"), "HoverBoots", XaphanModule.ModSaveData.HoverBootsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 480f), 50, getCustomName("SpaceJump"), getCustomSpritePath("SpaceJump"), "SpaceJump", XaphanModule.ModSaveData.SpaceJumpInactive));
                 }
                 if (Settings.LightningDash)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 580f), 7, getCustomName("LightningDash"), getCustomSpritePath("LightningDash"), "LightningDash", XaphanModule.ModSaveData.LightningDashInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 530f), 60, getCustomName("LightningDash"), getCustomSpritePath("LightningDash"), "LightningDash", XaphanModule.ModSaveData.LightningDashInactive));
                 }
                 if (Settings.LongBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 685f), 8, getCustomName("LongBeam"), getCustomSpritePath("LongBeam"), "LongBeam", XaphanModule.ModSaveData.LongBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f + padding, 635f), 70, "", getCustomSpritePath("LongBeam"), "LongBeam", XaphanModule.ModSaveData.LongBeamInactive, 51f));
                 }
                 if (Settings.IceBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 735f), 9, getCustomName("IceBeam"), getCustomSpritePath("IceBeam"), "IceBeam", XaphanModule.ModSaveData.IceBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(210f + padding, 635f), 71, "", getCustomSpritePath("IceBeam"), "IceBeam", XaphanModule.ModSaveData.IceBeamInactive, 51f));
                 }
                 if (Settings.WaveBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 785f), 10, getCustomName("WaveBeam"), getCustomSpritePath("WaveBeam"), "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(265f + padding, 635f), 72, "", getCustomSpritePath("WaveBeam"), "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive, 51f));
+                }
+                if (Settings.Missiles)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f + padding, 685f), 80, "", getCustomSpritePath("Missiles"), "Missiles", XaphanModule.ModSaveData.MissilesInactive, 51f));
+                }
+                if (Settings.SuperMissiles)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(210f + padding, 685f), 81, "", getCustomSpritePath("SuperMissiles"), "SuperMissiles", XaphanModule.ModSaveData.SuperMissilesInactive, 51f));
                 }
                 if (Settings.DroneTeleport)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 835f), 11, getCustomName("DroneTeleport"), getCustomSpritePath("DroneTeleport"), "DroneTeleport", XaphanModule.ModSaveData.DroneTeleportInactive));
-                }
-                if (Settings.VariaJacket)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 225f), 12, getCustomName("VariaJacket"), getCustomSpritePath("VariaJacket"), "VariaJacket", XaphanModule.ModSaveData.VariaJacketInactive));
-                }
-                if (Settings.GravityJacket)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 275f), 13, getCustomName("GravityJacket"), getCustomSpritePath("GravityJacket"), "GravityJacket", XaphanModule.ModSaveData.GravityJacketInactive));
-                }
-                if (Settings.Bombs)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 380f), 14, getCustomName("Bombs"), getCustomSpritePath("Bombs"), "Bombs", XaphanModule.ModSaveData.BombsInactive));
-                }
-                if (Settings.MegaBombs)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 430f), 15, getCustomName("MegaBombs"), getCustomSpritePath("MegaBombs"), "MegaBombs", XaphanModule.ModSaveData.MegaBombsInactive));
-                }
-                if (Settings.RemoteDrone)
-                {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 480f), 16, getCustomName("RemoteDrone"), getCustomSpritePath("RemoteDrone"), "RemoteDrone", XaphanModule.ModSaveData.RemoteDroneInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 735f), 90, getCustomName("DroneTeleport"), getCustomSpritePath("DroneTeleport"), "DroneTeleport", XaphanModule.ModSaveData.DroneTeleportInactive));
                 }
                 /*if (Settings.JumpBoost)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 470f), 14, getCustomName("JumpBoost"), getCustomSpritePath("JumpBoost"), "JumpBoost", XaphanModule.ModSaveData.JumpBoostInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 470f), 100, getCustomName("JumpBoost"), getCustomSpritePath("JumpBoost"), "JumpBoost", XaphanModule.ModSaveData.JumpBoostInactive));
                 }*/
+                if (Settings.HoverBoots)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 835f), 110, getCustomName("HoverBoots"), getCustomSpritePath("HoverBoots"), "HoverBoots", XaphanModule.ModSaveData.HoverBootsInactive));
+                }
+                if (Settings.VariaJacket)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 225f), 120, getCustomName("VariaJacket"), getCustomSpritePath("VariaJacket"), "VariaJacket", XaphanModule.ModSaveData.VariaJacketInactive));
+                }
+                if (Settings.GravityJacket)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 275f), 130, getCustomName("GravityJacket"), getCustomSpritePath("GravityJacket"), "GravityJacket", XaphanModule.ModSaveData.GravityJacketInactive));
+                }
+                if (Settings.Bombs)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 380f), 140, getCustomName("Bombs"), getCustomSpritePath("Bombs"), "Bombs", XaphanModule.ModSaveData.BombsInactive));
+                }
+                if (Settings.MegaBombs)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 430f), 150, getCustomName("MegaBombs"), getCustomSpritePath("MegaBombs"), "MegaBombs", XaphanModule.ModSaveData.MegaBombsInactive));
+                }
+                if (Settings.RemoteDrone)
+                {
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 480f), 160, getCustomName("RemoteDrone"), getCustomSpritePath("RemoteDrone"), "RemoteDrone", XaphanModule.ModSaveData.RemoteDroneInactive));
+                }
                 if (Settings.GoldenFeather)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 585f), 17, getCustomName("GoldenFeather"), getCustomSpritePath("GoldenFeather"), "GoldenFeather", XaphanModule.ModSaveData.GoldenFeatherInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 585f), 170, getCustomName("GoldenFeather"), getCustomSpritePath("GoldenFeather"), "GoldenFeather", XaphanModule.ModSaveData.GoldenFeatherInactive));
                 }
                 if (Settings.EtherealDash)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 635f), 18, getCustomName("EtherealDash"), getCustomSpritePath("EtherealDash"), "EtherealDash", XaphanModule.ModSaveData.EtherealDashInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 635f), 180, getCustomName("EtherealDash"), getCustomSpritePath("EtherealDash"), "EtherealDash", XaphanModule.ModSaveData.EtherealDashInactive));
                 }
                 if (Settings.ScrewAttack)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 685f), 19, getCustomName("ScrewAttack"), getCustomSpritePath("ScrewAttack"), "ScrewAttack", XaphanModule.ModSaveData.ScrewAttackInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 685f), 190, getCustomName("ScrewAttack"), getCustomSpritePath("ScrewAttack"), "ScrewAttack", XaphanModule.ModSaveData.ScrewAttackInactive));
                 }
                 if (Settings.Binoculars)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 735f), 20, getCustomName("Binoculars"), getCustomSpritePath("Binoculars"), "Binoculars", XaphanModule.ModSaveData.BinocularsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 735f), 200, getCustomName("Binoculars"), getCustomSpritePath("Binoculars"), "Binoculars", XaphanModule.ModSaveData.BinocularsInactive));
                 }
                 if (Settings.PortableStation)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 785f), 21, getCustomName("PortableStation"), getCustomSpritePath("PortableStation"), "PortableStation", XaphanModule.ModSaveData.PortableStationInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 785f), 210, getCustomName("PortableStation"), getCustomSpritePath("PortableStation"), "PortableStation", XaphanModule.ModSaveData.PortableStationInactive));
                 }
                 if (Settings.PulseRadar)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 835f), 22, getCustomName("PulseRadar"), getCustomSpritePath("PulseRadar"), "PulseRadar", XaphanModule.ModSaveData.PulseRadarInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 835f), 220, getCustomName("PulseRadar"), getCustomSpritePath("PulseRadar"), "PulseRadar", XaphanModule.ModSaveData.PulseRadarInactive));
                 }
             }
             else
             {
                 if (Settings.LongBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 610f), 6, "XaphanHelper_get_LongBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "LongBeam", XaphanModule.ModSaveData.LongBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 610f), 60, "XaphanHelper_get_LongBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "LongBeam", XaphanModule.ModSaveData.LongBeamInactive));
                 }
                 if (Settings.IceBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 670f), 7, "XaphanHelper_get_IceBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "IceBeam", XaphanModule.ModSaveData.IceBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 670f), 70, "XaphanHelper_get_IceBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "IceBeam", XaphanModule.ModSaveData.IceBeamInactive));
                 }
                 if (Settings.WaveBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 730f), 8, "XaphanHelper_get_WaveBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 730f), 80, "XaphanHelper_get_WaveBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive));
                 }
                 if (Settings.Spazer)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 790f), 9, "XaphanHelper_get_Spazer_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "Spazer", XaphanModule.ModSaveData.SpazerInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 790f), 90, "XaphanHelper_get_Spazer_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "Spazer", XaphanModule.ModSaveData.SpazerInactive));
                 }
                 if (Settings.PlasmaBeam)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 850f), 10, "XaphanHelper_get_PlasmaBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "PlasmaBeam", XaphanModule.ModSaveData.PlasmaBeamInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 850f), 100, "XaphanHelper_get_PlasmaBeam_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "PlasmaBeam", XaphanModule.ModSaveData.PlasmaBeamInactive));
                 }
                 if (Settings.VariaJacket)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 250f), 11, "XaphanHelper_get_Met_VariaJacket_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "VariaJacket", XaphanModule.ModSaveData.VariaJacketInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 250f), 110, "XaphanHelper_get_Met_VariaJacket_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "VariaJacket", XaphanModule.ModSaveData.VariaJacketInactive));
                 }
                 if (Settings.GravityJacket)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 310f), 12, "XaphanHelper_get_Met_GravityJacket_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "GravityJacket", XaphanModule.ModSaveData.GravityJacketInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 310f), 120, "XaphanHelper_get_Met_GravityJacket_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "GravityJacket", XaphanModule.ModSaveData.GravityJacketInactive));
                 }
                 if (Settings.MorphingBall)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 460f), 13, "XaphanHelper_get_MorphingBall_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "MorphingBall", XaphanModule.ModSaveData.MorphingBallInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 460f), 130, "XaphanHelper_get_MorphingBall_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "MorphingBall", XaphanModule.ModSaveData.MorphingBallInactive));
                 }
                 if (Settings.MorphBombs)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 520f), 14, "XaphanHelper_get_MorphBombs_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "MorphBombs", XaphanModule.ModSaveData.MorphBombsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 520f), 140, "XaphanHelper_get_MorphBombs_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "MorphBombs", XaphanModule.ModSaveData.MorphBombsInactive));
                 }
                 if (Settings.SpringBall)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 580f), 15, "XaphanHelper_get_SpringBall_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpringBall", XaphanModule.ModSaveData.SpringBallInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 580f), 150, "XaphanHelper_get_SpringBall_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpringBall", XaphanModule.ModSaveData.SpringBallInactive));
                 }
                 if (Settings.ScrewAttack)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 640f), 16, "XaphanHelper_get_Met_ScrewAttack_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "ScrewAttack", XaphanModule.ModSaveData.ScrewAttackInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 640f), 160, "XaphanHelper_get_Met_ScrewAttack_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "ScrewAttack", XaphanModule.ModSaveData.ScrewAttackInactive));
                 }
                 if (Settings.HighJumpBoots)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 790f), 17, "XaphanHelper_get_HighJumpBoots_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "HighJumpBoots", XaphanModule.ModSaveData.HighJumpBootsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 790f), 170, "XaphanHelper_get_HighJumpBoots_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "HighJumpBoots", XaphanModule.ModSaveData.HighJumpBootsInactive));
                 }
                 if (Settings.SpaceJump == 6)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 850f), 18, "XaphanHelper_get_Met_SpaceJump_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpaceJump", XaphanModule.ModSaveData.SpaceJumpInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 850f), 180, "XaphanHelper_get_Met_SpaceJump_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpaceJump", XaphanModule.ModSaveData.SpaceJumpInactive));
                 }
                 if (Settings.SpeedBooster)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 910f), 19, "XaphanHelper_get_SpeedBooster_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpeedBooster", XaphanModule.ModSaveData.SpeedBoosterInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 910f), 190, "XaphanHelper_get_SpeedBooster_Name", "collectables/XaphanHelper/SamusUpgradeCollectable", "SpeedBooster", XaphanModule.ModSaveData.SpeedBoosterInactive));
                 }
             }
             yield return null;
@@ -457,7 +485,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
                 SectionName = Dialog.Clean("Xaphanhelper_UI_Legs");
                 SectionPosition = new Vector2(430f, 410f);
-                SectionMaxUpgrades = 4;
+                SectionMaxUpgrades = 3;
                 ActiveFont.DrawOutline(SectionName, Position + SectionPosition, new Vector2(0.5f, 0.5f), Vector2.One * 1f, Color.Yellow, 2f, Color.Black);
                 SectionTitleLenght = ActiveFont.Measure(SectionName).X;
                 SectionTitleHeight = ActiveFont.Measure(SectionName).Y;
@@ -477,11 +505,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10 + 275f - (SectionTitleLenght / 2 + 10) + 15 + 155 - 6, (SectionMaxUpgrades * 50f + 26) / 2 + 200 - 6), 12f, 12f, Color.White);
 
                 SectionName = Settings.RemoteDrone ? Dialog.Clean("Xaphanhelper_UI_Drone") : "???";
-                SectionPosition = new Vector2(430f, 665f);
-                SectionMaxUpgrades = 4;
+                SectionPosition = new Vector2(430f, 615f);
+                SectionMaxUpgrades = 5;
                 ActiveFont.DrawOutline(SectionName, Position + SectionPosition, new Vector2(0.5f, 0.5f), Vector2.One * 1f, Color.Yellow, 2f, Color.Black);
                 SectionTitleLenght = ActiveFont.Measure(SectionName).X;
                 SectionTitleHeight = ActiveFont.Measure(SectionName).Y;
+                ActiveFont.DrawOutline(Settings.RemoteDrone ? beamStr : "", new Vector2(155f, 635f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
+                ActiveFont.DrawOutline((Settings.Missiles || Settings.SuperMissiles) ? ammoStr : "", new Vector2(155f, 685f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
                 Draw.Rect(Position + SectionPosition + new Vector2(-275f - 15, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10 + 275f - (SectionTitleLenght / 2 + 10) + 5, -4), 10f, SectionMaxUpgrades * 50f + SectionTitleHeight / 2 + 4, Color.White);
@@ -660,6 +690,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             controlA = Input.MenuUp;
                             inputActionA = "XaphanHelper_Hold";
                             break;*/
+                        case "Missiles":
+                            UpgDesc_b = null;
+                            break;
+                        case "SuperMissiles":
+                            UpgDesc_b = null;
+                            break;
                         default:
                             break;
                     }
