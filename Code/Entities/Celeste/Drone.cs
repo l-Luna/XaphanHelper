@@ -601,8 +601,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void GiveAmmo()
         {
-            CurrentMissiles = 25;
-            CurrentSuperMissiles = 10;
+            AreaKey area = SceneAs<Level>().Session.Area;
+            string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+            int chapterIndex = area.ChapterIndex;
+            int missileCount = 10;
+            foreach (string missileUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+            {
+                if (missileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                {
+                    missileCount += 2;
+                }
+            }
+            CurrentMissiles = missileCount;
+            int superMissileCount = 5;
+            foreach (string superMissileUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+            {
+                if (superMissileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                {
+                    superMissileCount++;
+                }
+            }
+            CurrentSuperMissiles = superMissileCount;
         }
 
         public override void Update()

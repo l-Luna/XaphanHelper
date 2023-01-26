@@ -2264,6 +2264,8 @@ namespace Celeste.Mod.XaphanHelper
             {
                 ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                 ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneMissilesUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Clear();
                 ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 Settings.SpeedrunMode = false;
             }
@@ -3029,6 +3031,8 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                     ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                    ModSaveData.SpeedrunModeDroneMissilesUpgrades.Clear();
+                    ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Clear();
                     ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
                 }
                 if (string.IsNullOrEmpty(ModSaveData.DestinationRoom))
@@ -3500,6 +3504,8 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                 ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneMissilesUpgrades.Clear();
+                ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Clear();
                 ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
             }
             orig(self, player);

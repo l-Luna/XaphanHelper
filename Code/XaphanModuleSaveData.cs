@@ -111,6 +111,14 @@ namespace Celeste.Mod.XaphanHelper
 
         public HashSet<string> SpeedrunModeStaminaUpgrades = new();
 
+        public HashSet<string> DroneMissilesUpgrades = new();
+
+        public HashSet<string> SpeedrunModeDroneMissilesUpgrades = new();
+
+        public HashSet<string> DroneSuperMissilesUpgrades = new();
+
+        public HashSet<string> SpeedrunModeDroneSuperMissilesUpgrades = new();
+
         public HashSet<string> DroneFireRateUpgrades = new();
 
         public HashSet<string> SpeedrunModeDroneFireRateUpgrades = new();
@@ -178,11 +186,6 @@ namespace Celeste.Mod.XaphanHelper
         // Lobbies variables
 
         public Dictionary<string, string> VisitedLobbyPositions = new();
-        // public HashSet<string> VisitedLobbyMapTiles = new();
-        //
-        // public List<Vector2> GeneratedVisitedLobbyMapTiles = new();
-        //
-        // public List<Vector2> GeneratedVisitedLobbyMapTiles2 = new();
 
         // Metroid variables
 

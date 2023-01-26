@@ -37,6 +37,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string type;
 
+        private string Prefix;
+
+        private int chapterIndex;
+
         public CustomFollower(EntityData data, Vector2 offset, EntityID gid)
         {
             ID = gid;
@@ -54,6 +58,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+            chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
+            switch (type)
+            {
+                case "missile":
+                    {
+                        if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                        {
+                            RemoveSelf();
+                        }
+                        break;
+                    }
+                case "superMissile":
+                    {
+                        if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                        {
+                            RemoveSelf();
+                        }
+                        break;
+                    }
+            }
             Add(sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/" + type + "/"));
             sprite.AddLoop("idle", "idle", 0.1f, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3);
             sprite.Add("collect", "collect", 0.05f);
@@ -190,6 +215,29 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
             }
             Scene.Add(new StrawberryPoints(Position, false, collectIndex, false));
+            switch (type)
+            {
+                case "missile":
+                {
+                        
+                    XaphanModule.ModSaveData.DroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                    if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                    {
+                        XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                    }
+                    break;
+                }
+                case "superMissile":
+                    {
+
+                        XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                        {
+                            XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        }
+                        break;
+                    }
+            }
             RemoveSelf();
         }
 

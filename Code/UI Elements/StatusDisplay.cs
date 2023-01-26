@@ -318,14 +318,33 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(265f + padding, 635f), 72, "", getCustomSpritePath("WaveBeam"), "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive, 51f));
                 }
                 float scale = 0.4f;
+                AreaKey area = SceneAs<Level>().Session.Area;
+                string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+                int chapterIndex = area.ChapterIndex;
                 if (Settings.MissilesModule)
                 {
-                    string qty = "x 25";
+                    int missileCount = 10;
+                    foreach (string missileUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+                    {
+                        if (missileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                        {
+                            missileCount += 2;
+                        }
+                    }
+                    string qty = "x " + missileCount;
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f + padding, 685f), 80, qty, getCustomSpritePath("MissilesModule"), "MissilesModule", XaphanModule.ModSaveData.MissilesModuleInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
                 }
                 if (Settings.SuperMissilesModule)
                 {
-                    string qty = "x 10";
+                    int superMissileCount = 5;
+                    foreach (string superMissileUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                    {
+                        if (superMissileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                        {
+                            superMissileCount ++;
+                        }
+                    }
+                    string qty = "x " + superMissileCount;
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(210f + padding, 685f), 81, qty, getCustomSpritePath("SuperMissilesModule"), "SuperMissilesModule", XaphanModule.ModSaveData.SuperMissilesModuleInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
                 }
                 if (Settings.DroneTeleport)
