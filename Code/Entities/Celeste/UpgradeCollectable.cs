@@ -328,10 +328,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     controlA = Input.MenuUp;
                     inputActionA = "XaphanHelper_Hold";
                     break;*/
-                case "Missiles":
+                case "MissilesModule":
                     poemTextC = null;
                     break;
-                case "SuperMissiles":
+                case "SuperMissilesModule":
                     poemTextC = null;
                     break;
                 default:

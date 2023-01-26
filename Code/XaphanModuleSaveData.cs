@@ -69,9 +69,9 @@ namespace Celeste.Mod.XaphanHelper
 
         public HashSet<string> HoverBootsInactive = new();
 
-        public HashSet<string> MissilesInactive = new();
+        public HashSet<string> MissilesModuleInactive = new();
 
-        public HashSet<string> SuperMissilesInactive = new();
+        public HashSet<string> SuperMissilesModuleInactive = new();
 
         // Metroid Upgrades
 

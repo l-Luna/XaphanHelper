@@ -1,6 +1,6 @@
 ﻿namespace Celeste.Mod.XaphanHelper.Upgrades
 {
-    class Missiles : Upgrade
+    class MissilesModule : Upgrade
     {
         public override int GetDefaultValue()
         {
@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.Missiles ? 1 : 0;
+            return Settings.MissilesModule ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.Missiles = (value != 0);
+            Settings.MissilesModule = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.Missiles && !XaphanModule.ModSaveData.MissilesInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.MissilesModule && !XaphanModule.ModSaveData.MissilesModuleInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

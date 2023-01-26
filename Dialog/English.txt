@@ -46,6 +46,12 @@
 	XaphanHelper_get_EnergyTank_Desc= Increases maximum Stamina
 	XaphanHelper_get_FireRateModule_Name= FIRE RATE MODULE
 	XaphanHelper_get_FireRateModule_Desc= Increases drone Fire rate
+	XaphanHelper_get_MissilesModule_Name= MISSILES MODULE
+	XaphanHelper_get_MissilesModule_Desc= Allows the drone to fire missiles that can destroy
+	XaphanHelper_get_MissilesModule_Desc_b= some walls and activate certain mechanisms
+	XaphanHelper_get_SuperMissilesModule_Name= SUPER MISSILES MODULE
+	XaphanHelper_get_SuperMissilesModule_Desc= Allows the drone to fire powerful missiles
+	XaphanHelper_get_SuperMissilesModule_Desc_b= with a large blast radius
 	XaphanHelper_get_PowerGrip_Name= POWER GRIP
 	XaphanHelper_get_PowerGrip_Desc= Allows you to cling to walls for a short time
 	XaphanHelper_get_PowerGrip_Desc_b= near a wall to grab it
@@ -240,6 +246,8 @@
 	Xaphanhelper_UI_Jacket= JACKET
 	Xaphanhelper_UI_Bag= BAG
 	Xaphanhelper_UI_Misc= MISC
+	Xaphanhelper_UI_Beam= BEAM:
+	Xaphanhelper_UI_Modules= MODULES:
 	Xaphanhelper_UI_Time= TIME
 	XaphanHelper_UI_Currently_In= Currently In:
 	XaphanHelper_UI_ReturnToMap_Rooms= Returning to Map will save your progress.{n}You will restart at your current spawn point.

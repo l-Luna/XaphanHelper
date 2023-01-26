@@ -129,10 +129,10 @@ namespace Celeste.Mod.XaphanHelper
         public bool LightningDash { get; set; } = false;
 
         [SettingIgnore]
-        public bool Missiles { get; set; } = false;
+        public bool MissilesModule { get; set; } = false;
 
         [SettingIgnore]
-        public bool SuperMissiles { get; set; } = false;
+        public bool SuperMissilesModule { get; set; } = false;
 
         // Metroid Upgrades
 

@@ -248,8 +248,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if (!SceneAs<Level>().Paused && !SceneAs<Level>().PauseLock && XaphanModule.PlayerIsControllingRemoteDrone())
             {
-                HasMissilesUpgrade = Missiles.Active(SceneAs<Level>());
-                HasSuperMissilesUpgrade = SuperMissiles.Active(SceneAs<Level>());
+                HasMissilesUpgrade = MissilesModule.Active(SceneAs<Level>());
+                HasSuperMissilesUpgrade = SuperMissilesModule.Active(SceneAs<Level>());
                 bool NoneSelected = !MissileSelected && !SuperMissileSelected;
                 if (NoneSelected && XaphanSettings.SelectItem.Pressed)
                 {

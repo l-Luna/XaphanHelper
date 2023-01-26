@@ -46,6 +46,12 @@
 	XaphanHelper_get_EnergyTank_Desc= Augmente l'endurance maximale
 	XaphanHelper_get_FireRateModule_Name= MODULE DE CADENCE DE TIR
 	XaphanHelper_get_FireRateModule_Desc= Augmente la cadence de tir du drone
+	XaphanHelper_get_MissilesModule_Name= MODULE DE MISSILES
+	XaphanHelper_get_MissilesModule_Desc= Permet au drone de tirer des missiles pouvant détruire
+	XaphanHelper_get_MissilesModule_Desc_b= certains murs et activer certains mécanismes
+	XaphanHelper_get_SuperMissilesModule_Name= MODULE DE SUPER MISSILES
+	XaphanHelper_get_SuperMissilesModule_Desc= Permet au drone de tirer de puissants missiles
+	XaphanHelper_get_SuperMissilesModule_Desc_b= ayant un large rayon d'explosion
 	XaphanHelper_get_PowerGrip_Name= POIGNE DE FER
 	XaphanHelper_get_PowerGrip_Desc= Permet de s'accrocher aux murs pendant un court instant
 	XaphanHelper_get_PowerGrip_Desc_b= près d'un mur pour s'y accrocher
@@ -242,6 +248,8 @@
 	Xaphanhelper_UI_Jacket= VESTE
 	Xaphanhelper_UI_Bag= SAC
 	Xaphanhelper_UI_Misc= DIVERS
+	Xaphanhelper_UI_Beam= RAYON :
+	Xaphanhelper_UI_Modules= MODULES :
 	Xaphanhelper_UI_Time= TEMPS
 	XaphanHelper_UI_Currently_In= Actuellement dans :
 	XaphanHelper_UI_ReturnToMap_Rooms= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à ton point de départ actuel.

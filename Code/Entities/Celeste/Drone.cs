@@ -601,8 +601,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void GiveAmmo()
         {
-            CurrentMissiles = 99;
-            CurrentSuperMissiles = 50;
+            CurrentMissiles = 25;
+            CurrentSuperMissiles = 10;
         }
 
         public override void Update()

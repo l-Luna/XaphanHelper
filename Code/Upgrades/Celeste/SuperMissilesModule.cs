@@ -1,6 +1,6 @@
 ﻿namespace Celeste.Mod.XaphanHelper.Upgrades
 {
-    class SuperMissiles : Upgrade
+    class SuperMissilesModule : Upgrade
     {
         public override int GetDefaultValue()
         {
@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.SuperMissiles ? 1 : 0;
+            return Settings.SuperMissilesModule ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.SuperMissiles = (value != 0);
+            Settings.SuperMissilesModule = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.SuperMissiles && !XaphanModule.ModSaveData.SuperMissilesInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.Settings.SuperMissilesModule && !XaphanModule.ModSaveData.SuperMissilesModuleInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

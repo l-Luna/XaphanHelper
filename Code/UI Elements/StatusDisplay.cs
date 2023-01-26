@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
@@ -40,15 +41,24 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             private int alphaStatus = 0;
 
+            private float scale;
+
             public string internalName;
 
-            public UpgradeDisplay(Level level, StatusDisplay display, Vector2 position, int id, string name, string spritePath, string spriteName, HashSet<string> inactiveList, float width = 550f) : base(position)
+            public float paddingH;
+
+            public float paddingV;
+
+            public UpgradeDisplay(Level level, StatusDisplay display, Vector2 position, int id, string name, string spritePath, string spriteName, HashSet<string> inactiveList, float width = 550f, bool notDialog = false, float scale = 0.85f, float paddingH = 10f, float paddingV = 0f) : base(position)
             {
                 Tag = Tags.HUD;
                 this.width = width;
+                this.scale = scale;
+                this.paddingH = paddingH;
+                this.paddingV = paddingV;
                 Display = display;
                 ID = id;
-                Name = Dialog.Clean(name);
+                Name = notDialog ? name : Dialog.Clean(name);
                 InactiveList = inactiveList;
                 Sprite = new Sprite(GFX.Gui, spritePath + "/");
                 Sprite.AddLoop("on", spriteName, 0.05f, 0);
@@ -112,11 +122,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             public override void Render()
             {
                 base.Render();
-                float lenght = ActiveFont.Measure(Name).X * 0.85f;
+                float lenght = ActiveFont.Measure(Name).X * scale;
                 bool smallText = false;
                 if (lenght > 500f)
                 {
-                    lenght = ActiveFont.Measure(Name).X * 0.75f;
+                    lenght = ActiveFont.Measure(Name).X * (scale - 0.1f);
                     smallText = true;
                 }
                 if (Selected)
@@ -124,7 +134,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Draw.Rect(Position, width, height, Color.Yellow * selectedAlpha);
                 }
                 Sprite.Render();
-                ActiveFont.DrawOutline(Name, Position + new Vector2(70 + lenght / 2 - 10, height / 2), new Vector2(0.5f, 0.5f), Vector2.One * (smallText ? 0.75f : 0.85f), !InactiveList.Contains(LevelSet) ? Color.White : Color.Gray, 2f, Color.Black);
+                ActiveFont.DrawOutline(Name, Position + new Vector2(60 + paddingH + lenght / 2 - 10, height / 2 + paddingV), new Vector2(0.5f, 0.5f), Vector2.One * (smallText ? 0.75f : scale), !InactiveList.Contains(LevelSet) ? Color.White : Color.Gray, 2f, Color.Black);
             }
         }
 
@@ -146,7 +156,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private string beamStr;
 
-        private string ammoStr;
+        private string modulesStr;
 
         private float padding;
 
@@ -168,9 +178,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            beamStr = "BEAMS : ";
-            ammoStr = "AMMO : ";
-            padding = Math.Max(ActiveFont.Measure(beamStr).X * 0.85f, ActiveFont.Measure(ammoStr).X * 0.85f);
+            beamStr = Dialog.Clean("Xaphanhelper_UI_Beam") + " ";
+            modulesStr = Dialog.Clean("Xaphanhelper_UI_Modules") + " ";
+            padding = Math.Max(ActiveFont.Measure(beamStr).X * 0.85f, ActiveFont.Measure(modulesStr).X * 0.85f);
             foreach (string VisitedChapter in XaphanModule.ModSaveData.VisitedChapters)
             {
                 string[] str = VisitedChapter.Split('_');
@@ -307,13 +317,16 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(265f + padding, 635f), 72, "", getCustomSpritePath("WaveBeam"), "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive, 51f));
                 }
-                if (Settings.Missiles)
+                float scale = 0.4f;
+                if (Settings.MissilesModule)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f + padding, 685f), 80, "", getCustomSpritePath("Missiles"), "Missiles", XaphanModule.ModSaveData.MissilesInactive, 51f));
+                    string qty = "x 25";
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f + padding, 685f), 80, qty, getCustomSpritePath("MissilesModule"), "MissilesModule", XaphanModule.ModSaveData.MissilesModuleInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
                 }
-                if (Settings.SuperMissiles)
+                if (Settings.SuperMissilesModule)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(210f + padding, 685f), 81, "", getCustomSpritePath("SuperMissiles"), "SuperMissiles", XaphanModule.ModSaveData.SuperMissilesInactive, 51f));
+                    string qty = "x 10";
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(210f + padding, 685f), 81, qty, getCustomSpritePath("SuperMissilesModule"), "SuperMissilesModule", XaphanModule.ModSaveData.SuperMissilesModuleInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
                 }
                 if (Settings.DroneTeleport)
                 {
@@ -511,7 +524,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 SectionTitleLenght = ActiveFont.Measure(SectionName).X;
                 SectionTitleHeight = ActiveFont.Measure(SectionName).Y;
                 ActiveFont.DrawOutline(Settings.RemoteDrone ? beamStr : "", new Vector2(155f, 635f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
-                ActiveFont.DrawOutline((Settings.Missiles || Settings.SuperMissiles) ? ammoStr : "", new Vector2(155f, 685f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
+                ActiveFont.DrawOutline((Settings.MissilesModule || Settings.SuperMissilesModule) ? modulesStr : "", new Vector2(155f, 685f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
                 Draw.Rect(Position + SectionPosition + new Vector2(-275f - 15, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10 + 275f - (SectionTitleLenght / 2 + 10) + 5, -4), 10f, SectionMaxUpgrades * 50f + SectionTitleHeight / 2 + 4, Color.White);
@@ -690,12 +703,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             controlA = Input.MenuUp;
                             inputActionA = "XaphanHelper_Hold";
                             break;*/
-                        case "Missiles":
-                            UpgDesc_b = null;
-                            break;
-                        case "SuperMissiles":
-                            UpgDesc_b = null;
-                            break;
                         default:
                             break;
                     }

@@ -121,8 +121,8 @@ namespace Celeste.Mod.XaphanHelper
             DashBoots,
             HoverBoots,
             LightningDash,
-            Missiles,
-            SuperMissiles,
+            MissilesModule,
+            SuperMissilesModule,
 
             // Metroid Upgrades
 
@@ -227,14 +227,14 @@ namespace Celeste.Mod.XaphanHelper
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_LightningDash");
         }
 
-        public static bool MissilesCollected(Level level)
+        public static bool MissilesModuleCollected(Level level)
         {
-            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_Missiles");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_MissilesModule");
         }
 
-        public static bool SuperMissilesCollected(Level level)
+        public static bool SuperMissilesModuleCollected(Level level)
         {
-            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SuperMissiles");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SuperMissilesModule");
         }
 
         // Metroid Upgrades
@@ -504,8 +504,8 @@ namespace Celeste.Mod.XaphanHelper
             UpgradeHandlers[Upgrades.DashBoots] = new DashBoots();
             UpgradeHandlers[Upgrades.HoverBoots] = new HoverBoots();
             UpgradeHandlers[Upgrades.LightningDash] = new LightningDash();
-            UpgradeHandlers[Upgrades.Missiles] = new Missiles();
-            UpgradeHandlers[Upgrades.SuperMissiles] = new SuperMissiles();
+            UpgradeHandlers[Upgrades.MissilesModule] = new MissilesModule();
+            UpgradeHandlers[Upgrades.SuperMissilesModule] = new SuperMissilesModule();
 
             //Metroid Upgrades
 
@@ -1594,8 +1594,8 @@ namespace Celeste.Mod.XaphanHelper
                 Settings.SpringBall = false;
                 Settings.HighJumpBoots = false;
                 Settings.SpeedBooster = false;
-                Settings.Missiles = false;
-                Settings.SuperMissiles = false;
+                Settings.MissilesModule = false;
+                Settings.SuperMissilesModule = false;
             }
 
             // Set flags based on previous player progress
@@ -1705,8 +1705,8 @@ namespace Celeste.Mod.XaphanHelper
             Settings.SpringBall = false;
             Settings.HighJumpBoots = false;
             Settings.SpeedBooster = false;
-            Settings.Missiles = false;
-            Settings.SuperMissiles = false;
+            Settings.MissilesModule = false;
+            Settings.SuperMissilesModule = false;
             level.Session.SetFlag("Using_Elevator", false);
 
             // Get upgrades info from the Upgrade Controller
@@ -1734,8 +1734,8 @@ namespace Celeste.Mod.XaphanHelper
             bool setLongBeam = false;
             bool setIceBeam = false;
             bool setWaveBeam = false;
-            bool setMissiles = false;
-            bool setSuperMissiles = false;
+            bool setMissilesModule = false;
+            bool setSuperMissilesModule = false;
             bool hasStartingUpgrades = false;
             foreach (LevelData levelData in MapData.Levels)
             {
@@ -1766,9 +1766,9 @@ namespace Celeste.Mod.XaphanHelper
                         setLongBeam = entity.Bool("onlyAllowLongBeam") || entity.Bool("startWithLongBeam");
                         setIceBeam = entity.Bool("onlyAllowIceBeam") || entity.Bool("startWithIceBeam");
                         setWaveBeam = entity.Bool("onlyAllowWaveBeam") || entity.Bool("startWithWaveBeam");
-                        setMissiles = entity.Bool("onlyAllowMissiles") || entity.Bool("startWithMissiles");
-                        setSuperMissiles = entity.Bool("onlyAllowSuperMissiles") || entity.Bool("startWithSuperMissiles");
-                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissiles || setSuperMissiles;
+                        setMissilesModule = entity.Bool("onlyAllowMissilesModule") || entity.Bool("startWithMissilesModule");
+                        setSuperMissilesModule = entity.Bool("onlyAllowSuperMissilesModule") || entity.Bool("startWithSuperMissilesModule");
+                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissilesModule || setSuperMissilesModule;
                         forceStartingUpgrades = entity.Bool("onlyAllowStartingUpgrades", hasStartingUpgrades ? true : false);
                         break;
                     }
@@ -1800,8 +1800,8 @@ namespace Celeste.Mod.XaphanHelper
             bool goldenLongBeam = false;
             bool goldenIceBeam = false;
             bool goldenWaveBeam = false;
-            bool goldenMissiles = false;
-            bool goldenSuperMissiles = false;
+            bool goldenMissilesModule = false;
+            bool goldenSuperMissilesModule = false;
             foreach (LevelData levelData in MapData.Levels)
             {
                 foreach (EntityData entity in levelData.Entities)
@@ -1831,8 +1831,8 @@ namespace Celeste.Mod.XaphanHelper
                         goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
                         goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
                         goldenWaveBeam = entity.Bool("goldenStartWithWaveBeam");
-                        goldenMissiles = entity.Bool("goldenStartWithMissiles");
-                        goldenSuperMissiles = entity.Bool("goldenStartWithSuperMissiles");
+                        goldenMissilesModule = entity.Bool("goldenStartWithMissilesModule");
+                        goldenSuperMissilesModule = entity.Bool("goldenStartWithSuperMissilesModule");
                         break;
                     }
                 }
@@ -1957,15 +1957,15 @@ namespace Celeste.Mod.XaphanHelper
                     Settings.WaveBeam = true;
                     level.Session.SetFlag("Upgrade_WaveBeam", true);
                 }
-                if (setMissiles || level.Session.GetFlag("Upgrade_Missiles"))
+                if (setMissilesModule || level.Session.GetFlag("Upgrade_MissilesModule"))
                 {
-                    Settings.Missiles = true;
-                    level.Session.SetFlag("Upgrade_Missiles", true);
+                    Settings.MissilesModule = true;
+                    level.Session.SetFlag("Upgrade_MissilesModule", true);
                 }
-                if (setSuperMissiles || level.Session.GetFlag("Upgrade_SuperMissiles"))
+                if (setSuperMissilesModule || level.Session.GetFlag("Upgrade_SuperMissilesModule"))
                 {
-                    Settings.SuperMissiles = true;
-                    level.Session.SetFlag("Upgrade_SuperMissiles", true);
+                    Settings.SuperMissilesModule = true;
+                    level.Session.SetFlag("Upgrade_SuperMissilesModule", true);
                 }
             }
             else
@@ -2056,15 +2056,15 @@ namespace Celeste.Mod.XaphanHelper
                         Settings.LightningDash = true;
                         level.Session.SetFlag("Upgrade_LightningDash", true);
                     }
-                    if (MissilesCollected(level))
+                    if (MissilesModuleCollected(level))
                     {
-                        Settings.Missiles = true;
-                        level.Session.SetFlag("Upgrade_Missiles", true);
+                        Settings.MissilesModule = true;
+                        level.Session.SetFlag("Upgrade_MissilesModule", true);
                     }
-                    if (SuperMissilesCollected(level))
+                    if (SuperMissilesModuleCollected(level))
                     {
-                        Settings.SuperMissiles = true;
-                        level.Session.SetFlag("SuperUpgrade_Missiles", true);
+                        Settings.SuperMissilesModule = true;
+                        level.Session.SetFlag("SuperUpgrade_MissilesModule", true);
                     }
 
                     //Metroid Upgrades
@@ -2237,13 +2237,13 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         Settings.WaveBeam = true;
                     }
-                    if (goldenMissiles || level.Session.GetFlag("Upgrade_Missiles"))
+                    if (goldenMissilesModule || level.Session.GetFlag("Upgrade_MissilesModule"))
                     {
-                        Settings.Missiles = true;
+                        Settings.MissilesModule = true;
                     }
-                    if (goldenSuperMissiles || level.Session.GetFlag("Upgrade_SuperMissiles"))
+                    if (goldenSuperMissilesModule || level.Session.GetFlag("Upgrade_SuperMissilesModule"))
                     {
-                        Settings.SuperMissiles = true;
+                        Settings.SuperMissilesModule = true;
                     }
                 }
             }
@@ -3284,10 +3284,10 @@ namespace Celeste.Mod.XaphanHelper
                         Settings.IceBeam = false;
                         level.Session.SetFlag("Upgrade_WaveBeam", false);
                         Settings.WaveBeam = false;
-                        level.Session.SetFlag("Upgrade_Missiles", false);
-                        Settings.Missiles = false;
-                        level.Session.SetFlag("Upgrade_SuperMissiles", false);
-                        Settings.SuperMissiles = false;
+                        level.Session.SetFlag("Upgrade_MissilesModule", false);
+                        Settings.MissilesModule = false;
+                        level.Session.SetFlag("Upgrade_SuperMissilesModule", false);
+                        Settings.SuperMissilesModule = false;
 
                         foreach (string flag in ModSaveData.SavedFlags)
                         {
@@ -3334,8 +3334,8 @@ namespace Celeste.Mod.XaphanHelper
                         bool goldenLongBeam = false;
                         bool goldenIceBeam = false;
                         bool goldenWaveBeam = false;
-                        bool goldenMissiles = false;
-                        bool goldenSuperMissiles = false;
+                        bool goldenMissilesModule = false;
+                        bool goldenSuperMissilesModule = false;
                         foreach (LevelData levelData in MapData.Levels)
                         {
                             foreach (EntityData entity in levelData.Entities)
@@ -3365,8 +3365,8 @@ namespace Celeste.Mod.XaphanHelper
                                     goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
                                     goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
                                     goldenWaveBeam = entity.Bool("goldenStartWithWaveBeam");
-                                    goldenMissiles = entity.Bool("goldenStartWithMissiles");
-                                    goldenSuperMissiles = entity.Bool("goldenStartWithSuperMissiles");
+                                    goldenMissilesModule = entity.Bool("goldenStartWithMissilesModule");
+                                    goldenSuperMissilesModule = entity.Bool("goldenStartWithSuperMissilesModule");
                                     break;
                                 }
                             }
@@ -3486,15 +3486,15 @@ namespace Celeste.Mod.XaphanHelper
                             Settings.WaveBeam = true;
                             level.Session.SetFlag("Upgrade_WaveBeam", true);
                         }
-                        if (goldenMissiles)
+                        if (goldenMissilesModule)
                         {
-                            Settings.Missiles = true;
-                            level.Session.SetFlag("Upgrade_Missiles", true);
+                            Settings.MissilesModule = true;
+                            level.Session.SetFlag("Upgrade_MissilesModule", true);
                         }
-                        if (goldenSuperMissiles)
+                        if (goldenSuperMissilesModule)
                         {
-                            Settings.SuperMissiles = true;
-                            level.Session.SetFlag("Upgrade_SuperMissiles", true);
+                            Settings.SuperMissilesModule = true;
+                            level.Session.SetFlag("Upgrade_SuperMissilesModule", true);
                         }
                     }
                 }
