@@ -165,6 +165,12 @@
 	XaphanHelper_get_WaveBeam_Desc= Permet aux rayons de traverser les objets solides
 	XaphanHelper_get_WaveBeam_Desc_drone= Permet au rayon du drone de traverser les objets solides
 
+#Collectables
+	XaphanHelper_Collect_EnergyTank= ENDURANCE
+	XaphanHelper_Collect_Missiles= MISSILES
+	XaphanHelper_Collect_SuperMissiles= SUPER MISSILE
+	XaphanHelper_Collect_FireRateModule= CADENCE DE TIR
+
 #Warps
 	XaphanHelper_Warp_Select_Destination= - Selectionnez votre destination -
 	XaphanHelper_Warp_Stay= Rester ici

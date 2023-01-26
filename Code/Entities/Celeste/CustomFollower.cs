@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -9,6 +10,131 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/CustomFollower")]
     class CustomFollower : Entity
     {
+        [Tracked(true)]
+        private class CustomFollowerCollectText : Entity
+        {
+            private Sprite[] sprites;
+
+            private int color;
+
+            private VertexLight light;
+
+            private BloomPoint bloom;
+
+            private int index;
+
+            private DisplacementRenderer.Burst burst;
+
+            private string text;
+
+            private float textWidth;
+
+            public CustomFollowerCollectText(Vector2 position, int index, int color, string text) : base(position)
+            {
+                this.text = text;
+                sprites = new Sprite[text.Length];
+                for (int i = 0; i < text.Length; i++)
+                {
+                    Sprite sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/collectText/");
+                    sprite.Add("start", "start", 0.08f);
+                    sprite.Add("char", text[i] == ' ' ? "_" : text[i].ToString(), 1f);
+                    sprite.Add("end", "end", 0.08f);
+                    sprite.Play("start");
+                    sprites[i] = sprite;
+                    
+                }
+                textWidth = sprites.Sum((Sprite sprite) => sprite.Width -1) + 1;
+                Add(light = new VertexLight(Color.White, 1f, 16, 24));
+                Add(bloom = new BloomPoint(1f, 12f));
+                Depth = -2000100;
+                Tag = (int)Tags.Persistent | (int)Tags.TransitionUpdate | (int)Tags.FrozenUpdate;
+                this.color = color;
+                this.index = index;
+            }
+
+            public override void Added(Scene scene)
+            {
+                index = Math.Min(5, index);
+                float lastX = (float)Math.Round(-textWidth / 2f, MidpointRounding.AwayFromZero);
+                for (int i = 0; i < text.Length; i++)
+                {
+                    sprites[i].X = lastX;
+                    lastX = sprites[i].X + sprites[i].Width - 1;
+                    Add(sprites[i]);
+                }
+                Sprite[] array = sprites;
+                foreach (Sprite sprite in array)
+                {
+                    sprite.OnLastFrame = delegate
+                    {
+                        if (sprite.CurrentAnimationID == "start")
+                        {
+                            sprite.Play("char");
+                        }
+                        else if (sprite.CurrentAnimationID == "char")
+                        {
+                            sprite.Play("end");
+                        }
+                        else if (sprite.CurrentAnimationID == "end")
+                        {
+                            RemoveSelf();
+                        }
+                    };
+                }
+                base.Added(scene);
+                foreach (Entity entity in Scene.Tracker.GetEntities<CustomFollowerCollectText>())
+                {
+                    if (entity != this && Vector2.DistanceSquared(entity.Position, Position) <= 256f)
+                    {
+                        entity.RemoveSelf();
+                    }
+                }
+                burst = (scene as Level).Displacement.AddBurst(Position, 0.3f, 16f, 24f, 0.3f);
+            }
+
+            public override void Update()
+            {
+
+                Level level = Scene as Level;
+                if (level.Frozen)
+                {
+                    if (burst != null)
+                    {
+                        burst.AlphaFrom = (burst.AlphaTo = 0f);
+                        burst.Percent = burst.Duration;
+                    }
+                    return;
+                }
+                base.Update();
+                Camera camera = level.Camera;
+                Y -= 8f * Engine.DeltaTime;
+                X = Calc.Clamp(X, camera.Left + 8f, camera.Right - 8f);
+                Y = Calc.Clamp(Y, camera.Top + 8f, camera.Bottom - 8f);
+                light.Alpha = Calc.Approach(light.Alpha, 0f, Engine.DeltaTime * 4f);
+                bloom.Alpha = light.Alpha;
+                ParticleType particleType = (color == 0 ? Strawberry.P_GhostGlow : ( color == 1 ? Strawberry.P_Glow : Strawberry.P_MoonGlow));
+                Sprite[] array = sprites;
+                foreach (Sprite sprite in array)
+                {
+                    if (Scene.OnInterval(0.05f))
+                    {
+                        if (sprite.Color == particleType.Color2)
+                        {
+                            sprite.Color = particleType.Color;
+                        }
+                        else
+                        {
+                            sprite.Color = particleType.Color2;
+                        }
+                    }
+                    if (Scene.OnInterval(0.06f) && sprite.CurrentAnimationFrame > 11)
+                    {
+                        level.ParticlesFG.Emit(particleType, 1, Position + Vector2.UnitY * -2f, new Vector2(8f, 4f));
+                    }
+                }
+            }
+        }
+
         public EntityID ID;
 
         private Vector2 start;
@@ -58,7 +184,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+            /*Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
             switch (type)
             {
@@ -78,7 +204,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         break;
                     }
-            }
+            }*/
             Add(sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/" + type + "/"));
             sprite.AddLoop("idle", "idle", 0.1f, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3);
             sprite.Add("collect", "collect", 0.05f);
@@ -214,7 +340,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 yield return null;
             }
-            Scene.Add(new StrawberryPoints(Position, false, collectIndex, false));
+            string text = type == "energyTank" ? "+5 " + Dialog.Clean("XaphanHelper_Collect_EnergyTank") : (type == "missile" ? "+2 " + Dialog.Clean("XaphanHelper_Collect_Missiles") : "+1 " + Dialog.Clean("XaphanHelper_Collect_SuperMissiles"));
+            Scene.Add(new CustomFollowerCollectText(Position, collectIndex, type == "energyTank" ? 0 : (type == "missile" ? 1 : 2), text));
             switch (type)
             {
                 case "missile":

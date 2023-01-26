@@ -165,6 +165,12 @@
 	XaphanHelper_get_WaveBeam_Desc= Beams can go through solid objects
 	XaphanHelper_get_WaveBeam_Desc_drone= Allows the drone beam to go through solid objects
 
+#Collectables
+	XaphanHelper_Collect_EnergyTank= STAMINA
+	XaphanHelper_Collect_Missiles= MISSILES
+	XaphanHelper_Collect_SuperMissiles= SUPER MISSILE
+	XaphanHelper_Collect_FireRateModule= BEAM FIRE RATE
+
 #Warps
 	XaphanHelper_Warp_Select_Destination= - Select your destination -
 	XaphanHelper_Warp_Stay= Stay here
