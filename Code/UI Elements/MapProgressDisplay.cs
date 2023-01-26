@@ -586,6 +586,150 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return TotalStaminaUpgradesCount;
         }
 
+        public int getCurrentDroneMissilesUpgrades(int subAreaIndex = -1)
+        {
+            int CurrentDroneMissilesUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (string DroneMissilesUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+                {
+                    if (DroneMissilesUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                    {
+                        CurrentDroneMissilesUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "missile")
+                            {
+                                foreach (string DroneMissilesUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+                                {
+                                    if (DroneMissilesUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
+                                    {
+                                        CurrentDroneMissilesUpgradesCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return CurrentDroneMissilesUpgradesCount;
+        }
+
+        public int getTotalDroneMissilesUpgrades(int subAreaIndex = -1)
+        {
+            int TotalDroneMissilesUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                {
+                    if (entityData.Type == "missile")
+                    {
+                        TotalDroneMissilesUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "missile")
+                            {
+                                TotalDroneMissilesUpgradesCount++;
+                            }
+                        }
+                    }
+                }
+            }
+            return TotalDroneMissilesUpgradesCount;
+        }
+
+        public int getCurrentDroneSuperMissilesUpgrades(int subAreaIndex = -1)
+        {
+            int CurrentDroneSuperMissilesUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (string DroneSuperMissilesUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                {
+                    if (DroneSuperMissilesUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                    {
+                        CurrentDroneSuperMissilesUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "superMissile")
+                            {
+                                foreach (string DroneSuperMissilesUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                                {
+                                    if (DroneSuperMissilesUpgrade.Contains(Prefix + "_Ch" + chapterIndex + "_" + room))
+                                    {
+                                        CurrentDroneSuperMissilesUpgradesCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return CurrentDroneSuperMissilesUpgradesCount;
+        }
+
+        public int getTotalDroneSuperMissilesUpgrades(int subAreaIndex = -1)
+        {
+            int TotalDroneSuperMissilesUpgradesCount = 0;
+            if (subAreaIndex == -1)
+            {
+                foreach (InGameMapEntitiesData entityData in EntitiesData)
+                {
+                    if (entityData.Type == "superMissile")
+                    {
+                        TotalDroneSuperMissilesUpgradesCount++;
+                    }
+                }
+            }
+            else
+            {
+                List<string> subAreaRooms = getSubAreaRooms(subAreaIndex);
+                foreach (string room in subAreaRooms)
+                {
+                    foreach (InGameMapEntitiesData entityData in EntitiesData)
+                    {
+                        if (room == entityData.Room)
+                        {
+                            if (entityData.Type == "superMissile")
+                            {
+                                TotalDroneSuperMissilesUpgradesCount++;
+                            }
+                        }
+                    }
+                }
+            }
+            return TotalDroneSuperMissilesUpgradesCount;
+        }
+
         public int getCurrentDroneFireRateUpgrades(int subAreaIndex = -1)
         {
             int CurrentFireRateUpgradesCount = 0;
@@ -1034,6 +1178,22 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + staminaUpgradeIcon.Height / 4) + (staminaUpgradeIcon.Height - characterImageHeight) / 2));
                     iconYPos++;
                 }
+                if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalDroneMissilesUpgrades(getSubAreaIndex()) != 0 : getTotalDroneMissilesUpgrades() != 0)
+                {
+                    Image DroneMissilesUpgradeIcon = new(GFX.Gui["maps/keys/missile"]);
+                    DroneMissilesUpgradeIcon.Position = new Vector2(Position.X, Position.Y + lineHeight * iconYPos + DroneMissilesUpgradeIcon.Height / 4);
+                    DroneMissilesUpgradeIcon.Render();
+                    linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + DroneMissilesUpgradeIcon.Height / 4) + (DroneMissilesUpgradeIcon.Height - characterImageHeight) / 2));
+                    iconYPos++;
+                }
+                if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalDroneSuperMissilesUpgrades(getSubAreaIndex()) != 0 : getTotalDroneSuperMissilesUpgrades() != 0)
+                {
+                    Image DroneSuperMissilesUpgradeIcon = new(GFX.Gui["maps/keys/superMissile"]);
+                    DroneSuperMissilesUpgradeIcon.Position = new Vector2(Position.X - 2f, Position.Y - 2f + lineHeight * iconYPos + DroneSuperMissilesUpgradeIcon.Height / 4);
+                    DroneSuperMissilesUpgradeIcon.Render();
+                    linesYPos.Insert(iconYPos, (int)((Position.Y + lineHeight * iconYPos + DroneSuperMissilesUpgradeIcon.Height / 4) + (DroneSuperMissilesUpgradeIcon.Height - characterImageHeight) / 2));
+                    iconYPos++;
+                }
                 if (!InGameMapControllerData.HideUpgradeProgress && (getSubAreaIndex() != -1 && mode == 1) ? getTotalDroneFireRateUpgrades(getSubAreaIndex()) != 0 : getTotalDroneFireRateUpgrades() != 0)
                 {
                     Image fireRateUpgradeIcon = new(GFX.Gui["maps/keys/fireRateModule"]);
@@ -1184,6 +1344,52 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                             characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                             characterImage.Color = getCurrentStaminaUpgrades() == getTotalStaminaUpgrades() ? Color.Gold : Color.White;
+                            characterImage.Render();
+                            valueWidth += (int)characterImage.Width;
+                        }
+                        valueWidth = 0;
+                        iconYPos++;
+                    }
+
+                    if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneMissilesUpgrades() != 0)
+                    {
+                        string DroneMissilesUpgradeDisplay = (getCurrentDroneMissilesUpgrades() + "/" + getTotalDroneMissilesUpgrades()).ToString();
+                        for (int i = 0; i < DroneMissilesUpgradeDisplay.Length; i++)
+                        {
+                            if (DroneMissilesUpgradeDisplay[i] == '/')
+                            {
+                                character = "slash";
+                            }
+                            else
+                            {
+                                character = DroneMissilesUpgradeDisplay[i].ToString();
+                            }
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
+                            characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                            characterImage.Color = getCurrentDroneMissilesUpgrades() == getTotalDroneMissilesUpgrades() ? Color.Gold : Color.White;
+                            characterImage.Render();
+                            valueWidth += (int)characterImage.Width;
+                        }
+                        valueWidth = 0;
+                        iconYPos++;
+                    }
+
+                    if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneSuperMissilesUpgrades() != 0)
+                    {
+                        string DroneSuperMissilesUpgradeDisplay = (getCurrentDroneSuperMissilesUpgrades() + "/" + getTotalDroneSuperMissilesUpgrades()).ToString();
+                        for (int i = 0; i < DroneSuperMissilesUpgradeDisplay.Length; i++)
+                        {
+                            if (DroneSuperMissilesUpgradeDisplay[i] == '/')
+                            {
+                                character = "slash";
+                            }
+                            else
+                            {
+                                character = DroneSuperMissilesUpgradeDisplay[i].ToString();
+                            }
+                            Image characterImage = new(GFX.Gui["maps/keys/" + character]);
+                            characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                            characterImage.Color = getCurrentDroneSuperMissilesUpgrades() == getTotalDroneSuperMissilesUpgrades() ? Color.Gold : Color.White;
                             characterImage.Render();
                             valueWidth += (int)characterImage.Width;
                         }
@@ -1428,6 +1634,52 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 Image characterImage = new(GFX.Gui["maps/keys/" + character]);
                                 characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
                                 characterImage.Color = getCurrentStaminaUpgrades(getSubAreaIndex()) == getTotalStaminaUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
+                                characterImage.Render();
+                                valueWidth += (int)characterImage.Width;
+                            }
+                            valueWidth = 0;
+                            iconYPos++;
+                        }
+
+                        if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneMissilesUpgrades(getSubAreaIndex()) != 0)
+                        {
+                            string DroneMissilesUpgradeDisplay = (getCurrentDroneMissilesUpgrades(getSubAreaIndex()) + "/" + getTotalDroneMissilesUpgrades(getSubAreaIndex())).ToString();
+                            for (int i = 0; i < DroneMissilesUpgradeDisplay.Length; i++)
+                            {
+                                if (DroneMissilesUpgradeDisplay[i] == '/')
+                                {
+                                    character = "slash";
+                                }
+                                else
+                                {
+                                    character = DroneMissilesUpgradeDisplay[i].ToString();
+                                }
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
+                                characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                                characterImage.Color = getCurrentDroneMissilesUpgrades(getSubAreaIndex()) == getTotalDroneMissilesUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
+                                characterImage.Render();
+                                valueWidth += (int)characterImage.Width;
+                            }
+                            valueWidth = 0;
+                            iconYPos++;
+                        }
+
+                        if (!InGameMapControllerData.HideUpgradeProgress && getTotalDroneSuperMissilesUpgrades(getSubAreaIndex()) != 0)
+                        {
+                            string DroneSuperMissilesUpgradeDisplay = (getCurrentDroneSuperMissilesUpgrades(getSubAreaIndex()) + "/" + getTotalDroneSuperMissilesUpgrades(getSubAreaIndex())).ToString();
+                            for (int i = 0; i < DroneSuperMissilesUpgradeDisplay.Length; i++)
+                            {
+                                if (DroneSuperMissilesUpgradeDisplay[i] == '/')
+                                {
+                                    character = "slash";
+                                }
+                                else
+                                {
+                                    character = DroneSuperMissilesUpgradeDisplay[i].ToString();
+                                }
+                                Image characterImage = new(GFX.Gui["maps/keys/" + character]);
+                                characterImage.Position = new Vector2(Position.X + valueXPos + valueWidth + characterInline, linesYPos[iconYPos]);
+                                characterImage.Color = getCurrentDroneSuperMissilesUpgrades(getSubAreaIndex()) == getTotalDroneSuperMissilesUpgrades(getSubAreaIndex()) ? Color.Gold : Color.White;
                                 characterImage.Render();
                                 valueWidth += (int)characterImage.Width;
                             }
