@@ -273,8 +273,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             base.Update();
             if (Follower.Leader != null && Scene.OnInterval(0.08f))
             {
-                ParticleType type = Strawberry.P_Glow;
-                SceneAs<Level>().ParticlesFG.Emit(type, Position + Calc.Random.Range(-Vector2.One * 6f, Vector2.One * 6f));
+                int color = type == "energyTank" ? 0 : (type == "missile" ? 1 : 2);
+                ParticleType particleType = (color == 0 ? Strawberry.P_GhostGlow : (color == 1 ? Strawberry.P_Glow : Strawberry.P_MoonGlow));
+                SceneAs<Level>().ParticlesFG.Emit(particleType, Position + Calc.Random.Range(-Vector2.One * 6f, Vector2.One * 6f));
             }
         }
 
