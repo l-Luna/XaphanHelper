@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Managers;
-using IL.Monocle;
+using Monocle;
 using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 
@@ -47,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         ConfirmSfx = SFX.ui_game_unpause,
                         Label = Dialog.Clean("XaphanHelper_Warp_Stay"),
-                        OnPressed = () => OnConfirm(warp, true)
+                        OnPressed = () => OnStay()
                     });
                 }
                 else
@@ -61,7 +61,24 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
         }
 
-        private void OnConfirm(WarpInfo warp, bool isCurrent = false)
+        private void OnStay()
+        {
+            Focused = false;
+            Add(new Coroutine(OnStayRoutine()));
+        }
+
+        private IEnumerator OnStayRoutine()
+        {
+            float timer = 0.04f;
+            while (timer > 0)
+            {
+                timer -= Engine.DeltaTime;
+                yield return null;
+            }
+            OnCancel();
+        }
+
+        private void OnConfirm(WarpInfo warp)
         {
             Focused = false;
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
@@ -74,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     warpScreen.StartDelay();
                 }
             }
-            WarpManager.Teleport(warp, (mapData.HasEntity("XaphanHelper/LobbyMapController") && warp.ID == CurrentWarp ? "Fade" : WipeType), WipeDuration, isCurrent);
+            WarpManager.Teleport(warp, (mapData.HasEntity("XaphanHelper/LobbyMapController") && warp.ID == CurrentWarp ? "Fade" : WipeType), WipeDuration);
         }
 
         public class WarpButton : Button

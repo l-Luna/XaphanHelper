@@ -1,3 +1,6 @@
+Version 1.0.52 :
+- Fixed a bug soft-locking the game when selecting the 'Stay Here' option on the Warp selection menu when using the In-Game map
+
 Version 1.0.51 :
 - Theo Crystals and Seekers can now activate Flag Dash Switches and Timed Dash Switches
 - Fixed a crash when trying to switch chapter on the Warp selection menu

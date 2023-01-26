@@ -104,9 +104,9 @@ namespace Celeste.Mod.XaphanHelper.Managers
             return warps;
         }
 
-        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration, bool isCurrent)
+        public static void Teleport(WarpInfo warp, string wipeType, float wipeDuration)
         {
-            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player && !isCurrent)
+            if (Engine.Scene is Level level && level.Tracker.GetEntity<Player>() is Player player)
             {
                 int currentAreaId = level.Session.Area.ID;
                 if (warp.AreaId == currentAreaId)
