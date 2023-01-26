@@ -184,7 +184,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            /*Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+            Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
             switch (type)
             {
@@ -204,7 +204,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         break;
                     }
-            }*/
+            }
             Add(sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/" + type + "/"));
             sprite.AddLoop("idle", "idle", 0.1f, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3);
             sprite.Add("collect", "collect", 0.05f);
