@@ -2513,6 +2513,8 @@ namespace Celeste.Mod.XaphanHelper
                     List<string> FlagsToRemove = new();
                     List<string> CutscenesToRemove = new();
                     List<string> StaminaUpgradesToRemove = new();
+                    List<string> DroneMissilesUpgradesToRemove = new();
+                    List<string> DroneSuperMissilesUpgradesToRemove = new();
                     List<string> DroneFireRateUpgradesToRemove = new();
                     List<string> GlobalFlagsToRemove = new();
                     foreach (string savedFlag in ModSaveData.SavedFlags)
@@ -2534,6 +2536,20 @@ namespace Celeste.Mod.XaphanHelper
                         if (staminaUpgrade.Contains(level.Session.Area.LevelSet))
                         {
                             StaminaUpgradesToRemove.Add(staminaUpgrade);
+                        }
+                    }
+                    foreach (string droneMissileUpgrade in ModSaveData.DroneMissilesUpgrades)
+                    {
+                        if (droneMissileUpgrade.Contains(level.Session.Area.LevelSet))
+                        {
+                            DroneMissilesUpgradesToRemove.Add(droneMissileUpgrade);
+                        }
+                    }
+                    foreach (string droneSuperMissileUpgrade in ModSaveData.DroneSuperMissilesUpgrades)
+                    {
+                        if (droneSuperMissileUpgrade.Contains(level.Session.Area.LevelSet))
+                        {
+                            DroneSuperMissilesUpgradesToRemove.Add(droneSuperMissileUpgrade);
                         }
                     }
                     foreach (string droneFireRateUpgrade in ModSaveData.DroneFireRateUpgrades)
@@ -2561,6 +2577,14 @@ namespace Celeste.Mod.XaphanHelper
                     foreach (string value in StaminaUpgradesToRemove)
                     {
                         ModSaveData.StaminaUpgrades.Remove(value);
+                    }
+                    foreach (string value in DroneMissilesUpgradesToRemove)
+                    {
+                        ModSaveData.DroneMissilesUpgrades.Remove(value);
+                    }
+                    foreach (string value in DroneSuperMissilesUpgradesToRemove)
+                    {
+                        ModSaveData.DroneSuperMissilesUpgrades.Remove(value);
                     }
                     foreach (string value in DroneFireRateUpgradesToRemove)
                     {
