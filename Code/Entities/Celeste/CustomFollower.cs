@@ -188,6 +188,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
             switch (type)
             {
+                case "energyTank":
+                    {
+                        if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.StaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                        {
+                            RemoveSelf();
+                        }
+                        break;
+                    }
                 case "missile":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
@@ -199,6 +207,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 case "superMissile":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
+                        {
+                            RemoveSelf();
+                        }
+                        break;
+                    }
+                case "fireRateModule":
+                    {
+                        if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
                         {
                             RemoveSelf();
                         }
@@ -345,16 +361,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Scene.Add(new CustomFollowerCollectText(Position, collectIndex, type == "energyTank" ? 0 : (type == "missile" ? 1 : 2), text));
             switch (type)
             {
-                case "missile":
-                {
-                        
-                    XaphanModule.ModSaveData.DroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
-                    if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                case "energyTank":
                     {
-                        XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+
+                        XaphanModule.ModSaveData.StaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                        {
+                            XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        }
+                        break;
                     }
-                    break;
-                }
+                case "missile":
+                    {
+
+                        XaphanModule.ModSaveData.DroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                        {
+                            XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        }
+                        break;
+                    }
                 case "superMissile":
                     {
 
@@ -362,6 +388,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
                         {
                             XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        }
+                        break;
+                    }
+                case "fireRateModule":
+                    {
+
+                        XaphanModule.ModSaveData.DroneFireRateUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
+                        if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
+                        {
+                            XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Add(Prefix + "_Ch" + chapterIndex + "_" + ID);
                         }
                         break;
                     }
