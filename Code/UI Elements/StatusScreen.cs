@@ -250,6 +250,27 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 yield return null;
             }
+            AreaKey area = SceneAs<Level>().Session.Area;
+            string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+            int chapterIndex = area.ChapterIndex;
+            bool HasStaminaUpgrades = false;
+            bool HasFireRateUpgrades = false;
+            foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
+            {
+                if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                {
+                    HasStaminaUpgrades = true;
+                    break;
+                }
+            }
+            foreach (string fireRateUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
+            {
+                if (fireRateUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                {
+                    HasFireRateUpgrades = true;
+                    break;
+                }
+            }
             while (!Input.ESC.Pressed && !Input.MenuCancel.Pressed && !XaphanSettings.OpenMap.Pressed && player != null)
             {
                 if (Selection > 0)
@@ -284,9 +305,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                         else
                         {
-                            if (Input.MenuRight.Pressed && ((Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
+                            if (Input.MenuRight.Pressed && ((Selection == 10) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                             {
-                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
+                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection == 10) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                                 {
                                     Selection ++;
                                 }
@@ -298,7 +319,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 SelectRightDisplay(false);
                             }
-                            else if (Input.MenuLeft.Pressed && ((Selection > 70 && Selection <= lastBeamIndex) || ((Selection > 80 && Selection <= lastAmmoIndex))))
+                            else if (Input.MenuLeft.Pressed && ((Selection == 11) || (Selection > 70 && Selection <= lastBeamIndex) || ((Selection > 80 && Selection <= lastAmmoIndex))))
                             {
                                 while (!statusDisplay.LeftDisplays.Contains(Selection - 1))
                                 {
@@ -317,6 +338,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (Input.MenuUp.Pressed && Selection > firstRightUpgradeIndex)
                         {
+                            if (!statusDisplay.RightDisplays.Contains(Selection - 10))
+                            {
+                                Selection -= (Selection % 10);
+                            }
                             while (!statusDisplay.RightDisplays.Contains(Selection - 10))
                             {
                                 Selection -= 10 ;
@@ -326,6 +351,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                         else if (Input.MenuDown.Pressed && Selection < lastRightUpgradeIndex)
                         {
+                            if (!statusDisplay.RightDisplays.Contains(Selection + 10))
+                            {
+                                Selection -= (Selection % 10);
+                            }
                             while (!statusDisplay.RightDisplays.Contains(Selection + 10))
                             {
                                 Selection += 10;
@@ -337,7 +366,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         {
                             if (Input.MenuLeft.Pressed && statusDisplay.LeftDisplays.Count > 0)
                             {
-                                if (Selection == 180)
+                                if (Selection == 120 && HasStaminaUpgrades)
+                                {
+                                    Selection = 11;
+                                }
+                                else if (Selection == 161)
+                                {
+                                    Selection = 160;
+                                }
+                                else if (Selection == 180)
                                 {
                                     Selection = lastBeamIndex;
                                 }
@@ -371,6 +408,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                     }
                                 }
                                 Audio.Play("event:/ui/main/rollover_up");
+                            }
+                            else if (Input.MenuRight.Pressed && Selection == 160 && HasFireRateUpgrades)
+                            {
+                                Selection = 161;
                             }
                         }
                     }

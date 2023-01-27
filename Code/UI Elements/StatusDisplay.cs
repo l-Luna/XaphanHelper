@@ -281,9 +281,26 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             if (!XaphanModule.useMetroidGameplay)
             {
+                float scale = 0.4f;
+                AreaKey area = SceneAs<Level>().Session.Area;
+                string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+                int chapterIndex = area.ChapterIndex;
                 if (Settings.PowerGrip)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 225f), 10, getCustomName("PowerGrip"), getCustomSpritePath("PowerGrip"), "PowerGrip", XaphanModule.ModSaveData.PowerGripInactive));
+                    int staminaCount = 0;
+                    foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
+                    {
+                        if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                        {
+                            staminaCount++;
+                        }
+                    }
+                    if (staminaCount > 0)
+                    {
+                        string qty = "x " + staminaCount;
+                        Scene.Add(new UpgradeDisplay(level, this, new Vector2(654f, 225f), 11, qty, getCustomSpritePath("EnergyTank"), "EnergyTank", XaphanModule.ModSaveData.PowerGripInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
+                    }
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 225f), 10, getCustomName("PowerGrip"), getCustomSpritePath("PowerGrip"), "PowerGrip", XaphanModule.ModSaveData.PowerGripInactive, staminaCount > 0 ? 494f : 550f));
                 }
                 if (Settings.ClimbingKit)
                 {
@@ -317,10 +334,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(265f + padding, 635f), 72, "", getCustomSpritePath("WaveBeam"), "WaveBeam", XaphanModule.ModSaveData.WaveBeamInactive, 51f));
                 }
-                float scale = 0.4f;
-                AreaKey area = SceneAs<Level>().Session.Area;
-                string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-                int chapterIndex = area.ChapterIndex;
                 if (Settings.MissilesModule)
                 {
                     int missileCount = 10;
@@ -377,7 +390,20 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 if (Settings.RemoteDrone)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 480f), 160, getCustomName("RemoteDrone"), getCustomSpritePath("RemoteDrone"), "RemoteDrone", XaphanModule.ModSaveData.RemoteDroneInactive));
+                    int fireRateCount = 0;
+                    foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
+                    {
+                        if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                        {
+                            fireRateCount ++;
+                        }
+                    }
+                    if (fireRateCount > 0)
+                    {
+                        string qty = "x " + fireRateCount;
+                        Scene.Add(new UpgradeDisplay(level, this, new Vector2(1714f, 480f), 161, qty, getCustomSpritePath("FireRateModule"), "FireRateModule", XaphanModule.ModSaveData.RemoteDroneInactive, 51f, true, scale, -25f - ActiveFont.Measure(qty).X * scale / 2, 15f));
+                    }
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 480f), 160, getCustomName("RemoteDrone"), getCustomSpritePath("RemoteDrone"), "RemoteDrone", XaphanModule.ModSaveData.RemoteDroneInactive, fireRateCount > 0 ? 494f : 550f));
                 }
                 if (Settings.GoldenFeather)
                 {
@@ -722,6 +748,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             controlA = Input.MenuUp;
                             inputActionA = "XaphanHelper_Hold";
                             break;*/
+                        case "EnergyTank":
+                            UpgDesc_b = null;
+                            break;
+                        case "FireRateModule":
+                            UpgDesc_b = null;
+                            break;
                         default:
                             break;
                     }
