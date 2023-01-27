@@ -601,13 +601,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void GiveAmmo()
         {
-            AreaKey area = SceneAs<Level>().Session.Area;
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            int chapterIndex = area.ChapterIndex;
             int missileCount = 10;
             foreach (string missileUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
             {
-                if (missileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                if (missileUpgrade.Contains(Prefix))
                 {
                     missileCount += 2;
                 }
@@ -616,7 +614,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int superMissileCount = 5;
             foreach (string superMissileUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
             {
-                if (superMissileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                if (superMissileUpgrade.Contains(Prefix))
                 {
                     superMissileCount++;
                 }
@@ -962,9 +960,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (!ammoDisplay.MissileSelected && !ammoDisplay.SuperMissileSelected)
                 {
-                    AreaKey area = SceneAs<Level>().Session.Area;
                     string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-                    int chapterIndex = area.ChapterIndex;
                     string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
                     string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
                     level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
@@ -973,7 +969,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades)
                         {
-                            if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                            if (fireRateModuleUpgrade.Contains(Prefix))
                             {
                                 droneFireRateUpgradesCount++;
                             }
@@ -983,7 +979,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
                         {
-                            if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                            if (fireRateModuleUpgrade.Contains(Prefix))
                             {
                                 droneFireRateUpgradesCount++;
                             }
