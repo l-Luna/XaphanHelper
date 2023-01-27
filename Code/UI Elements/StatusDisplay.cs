@@ -288,7 +288,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (Settings.PowerGrip)
                 {
                     int staminaCount = 0;
-                    foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
+                    foreach (string staminaUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades : XaphanModule.ModSaveData.StaminaUpgrades)
                     {
                         if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                         {
@@ -337,7 +337,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (Settings.MissilesModule)
                 {
                     int missileCount = 10;
-                    foreach (string missileUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+                    foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
                     {
                         if (missileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                         {
@@ -350,7 +350,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (Settings.SuperMissilesModule)
                 {
                     int superMissileCount = 5;
-                    foreach (string superMissileUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                    foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
                     {
                         if (superMissileUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                         {
@@ -391,7 +391,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (Settings.RemoteDrone)
                 {
                     int fireRateCount = 0;
-                    foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
+                    foreach (string fireRateModuleUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades : XaphanModule.ModSaveData.DroneFireRateUpgrades)
                     {
                         if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
                         {
