@@ -305,9 +305,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                         else
                         {
-                            if (Input.MenuRight.Pressed && ((Selection == 10) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
+                            if (Input.MenuRight.Pressed && ((Selection == 10 && HasStaminaUpgrades) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                             {
-                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection == 10) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
+                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection == 10 && HasStaminaUpgrades) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                                 {
                                     Selection ++;
                                 }

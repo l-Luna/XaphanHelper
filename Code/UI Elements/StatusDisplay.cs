@@ -568,7 +568,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 ActiveFont.DrawOutline(SectionName, Position + SectionPosition, new Vector2(0.5f, 0.5f), Vector2.One * 1f, Color.Yellow, 2f, Color.Black);
                 SectionTitleLenght = ActiveFont.Measure(SectionName).X;
                 SectionTitleHeight = ActiveFont.Measure(SectionName).Y;
-                ActiveFont.DrawOutline(Settings.RemoteDrone ? beamStr : "", new Vector2(155f, 635f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
+                ActiveFont.DrawOutline(Settings.LongBeam || Settings.IceBeam || Settings.WaveBeam ? beamStr : "", new Vector2(155f, 635f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
                 ActiveFont.DrawOutline((Settings.MissilesModule || Settings.SuperMissilesModule) ? modulesStr : "", new Vector2(155f, 685f), Vector2.Zero, Vector2.One * 0.85f, Color.White, 2f, Color.Black);
                 Draw.Rect(Position + SectionPosition + new Vector2(SectionTitleLenght / 2 + 10, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
                 Draw.Rect(Position + SectionPosition + new Vector2(-275f - 15, -4), 275f - (SectionTitleLenght / 2 + 10) + 15, 8f, Color.White);
