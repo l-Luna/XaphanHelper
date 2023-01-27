@@ -167,7 +167,7 @@
 	XaphanHelper_Collect_SuperMissiles= SUPER MISSILE
 	XaphanHelper_Collect_FireRateModule= BEAM FIRE RATE
 	XaphanHelper_get_EnergyTank_Desc= Each Energy Tank increases maximum stamina by 5 points
-	XaphanHelper_get_FireRateModule_Desc= Each Fire Rate Module increases the drone fire rate by 20%
+	XaphanHelper_get_FireRateModule_Desc= Each Fire Rate Module decreases the delay between each beam shoot by 15%
 
 #Warps
 	XaphanHelper_Warp_Select_Destination= - Select your destination -

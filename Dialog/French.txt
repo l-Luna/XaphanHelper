@@ -167,7 +167,7 @@
 	XaphanHelper_Collect_SuperMissiles= SUPER MISSILE
 	XaphanHelper_Collect_FireRateModule= CADENCE DE TIR
 	XaphanHelper_get_EnergyTank_Desc= Chaque réservoir d'énergie augmente l'endurance maximale de 5 points
-	XaphanHelper_get_FireRateModule_Desc= Chaque module de cadence de tir augmente la cadence de tir du drone de 20%
+	XaphanHelper_get_FireRateModule_Desc= Chaque module de cadence de tir réduit le délais entre chaque tir de rayon de 15%
 
 #Warps
 	XaphanHelper_Warp_Select_Destination= - Selectionnez votre destination -

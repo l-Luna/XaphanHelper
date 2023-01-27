@@ -962,19 +962,34 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (!ammoDisplay.MissileSelected && !ammoDisplay.SuperMissileSelected)
                 {
+                    AreaKey area = SceneAs<Level>().Session.Area;
+                    string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+                    int chapterIndex = area.ChapterIndex;
                     string beamSound = "event:/game/xaphan/drone" + (IceBeam.Active(level) ? "_ice" : (WaveBeam.Active(level) ? "_wave" : "")) + "_fire";
                     string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
                     level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
                     int droneFireRateUpgradesCount = 0;
                     if (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode)
                     {
-                        droneFireRateUpgradesCount = XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Count;
+                        foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades)
+                        {
+                            if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                            {
+                                droneFireRateUpgradesCount++;
+                            }
+                        }
                     }
                     else
                     {
-                        droneFireRateUpgradesCount = XaphanModule.ModSaveData.DroneFireRateUpgrades.Count;
+                        foreach (string fireRateModuleUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
+                        {
+                            if (fireRateModuleUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                            {
+                                droneFireRateUpgradesCount++;
+                            }
+                        }
                     }
-                    BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.035f;
+                    BeamDelay = 0.5f - droneFireRateUpgradesCount * 0.075f;
                 }
                 else if (ammoDisplay.MissileSelected)
                 {

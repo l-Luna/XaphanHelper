@@ -357,7 +357,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 yield return null;
             }
-            string text = type == "energyTank" ? "+5 " + Dialog.Clean("XaphanHelper_Collect_EnergyTank") : (type == "missile" ? "+2 " + Dialog.Clean("XaphanHelper_Collect_Missiles") : (type == "superMissile" ? "+1 " + Dialog.Clean("XaphanHelper_Collect_SuperMissiles") : "+20% " + Dialog.Clean("XaphanHelper_Collect_FireRateModule")));
+            string text = type == "energyTank" ? "+5 " + Dialog.Clean("XaphanHelper_Collect_EnergyTank") : (type == "missile" ? "+2 " + Dialog.Clean("XaphanHelper_Collect_Missiles") : (type == "superMissile" ? "+1 " + Dialog.Clean("XaphanHelper_Collect_SuperMissiles") : "+15% " + Dialog.Clean("XaphanHelper_Collect_FireRateModule")));
             Scene.Add(new CustomFollowerCollectText(Position, collectIndex, type == "energyTank" ? 0 : (type == "missile" ? 1 : 2), text));
             switch (type)
             {
