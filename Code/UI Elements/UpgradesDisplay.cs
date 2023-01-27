@@ -143,25 +143,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int ExtraStamina = 0;
             if (Engine.Scene is Level)
             {
-                Level level = (Level)Engine.Scene;
-                if (XaphanModule.PlayerHasGolden)
+                foreach (string upgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades : XaphanModule.ModSaveData.StaminaUpgrades)
                 {
-                    foreach (string upgrade in XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades)
+                    if (upgrade.Contains(Prefix))
                     {
-                        if (upgrade.Contains(Prefix))
-                        {
-                            ExtraStamina += 5;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (string upgrade in XaphanModule.ModSaveData.StaminaUpgrades)
-                    {
-                        if (upgrade.Contains(Prefix))
-                        {
-                            ExtraStamina += 5;
-                        }
+                        ExtraStamina += 5;
                     }
                 }
             }
