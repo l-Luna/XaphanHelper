@@ -36,9 +36,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 for (int i = 0; i < text.Length; i++)
                 {
                     Sprite sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/collectText/");
-                    sprite.Add("start", "start", 0.08f);
+                    if (text[i] == ' ')
+                    {
+                        sprite.Add("start", "_", 0.08f, 0, 0, 0);
+                    }
+                    else
+                    {
+                        sprite.Add("start", sprite.Width == 7 ? "startLarger" : (sprite.Width == 6 ? "startLarge" : "start"), 0.08f);
+                    }
                     sprite.Add("char", text[i] == ' ' ? "_" : text[i].ToString(), 1f);
-                    sprite.Add("end", "end", 0.08f);
+                    if (text[i] != ' ')
+                    {
+                        sprite.Add("end", sprite.Width == 7 ? "endLarger" : (sprite.Width == 6 ? "endLarge" : "end"), 0.08f);
+                    }
                     sprite.Play("start");
                     sprites[i] = sprite;
                     
@@ -71,7 +81,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             sprite.Play("char");
                         }
-                        else if (sprite.CurrentAnimationID == "char")
+                        else if (sprite.CurrentAnimationID == "char" && sprite.Animations.ContainsKey("end"))
                         {
                             sprite.Play("end");
                         }
@@ -126,10 +136,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             sprite.Color = particleType.Color2;
                         }
-                    }
-                    if (Scene.OnInterval(0.06f) && sprite.CurrentAnimationFrame > 11)
-                    {
-                        level.ParticlesFG.Emit(particleType, 1, Position + Vector2.UnitY * -2f, new Vector2(8f, 4f));
                     }
                 }
             }
@@ -204,14 +210,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         break;
                     }
-                case "superMissile":
+                /*case "superMissile":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
                         {
                             RemoveSelf();
                         }
                         break;
-                    }
+                    }*/
                 case "fireRateModule":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.Settings.SpeedrunMode && XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
