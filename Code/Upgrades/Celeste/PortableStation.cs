@@ -12,12 +12,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.PortableStation ? 1 : 0;
+            return XaphanModule.ModSettings.PortableStation ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.PortableStation = (value != 0);
+            XaphanModule.ModSettings.PortableStation = (value != 0);
         }
 
         public override void Load()
@@ -32,7 +32,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.PortableStation && !XaphanModule.ModSaveData.PortableStationInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.PortableStation && !XaphanModule.ModSaveData.PortableStationInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;
@@ -53,7 +53,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive)
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && Settings.UseMiscItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && XaphanModule.ModSettings.UseMiscItemSlot.Pressed && !XaphanModule.ModSettings.OpenMap.Check && !XaphanModule.ModSettings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "misc");
                         if (bagDisplay != null)

@@ -14,12 +14,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.VariaJacket ? 1 : 0;
+            return XaphanModule.ModSettings.VariaJacket ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.VariaJacket = (value != 0);
+            XaphanModule.ModSettings.VariaJacket = (value != 0);
         }
 
         public override void Load()
@@ -34,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.VariaJacket && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VariaJacketInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.VariaJacket && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).VariaJacketInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private IEnumerator modLookoutLookRoutine(On.Celeste.Lookout.orig_LookRoutine orig, Lookout self, Player player)

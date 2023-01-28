@@ -28,13 +28,17 @@ namespace Celeste.Mod.XaphanHelper
 
         public static XaphanModule Instance;
 
-        // If you need to store settings:
+        // If you need to store ModSettings:
         public override Type SettingsType => typeof(XaphanModuleSettings);
-        public static XaphanModuleSettings Settings => (XaphanModuleSettings)Instance._Settings;
+        public static XaphanModuleSettings ModSettings => (XaphanModuleSettings)Instance._Settings;
 
         // If you need to store save data:
         public override Type SaveDataType => typeof(XaphanModuleSaveData);
         public static XaphanModuleSaveData ModSaveData => (XaphanModuleSaveData)Instance._SaveData;
+
+        // If you need to store session data:
+        public override Type SessionType => typeof(XaphanModuleSession);
+        public static XaphanModuleSession ModSession => (XaphanModuleSession)Instance._Session;
 
         public static List<TeleportToOtherSideData> TeleportToOtherSideData = new();
 
@@ -98,7 +102,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool CanOpenMap(Level level)
         {
-            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || Settings.SpeedrunMode ? true : false;
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || ModSettings.SpeedrunMode ? true : false;
         }
 
         public enum Upgrades
@@ -1543,7 +1547,7 @@ namespace Celeste.Mod.XaphanHelper
 
             if (ModSaveData.SpeedrunMode)
             {
-                Settings.SpeedrunMode = true;
+                ModSettings.SpeedrunMode = true;
                 level.Session.SetFlag("Map_Collected");
                 if (!ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + level.Session.Area.ChapterIndex + "_Map_Collected"))
                 {
@@ -1564,45 +1568,45 @@ namespace Celeste.Mod.XaphanHelper
             }
             else // Set upgrades to default values if the map is not using upgrades
             {
-                Settings.PowerGrip = true;
-                Settings.ClimbingKit = true;
-                Settings.SpiderMagnet = false;
-                Settings.DroneTeleport = false;
-                //Settings.JumpBoost = false;
-                Settings.ScrewAttack = false;
-                Settings.VariaJacket = false;
-                Settings.GravityJacket = false;
-                Settings.Bombs = false;
-                Settings.MegaBombs = false;
-                Settings.RemoteDrone = false;
-                Settings.GoldenFeather = false;
-                Settings.Binoculars = false;
-                Settings.EtherealDash = false;
-                Settings.PortableStation = false;
-                Settings.PulseRadar = false;
-                Settings.DashBoots = true;
-                Settings.SpaceJump = 1;
-                Settings.HoverBoots = false;
-                Settings.LightningDash = false;
-                Settings.LongBeam = false;
-                Settings.IceBeam = false;
-                Settings.WaveBeam = false;
-                Settings.Spazer = false;
-                Settings.PlasmaBeam = false;
-                Settings.MorphingBall = false;
-                Settings.MorphBombs = false;
-                Settings.SpringBall = false;
-                Settings.HighJumpBoots = false;
-                Settings.SpeedBooster = false;
-                Settings.MissilesModule = false;
-                Settings.SuperMissilesModule = false;
+                ModSettings.PowerGrip = true;
+                ModSettings.ClimbingKit = true;
+                ModSettings.SpiderMagnet = false;
+                ModSettings.DroneTeleport = false;
+                //ModSettings.JumpBoost = false;
+                ModSettings.ScrewAttack = false;
+                ModSettings.VariaJacket = false;
+                ModSettings.GravityJacket = false;
+                ModSettings.Bombs = false;
+                ModSettings.MegaBombs = false;
+                ModSettings.RemoteDrone = false;
+                ModSettings.GoldenFeather = false;
+                ModSettings.Binoculars = false;
+                ModSettings.EtherealDash = false;
+                ModSettings.PortableStation = false;
+                ModSettings.PulseRadar = false;
+                ModSettings.DashBoots = true;
+                ModSettings.SpaceJump = 1;
+                ModSettings.HoverBoots = false;
+                ModSettings.LightningDash = false;
+                ModSettings.LongBeam = false;
+                ModSettings.IceBeam = false;
+                ModSettings.WaveBeam = false;
+                ModSettings.Spazer = false;
+                ModSettings.PlasmaBeam = false;
+                ModSettings.MorphingBall = false;
+                ModSettings.MorphBombs = false;
+                ModSettings.SpringBall = false;
+                ModSettings.HighJumpBoots = false;
+                ModSettings.SpeedBooster = false;
+                ModSettings.MissilesModule = false;
+                ModSettings.SuperMissilesModule = false;
             }
 
             // Set flags based on previous player progress
 
             if (!PlayerHasGolden && !ModSaveData.SavedFlags.Contains(Prefix + "_teleporting"))
             {
-                if (!Settings.SpeedrunMode) // Normal mode only
+                if (!ModSettings.SpeedrunMode) // Normal mode only
                 {
                     foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
@@ -1675,38 +1679,38 @@ namespace Celeste.Mod.XaphanHelper
         {
             // Remove all upgrades
 
-            Settings.PowerGrip = false;
-            Settings.ClimbingKit = false;
-            Settings.SpiderMagnet = false;
-            Settings.DroneTeleport = false;
-            //Settings.JumpBoost = false;
-            Settings.ScrewAttack = false;
-            Settings.VariaJacket = false;
-            Settings.GravityJacket = false;
-            Settings.Bombs = false;
-            Settings.MegaBombs = false;
-            Settings.RemoteDrone = false;
-            Settings.GoldenFeather = false;
-            Settings.Binoculars = false;
-            Settings.EtherealDash = false;
-            Settings.PortableStation = false;
-            Settings.PulseRadar = false;
-            Settings.DashBoots = false;
-            Settings.SpaceJump = 1;
-            Settings.HoverBoots = false;
-            Settings.LightningDash = false;
-            Settings.LongBeam = false;
-            Settings.IceBeam = false;
-            Settings.WaveBeam = false;
-            Settings.Spazer = false;
-            Settings.PlasmaBeam = false;
-            Settings.MorphingBall = false;
-            Settings.MorphBombs = false;
-            Settings.SpringBall = false;
-            Settings.HighJumpBoots = false;
-            Settings.SpeedBooster = false;
-            Settings.MissilesModule = false;
-            Settings.SuperMissilesModule = false;
+            ModSettings.PowerGrip = false;
+            ModSettings.ClimbingKit = false;
+            ModSettings.SpiderMagnet = false;
+            ModSettings.DroneTeleport = false;
+            //ModSettings.JumpBoost = false;
+            ModSettings.ScrewAttack = false;
+            ModSettings.VariaJacket = false;
+            ModSettings.GravityJacket = false;
+            ModSettings.Bombs = false;
+            ModSettings.MegaBombs = false;
+            ModSettings.RemoteDrone = false;
+            ModSettings.GoldenFeather = false;
+            ModSettings.Binoculars = false;
+            ModSettings.EtherealDash = false;
+            ModSettings.PortableStation = false;
+            ModSettings.PulseRadar = false;
+            ModSettings.DashBoots = false;
+            ModSettings.SpaceJump = 1;
+            ModSettings.HoverBoots = false;
+            ModSettings.LightningDash = false;
+            ModSettings.LongBeam = false;
+            ModSettings.IceBeam = false;
+            ModSettings.WaveBeam = false;
+            ModSettings.Spazer = false;
+            ModSettings.PlasmaBeam = false;
+            ModSettings.MorphingBall = false;
+            ModSettings.MorphBombs = false;
+            ModSettings.SpringBall = false;
+            ModSettings.HighJumpBoots = false;
+            ModSettings.SpeedBooster = false;
+            ModSettings.MissilesModule = false;
+            ModSettings.SuperMissilesModule = false;
             level.Session.SetFlag("Using_Elevator", false);
 
             // Get upgrades info from the Upgrade Controller
@@ -1844,127 +1848,127 @@ namespace Celeste.Mod.XaphanHelper
             {
                 if (setPowerGrip || level.Session.GetFlag("Upgrade_PowerGrip"))
                 {
-                    Settings.PowerGrip = true;
+                    ModSettings.PowerGrip = true;
                     level.Session.SetFlag("Upgrade_PowerGrip", true);
                 }
                 if (setClimbingKit || level.Session.GetFlag("Upgrade_ClimbingKit"))
                 {
-                    Settings.ClimbingKit = true;
+                    ModSettings.ClimbingKit = true;
                     level.Session.SetFlag("Upgrade_ClimbingKit", true);
                 }
                 if (setSpiderMagnet || level.Session.GetFlag("Upgrade_SpiderMagnet"))
                 {
-                    Settings.SpiderMagnet = true;
+                    ModSettings.SpiderMagnet = true;
                     level.Session.SetFlag("Upgrade_SpiderMagnet", true);
                 }
                 if (setDroneTeleport || level.Session.GetFlag("Upgrade_DroneTeleport"))
                 {
-                    Settings.DroneTeleport = true;
+                    ModSettings.DroneTeleport = true;
                     level.Session.SetFlag("Upgrade_DroneTeleport", true);
                 }
                 /*if (setJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
                 {
-                    Settings.JumpBoost = true;
+                    ModSettings.JumpBoost = true;
                     level.Session.SetFlag("Upgrade_JumpBoost", true);
                 }*/
                 if (setScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
                 {
-                    Settings.ScrewAttack = true;
+                    ModSettings.ScrewAttack = true;
                     level.Session.SetFlag("Upgrade_ScrewAttack", true);
                 }
                 if (setVariaJacket || level.Session.GetFlag("Upgrade_VariaJacket"))
                 {
-                    Settings.VariaJacket = true;
+                    ModSettings.VariaJacket = true;
                     level.Session.SetFlag("Upgrade_VariaJacket", true);
                 }
                 if (setGravityJacket || level.Session.GetFlag("Upgrade_GravityJacket"))
                 {
-                    Settings.GravityJacket = true;
+                    ModSettings.GravityJacket = true;
                     level.Session.SetFlag("Upgrade_GravityJacket", true);
                 }
                 if (setBombs || level.Session.GetFlag("Upgrade_Bombs"))
                 {
-                    Settings.Bombs = true;
+                    ModSettings.Bombs = true;
                     level.Session.SetFlag("Upgrade_Bombs", true);
                 }
                 if (setMegaBombs || level.Session.GetFlag("Upgrade_MegaBombs"))
                 {
-                    Settings.MegaBombs = true;
+                    ModSettings.MegaBombs = true;
                     level.Session.SetFlag("Upgrade_MegaBombs", true);
                 }
                 if (setRemoteDrone || level.Session.GetFlag("Upgrade_RemoteDrone"))
                 {
-                    Settings.RemoteDrone = true;
+                    ModSettings.RemoteDrone = true;
                     level.Session.SetFlag("Upgrade_RemoteDrone", true);
                 }
                 if (setGoldenFeather || level.Session.GetFlag("Upgrade_GoldenFeather"))
                 {
-                    Settings.GoldenFeather = true;
+                    ModSettings.GoldenFeather = true;
                     level.Session.SetFlag("Upgrade_GoldenFeather", true);
                 }
                 if (setBinoculars || level.Session.GetFlag("Upgrade_Binoculars"))
                 {
-                    Settings.Binoculars = true;
+                    ModSettings.Binoculars = true;
                     level.Session.SetFlag("Upgrade_Binoculars", true);
                 }
                 if (setEtherealDash || level.Session.GetFlag("Upgrade_EtherealDash"))
                 {
-                    Settings.EtherealDash = true;
+                    ModSettings.EtherealDash = true;
                     level.Session.SetFlag("Upgrade_EtherealDash", true);
                 }
                 if (setPortableStation || level.Session.GetFlag("Upgrade_PortableStation"))
                 {
-                    Settings.PortableStation = true;
+                    ModSettings.PortableStation = true;
                     level.Session.SetFlag("Upgrade_PortableStation", true);
                 }
                 if (setPulseRadar || level.Session.GetFlag("Upgrade_PulseRadar"))
                 {
-                    Settings.PulseRadar = true;
+                    ModSettings.PulseRadar = true;
                     level.Session.SetFlag("Upgrade_PulseRadar", true);
                 }
                 if (setDashBoots || level.Session.GetFlag("Upgrade_DashBoots"))
                 {
-                    Settings.DashBoots = true;
+                    ModSettings.DashBoots = true;
                     level.Session.SetFlag("Upgrade_DashBoots", true);
                 }
                 if (setSpaceJump || level.Session.GetFlag("Upgrade_SpaceJump"))
                 {
-                    Settings.SpaceJump = 2;
+                    ModSettings.SpaceJump = 2;
                     level.Session.SetFlag("Upgrade_SpaceJump", true);
                 }
                 if (setHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
                 {
-                    Settings.HoverBoots = true;
+                    ModSettings.HoverBoots = true;
                     level.Session.SetFlag("Upgrade_HoverBoots", true);
                 }
                 if (setLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
                 {
-                    Settings.LightningDash = true;
+                    ModSettings.LightningDash = true;
                     level.Session.SetFlag("Upgrade_LightningDash", true);
                 }
                 if (setLongBeam || level.Session.GetFlag("Upgrade_LongBeam"))
                 {
-                    Settings.LongBeam = true;
+                    ModSettings.LongBeam = true;
                     level.Session.SetFlag("Upgrade_LongBeam", true);
                 }
                 if (setIceBeam || level.Session.GetFlag("Upgrade_IceBeam"))
                 {
-                    Settings.IceBeam = true;
+                    ModSettings.IceBeam = true;
                     level.Session.SetFlag("Upgrade_IceBeam", true);
                 }
                 if (setWaveBeam || level.Session.GetFlag("Upgrade_WaveBeam"))
                 {
-                    Settings.WaveBeam = true;
+                    ModSettings.WaveBeam = true;
                     level.Session.SetFlag("Upgrade_WaveBeam", true);
                 }
                 if (setMissilesModule || level.Session.GetFlag("Upgrade_MissilesModule"))
                 {
-                    Settings.MissilesModule = true;
+                    ModSettings.MissilesModule = true;
                     level.Session.SetFlag("Upgrade_MissilesModule", true);
                 }
                 if (setSuperMissilesModule || level.Session.GetFlag("Upgrade_SuperMissilesModule"))
                 {
-                    Settings.SuperMissilesModule = true;
+                    ModSettings.SuperMissilesModule = true;
                     level.Session.SetFlag("Upgrade_SuperMissilesModule", true);
                 }
             }
@@ -1972,98 +1976,98 @@ namespace Celeste.Mod.XaphanHelper
             {
                 // Give back upgrades the player has unlocked
 
-                if (!forceStartingUpgrades && !PlayerHasGolden && !Settings.SpeedrunMode)
+                if (!forceStartingUpgrades && !PlayerHasGolden && !ModSettings.SpeedrunMode)
                 {
                     // Celeste Upgrades
 
                     if (PowerGripCollected(level))
                     {
-                        Settings.PowerGrip = true;
+                        ModSettings.PowerGrip = true;
                         level.Session.SetFlag("Upgrade_PowerGrip", true);
                     }
                     if (ClimbingKitCollected(level))
                     {
-                        Settings.ClimbingKit = true;
+                        ModSettings.ClimbingKit = true;
                         level.Session.SetFlag("Upgrade_ClimbingKit", true);
                     }
                     if (SpiderMagnetCollected(level))
                     {
-                        Settings.SpiderMagnet = true;
+                        ModSettings.SpiderMagnet = true;
                         level.Session.SetFlag("Upgrade_SpiderMagnet", true);
                     }
                     if (DroneTeleportCollected(level))
                     {
-                        Settings.DroneTeleport = true;
+                        ModSettings.DroneTeleport = true;
                         level.Session.SetFlag("Upgrade_DroneTeleport", true);
                     }
                     /*if (JumpBoostCollected(level))
                     {
-                        Settings.JumpBoost = true;
+                        ModSettings.JumpBoost = true;
                         level.Session.SetFlag("Upgrade_JumpBoost", true);
                     }*/
                     if (BombsCollected(level))
                     {
-                        Settings.Bombs = true;
+                        ModSettings.Bombs = true;
                         level.Session.SetFlag("Upgrade_Bombs", true);
                     }
                     if (MegaBombsCollected(level))
                     {
-                        Settings.MegaBombs = true;
+                        ModSettings.MegaBombs = true;
                         level.Session.SetFlag("Upgrade_MegaBombs", true);
                     }
                     if (RemoteDroneCollected(level))
                     {
-                        Settings.RemoteDrone = true;
+                        ModSettings.RemoteDrone = true;
                         level.Session.SetFlag("Upgrade_RemoteDrone", true);
                     }
                     if (GoldenFeatherCollected(level))
                     {
-                        Settings.GoldenFeather = true;
+                        ModSettings.GoldenFeather = true;
                         level.Session.SetFlag("Upgrade_GoldenFeather", true);
                     }
                     if (BinocularsCollected(level))
                     {
-                        Settings.Binoculars = true;
+                        ModSettings.Binoculars = true;
                         level.Session.SetFlag("Upgrade_Binoculars", true);
                     }
                     if (EtherealDashCollected(level))
                     {
-                        Settings.EtherealDash = true;
+                        ModSettings.EtherealDash = true;
                         level.Session.SetFlag("Upgrade_EtherealDash", true);
                     }
                     if (PortableStationCollected(level))
                     {
-                        Settings.PortableStation = true;
+                        ModSettings.PortableStation = true;
                         level.Session.SetFlag("Upgrade_PortableStation", true);
                     }
                     if (PulseRadarCollected(level))
                     {
-                        Settings.PulseRadar = true;
+                        ModSettings.PulseRadar = true;
                         level.Session.SetFlag("Upgrade_PulseRadar", true);
                     }
                     if (DashBootsCollected(level))
                     {
-                        Settings.DashBoots = true;
+                        ModSettings.DashBoots = true;
                         level.Session.SetFlag("Upgrade_DashBoots", true);
                     }
                     if (HoverBootsCollected(level))
                     {
-                        Settings.HoverBoots = true;
+                        ModSettings.HoverBoots = true;
                         level.Session.SetFlag("Upgrade_HoverBoots", true);
                     }
                     if (LightningDashCollected(level))
                     {
-                        Settings.LightningDash = true;
+                        ModSettings.LightningDash = true;
                         level.Session.SetFlag("Upgrade_LightningDash", true);
                     }
                     if (MissilesModuleCollected(level))
                     {
-                        Settings.MissilesModule = true;
+                        ModSettings.MissilesModule = true;
                         level.Session.SetFlag("Upgrade_MissilesModule", true);
                     }
                     if (SuperMissilesModuleCollected(level))
                     {
-                        Settings.SuperMissilesModule = true;
+                        ModSettings.SuperMissilesModule = true;
                         level.Session.SetFlag("SuperUpgrade_MissilesModule", true);
                     }
 
@@ -2071,37 +2075,37 @@ namespace Celeste.Mod.XaphanHelper
 
                     if (SpazerCollected(level))
                     {
-                        Settings.Spazer = true;
+                        ModSettings.Spazer = true;
                         level.Session.SetFlag("Upgrade_Spazer", true);
                     }
                     if (PlasmaBeamCollected(level))
                     {
-                        Settings.PlasmaBeam = true;
+                        ModSettings.PlasmaBeam = true;
                         level.Session.SetFlag("Upgrade_PlasmaBeam", true);
                     }
                     if (MorphingBallCollected(level))
                     {
-                        Settings.MorphingBall = true;
+                        ModSettings.MorphingBall = true;
                         level.Session.SetFlag("Upgrade_MorphingBall", true);
                     }
                     if (MorphBombsCollected(level))
                     {
-                        Settings.MorphBombs = true;
+                        ModSettings.MorphBombs = true;
                         level.Session.SetFlag("Upgrade_MorphBombs", true);
                     }
                     if (SpringBallCollected(level))
                     {
-                        Settings.SpringBall = true;
+                        ModSettings.SpringBall = true;
                         level.Session.SetFlag("Upgrade_SpringBall", true);
                     }
                     if (HighJumpBootsCollected(level))
                     {
-                        Settings.HighJumpBoots = true;
+                        ModSettings.HighJumpBoots = true;
                         level.Session.SetFlag("Upgrade_HighJumpBoots", true);
                     }
                     if (SpeedBoosterCollected(level))
                     {
-                        Settings.SpeedBooster = true;
+                        ModSettings.SpeedBooster = true;
                         level.Session.SetFlag("Upgrade_SpeedBooster", true);
                     }
 
@@ -2109,141 +2113,141 @@ namespace Celeste.Mod.XaphanHelper
 
                     if (LongBeamCollected(level))
                     {
-                        Settings.LongBeam = true;
+                        ModSettings.LongBeam = true;
                         level.Session.SetFlag("Upgrade_LongBeam", true);
                     }
                     if (IceBeamCollected(level))
                     {
-                        Settings.IceBeam = true;
+                        ModSettings.IceBeam = true;
                         level.Session.SetFlag("Upgrade_IceBeam", true);
                     }
                     if (WaveBeamCollected(level))
                     {
-                        Settings.WaveBeam = true;
+                        ModSettings.WaveBeam = true;
                         level.Session.SetFlag("Upgrade_WaveBeam", true);
                     }
                     if (VariaJacketCollected(level))
                     {
-                        Settings.VariaJacket = true;
+                        ModSettings.VariaJacket = true;
                         level.Session.SetFlag("Upgrade_VariaJacket", true);
                     }
                     if (GravityJacketCollected(level))
                     {
-                        Settings.GravityJacket = true;
+                        ModSettings.GravityJacket = true;
                         level.Session.SetFlag("Upgrade_GravityJacket", true);
                     }
                     if (ScrewAttackCollected(level))
                     {
-                        Settings.ScrewAttack = true;
+                        ModSettings.ScrewAttack = true;
                         level.Session.SetFlag("Upgrade_ScrewAttack", true);
                     }
                     if (SpaceJumpCollected(level))
                     {
-                        Settings.SpaceJump = !useMetroidGameplay ? 2 : 6;
+                        ModSettings.SpaceJump = !useMetroidGameplay ? 2 : 6;
                         level.Session.SetFlag("Upgrade_SpaceJump", true);
                     }
                 }
-                else if (PlayerHasGolden || Settings.SpeedrunMode) // If the player has the golden berry or is in speedrun mode
+                else if (PlayerHasGolden || ModSettings.SpeedrunMode) // If the player has the golden berry or is in speedrun mode
                 {
                     if (goldenPowerGrip || level.Session.GetFlag("Upgrade_PowerGrip"))
                     {
-                        Settings.PowerGrip = true;
+                        ModSettings.PowerGrip = true;
                     }
                     if (goldenClimbingKit || level.Session.GetFlag("Upgrade_ClimbingKit"))
                     {
-                        Settings.ClimbingKit = true;
+                        ModSettings.ClimbingKit = true;
                     }
                     if (goldenSpiderMagnet || level.Session.GetFlag("Upgrade_SpiderMagnet"))
                     {
-                        Settings.SpiderMagnet = true;
+                        ModSettings.SpiderMagnet = true;
                     }
                     if (goldenDroneTeleport || level.Session.GetFlag("Upgrade_DroneTeleport"))
                     {
-                        Settings.DroneTeleport = true;
+                        ModSettings.DroneTeleport = true;
                     }
                     /*if (goldenJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
                     {
-                        Settings.JumpBoost = true;
+                        ModSettings.JumpBoost = true;
                     }*/
                     if (goldenScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
                     {
-                        Settings.ScrewAttack = true;
+                        ModSettings.ScrewAttack = true;
                     }
                     if (goldenVariaJacket || level.Session.GetFlag("Upgrade_VariaJacket"))
                     {
-                        Settings.VariaJacket = true;
+                        ModSettings.VariaJacket = true;
                     }
                     if (goldenGravityJacket || level.Session.GetFlag("Upgrade_GravityJacket"))
                     {
-                        Settings.GravityJacket = true;
+                        ModSettings.GravityJacket = true;
                     }
                     if (goldenBombs || level.Session.GetFlag("Upgrade_Bombs"))
                     {
-                        Settings.Bombs = true;
+                        ModSettings.Bombs = true;
                     }
                     if (goldenMegaBombs || level.Session.GetFlag("Upgrade_MegaBombs"))
                     {
-                        Settings.MegaBombs = true;
+                        ModSettings.MegaBombs = true;
                     }
                     if (goldenRemoteDrone || level.Session.GetFlag("Upgrade_RemoteDrone"))
                     {
-                        Settings.RemoteDrone = true;
+                        ModSettings.RemoteDrone = true;
                     }
                     if (goldenGoldenFeather || level.Session.GetFlag("Upgrade_GoldenFeather"))
                     {
-                        Settings.GoldenFeather = true;
+                        ModSettings.GoldenFeather = true;
                     }
                     if (goldenBinoculars || level.Session.GetFlag("Upgrade_Binoculars"))
                     {
-                        Settings.Binoculars = true;
+                        ModSettings.Binoculars = true;
                     }
                     if (goldenEtherealDash || level.Session.GetFlag("Upgrade_EtherealDash"))
                     {
-                        Settings.EtherealDash = true;
+                        ModSettings.EtherealDash = true;
                     }
                     if (goldenPortableStation || level.Session.GetFlag("Upgrade_PortableStation"))
                     {
-                        Settings.PortableStation = true;
+                        ModSettings.PortableStation = true;
                     }
                     if (goldenPulseRadar || level.Session.GetFlag("Upgrade_PulseRadar"))
                     {
-                        Settings.PulseRadar = true;
+                        ModSettings.PulseRadar = true;
                     }
                     if (goldenDashBoots || level.Session.GetFlag("Upgrade_DashBoots"))
                     {
-                        Settings.DashBoots = true;
+                        ModSettings.DashBoots = true;
                     }
                     if (goldenSpaceJump || level.Session.GetFlag("Upgrade_SpaceJump"))
                     {
-                        Settings.SpaceJump = 2;
+                        ModSettings.SpaceJump = 2;
                     }
                     if (goldenHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
                     {
-                        Settings.HoverBoots = true;
+                        ModSettings.HoverBoots = true;
                     }
                     if (goldenLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
                     {
-                        Settings.LightningDash = true;
+                        ModSettings.LightningDash = true;
                     }
                     if (goldenLongBeam || level.Session.GetFlag("Upgrade_LongBeam"))
                     {
-                        Settings.LongBeam = true;
+                        ModSettings.LongBeam = true;
                     }
                     if (goldenIceBeam || level.Session.GetFlag("Upgrade_IceBeam"))
                     {
-                        Settings.IceBeam = true;
+                        ModSettings.IceBeam = true;
                     }
                     if (goldenWaveBeam || level.Session.GetFlag("Upgrade_WaveBeam"))
                     {
-                        Settings.WaveBeam = true;
+                        ModSettings.WaveBeam = true;
                     }
                     if (goldenMissilesModule || level.Session.GetFlag("Upgrade_MissilesModule"))
                     {
-                        Settings.MissilesModule = true;
+                        ModSettings.MissilesModule = true;
                     }
                     if (goldenSuperMissilesModule || level.Session.GetFlag("Upgrade_SuperMissilesModule"))
                     {
-                        Settings.SuperMissilesModule = true;
+                        ModSettings.SuperMissilesModule = true;
                     }
                 }
             }
@@ -2260,14 +2264,14 @@ namespace Celeste.Mod.XaphanHelper
 
             // Remove Speedrun Mode
 
-            if (Settings.SpeedrunMode)
+            if (ModSettings.SpeedrunMode)
             {
                 ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                 ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
                 ModSaveData.SpeedrunModeDroneMissilesUpgrades.Clear();
                 ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Clear();
                 ModSaveData.SpeedrunModeDroneFireRateUpgrades.Clear();
-                Settings.SpeedrunMode = false;
+                ModSettings.SpeedrunMode = false;
             }
 
             // Remove PickedGolden flag from save
@@ -2696,7 +2700,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     minimapEnabled = false;
                 }
-                if (allRoomsUseTileController && Settings.ShowMiniMap && (ModSaveData.SavedFlags.Contains(self.Session.Area.GetLevelSet() + "_Can_Open_Map") || (self.Session.Area.LevelSet == "Xaphan/0" ? ModSaveData.SpeedrunMode : false)) && !minimapEnabled)
+                if (allRoomsUseTileController && ModSettings.ShowMiniMap && (ModSaveData.SavedFlags.Contains(self.Session.Area.GetLevelSet() + "_Can_Open_Map") || (self.Session.Area.LevelSet == "Xaphan/0" ? ModSaveData.SpeedrunMode : false)) && !minimapEnabled)
                 {
                     if (self.Tracker.GetEntity<MiniMap>() == null)
                     {
@@ -2706,7 +2710,7 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 else
                 {
-                    if (!Settings.ShowMiniMap)
+                    if (!ModSettings.ShowMiniMap)
                     {
                         MiniMap minimap = self.Tracker.GetEntity<MiniMap>();
                         if (minimap != null)
@@ -2725,7 +2729,7 @@ namespace Celeste.Mod.XaphanHelper
                 string Prefix = self.Session.Area.GetLevelSet();
                 int chapterIndex = self.Session.Area.ChapterIndex == -1 ? 0 : self.Session.Area.ChapterIndex;
                 string room = self.Session.Level;
-                if (self.CanPause && (self.CanRetry || PlayerIsControllingRemoteDrone()) && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && Settings.OpenMap.Pressed && !self.Session.GetFlag("Map_Opened"))
+                if (self.CanPause && (self.CanRetry || PlayerIsControllingRemoteDrone()) && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !self.Session.GetFlag("In_bossfight") && player.OnSafeGround && ModSettings.OpenMap.Pressed && !self.Session.GetFlag("Map_Opened"))
                 {
                     if (useIngameMap && ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + room) && CanOpenMap(self))
                     {
@@ -3004,7 +3008,7 @@ namespace Celeste.Mod.XaphanHelper
                         self.Add(GetWipe(self, true));
                     }
                 }
-                if (Settings.SpeedrunMode) // Clear Speedrun Mode stuff
+                if (ModSettings.SpeedrunMode) // Clear Speedrun Mode stuff
                 {
                     ModSaveData.SpeedrunModeUnlockedWarps.Clear();
                     ModSaveData.SpeedrunModeStaminaUpgrades.Clear();
@@ -3130,7 +3134,7 @@ namespace Celeste.Mod.XaphanHelper
                                 }
                             }
                         }
-                        if (Settings.ShowMiniMap)
+                        if (ModSettings.ShowMiniMap)
                         {
                             MapDisplay mapDisplay = self.Tracker.GetEntity<MapDisplay>();
                             if (mapDisplay != null)
@@ -3220,55 +3224,55 @@ namespace Celeste.Mod.XaphanHelper
                         // Reset upgrades
 
                         level.Session.SetFlag("Upgrade_PowerGrip", false);
-                        Settings.PowerGrip = false;
+                        ModSettings.PowerGrip = false;
                         level.Session.SetFlag("Upgrade_ClimbingKit", false);
-                        Settings.ClimbingKit = false;
+                        ModSettings.ClimbingKit = false;
                         level.Session.SetFlag("Upgrade_SpiderMagnet", false);
-                        Settings.SpiderMagnet = false;
+                        ModSettings.SpiderMagnet = false;
                         level.Session.SetFlag("Upgrade_DroneTeleport", false);
-                        Settings.DroneTeleport = false;
+                        ModSettings.DroneTeleport = false;
                         /*level.Session.SetFlag("Upgrade_JumpBoost", false);
-                        Settings.JumpBoost = false;*/
+                        ModSettings.JumpBoost = false;*/
                         level.Session.SetFlag("Upgrade_ScrewAttack", false);
-                        Settings.ScrewAttack = false;
+                        ModSettings.ScrewAttack = false;
                         level.Session.SetFlag("Upgrade_VariaJacket", false);
-                        Settings.VariaJacket = false;
+                        ModSettings.VariaJacket = false;
                         level.Session.SetFlag("Upgrade_GravityJacket", false);
-                        Settings.GravityJacket = false;
+                        ModSettings.GravityJacket = false;
                         level.Session.SetFlag("Upgrade_Bombs", false);
-                        Settings.Bombs = false;
+                        ModSettings.Bombs = false;
                         level.Session.SetFlag("Upgrade_MegaBombs", false);
-                        Settings.MegaBombs = false;
+                        ModSettings.MegaBombs = false;
                         level.Session.SetFlag("Upgrade_RemoteDrone", false);
-                        Settings.RemoteDrone = false;
+                        ModSettings.RemoteDrone = false;
                         level.Session.SetFlag("Upgrade_GoldenFeather", false);
-                        Settings.GoldenFeather = false;
+                        ModSettings.GoldenFeather = false;
                         level.Session.SetFlag("Upgrade_Binoculars", false);
-                        Settings.Binoculars = false;
+                        ModSettings.Binoculars = false;
                         level.Session.SetFlag("Upgrade_EtherealDash", false);
-                        Settings.EtherealDash = false;
+                        ModSettings.EtherealDash = false;
                         level.Session.SetFlag("Upgrade_PortableStation", false);
-                        Settings.PortableStation = false;
+                        ModSettings.PortableStation = false;
                         level.Session.SetFlag("Upgrade_PulseRadar", false);
-                        Settings.PulseRadar = false;
+                        ModSettings.PulseRadar = false;
                         level.Session.SetFlag("Upgrade_DashBoots", false);
-                        Settings.DashBoots = false;
+                        ModSettings.DashBoots = false;
                         level.Session.SetFlag("Upgrade_SpaceJump", false);
-                        Settings.SpaceJump = 1;
+                        ModSettings.SpaceJump = 1;
                         level.Session.SetFlag("Upgrade_HoverBoots", false);
-                        Settings.HoverBoots = false;
+                        ModSettings.HoverBoots = false;
                         level.Session.SetFlag("Upgrade_LightningDash", false);
-                        Settings.LightningDash = false;
+                        ModSettings.LightningDash = false;
                         level.Session.SetFlag("Upgrade_LongBeam", false);
-                        Settings.LongBeam = false;
+                        ModSettings.LongBeam = false;
                         level.Session.SetFlag("Upgrade_IceBeam", false);
-                        Settings.IceBeam = false;
+                        ModSettings.IceBeam = false;
                         level.Session.SetFlag("Upgrade_WaveBeam", false);
-                        Settings.WaveBeam = false;
+                        ModSettings.WaveBeam = false;
                         level.Session.SetFlag("Upgrade_MissilesModule", false);
-                        Settings.MissilesModule = false;
+                        ModSettings.MissilesModule = false;
                         level.Session.SetFlag("Upgrade_SuperMissilesModule", false);
-                        Settings.SuperMissilesModule = false;
+                        ModSettings.SuperMissilesModule = false;
 
                         foreach (string flag in ModSaveData.SavedFlags)
                         {
@@ -3354,127 +3358,127 @@ namespace Celeste.Mod.XaphanHelper
                         }
                         if (goldenPowerGrip)
                         {
-                            Settings.PowerGrip = true;
+                            ModSettings.PowerGrip = true;
                             level.Session.SetFlag("Upgrade_PowerGrip", true);
                         }
                         if (goldenClimbingKit)
                         {
-                            Settings.ClimbingKit = true;
+                            ModSettings.ClimbingKit = true;
                             level.Session.SetFlag("Upgrade_ClimbingKit", true);
                         }
                         if (goldenSpiderMagnet)
                         {
-                            Settings.SpiderMagnet = true;
+                            ModSettings.SpiderMagnet = true;
                             level.Session.SetFlag("Upgrade_SpiderMagnet", true);
                         }
                         if (goldenDroneTeleport)
                         {
-                            Settings.DroneTeleport = true;
+                            ModSettings.DroneTeleport = true;
                             level.Session.SetFlag("Upgrade_DroneTeleport", true);
                         }
                         /*if (goldenJumpBoost)
                         {
-                            Settings.JumpBoost = true;
+                            ModSettings.JumpBoost = true;
                             level.Session.SetFlag("Upgrade_JumpBoost", true);
                         }*/
                         if (goldenScrewAttack)
                         {
-                            Settings.ScrewAttack = true;
+                            ModSettings.ScrewAttack = true;
                             level.Session.SetFlag("Upgrade_ScrewAttack", true);
                         }
                         if (goldenVariaJacket)
                         {
-                            Settings.VariaJacket = true;
+                            ModSettings.VariaJacket = true;
                             level.Session.SetFlag("Upgrade_VariaJacket", true);
                         }
                         if (goldenGravityJacket)
                         {
-                            Settings.GravityJacket = true;
+                            ModSettings.GravityJacket = true;
                             level.Session.SetFlag("Upgrade_GravityJacket", true);
                         }
                         if (goldenBombs)
                         {
-                            Settings.Bombs = true;
+                            ModSettings.Bombs = true;
                             level.Session.SetFlag("Upgrade_Bombs", true);
                         }
                         if (goldenMegaBombs)
                         {
-                            Settings.MegaBombs = true;
+                            ModSettings.MegaBombs = true;
                             level.Session.SetFlag("Upgrade_MegaBombs", true);
                         }
                         if (goldenRemoteDrone)
                         {
-                            Settings.RemoteDrone = true;
+                            ModSettings.RemoteDrone = true;
                             level.Session.SetFlag("Upgrade_RemoteDrone", true);
                         }
                         if (goldenGoldenFeather)
                         {
-                            Settings.GoldenFeather = true;
+                            ModSettings.GoldenFeather = true;
                             level.Session.SetFlag("Upgrade_GoldenFeather", true);
                         }
                         if (goldenBinoculars)
                         {
-                            Settings.Binoculars = true;
+                            ModSettings.Binoculars = true;
                             level.Session.SetFlag("Upgrade_Binoculars", true);
                         }
                         if (goldenEtherealDash)
                         {
-                            Settings.EtherealDash = true;
+                            ModSettings.EtherealDash = true;
                             level.Session.SetFlag("Upgrade_EtherealDash", true);
                         }
                         if (goldenPortableStation)
                         {
-                            Settings.PortableStation = true;
+                            ModSettings.PortableStation = true;
                             level.Session.SetFlag("Upgrade_PortableStation", true);
                         }
                         if (goldenPulseRadar)
                         {
-                            Settings.PulseRadar = true;
+                            ModSettings.PulseRadar = true;
                             level.Session.SetFlag("Upgrade_PulseRadar", true);
                         }
                         if (goldenDashBoots)
                         {
-                            Settings.DashBoots = true;
+                            ModSettings.DashBoots = true;
                             level.Session.SetFlag("Upgrade_DashBoots", true);
                         }
                         if (goldenSpaceJump)
                         {
-                            Settings.SpaceJump = 2;
+                            ModSettings.SpaceJump = 2;
                             level.Session.SetFlag("Upgrade_SpaceJump", true);
                         }
                         if (goldenHoverBoots)
                         {
-                            Settings.HoverBoots = true;
+                            ModSettings.HoverBoots = true;
                             level.Session.SetFlag("Upgrade_HoverBoots", true);
                         }
                         if (goldenLightningDash)
                         {
-                            Settings.LightningDash = true;
+                            ModSettings.LightningDash = true;
                             level.Session.SetFlag("Upgrade_LightningDash", true);
                         }
                         if (goldenLongBeam)
                         {
-                            Settings.LongBeam = true;
+                            ModSettings.LongBeam = true;
                             level.Session.SetFlag("Upgrade_LongBeam", true);
                         }
                         if (goldenIceBeam)
                         {
-                            Settings.IceBeam = true;
+                            ModSettings.IceBeam = true;
                             level.Session.SetFlag("Upgrade_IceBeam", true);
                         }
                         if (goldenWaveBeam)
                         {
-                            Settings.WaveBeam = true;
+                            ModSettings.WaveBeam = true;
                             level.Session.SetFlag("Upgrade_WaveBeam", true);
                         }
                         if (goldenMissilesModule)
                         {
-                            Settings.MissilesModule = true;
+                            ModSettings.MissilesModule = true;
                             level.Session.SetFlag("Upgrade_MissilesModule", true);
                         }
                         if (goldenSuperMissilesModule)
                         {
-                            Settings.SuperMissilesModule = true;
+                            ModSettings.SuperMissilesModule = true;
                             level.Session.SetFlag("Upgrade_SuperMissilesModule", true);
                         }
                     }

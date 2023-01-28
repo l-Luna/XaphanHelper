@@ -52,8 +52,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public int index;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public AmmoCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {
             ID = id;
@@ -144,7 +142,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         if (ammoDisplay.MaxMissiles == 0)
                         {
-                            controlA = Settings.SelectItem;
+                            controlA = XaphanModule.ModSettings.SelectItem;
                             controlB = Input.Dash;
                             inputActionA = "XaphanHelper_Select";
                             inputActionB = "XaphanHelper_Fire";
@@ -161,7 +159,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         if (ammoDisplay.MaxSuperMissiles == 0)
                         {
-                            controlA = Settings.SelectItem;
+                            controlA = XaphanModule.ModSettings.SelectItem;
                             controlB = Input.Dash;
                             inputActionA = "XaphanHelper_Select";
                             inputActionB = "XaphanHelper_Fire";
@@ -178,7 +176,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         if (ammoDisplay.MaxPowerBombs == 0)
                         {
-                            controlA = Settings.SelectItem;
+                            controlA = XaphanModule.ModSettings.SelectItem;
                             controlB = Input.Dash;
                             inputActionA = "XaphanHelper_Select_2";
                             inputActionB = "XaphanHelper_Set";

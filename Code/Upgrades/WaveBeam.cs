@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.WaveBeam ? 1 : 0;
+            return XaphanModule.ModSettings.WaveBeam ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.WaveBeam = (value != 0);
+            XaphanModule.ModSettings.WaveBeam = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.WaveBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).WaveBeamInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.WaveBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).WaveBeamInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

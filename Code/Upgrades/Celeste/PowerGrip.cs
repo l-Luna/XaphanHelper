@@ -18,12 +18,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.PowerGrip ? 1 : 0;
+            return XaphanModule.ModSettings.PowerGrip ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.PowerGrip = (value != 0);
+            XaphanModule.ModSettings.PowerGrip = (value != 0);
         }
 
         public override void Load()
@@ -44,7 +44,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (XaphanModule.useUpgrades)
             {
-                return Settings.PowerGrip && !XaphanModule.ModSaveData.PowerGripInactive.Contains(level.Session.Area.GetLevelSet());
+                return XaphanModule.ModSettings.PowerGrip && !XaphanModule.ModSaveData.PowerGripInactive.Contains(level.Session.Area.GetLevelSet());
             }
             return true;
         }
@@ -70,7 +70,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             if (Active(self.SceneAs<Level>()) && !self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && !XaphanModule.PlayerIsControllingRemoteDrone())
             {
                 BagDisplay display = self.SceneAs<Level>().Tracker.GetEntity<BagDisplay>();
-                if (self.OnGround() && self.Speed == Vector2.Zero && (((Input.MenuUp.Check && Input.Grab.Check && display != null && XaphanModule.useUpgrades) || (Settings.OpenMap.Pressed && XaphanModule.useIngameMap)) && self.StateMachine.State == 0))
+                if (self.OnGround() && self.Speed == Vector2.Zero && (((Input.MenuUp.Check && Input.Grab.Check && display != null && XaphanModule.useUpgrades) || (XaphanModule.ModSettings.OpenMap.Pressed && XaphanModule.useIngameMap)) && self.StateMachine.State == 0))
                 {
                     return false;
                 }

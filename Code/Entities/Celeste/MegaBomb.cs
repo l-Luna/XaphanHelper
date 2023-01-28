@@ -39,8 +39,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool shouldExplodeImmediately;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public MegaBomb(Vector2 position, Player player) : base(position)
         {
             this.player = player;
@@ -225,7 +223,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.UseBagItemSlot.Check)
+            if (!XaphanModule.ModSettings.UseBagItemSlot.Check)
             {
                 RemoveSelf();
             }

@@ -9,7 +9,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     class SpaceJumpIndicator : Entity
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public SpaceJumpIndicator()
         {

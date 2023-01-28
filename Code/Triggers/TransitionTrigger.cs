@@ -7,8 +7,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
     [CustomEntity("XaphanHelper/TransitionTrigger")]
     class TransitionTrigger : Trigger
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private string DestinationLevel;
 
         private string Direction;

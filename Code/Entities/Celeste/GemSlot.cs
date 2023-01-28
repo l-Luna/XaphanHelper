@@ -17,7 +17,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string ParticleColor;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public GemSlot(EntityData data, Vector2 position) : base(data.Position + position)
         {

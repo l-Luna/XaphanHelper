@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.SpringBall ? 1 : 0;
+            return XaphanModule.ModSettings.SpringBall ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.SpringBall = (value != 0);
+            XaphanModule.ModSettings.SpringBall = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.SpringBall && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpringBallInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.SpringBall && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpringBallInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

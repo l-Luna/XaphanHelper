@@ -23,12 +23,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.MegaBombs ? 1 : 0;
+            return XaphanModule.ModSettings.MegaBombs ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.MegaBombs = (value != 0);
+            XaphanModule.ModSettings.MegaBombs = (value != 0);
         }
 
         public override void Load()
@@ -43,7 +43,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public bool Active(Level level)
         {
-            return Settings.MegaBombs && !XaphanModule.ModSaveData.MegaBombsInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.MegaBombs && !XaphanModule.ModSaveData.MegaBombsInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
@@ -62,7 +62,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive)
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseBombCoroutine.Active)
+                    if (!cooldown && self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && XaphanModule.ModSettings.UseBagItemSlot.Pressed && !XaphanModule.ModSettings.OpenMap.Check && !XaphanModule.ModSettings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseBombCoroutine.Active)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -86,7 +86,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         private IEnumerator UseBomb(Player player, Level level)
         {
             bool usedBomb = false;
-            while (Settings.UseBagItemSlot.Check && !usedBomb)
+            while (XaphanModule.ModSettings.UseBagItemSlot.Check && !usedBomb)
             {
                 while (player.Speed != Vector2.Zero)
                 {

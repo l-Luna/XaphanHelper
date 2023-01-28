@@ -95,7 +95,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public Drone(Vector2 position, Player player) : base(position)
         {
@@ -603,7 +603,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
             int missileCount = 10;
-            foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
+            foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
             {
                 if (missileUpgrade.Contains(Prefix))
                 {
@@ -612,7 +612,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             CurrentMissiles = missileCount;
             int superMissileCount = 5;
-            foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+            foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
             {
                 if (superMissileUpgrade.Contains(Prefix))
                 {
@@ -965,7 +965,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     string beamType = "Power" + (WaveBeam.Active(level) ? "Wave" : "") + (IceBeam.Active(level) ? "Ice" : "");
                     level.Add(new Beam(player, beamType, beamSound, Position, WaveBeam.Active(level) ? 4 : 0));
                     int droneFireRateUpgradesCount = 0;
-                    foreach (string fireRateModuleUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades : XaphanModule.ModSaveData.DroneFireRateUpgrades)
+                    foreach (string fireRateModuleUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades : XaphanModule.ModSaveData.DroneFireRateUpgrades)
                     {
                         if (fireRateModuleUpgrade.Contains(Prefix))
                         {

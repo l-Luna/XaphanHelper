@@ -10,8 +10,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
     [CustomEntity("XaphanHelper/TeleportToChapterTrigger")]
     class TeleportToChapterTrigger : Trigger
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private int ToChapter;
 
         private int SpawnRoomX;

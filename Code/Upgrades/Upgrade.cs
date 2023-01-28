@@ -6,8 +6,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 {
     public abstract class Upgrade
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public abstract int GetDefaultValue();
 
         public abstract void Load();

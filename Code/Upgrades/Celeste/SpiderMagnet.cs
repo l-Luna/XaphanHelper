@@ -14,12 +14,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.SpiderMagnet ? 1 : 0;
+            return XaphanModule.ModSettings.SpiderMagnet ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.SpiderMagnet = (value != 0);
+            XaphanModule.ModSettings.SpiderMagnet = (value != 0);
         }
 
         public override void Load()
@@ -34,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.SpiderMagnet && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpiderMagnetInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.SpiderMagnet && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpiderMagnetInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modNormalUpdate(ILContext il)

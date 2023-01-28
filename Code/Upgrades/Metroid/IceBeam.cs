@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.IceBeam ? 1 : 0;
+            return XaphanModule.ModSettings.IceBeam ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.IceBeam = (value != 0);
+            XaphanModule.ModSettings.IceBeam = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.IceBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).IceBeamInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.IceBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).IceBeamInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.LongBeam ? 1 : 0;
+            return XaphanModule.ModSettings.LongBeam ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.LongBeam = (value != 0);
+            XaphanModule.ModSettings.LongBeam = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.LongBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).LongBeamInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.LongBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).LongBeamInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

@@ -54,8 +54,6 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         private Image InputImage;
 
-        protected XaphanModuleSettings XaphanModuleSettings => XaphanModule.Settings;
-
         public SoCMIntroVignette(Session session, HiresSnow snow = null)
         {
             this.session = session;
@@ -226,7 +224,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             FirstInput = null;
             InputImage = null;
             decoRight = null;
-            if (XaphanModuleSettings.SpeedrunModeUnlocked)
+            if (XaphanModule.ModSettings.SpeedrunModeUnlocked)
             {
                 Add(menu = new TextMenu());
                 menu.Add(new TextMenu.SubHeader(""));

@@ -16,12 +16,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.GoldenFeather ? 1 : 0;
+            return XaphanModule.ModSettings.GoldenFeather ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.GoldenFeather = (value != 0);
+            XaphanModule.ModSettings.GoldenFeather = (value != 0);
         }
 
         public override void Load()
@@ -36,7 +36,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public bool Active(Level level)
         {
-            return Settings.GoldenFeather && !XaphanModule.ModSaveData.GoldenFeatherInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.GoldenFeather && !XaphanModule.ModSaveData.GoldenFeatherInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;

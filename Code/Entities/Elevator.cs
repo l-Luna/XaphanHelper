@@ -54,7 +54,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string flag;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public Elevator(Vector2 position, string sprite, bool canTalk, bool usableInSpeedrunMode, float timer, bool endAreaEntrance, int endPosition, int toChapter, string destinationRoom, int spawnRoomX, int spawnRoomY, string flag) : base(position, 32f, 8f, safe: true)
         {

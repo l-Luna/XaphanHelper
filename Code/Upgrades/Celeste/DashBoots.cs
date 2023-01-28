@@ -15,12 +15,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.DashBoots ? 1 : 0;
+            return XaphanModule.ModSettings.DashBoots ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.DashBoots = (value != 0);
+            XaphanModule.ModSettings.DashBoots = (value != 0);
         }
 
         public override void Load()
@@ -37,7 +37,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (XaphanModule.useUpgrades)
             {
-                return Settings.DashBoots && !XaphanModule.ModSaveData.DashBootsInactive.Contains(level.Session.Area.GetLevelSet());
+                return XaphanModule.ModSettings.DashBoots && !XaphanModule.ModSaveData.DashBootsInactive.Contains(level.Session.Area.GetLevelSet());
             }
             return true;
         }

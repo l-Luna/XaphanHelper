@@ -55,8 +55,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private bool HasSuperMissilesUpgrade;
 
-        protected XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
-
         public static void getStaminaData(Level level)
         {
             AreaKey area = level.Session.Area;
@@ -143,7 +141,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int ExtraStamina = 0;
             if (Engine.Scene is Level)
             {
-                foreach (string upgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades : XaphanModule.ModSaveData.StaminaUpgrades)
+                foreach (string upgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeStaminaUpgrades : XaphanModule.ModSaveData.StaminaUpgrades)
                 {
                     if (upgrade.Contains(Prefix))
                     {
@@ -237,7 +235,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 HasMissilesUpgrade = MissilesModule.Active(SceneAs<Level>());
                 HasSuperMissilesUpgrade = SuperMissilesModule.Active(SceneAs<Level>());
                 bool NoneSelected = !MissileSelected && !SuperMissileSelected;
-                if (NoneSelected && XaphanSettings.SelectItem.Pressed)
+                if (NoneSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     if (HasMissilesUpgrade && CurrentMissiles > 0)
                     {
@@ -248,7 +246,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         SuperMissileSelected = true;
                     }
                 }
-                else if (MissileSelected && XaphanSettings.SelectItem.Pressed)
+                else if (MissileSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     MissileSelected = false;
                     if (HasSuperMissilesUpgrade && CurrentSuperMissiles > 0)
@@ -256,7 +254,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         SuperMissileSelected = true;
                     }
                 }
-                else if (SuperMissileSelected && XaphanSettings.SelectItem.Pressed)
+                else if (SuperMissileSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     SuperMissileSelected = false;
                 }
@@ -270,7 +268,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     SuperMissileSelected = false;
                     Audio.Play("event:/game/xaphan/item_select");
                 }
-                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0) && XaphanSettings.SelectItem.Pressed)
+                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0) && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     Audio.Play("event:/game/xaphan/item_select");
                 }

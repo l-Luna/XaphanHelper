@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.SpeedBooster ? 1 : 0;
+            return XaphanModule.ModSettings.SpeedBooster ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.SpeedBooster = (value != 0);
+            XaphanModule.ModSettings.SpeedBooster = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.SpeedBooster && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedBoosterInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.SpeedBooster && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpeedBoosterInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

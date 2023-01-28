@@ -11,8 +11,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/Slope")]
     class FakePlayerPlatform : Solid
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private Vector2 StartPosition;
 
         private Vector2 EndPosition;

@@ -65,7 +65,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public ChallengeMote(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position)
         {

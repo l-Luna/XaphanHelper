@@ -11,8 +11,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     public class MiniMap : Entity
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private Level level;
 
         private Player player;
@@ -57,7 +55,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private float GetMapOpacity()
         {
-            return Settings.MiniMapOpacity / 10f;
+            return XaphanModule.ModSettings.MiniMapOpacity / 10f;
         }
 
         public override void Update()

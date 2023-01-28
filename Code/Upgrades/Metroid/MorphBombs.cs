@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.MorphBombs ? 1 : 0;
+            return XaphanModule.ModSettings.MorphBombs ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.MorphBombs = (value != 0);
+            XaphanModule.ModSettings.MorphBombs = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.MorphBombs && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MorphBombsInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.MorphBombs && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).MorphBombsInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

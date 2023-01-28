@@ -18,12 +18,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.ClimbingKit ? 1 : 0;
+            return XaphanModule.ModSettings.ClimbingKit ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.ClimbingKit = (value != 0);
+            XaphanModule.ModSettings.ClimbingKit = (value != 0);
         }
 
         public override void Load()
@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         {
             if (XaphanModule.useUpgrades)
             {
-                return Settings.ClimbingKit && !XaphanModule.ModSaveData.ClimbingKitInactive.Contains(level.Session.Area.GetLevelSet());
+                return XaphanModule.ModSettings.ClimbingKit && !XaphanModule.ModSaveData.ClimbingKitInactive.Contains(level.Session.Area.GetLevelSet());
             }
             return true;
         }

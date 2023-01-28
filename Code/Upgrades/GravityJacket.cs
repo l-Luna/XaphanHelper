@@ -27,12 +27,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.GravityJacket ? 1 : 0;
+            return XaphanModule.ModSettings.GravityJacket ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.GravityJacket = (value != 0);
+            XaphanModule.ModSettings.GravityJacket = (value != 0);
         }
 
         public override void Load()
@@ -75,7 +75,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.GravityJacket && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GravityJacketInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.GravityJacket && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).GravityJacketInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modNormalUpdate(ILContext il)

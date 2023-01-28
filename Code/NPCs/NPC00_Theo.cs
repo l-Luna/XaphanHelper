@@ -15,8 +15,6 @@ namespace Celeste.Mod.XaphanHelper.NPCs
 
         public bool playerHasCollectedOneGem() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public NPC00_Theo(EntityData data, Vector2 position) : base(data.Position + position)
         {
             mode = data.Attr("mode");
@@ -36,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.NPCs
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 if (mode == "start" && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots"))
                 {

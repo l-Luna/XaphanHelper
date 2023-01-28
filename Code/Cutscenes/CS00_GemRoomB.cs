@@ -18,8 +18,6 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         private NPC00_Theo theo;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public CS00_GemRoomB(Player player)
         {
             this.player = player;
@@ -60,7 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             string poemTextB = Dialog.Clean("XaphanHelper_get_Map_Desc");
             string poemTextC = Dialog.Clean("XaphanHelper_get_Map_Desc_b");
             AreaKey area = level.Session.Area;
-            poem = new CustomPoem("XaphanHelper_Press", poemTextA, null, poemTextB, poemTextC, "AA00AA", "FFFFFF", "FFFFFF", "533467", "collectables/XaphanHelper/UpgradeCollectable/map", 0.5f, Settings.OpenMap);
+            poem = new CustomPoem("XaphanHelper_Press", poemTextA, null, poemTextB, poemTextC, "AA00AA", "FFFFFF", "FFFFFF", "533467", "collectables/XaphanHelper/UpgradeCollectable/map", 0.5f, XaphanModule.ModSettings.OpenMap);
             poem.Alpha = 0f;
             Scene.Add(poem);
             for (float t2 = 0f; t2 < 1f; t2 += Engine.RawDeltaTime)
@@ -87,7 +85,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public IEnumerator Cutscene(Level level)
         {
-            if ((Settings.SpeedrunMode && level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
+            if ((XaphanModule.ModSettings.SpeedrunMode && level.Session.GetFlag("Upgrade_DashBoots")) || (!XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
             {
                 player.StateMachine.State = 11;
                 yield return Level.ZoomTo(new Vector2(160f, 110f), 1.5f, 1f);

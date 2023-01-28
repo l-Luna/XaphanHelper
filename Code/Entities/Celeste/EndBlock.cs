@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private EntityID eid;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public EndBlock(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {

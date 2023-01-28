@@ -11,12 +11,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.ScrewAttack ? 1 : 0;
+            return XaphanModule.ModSettings.ScrewAttack ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.ScrewAttack = (value != 0);
+            XaphanModule.ModSettings.ScrewAttack = (value != 0);
         }
 
         public override void Load()
@@ -31,7 +31,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.ScrewAttack && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ScrewAttackInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.ScrewAttack && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).ScrewAttackInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)

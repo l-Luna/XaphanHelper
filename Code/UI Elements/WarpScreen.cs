@@ -177,7 +177,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     float scale = 0.5f;
                     Vector2 position = new(1030f, 1055f);
                     string progressDisplayStatus = mapProgressDisplay.mode == 0 ? (mapProgressDisplay.getSubAreaIndex() == -1 || mapProgressDisplay.SubAreaControllerData.Count == 1 ? hideProgressLabel : changeProgressLabel) : mapProgressDisplay.mode == 1 ? hideProgressLabel : showProgressLabel;
-                    ButtonBindingButtonUI.Render(position, progressDisplayStatus, XaphanModule.Settings.MapScreenShowProgressDisplay, scale, 1f, progressWiggle.Value * 0.05f);
+                    ButtonBindingButtonUI.Render(position, progressDisplayStatus, XaphanModule.ModSettings.MapScreenShowProgressDisplay, scale, 1f, progressWiggle.Value * 0.05f);
                     if (mapProgressDisplay.mode != 2)
                     {
                         string progressDisplayMode = mapProgressDisplay.mode == 0 ? areaProgressLabel : subareaProgressLabel;
@@ -465,7 +465,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         mapDisplay.SetCurrentRoomCoordinates(roomOffset);
                     }
 
-                    if (mapProgressDisplay != null && XaphanModule.Settings.MapScreenShowProgressDisplay.Check && progressWiggleDelay <= 0f)
+                    if (mapProgressDisplay != null && XaphanModule.ModSettings.MapScreenShowProgressDisplay.Check && progressWiggleDelay <= 0f)
                     {
                         progressWiggle.Start();
                         progressWiggleDelay = 0.5f;

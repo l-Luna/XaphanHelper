@@ -47,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public DroneSwitch(EntityData data, Vector2 position) : base(data.Position + position)
         {

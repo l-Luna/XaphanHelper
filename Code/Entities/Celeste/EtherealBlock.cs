@@ -19,8 +19,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public static bool HadSpaceJump;
 
-        protected static XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public EtherealBlock(EntityData data, Vector2 position) : base(data.Position + position)
         {
             fillTile = data.Char("tiletype", '3');
@@ -36,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (SpaceJump.Active(player.SceneAs<Level>()) && SpaceJump.GetJumpBuffer() != 1)
             {
                 HadSpaceJump = true;
-                Settings.SpaceJump = 1;
+                XaphanModule.ModSettings.SpaceJump = 1;
             }
         }
 
@@ -106,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         PreventRefill = false;
                         if (HadSpaceJump)
                         {
-                            Settings.SpaceJump = 2;
+                            XaphanModule.ModSettings.SpaceJump = 2;
                         }
                     }
                 }

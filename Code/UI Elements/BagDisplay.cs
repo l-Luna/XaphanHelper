@@ -15,8 +15,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     {
         private static MethodInfo Player_Pickup = typeof(Player).GetMethod("Pickup", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        protected static XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private Level level;
 
         public string type;
@@ -53,7 +51,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             borderColor = Calc.HexToColor("262626");
             Opacity = 1f;
             VirtualButton Button = new();
-            ButtonBinding Control = type == "bag" ? Settings.UseBagItemSlot : Settings.UseMiscItemSlot;
+            ButtonBinding Control = type == "bag" ? XaphanModule.ModSettings.UseBagItemSlot : XaphanModule.ModSettings.UseMiscItemSlot;
             Button.Binding = Control.Binding;
             buttonTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
         }
@@ -71,7 +69,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             if (XaphanModule.useUpgrades)
             {
-                if ((Settings.UseBagItemSlot.Pressed || Settings.UseMiscItemSlot.Pressed) && Input.MoveX == 0)
+                if ((XaphanModule.ModSettings.UseBagItemSlot.Pressed || XaphanModule.ModSettings.UseMiscItemSlot.Pressed) && Input.MoveX == 0)
                 {
                     return false;
                 }
@@ -156,7 +154,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private static void modTalkComponentUpdate(On.Celeste.TalkComponent.orig_Update orig, TalkComponent self)
         {
             BagDisplay display = self.SceneAs<Level>().Tracker.GetEntity<BagDisplay>();
-            if (display == null || (display != null && !Settings.UseBagItemSlot.Check && !Settings.UseMiscItemSlot.Check))
+            if (display == null || (display != null && !XaphanModule.ModSettings.UseBagItemSlot.Check && !XaphanModule.ModSettings.UseMiscItemSlot.Check))
             {
                 orig(self);
             }
@@ -168,7 +166,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (self.Holding == null)
                 {
-                    if (Settings.UseBagItemSlot.Check && !self.Ducking)
+                    if (XaphanModule.ModSettings.UseBagItemSlot.Check && !self.Ducking)
                     {
                         foreach (Holdable component in self.Scene.Tracker.GetComponents<Holdable>())
                         {
@@ -187,7 +185,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             if (XaphanModule.useUpgrades)
             {
-                if (!Settings.UseBagItemSlot.Check)
+                if (!XaphanModule.ModSettings.UseBagItemSlot.Check)
                 {
                     orig(self);
                 }
@@ -327,7 +325,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Position.X = 1790f;
                 }
             }
-            if ((type == "bag" ? Settings.UseBagItemSlot.Pressed : Settings.UseMiscItemSlot.Pressed) && Settings.SelectItem.Check)
+            if ((type == "bag" ? XaphanModule.ModSettings.UseBagItemSlot.Pressed : XaphanModule.ModSettings.UseMiscItemSlot.Pressed) && XaphanModule.ModSettings.SelectItem.Check)
             {
                 StatusScreen statusScreen = level.Tracker.GetEntity<StatusScreen>();
                 MapScreen mapScreen = level.Tracker.GetEntity<MapScreen>();
@@ -363,14 +361,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (type == "bag")
                 {
-                    if ((currentSelection == 1 && !(Bombs.isActive && Settings.Bombs)) || (currentSelection == 2 && !(MegaBombs.isActive && Settings.MegaBombs)) || (currentSelection == 3 && !(RemoteDrone.isActive && Settings.RemoteDrone)))
+                    if ((currentSelection == 1 && !(Bombs.isActive && XaphanModule.ModSettings.Bombs)) || (currentSelection == 2 && !(MegaBombs.isActive && XaphanModule.ModSettings.MegaBombs)) || (currentSelection == 3 && !(RemoteDrone.isActive && XaphanModule.ModSettings.RemoteDrone)))
                     {
                         SetToFirstActiveUpgrade();
                     }
                 }
                 else
                 {
-                    if ((currentSelection == 1 && !(Binoculars.isActive && Settings.Binoculars)) || (currentSelection == 2 && !(PortableStation.isActive && Settings.PortableStation)) || (currentSelection == 3 && !(PulseRadar.isActive && Settings.PulseRadar)))
+                    if ((currentSelection == 1 && !(Binoculars.isActive && XaphanModule.ModSettings.Binoculars)) || (currentSelection == 2 && !(PortableStation.isActive && XaphanModule.ModSettings.PortableStation)) || (currentSelection == 3 && !(PulseRadar.isActive && XaphanModule.ModSettings.PulseRadar)))
                     {
                         SetToFirstActiveUpgrade();
                     }
@@ -454,30 +452,30 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 if (upgradeID == 1)
                 {
-                    return Bombs.isActive && Settings.Bombs;
+                    return Bombs.isActive && XaphanModule.ModSettings.Bombs;
                 }
                 else if (upgradeID == 2)
                 {
-                    return MegaBombs.isActive && Settings.MegaBombs;
+                    return MegaBombs.isActive && XaphanModule.ModSettings.MegaBombs;
                 }
                 else
                 {
-                    return RemoteDrone.isActive && Settings.RemoteDrone;
+                    return RemoteDrone.isActive && XaphanModule.ModSettings.RemoteDrone;
                 }
             }
             else
             {
                 if (upgradeID == 1)
                 {
-                    return Binoculars.isActive && Settings.Binoculars;
+                    return Binoculars.isActive && XaphanModule.ModSettings.Binoculars;
                 }
                 else if (upgradeID == 2)
                 {
-                    return PortableStation.isActive && Settings.PortableStation;
+                    return PortableStation.isActive && XaphanModule.ModSettings.PortableStation;
                 }
                 else
                 {
-                    return PulseRadar.isActive && Settings.PulseRadar;
+                    return PulseRadar.isActive && XaphanModule.ModSettings.PulseRadar;
                 }
             }
         }

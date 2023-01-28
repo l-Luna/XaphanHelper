@@ -76,8 +76,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string deathSound;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public Cell(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
             tutorial = data.Bool("tutorial");
@@ -134,7 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int chapterIndex = Level.Session.Area.ChapterIndex;
             if (!string.IsNullOrEmpty(flag))
             {
-                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
                 {
                     RemoveSelf();
                 }
@@ -155,7 +153,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             int chapterIndex = Level.Session.Area.ChapterIndex;
             if (!string.IsNullOrEmpty(flag))
             {
-                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
+                if (Level.Session.GetFlag(flag) || Level.Session.GetFlag(flag + "_sloted") || (!XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag)))
                 {
                     RemoveSelf();
                 }

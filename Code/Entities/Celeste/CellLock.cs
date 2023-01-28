@@ -37,7 +37,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Session session = SceneAs<Level>().Session;
             string Prefix = session.Area.GetLevelSet();
             int chapterIndex = session.Area.ChapterIndex;
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag);
             }
@@ -58,8 +58,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private Sprite leverSprite;
 
         private Sprite lightningSprite;
-
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public CellLock(EntityData data, Vector2 position) : base(data.Position + position)
         {

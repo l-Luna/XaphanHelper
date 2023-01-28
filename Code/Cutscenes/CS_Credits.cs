@@ -87,10 +87,6 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             return XaphanModule.ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_SpaceJump");
         }
 
-
-
-        protected XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
-
         public CS_Credits(Player player)
         {
             this.player = player;
@@ -111,7 +107,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
 
         public override void OnBegin(Level level)
         {
-            if (!XaphanSettings.SpeedrunModeUnlocked)
+            if (!XaphanModule.ModSettings.SpeedrunModeUnlocked)
             {
                 MInput.Disabled = true;
             }
@@ -164,7 +160,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             {
                 Bg.Render();
             }
-            if (credits != null && XaphanSettings.SpeedrunModeUnlocked)
+            if (credits != null && XaphanModule.ModSettings.SpeedrunModeUnlocked)
             {
                 float num = 0.5f;
                 string label = Dialog.Clean("XaphanHelper_UI_skip");
@@ -223,7 +219,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             credits.Enabled = true;
             while (credits.BottomTimer <= 3f && !Skipped)
             {
-                if (Input.ESC.Pressed && XaphanSettings.SpeedrunModeUnlocked)
+                if (Input.ESC.Pressed && XaphanModule.ModSettings.SpeedrunModeUnlocked)
                 {
                     Skipped = true;
                 }
@@ -415,7 +411,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 yield return null;
             }
             Audio.Play("event:/new_content/game/10_farewell/endscene_final_input");
-            if (XaphanSettings.SpeedrunModeUnlocked)
+            if (XaphanModule.ModSettings.SpeedrunModeUnlocked)
             {
                 yield return new FadeWipe(level, false, () => EndCutscene(Level))
                 {
@@ -440,7 +436,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 {
                     Duration = 1.25f
                 });
-                XaphanSettings.SpeedrunModeUnlocked = true;
+                XaphanModule.ModSettings.SpeedrunModeUnlocked = true;
                 Scene.Add(new NormalText("Xaphan_0_Credits_SpeedrunMode_Unlocked_Title", new Vector2(Engine.Width / 2, Engine.Height / 2 - 100), Color.Gold, 1f, 2f));
                 Scene.Add(new NormalText("Xaphan_0_Credits_SpeedrunMode_Unlocked", new Vector2(Engine.Width / 2, Engine.Height / 2 + 100), Color.White, 1f, 1f));
                 timer = 10f;

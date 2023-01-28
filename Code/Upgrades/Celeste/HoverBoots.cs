@@ -30,12 +30,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.HoverBoots ? 1 : 0;
+            return XaphanModule.ModSettings.HoverBoots ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.HoverBoots = (value != 0);
+            XaphanModule.ModSettings.HoverBoots = (value != 0);
         }
 
         public override void Load()
@@ -56,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.HoverBoots && !XaphanModule.ModSaveData.HoverBootsInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.HoverBoots && !XaphanModule.ModSaveData.HoverBootsInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private static void ilPlayerNormalUpdate(ILContext il)

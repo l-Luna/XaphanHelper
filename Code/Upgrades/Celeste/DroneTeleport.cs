@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.DroneTeleport ? 1 : 0;
+            return XaphanModule.ModSettings.DroneTeleport ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.DroneTeleport = (value != 0);
+            XaphanModule.ModSettings.DroneTeleport = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.DroneTeleport && !XaphanModule.ModSaveData.DroneTeleportInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.DroneTeleport && !XaphanModule.ModSaveData.DroneTeleportInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

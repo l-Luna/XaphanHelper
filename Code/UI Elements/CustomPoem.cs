@@ -75,8 +75,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Sprite upgradeSprite;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public CustomPoem(string inputActionA, string textA, string inputActionB = null, string textB = null, string textC = null, string poemColorA = "FFFFFF", string poemColorB = "FFFFFF", string poemColorC = "FFFFFF", string poemParticleColor = "FFFFFF", string sprite = "", float spriteAlpha = 1f, object controlA = null, object controlB = null, bool select = false)
         {
             if (textA != null)

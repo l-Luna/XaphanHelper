@@ -14,8 +14,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public int damage = 200;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public PowerBomb(Vector2 position) : base(position)
         {
             Add(BombSprite = new Sprite(GFX.Game, "upgrades/powerBomb/"));

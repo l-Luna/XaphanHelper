@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.HighJumpBoots ? 1 : 0;
+            return XaphanModule.ModSettings.HighJumpBoots ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.HighJumpBoots = (value != 0);
+            XaphanModule.ModSettings.HighJumpBoots = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.HighJumpBoots && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).HighJumpBootsInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.HighJumpBoots && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).HighJumpBootsInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

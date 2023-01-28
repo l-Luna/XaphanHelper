@@ -38,8 +38,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool shouldExplodeImmediately;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public Bomb(Vector2 position, Player player) : base(position)
         {
             this.player = player;
@@ -210,7 +208,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.UseBagItemSlot.Check)
+            if (!XaphanModule.ModSettings.UseBagItemSlot.Check)
             {
                 RemoveSelf();
             }
@@ -402,8 +400,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     dist = -dist;
                 }
-                player.Speed.Y = ((180f - dist) * dirY) * (GravityJacket.determineIfInWater() && !Settings.GravityJacket ? 0.8f : 1f);
-                player.Speed.X = (180f * dirX) * (GravityJacket.determineIfInWater() && !Settings.GravityJacket ? 0.8f : 1f);
+                player.Speed.Y = ((180f - dist) * dirY) * (GravityJacket.determineIfInWater() && !XaphanModule.ModSettings.GravityJacket ? 0.8f : 1f);
+                player.Speed.X = (180f * dirX) * (GravityJacket.determineIfInWater() && !XaphanModule.ModSettings.GravityJacket ? 0.8f : 1f);
             }
 
             foreach (Entity entity in Scene.Tracker.GetEntities<BreakBlockIndicator>())

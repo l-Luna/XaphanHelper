@@ -14,8 +14,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         public bool playerHasCollectedOneGem() { return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch1_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch3_Gem_Collected") || XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch4_Gem_Collected"); }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public SoCMCutsceneTrigger(EntityData data, Vector2 offset) : base(data, offset)
         {
             Cutscene = data.Attr("cutscene");
@@ -24,7 +22,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public override void OnStay(Player player)
         {
             base.OnStay(player);
-            if (triggered || Settings.SpeedrunMode)
+            if (triggered || XaphanModule.ModSettings.SpeedrunMode)
             {
                 return;
             }

@@ -13,12 +13,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.PulseRadar ? 1 : 0;
+            return XaphanModule.ModSettings.PulseRadar ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.PulseRadar = (value != 0);
+            XaphanModule.ModSettings.PulseRadar = (value != 0);
         }
 
         public override void Load()
@@ -33,7 +33,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.PulseRadar && !XaphanModule.ModSaveData.PulseRadarInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.PulseRadar && !XaphanModule.ModSaveData.PulseRadarInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;
@@ -54,7 +54,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive)
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseMiscItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && player.Speed == Vector2.Zero && !player.Ducking && !self.Session.GetFlag("In_bossfight") && XaphanModule.ModSettings.UseMiscItemSlot.Pressed && !XaphanModule.ModSettings.OpenMap.Check && !XaphanModule.ModSettings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "misc");
                         if (bagDisplay != null)

@@ -19,12 +19,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.RemoteDrone ? 1 : 0;
+            return XaphanModule.ModSettings.RemoteDrone ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.RemoteDrone = (value != 0);
+            XaphanModule.ModSettings.RemoteDrone = (value != 0);
         }
 
         public override void Load()
@@ -39,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public bool Active(Level level)
         {
-            return Settings.RemoteDrone && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.RemoteDrone && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).RemoteDroneInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void modLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
@@ -58,7 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 if (isActive && !XaphanModule.PlayerIsControllingRemoteDrone() && !GravityJacket.determineIfInWater())
                 {
                     Player player = self.Tracker.GetEntity<Player>();
-                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && Settings.UseBagItemSlot.Pressed && !Settings.OpenMap.Check && !Settings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseDroneCoroutine.Active)
+                    if (self.CanPause && !XaphanModule.PlayerIsControllingRemoteDrone() && player != null && player.StateMachine.State == Player.StNormal && !player.Ducking && !self.Session.GetFlag("In_bossfight") && XaphanModule.ModSettings.UseBagItemSlot.Pressed && !XaphanModule.ModSettings.OpenMap.Check && !XaphanModule.ModSettings.SelectItem.Check && !self.Session.GetFlag("Map_Opened") && player.Holding == null && !UseDroneCoroutine.Active)
                     {
                         BagDisplay bagDisplay = GetDisplay(self, "bag");
                         if (bagDisplay != null)
@@ -81,7 +81,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         private IEnumerator UseDrone(Player player, Level level)
         {
             bool usedDrone = false;
-            while (Settings.UseBagItemSlot.Check && !usedDrone)
+            while (XaphanModule.ModSettings.UseBagItemSlot.Check && !usedDrone)
             {
                 while (player.Speed != Vector2.Zero)
                 {

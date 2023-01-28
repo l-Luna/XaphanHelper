@@ -22,12 +22,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.JumpBoost ? 1 : 0;
+            return XaphanModule.ModSettings.JumpBoost ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.JumpBoost = (value != 0);
+            XaphanModule.ModSettings.JumpBoost = (value != 0);
         }
 
         public override void Load()
@@ -50,7 +50,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.JumpBoost && !XaphanModule.ModSaveData.JumpBoostInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.JumpBoost && !XaphanModule.ModSaveData.JumpBoostInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private static void ilPlayerJump(ILContext il)

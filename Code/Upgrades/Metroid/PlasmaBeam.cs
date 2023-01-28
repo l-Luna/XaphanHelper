@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.PlasmaBeam ? 1 : 0;
+            return XaphanModule.ModSettings.PlasmaBeam ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.PlasmaBeam = (value != 0);
+            XaphanModule.ModSettings.PlasmaBeam = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.PlasmaBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PlasmaBeamInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.PlasmaBeam && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).PlasmaBeamInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

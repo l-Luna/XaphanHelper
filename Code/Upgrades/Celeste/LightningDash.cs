@@ -25,12 +25,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.LightningDash ? 1 : 0;
+            return XaphanModule.ModSettings.LightningDash ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.LightningDash = (value != 0);
+            XaphanModule.ModSettings.LightningDash = (value != 0);
         }
 
         public override void Load()
@@ -58,7 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public bool Active(Level level)
         {
-            return Settings.LightningDash && !XaphanModule.ModSaveData.LightningDashInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.LightningDash && !XaphanModule.ModSaveData.LightningDashInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private static void onPlayerDie(Player player)
@@ -202,7 +202,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 cursor.Emit(OpCodes.Ldarg_0);
                 cursor.EmitDelegate<Func<float, Player, float>>((orig, self) =>
                 {
-                    XaphanModuleSettings Settings = XaphanModule.Settings;
+                    XaphanModuleSettings Settings = XaphanModule.ModSettings;
                     if (Settings.LightningDash && (self.Speed.X > 600f || self.Speed.X < -600f) && self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))
                     {
                         return 500f;

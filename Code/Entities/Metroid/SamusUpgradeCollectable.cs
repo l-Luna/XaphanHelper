@@ -86,7 +86,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Session session = SceneAs<Level>().Session;
             string Prefix = session.Area.GetLevelSet();
             int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 if (upgrade == "MapShard")
                 {
@@ -103,8 +103,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return session.GetFlag(upgrade);
             }
         }
-
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public SamusUpgradeCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {
@@ -328,7 +326,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private void EndCutscene()
         {
             Level level = Scene as Level;
-            if (Settings.ShowMiniMap)
+            if (XaphanModule.ModSettings.ShowMiniMap)
             {
                 MapDisplay mapDisplay = level.Tracker.GetEntity<MapDisplay>();
                 if (mapDisplay != null)

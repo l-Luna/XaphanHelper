@@ -6,8 +6,6 @@ namespace Celeste.Mod.XaphanHelper.Triggers
     [CustomEntity("XaphanHelper/SpeedrunModeSpecialTrigger")]
     class SpeedrunModeSpecialTrigger : Trigger
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public string[] flags;
 
         public bool triggered;
@@ -20,7 +18,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
         public override void Update()
         {
             base.Update();
-            if (Settings.SpeedrunMode && !SceneAs<Level>().Session.StartedFromBeginning && !triggered)
+            if (XaphanModule.ModSettings.SpeedrunMode && !SceneAs<Level>().Session.StartedFromBeginning && !triggered)
             {
                 foreach (string flag in flags)
                 {
@@ -30,31 +28,31 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                     }
                     if (flag == "Upgrade_DashBoots")
                     {
-                        Settings.DashBoots = true;
+                        XaphanModule.ModSettings.DashBoots = true;
                     }
                     if (flag == "Upgrade_PowerGrip")
                     {
-                        Settings.PowerGrip = true;
+                        XaphanModule.ModSettings.PowerGrip = true;
                     }
                     if (flag == "Upgrade_ClimbingKit")
                     {
-                        Settings.ClimbingKit = true;
+                        XaphanModule.ModSettings.ClimbingKit = true;
                     }
                     if (flag == "Upgrade_Bombs")
                     {
-                        Settings.Bombs = true;
+                        XaphanModule.ModSettings.Bombs = true;
                     }
                     if (flag == "Upgrade_SpaceJump")
                     {
-                        Settings.SpaceJump = 2;
+                        XaphanModule.ModSettings.SpaceJump = 2;
                     }
                     if (flag == "Upgrade_LightningDash")
                     {
-                        Settings.LightningDash = true;
+                        XaphanModule.ModSettings.LightningDash = true;
                     }
                     if (flag == "Upgrade_GravityJacket")
                     {
-                        Settings.GravityJacket = true;
+                        XaphanModule.ModSettings.GravityJacket = true;
                     }
                 }
                 triggered = true;

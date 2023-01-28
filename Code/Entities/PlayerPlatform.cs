@@ -14,8 +14,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/Slope")]
     class PlayerPlatform : Solid
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         private Sprite PlayerSprite;
 
         private Sprite PlayerHairSprite;

@@ -118,7 +118,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public UpgradeCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {

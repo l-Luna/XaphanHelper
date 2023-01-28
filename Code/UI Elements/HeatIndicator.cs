@@ -10,7 +10,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     class HeatIndicator : Entity
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public float heat;
 

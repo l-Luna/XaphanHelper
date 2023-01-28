@@ -7,7 +7,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     class StatusScreen : Entity
     {
-        protected static XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
+        protected static XaphanModuleSettings XaphanSettings => XaphanModule.ModSettings;
 
         private Level level;
 

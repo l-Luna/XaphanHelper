@@ -21,8 +21,6 @@ namespace Celeste.Mod.XaphanHelper.Controllers
 
         private bool triggered;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public GemController(EntityData data, Vector2 position) : base(data.Position + position)
         {
 
@@ -31,7 +29,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
         public override void Update()
         {
             base.Update();
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 if (SceneAs<Level>().Session.GetFlag("CS_Ch0_Gem_Room_Activeate_Gems") && !triggered)
                 {

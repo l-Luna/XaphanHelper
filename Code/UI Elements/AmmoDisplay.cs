@@ -7,8 +7,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     class AmmoDisplay : Entity
     {
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public string Prefix;
 
         private Player player;
@@ -165,7 +163,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             if (!SceneAs<Level>().Paused && !SceneAs<Level>().PauseLock)
             {
                 bool NoneSelected = !MissileSelected && !SuperMissileSelected && !PowerBombSelected;
-                if (NoneSelected && Settings.SelectItem.Pressed)
+                if (NoneSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     if (MaxMissiles > 0 && CurrentMissiles > 0)
                     {
@@ -183,7 +181,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         PowerBombIcon = new Image(GFX.Gui["ammo/PowerBombOn"]);
                     }
                 }
-                else if (MissileSelected && Settings.SelectItem.Pressed)
+                else if (MissileSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     MissileSelected = false;
                     MissileIcon = new Image(GFX.Gui["ammo/MissileOff"]);
@@ -198,7 +196,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         PowerBombIcon = new Image(GFX.Gui["ammo/PowerBombOn"]);
                     }
                 }
-                else if (SuperMissileSelected && Settings.SelectItem.Pressed)
+                else if (SuperMissileSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     SuperMissileSelected = false;
                     SuperMissileIcon = new Image(GFX.Gui["ammo/SuperMissileOff"]);
@@ -208,7 +206,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         PowerBombIcon = new Image(GFX.Gui["ammo/PowerBombOn"]);
                     }
                 }
-                else if (PowerBombSelected && Settings.SelectItem.Pressed)
+                else if (PowerBombSelected && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     PowerBombSelected = false;
                     PowerBombIcon = new Image(GFX.Gui["ammo/PowerBombOff"]);
@@ -231,7 +229,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Audio.Play("event:/game/xaphan/item_select");
                     PowerBombIcon = new Image(GFX.Gui["ammo/PowerBombOff"]);
                 }
-                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0 || CurrentPowerBombs > 0) && Settings.SelectItem.Pressed)
+                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0 || CurrentPowerBombs > 0) && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     Audio.Play("event:/game/xaphan/item_select");
                 }

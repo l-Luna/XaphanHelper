@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.MissilesModule ? 1 : 0;
+            return XaphanModule.ModSettings.MissilesModule ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.MissilesModule = (value != 0);
+            XaphanModule.ModSettings.MissilesModule = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.MissilesModule && !XaphanModule.ModSaveData.MissilesModuleInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.MissilesModule && !XaphanModule.ModSaveData.MissilesModuleInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

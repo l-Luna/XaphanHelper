@@ -68,7 +68,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public bool BossDefeated()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated");
             }
@@ -80,7 +80,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public bool BossDefeatedCM()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch2_Boss_Defeated_CM");
             }
@@ -92,7 +92,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public bool SpaceJumpCollected()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
             }
@@ -104,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public bool DashBootsCollected()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots");
             }
@@ -115,8 +115,6 @@ namespace Celeste.Mod.XaphanHelper.Events
         }
 
         public bool HadDashBoots;
-
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
 
         public E02_Boss(Player player, Level level)
         {
@@ -515,7 +513,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                     if (DashBootsCollected())
                     {
                         level.Session.SetFlag("Upgrade_DashBoots", false);
-                        Settings.DashBoots = false;
+                        XaphanModule.ModSettings.DashBoots = false;
                         HadDashBoots = true;
                     }
                     if (level.Session.GetFlag("boss_Challenge_Mode"))
@@ -542,7 +540,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                         yield return null;
                     }
                     string Prefix = level.Session.Area.GetLevelSet();
-                    if (!Settings.SpeedrunMode && !HasGolden() && !level.Session.GetFlag("boss_Challenge_Mode"))
+                    if (!XaphanModule.ModSettings.SpeedrunMode && !HasGolden() && !level.Session.GetFlag("boss_Challenge_Mode"))
                     {
                         Scene.Add(new CS02_BossDefeated(player));
                     }
@@ -567,7 +565,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                     if (HadDashBoots)
                     {
                         level.Session.SetFlag("Upgrade_DashBoots", true);
-                        Settings.DashBoots = true;
+                        XaphanModule.ModSettings.DashBoots = true;
                     }
                     if (level.Session.GetFlag("boss_Challenge_Mode"))
                     {
@@ -577,7 +575,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                     }
                 }
                 level.Session.SetFlag("boss_Challenge_Mode_Given_Up", false);
-                if (Settings.ShowMiniMap)
+                if (XaphanModule.ModSettings.ShowMiniMap)
                 {
                     MapDisplay mapDisplay = SceneAs<Level>().Tracker.GetEntity<MapDisplay>();
                     if (mapDisplay != null)

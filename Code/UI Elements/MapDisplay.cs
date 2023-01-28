@@ -12,8 +12,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     public class MapDisplay : Entity
     {
-        protected static XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
-
         private Level level;
 
         public MapData MapData;
@@ -300,7 +298,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public static void UpdateIcons(Entity entity)
         {
-            if (XaphanSettings.ShowMiniMap)
+            if (XaphanModule.ModSettings.ShowMiniMap)
             {
                 MapDisplay mapDisplay = entity.SceneAs<Level>().Tracker.GetEntity<MapDisplay>();
                 if (mapDisplay != null)

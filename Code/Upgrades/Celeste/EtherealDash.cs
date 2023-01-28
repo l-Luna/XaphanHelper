@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.EtherealDash ? 1 : 0;
+            return XaphanModule.ModSettings.EtherealDash ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.EtherealDash = (value != 0);
+            XaphanModule.ModSettings.EtherealDash = (value != 0);
         }
 
         public override void Load()
@@ -29,7 +29,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.EtherealDash && !XaphanModule.ModSaveData.EtherealDashInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.EtherealDash && !XaphanModule.ModSaveData.EtherealDashInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         public static bool isActive;

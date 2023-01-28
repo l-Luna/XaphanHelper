@@ -114,8 +114,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private DisplacementRenderHook Displacement;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public Liquid(EntityData data, Vector2 position, EntityID eid) : base(data.Position + position)
         {
             Tag = Tags.TransitionUpdate;

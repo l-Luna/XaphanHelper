@@ -347,7 +347,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
+        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public CollectableDoor(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset)
         {

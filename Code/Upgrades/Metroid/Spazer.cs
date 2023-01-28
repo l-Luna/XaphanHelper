@@ -9,12 +9,12 @@
 
         public override int GetValue()
         {
-            return Settings.Spazer ? 1 : 0;
+            return XaphanModule.ModSettings.Spazer ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            Settings.Spazer = (value != 0);
+            XaphanModule.ModSettings.Spazer = (value != 0);
         }
 
         public override void Load()
@@ -27,7 +27,7 @@
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.Spazer && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpazerInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.Spazer && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpazerInactive.Contains(level.Session.Area.GetLevelSet());
         }
     }
 }

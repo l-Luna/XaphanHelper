@@ -25,12 +25,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return Settings.SpaceJump;
+            return XaphanModule.ModSettings.SpaceJump;
         }
 
         public override void SetValue(int value)
         {
-            Settings.SpaceJump = value;
+            XaphanModule.ModSettings.SpaceJump = value;
         }
 
         public override void Load()
@@ -61,7 +61,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.Settings.SpaceJump >= 2 && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpaceJumpInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.SpaceJump >= 2 && !(XaphanModule.Instance._SaveData as XaphanModuleSaveData).SpaceJumpInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private void patchJumpGraceTimer(ILContext il)
@@ -130,7 +130,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         public bool RefillJumpBuffer()
         {
             int oldJumpBuffer = jumpBuffer;
-            jumpBuffer = Settings.SpaceJump - 1;
+            jumpBuffer = XaphanModule.ModSettings.SpaceJump - 1;
             return oldJumpBuffer != jumpBuffer;
         }
 
@@ -160,7 +160,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             if (capped)
             {
                 // cap the extra jump count.
-                jumpBuffer = Math.Min(jumpBuffer, Settings.SpaceJump - 1);
+                jumpBuffer = Math.Min(jumpBuffer, XaphanModule.ModSettings.SpaceJump - 1);
             }
 
             return oldJumpBuffer != jumpBuffer;
@@ -180,7 +180,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                     break;
                 }
             }
-            if (Settings.SpaceJump == 0 && jumpBuffer <= 0 || self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") || (lastGrabbedCeiling != null && !self.DashAttacking) || Liquid.determineIfInQuicksand())
+            if (XaphanModule.ModSettings.SpaceJump == 0 && jumpBuffer <= 0 || self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") || (lastGrabbedCeiling != null && !self.DashAttacking) || Liquid.determineIfInQuicksand())
             {
                 // we disabled jumping, so let's pretend the grace timer has run out
                 // but if the player is grabbing a magnetic ceiling that allows jumping, we give them one free jump
@@ -203,7 +203,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 // because inserting extra jumps would kill wall jumping
                 return initialJumpGraceTimer;
             }
-            if (initialJumpGraceTimer > 0f || (Settings.SpaceJump != 6 && jumpBuffer <= 0))
+            if (initialJumpGraceTimer > 0f || (XaphanModule.ModSettings.SpaceJump != 6 && jumpBuffer <= 0))
             {
                 // return the default value because we don't want to change anything 
                 // (our jump buffer ran out, or vanilla Celeste allows jumping anyway)
@@ -281,7 +281,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             }
             if (self.Dashes < num || self.Stamina < 20f)
             {
-                jumpBuffer = Settings.SpaceJump - 1;
+                jumpBuffer = XaphanModule.ModSettings.SpaceJump - 1;
             }
             return orig(self, twoDashes);
         }

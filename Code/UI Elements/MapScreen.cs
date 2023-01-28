@@ -11,7 +11,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     public class MapScreen : Entity
     {
-        protected XaphanModuleSettings XaphanSettings => XaphanModule.Settings;
+        protected XaphanModuleSettings XaphanSettings => XaphanModule.ModSettings;
 
         private Level level;
 

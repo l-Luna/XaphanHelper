@@ -8,8 +8,6 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
     {
         private readonly Player player;
 
-        protected XaphanModuleSettings Settings => XaphanModule.Settings;
-
         public CS00_StatueRoom(Player player)
         {
             this.player = player;
@@ -41,7 +39,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
             level.CancelCutscene();
             level.Session.SetFlag("CS_Ch0_Statue_Room_P1");
             player.StateMachine.State = 0;
-            while ((Settings.SpeedrunMode && !level.Session.GetFlag("Upgrade_DashBoots")) || (!Settings.SpeedrunMode && !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
+            while ((XaphanModule.ModSettings.SpeedrunMode && !level.Session.GetFlag("Upgrade_DashBoots")) || (!XaphanModule.ModSettings.SpeedrunMode && !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_DashBoots")))
             {
                 yield return null;
             }
