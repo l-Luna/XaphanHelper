@@ -82,7 +82,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Session session = SceneAs<Level>().Session;
             string Prefix = session.Area.GetLevelSet();
             int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag);
             }
@@ -91,8 +91,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return session.GetFlag(flag);
             }
         }
-
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public CustomCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {
@@ -159,7 +157,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            endChapter = (completeSpeedrun && Settings.SpeedrunMode) ? true : endChapter;
+            endChapter = (completeSpeedrun && XaphanModule.ModSettings.SpeedrunMode) ? true : endChapter;
             bool haveGolden = false;
             foreach (Strawberry item in Scene.Entities.FindAll<Strawberry>())
             {
@@ -173,7 +171,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (!haveGolden || (haveGolden && ignoreGolden))
                 {
-                    if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
+                    if (!XaphanModule.ModSettings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag(flag))
                     {
                         RemoveSelf();
                     }
@@ -238,7 +236,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 session.Audio.Apply(forceSixteenthNoteHack: false);
             }
             RegisterFlag();
-            if (Settings.ShowMiniMap)
+            if (XaphanModule.ModSettings.ShowMiniMap)
             {
                 MapDisplay mapDisplay = SceneAs<Level>().Tracker.GetEntity<MapDisplay>();
                 if (mapDisplay != null)

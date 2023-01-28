@@ -31,7 +31,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool SpaceJumpCollected()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_SpaceJump");
             }
@@ -43,7 +43,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool LightningDashCollected()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_LightningDash");
             }
@@ -55,7 +55,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool GravityJacketCollected()
         {
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Upgrade_GravityJacket");
             }
@@ -64,8 +64,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return level.Session.GetFlag("Upgrade_GravityJacket");
             }
         }
-
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public ChallengeMote(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position)
         {
@@ -132,7 +130,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             strawberry = level.Entities.FindFirst<Strawberry>();
             if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated"))
             {
-                if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")) && strawberry != null && !Started)
+                if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !XaphanModule.ModSettings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")) && strawberry != null && !Started)
                 {
                     Started = true;
                     Visible = true;
@@ -141,7 +139,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     sprite.Play("completed");
                     sprite.OnLastFrame = onLastFrame;
                 }
-                else if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !Settings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")))
+                else if (((XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Boss_Defeated_CM") && !XaphanModule.ModSettings.SpeedrunMode) || level.Session.GetFlag("Boss_Defeated_CM")))
                 {
                     if (!Started)
                     {
@@ -315,19 +313,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (level.Session.GetFlag("Upgrade_HadSpaceJump"))
                 {
                     level.Session.SetFlag("Upgrade_SpaceJump", true);
-                    Settings.SpaceJump = 2;
+                    XaphanModule.ModSettings.SpaceJump = 2;
                     level.Session.SetFlag("Upgrade_HadSpaceJump", false);
                 }
                 if (level.Session.GetFlag("Upgrade_HadLightningDash"))
                 {
                     level.Session.SetFlag("Upgrade_LightningDash", true);
-                    Settings.LightningDash = true;
+                    XaphanModule.ModSettings.LightningDash = true;
                     level.Session.SetFlag("Upgrade_HadLightningDash", false);
                 }
                 if (level.Session.GetFlag("Upgrade_HadGravityJacket"))
                 {
                     level.Session.SetFlag("Upgrade_GravityJacket", true);
-                    Settings.GravityJacket = true;
+                    XaphanModule.ModSettings.GravityJacket = true;
                     level.Session.SetFlag("Upgrade_HadGravityJacket", false);
                 }
             }
@@ -336,19 +334,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (SpaceJumpCollected() || level.Session.GetFlag("Upgrade_HadSpaceJump"))
                 {
                     level.Session.SetFlag("Upgrade_SpaceJump", false);
-                    Settings.SpaceJump = 1;
+                    XaphanModule.ModSettings.SpaceJump = 1;
                     level.Session.SetFlag("Upgrade_HadSpaceJump", true);
                 }
                 if (LightningDashCollected() || level.Session.GetFlag("Upgrade_HadLightningDash"))
                 {
                     level.Session.SetFlag("Upgrade_LightningDash", false);
-                    Settings.LightningDash = false;
+                    XaphanModule.ModSettings.LightningDash = false;
                     level.Session.SetFlag("Upgrade_HadLightningDash", true);
                 }
                 if (GravityJacketCollected() || level.Session.GetFlag("Upgrade_HadGravityJacket"))
                 {
                     level.Session.SetFlag("Upgrade_GravityJacket", false);
-                    Settings.GravityJacket = false;
+                    XaphanModule.ModSettings.GravityJacket = false;
                     level.Session.SetFlag("Upgrade_HadGravityJacket", true);
                 }
             }

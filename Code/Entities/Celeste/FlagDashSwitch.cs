@@ -75,7 +75,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Session session = SceneAs<Level>().Session;
             string Prefix = session.Area.GetLevelSet();
             int chapterIndex = session.Area.ChapterIndex;
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 return XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag);
             }
@@ -90,8 +90,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private bool inWall;
 
         private Tween tween;
-
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public FlagDashSwitch(EntityData data, Vector2 offset, EntityID eid) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {
@@ -384,7 +382,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
-            if (!haveGolden && !Settings.SpeedrunMode)
+            if (!haveGolden && !XaphanModule.ModSettings.SpeedrunMode)
             {
                 if ((((mode == "SetTrue" && SceneAs<Level>().Session.GetFlag(flag)) || (mode == "SetFalse" && !SceneAs<Level>().Session.GetFlag(flag))) || FlagRegiseredInSaveData()) && !canSwapFlag)
                 {

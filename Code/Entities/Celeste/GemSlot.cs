@@ -17,8 +17,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string ParticleColor;
 
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
-
         public GemSlot(EntityData data, Vector2 position) : base(data.Position + position)
         {
             Depth = 2000;
@@ -36,7 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + Chapter + "_Gem_Sloted"))
+            if (!XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_Ch" + Chapter + "_Gem_Sloted"))
             {
                 Activated = true;
                 Sprite.Position.Y += 6;

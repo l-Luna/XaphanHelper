@@ -20,8 +20,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private EntityID eid;
 
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
-
         public EndBlock(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {
             eid = id;
@@ -37,7 +35,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (Settings.SpeedrunMode || !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_End_Area_Open"))
+            if (XaphanModule.ModSettings.SpeedrunMode || !XaphanModule.ModSaveData.SavedFlags.Contains("Xaphan/0_End_Area_Open"))
             {
                 sprite.Play("idle");
                 Collidable = true;
@@ -62,7 +60,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 RemoveSelf();
             }
-            else if (!Settings.SpeedrunMode && SceneAs<Level>().Session.GetFlag("Open_End_Area"))
+            else if (!XaphanModule.ModSettings.SpeedrunMode && SceneAs<Level>().Session.GetFlag("Open_End_Area"))
             {
                 Player player = Scene.Tracker.GetEntity<Player>();
                 Add(new Coroutine(BreakSequence(player)));

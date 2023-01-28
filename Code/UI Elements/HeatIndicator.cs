@@ -10,8 +10,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
     [Tracked(true)]
     class HeatIndicator : Entity
     {
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
-
         public float heat;
 
         public float maxDuration;
@@ -204,9 +202,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 heatIndicator = GFX.Gui["upgrades/heatindicator18"];
             }
-            if (heatIndicator != null && Settings.ShowHeatLevel && !XaphanModule.useMetroidGameplay)
+            if (heatIndicator != null && XaphanModule.ModSettings.ShowHeatLevel && !XaphanModule.useMetroidGameplay)
             {
-                heatIndicator.Draw(new Vector2(1840, 5 + (SceneAs<Level>().Tracker.GetEntity<MiniMap>() != null && Settings.ShowMiniMap ? 150 : 0)));
+                heatIndicator.Draw(new Vector2(1840, 5 + (SceneAs<Level>().Tracker.GetEntity<MiniMap>() != null && XaphanModule.ModSettings.ShowMiniMap ? 150 : 0)));
             }
         }
     }

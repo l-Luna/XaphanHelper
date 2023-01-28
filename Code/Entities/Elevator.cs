@@ -54,8 +54,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string flag;
 
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
-
         public Elevator(Vector2 position, string sprite, bool canTalk, bool usableInSpeedrunMode, float timer, bool endAreaEntrance, int endPosition, int toChapter, string destinationRoom, int spawnRoomX, int spawnRoomY, string flag) : base(position, 32f, 8f, safe: true)
         {
             CanTalk = canTalk;
@@ -110,7 +108,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (CanTalk)
                 {
-                    if ((!SceneAs<Level>().Session.GrabbedGolden || (SceneAs<Level>().Session.GrabbedGolden && ToChapter == SceneAs<Level>().Session.Area.ChapterIndex)) && (!Settings.SpeedrunMode || (Settings.SpeedrunMode && UsableInSpeedrunMode)) && (!EndAreaEntrance || (EndAreaEntrance && SceneAs<Level>().Session.GetFlag("Open_End_Area"))))
+                    if ((!SceneAs<Level>().Session.GrabbedGolden || (SceneAs<Level>().Session.GrabbedGolden && ToChapter == SceneAs<Level>().Session.Area.ChapterIndex)) && (!XaphanModule.ModSettings.SpeedrunMode || (XaphanModule.ModSettings.SpeedrunMode && UsableInSpeedrunMode)) && (!EndAreaEntrance || (EndAreaEntrance && SceneAs<Level>().Session.GetFlag("Open_End_Area"))))
                     {
                         Add(talk = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), Interact));
                         talk.PlayerMustBeFacing = false;
@@ -137,7 +135,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Sprite.Play("idle");
                     if (CanTalk)
                     {
-                        if ((!SceneAs<Level>().Session.GrabbedGolden || (SceneAs<Level>().Session.GrabbedGolden && ToChapter == SceneAs<Level>().Session.Area.ChapterIndex)) && (!Settings.SpeedrunMode || (Settings.SpeedrunMode && UsableInSpeedrunMode)) && (!EndAreaEntrance || (EndAreaEntrance && SceneAs<Level>().Session.GetFlag("Open_End_Area"))))
+                        if ((!SceneAs<Level>().Session.GrabbedGolden || (SceneAs<Level>().Session.GrabbedGolden && ToChapter == SceneAs<Level>().Session.Area.ChapterIndex)) && (!XaphanModule.ModSettings.SpeedrunMode || (XaphanModule.ModSettings.SpeedrunMode && UsableInSpeedrunMode)) && (!EndAreaEntrance || (EndAreaEntrance && SceneAs<Level>().Session.GetFlag("Open_End_Area"))))
                         {
                             Add(talk = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), Interact));
                             talk.PlayerMustBeFacing = false;

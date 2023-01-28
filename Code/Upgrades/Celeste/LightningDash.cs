@@ -202,8 +202,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 cursor.Emit(OpCodes.Ldarg_0);
                 cursor.EmitDelegate<Func<float, Player, float>>((orig, self) =>
                 {
-                    XaphanModuleSettings Settings = XaphanModule.ModSettings;
-                    if (Settings.LightningDash && (self.Speed.X > 600f || self.Speed.X < -600f) && self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))
+                    if (XaphanModule.ModSettings.LightningDash && (self.Speed.X > 600f || self.Speed.X < -600f) && self.SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking"))
                     {
                         return 500f;
                     }

@@ -93,7 +93,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Session session = SceneAs<Level>().Session;
             string Prefix = session.Area.GetLevelSet();
             int chapterIndex = session.Area.ChapterIndex == -1 ? 0 : session.Area.ChapterIndex;
-            if (!Settings.SpeedrunMode)
+            if (!XaphanModule.ModSettings.SpeedrunMode)
             {
                 if (upgrade == "MapShard")
                 {
@@ -117,8 +117,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return session.GetFlag(upgrade);
             }
         }
-
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public UpgradeCollectable(EntityData data, Vector2 position, EntityID id) : base(data.Position + position)
         {
@@ -165,7 +163,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (!haveGolden || (haveGolden && (upgrade == "MapShard" || upgrade == "Map")))
             {
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
-                if (!Settings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade))
+                if (!XaphanModule.ModSettings.SpeedrunMode && FlagRegiseredInSaveData() || SceneAs<Level>().Session.GetFlag("Upgrade_" + upgrade))
                 {
                     RemoveSelf();
                 }
@@ -223,7 +221,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             switch (upgrade)
             {
                 case "Map":
-                    controlA = Settings.OpenMap;
+                    controlA = XaphanModule.ModSettings.OpenMap;
                     inputActionA = "XaphanHelper_Press";
                     break;
                 case "PowerGrip":
@@ -266,7 +264,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     poemTextC = null;
                     break;
                 case "DroneTeleport":
-                    controlA = Settings.UseBagItemSlot;
+                    controlA = XaphanModule.ModSettings.UseBagItemSlot;
                     inputActionA = "XaphanHelper_Press";
                     break;
                 case "GravityJacket":
@@ -274,20 +272,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 case "Bombs":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseBagItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseBagItemSlot;
                     inputActionA = "XaphanHelper_ThenHold";
                     break;
                 case "MegaBombs":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseBagItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseBagItemSlot;
                     inputActionA = "XaphanHelper_ThenHold";
                     break;
                 case "RemoteDrone":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseBagItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseBagItemSlot;
                     inputActionA = "XaphanHelper_ThenHold";
                     break;
                 case "GoldenFeather":
@@ -299,20 +297,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 case "Binoculars":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseMiscItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseMiscItemSlot;
                     inputActionA = "XaphanHelper_ThenPress";
                     break;
                 case "PortableStation":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseMiscItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseMiscItemSlot;
                     inputActionA = "XaphanHelper_ThenPress";
                     break;
                 case "PulseRadar":
                     select = true;
-                    controlA = Settings.SelectItem;
-                    controlB = Settings.UseMiscItemSlot;
+                    controlA = XaphanModule.ModSettings.SelectItem;
+                    controlB = XaphanModule.ModSettings.UseMiscItemSlot;
                     inputActionA = "XaphanHelper_ThenPress";
                     break;
                 /*case "JumpBoost":
@@ -440,7 +438,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private void EndCutscene()
         {
             Level level = Scene as Level;
-            if (Settings.ShowMiniMap)
+            if (XaphanModule.ModSettings.ShowMiniMap)
             {
                 MapDisplay mapDisplay = level.Tracker.GetEntity<MapDisplay>();
                 if (mapDisplay != null)
