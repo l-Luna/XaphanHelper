@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using static Monocle.ComponentList;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -9,6 +10,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
     public class BreakBlockIndicator : Entity
     {
         public Sprite blockType;
+
+        public BreakBlock block;
 
         private bool broken;
 
@@ -28,46 +31,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool autoAdded;
 
-        public BreakBlockIndicator(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset)
+        public BreakBlockIndicator(BreakBlock block, bool autoAdded, Vector2 position)
         {
-            eid = id;
-            mode = data.Attr("mode");
-            color = data.Attr("color");
-            index = data.Int("index");
-            startRevealed = data.Bool("startRevealed");
-            directory = data.Attr("directory");
-            if (string.IsNullOrEmpty(directory))
-            {
-                directory = "objects/XaphanHelper/BreakBlock";
-            }
-            Collider = new Hitbox(8f, 8f, 0f, 0f);
-            Add(new PlayerCollider(OnPlayer, new Hitbox(10f, 12f, -1f, -3f)));
-            Add(new PlayerCollider(OnPlayerBooster, new Hitbox(16f, 16f, -4f, -4f)));
-            Add(blockType = new Sprite(GFX.Game, directory + "/"));
-            blockType.AddLoop("bomb", "Bomb", 1f);
-            blockType.AddLoop("megaBomb", "MegaBomb", 1f);
-            blockType.AddLoop("lightningDash", "LightningDash", 1f);
-            blockType.AddLoop("redBooster", "RedBooster", 1f);
-            blockType.AddLoop("drone", "Drone", 1f);
-            blockType.AddLoop("screwAttack", "ScrewAttack", 1f);
-            Depth = -13001;
-        }
-
-        public BreakBlockIndicator(EntityID id, bool autoAdded, Vector2 position, string mode, string color, bool startRevealed, string directory)
-        {
-            eid = id;
+            eid = block.eid;
+            this.block = block;
             this.autoAdded = autoAdded;
             Position = position;
-            this.mode = mode;
-            this.color = color;
-            this.startRevealed = startRevealed;
-            this.directory = directory;
+            mode = block.type;
+            color = block.color;
+            startRevealed = block.startRevealed;
+            directory = block.directory;
             if (string.IsNullOrEmpty(directory))
             {
                 directory = "objects/XaphanHelper/BreakBlock";
             }
             Collider = new Hitbox(8f, 8f, 0f, 0f);
-            Add(new PlayerCollider(OnPlayer, new Hitbox(10f, 12f, -1f, -3f)));
             Add(new PlayerCollider(OnPlayerBooster, new Hitbox(16f, 16f, -4f, -4f)));
             Add(blockType = new Sprite(GFX.Game, directory + "/"));
             blockType.AddLoop("bomb", "Bomb", 1f);
@@ -129,8 +107,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void OnPlayer(Player player)
         {
-            Vector2 aim = Input.GetAimVector();
-            if (player.StateMachine.State == 2 && ((player.Left >= Right && aim.X < 0) || (player.Right <= Left && aim.X > 0) || (player.Top >= Bottom && aim.Y < 0) || (player.Bottom <= Top && aim.Y > 0)))
+            if (player.StateMachine.State == 2)
             {
                 RevealSequence();
             }

@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -6,7 +7,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
     [CustomEntity("XaphanHelper/BreakBlock")]
-    class BreakBlock : Solid
+    public class BreakBlock : Solid
     {
         public enum Modes
         {
@@ -34,13 +35,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public int index;
 
-        private string color;
+        public string color;
 
-        private string directory;
+        public string directory;
 
-        private bool startRevealed;
+        public bool startRevealed;
 
-        private string type;
+        public string type;
 
         private bool permanent;
 
@@ -48,6 +49,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public BreakBlock(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position, data.Width, data.Height, safe: true)
         {
+            OnDashCollide = OnDashed;
             index = data.Int("index");
             mode = data.Enum<Modes>("mode");
             flag = data.Attr("flag");
@@ -63,6 +65,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = -13000;
             Add(cutout = new EffectCutout());
             Add(new LightOcclude(0.5f));
+        }
+
+        private DashCollisionResults OnDashed(Player player, Vector2 direction)
+        {
+            foreach (BreakBlockIndicator indicator in SceneAs<Level>().Tracker.GetEntities<BreakBlockIndicator>())
+            {
+                if (indicator.block == this && (indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitX * 2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitX * -2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitY * 2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitY * -2)))
+                {
+                    indicator.OnPlayer(player);
+                }
+            }
+            return DashCollisionResults.NormalCollision;
         }
 
 
@@ -103,7 +117,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         if (i == 0 || i == Height / 8 - 1 || j == 0 || j == Width / 8 - 1)
                         {
-                            SceneAs<Level>().Add(new BreakBlockIndicator(eid, true, Position + new Vector2(j * 8, i * 8), type, color, startRevealed, directory));
+                            SceneAs<Level>().Add(new BreakBlockIndicator(this, true, Position + new Vector2(j * 8, i * 8)));
                         }
                     }
                 }
