@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.UI_Elements;
+using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -9,10 +11,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/CustomRefill")]
     public class CustomRefill : Entity
     {
-        public static ParticleType P_Shatter;
-
-        public static ParticleType P_Glow;
-
         private Sprite sprite;
 
         private Sprite flash;
@@ -29,7 +27,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private SineWave sine;
 
-        private bool twoDashes;
+        private string type;
 
         private bool oneUse;
 
@@ -43,58 +41,98 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float respawnTime;
 
-        public CustomRefill(Vector2 position, bool twoDashes, bool oneUse, float respawnTime) : base(position)
+        public CustomRefill(Vector2 position, string type, bool oneUse, float respawnTime) : base(position)
         {
             Collider = new Hitbox(16f, 16f, -8f, -8f);
             Add(new PlayerCollider(OnPlayer));
-            this.twoDashes = twoDashes;
+            this.type = type;
             this.oneUse = oneUse;
             this.respawnTime = respawnTime;
-            P_Shatter = new ParticleType(Refill.P_Shatter)
-            {
-                Color = Calc.HexToColor("DAECFA"),
-                Color2 = Calc.HexToColor("8FC7EF")
-            };
-            P_Glow = new ParticleType(Refill.P_Glow)
-            {
-                Color = Calc.HexToColor("BED6E9"),
-                Color2 = Calc.HexToColor("73A5CE")
-            };
             string path;
             if (oneUse)
             {
-                if (twoDashes)
+                string spriteStr = "";
+                switch (type)
                 {
-                    path = "objects/XaphanHelper/CustomRefill/refillTwoOnce/";
+                    case "Two Dashes":
+                        spriteStr = "Two";
+                        break;
+                    case "Missiles":
+                        spriteStr = "Missile";
+                        break;
+                    case "Super Missiles":
+                        spriteStr = "SMissile";
+                        break;
                 }
-                else
+                path = "objects/XaphanHelper/CustomRefill/refill" + spriteStr + "Once/";
+                p_shatter = new ParticleType(Refill.P_Shatter)
                 {
-                    path = "objects/XaphanHelper/CustomRefill/refillOnce/";
-                }
-                p_shatter = P_Shatter;
-                p_glow = P_Glow;
+                    Color = Calc.HexToColor("DAECFA"),
+                    Color2 = Calc.HexToColor("8FC7EF")
+                };
+                p_glow = new ParticleType(Refill.P_Glow)
+                {
+                    Color = Calc.HexToColor("BED6E9"),
+                    Color2 = Calc.HexToColor("73A5CE")
+                };
             }
             else
             {
-                if (twoDashes)
+                string spriteStr = "";
+                p_shatter = Refill.P_Shatter;
+                p_regen = Refill.P_Regen;
+                p_glow = Refill.P_Glow;
+                switch (type)
                 {
-                    path = "objects/XaphanHelper/CustomRefill/refillTwo/";
-                    p_shatter = Refill.P_ShatterTwo;
-                    p_regen = Refill.P_RegenTwo;
-                    p_glow = Refill.P_GlowTwo;
+                    case "Two Dashes":
+                        spriteStr = "Two";
+                        p_shatter = Refill.P_ShatterTwo;
+                        p_regen = Refill.P_RegenTwo;
+                        p_glow = Refill.P_GlowTwo;
+                        break;
+                    case "Missiles":
+                        spriteStr = "Missile";
+                        p_shatter = new ParticleType(Refill.P_Shatter)
+                        {
+                            Color = Calc.HexToColor("FADBDB"),
+                            Color2 = Calc.HexToColor("EF9090")
+                        };
+                        p_regen = new ParticleType(Refill.P_Regen)
+                        {
+                            Color = Calc.HexToColor("E9BFBF"),
+                            Color2 = Calc.HexToColor("CE7474")
+                        };
+                        p_glow = new ParticleType(Refill.P_Glow)
+                        {
+                            Color = Calc.HexToColor("E9BFBF"),
+                            Color2 = Calc.HexToColor("CE7474")
+                        };
+                        break;
+                    case "Super Missiles":
+                        spriteStr = "SMissile";
+                        p_shatter = new ParticleType(Refill.P_Shatter)
+                        {
+                            Color = Calc.HexToColor("DBFADB"),
+                            Color2 = Calc.HexToColor("90EF90")
+                        };
+                        p_regen = new ParticleType(Refill.P_Regen)
+                        {
+                            Color = Calc.HexToColor("BFE9BF"),
+                            Color2 = Calc.HexToColor("74CE74")
+                        };
+                        p_glow = new ParticleType(Refill.P_Glow)
+                        {
+                            Color = Calc.HexToColor("BFE9BF"),
+                            Color2 = Calc.HexToColor("74CE74")
+                        };
+                        break;
                 }
-                else
-                {
-                    path = "objects/XaphanHelper/CustomRefill/refill/";
-                    p_shatter = Refill.P_Shatter;
-                    p_regen = Refill.P_Regen;
-                    p_glow = Refill.P_Glow;
-                }
+                path = "objects/XaphanHelper/CustomRefill/refill" + spriteStr + "/";
             }
             if (!oneUse)
             {
                 Add(outline = new Sprite(GFX.Game, path + "outline"));
-                outline.AddLoop("idle", "", respawnTime / (twoDashes ? 25f : 21f));
+                outline.AddLoop("idle", "", respawnTime / (type == "Missiles" ? 37f : (type == "Super Missiles" ? 35f : (type == "Two Dashes" ? 25f : 21f))));
                 outline.Visible = false;
                 outline.CenterOrigin();
             }
@@ -122,7 +160,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = -100;
         }
 
-        public CustomRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Bool("twoDash"), data.Bool("oneUse"), data.Float("respawnTime"))
+        public CustomRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Attr("type"), data.Bool("oneUse"), data.Float("respawnTime"))
         {
 
         }
@@ -168,7 +206,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 outline.Stop();
                 Depth = -100;
                 wiggler.Start();
-                Audio.Play(twoDashes ? "event:/new_content/game/10_farewell/pinkdiamond_return" : "event:/game/general/diamond_return", Position);
+                Audio.Play(type == "Two Dashes" ? "event:/new_content/game/10_farewell/pinkdiamond_return" : "event:/game/general/diamond_return", Position);
                 level.ParticlesFG.Emit(p_regen, 16, Position, Vector2.One * 2f);
             }
         }
@@ -192,17 +230,38 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void OnPlayer(Player player)
         {
-            if (player.UseRefill(twoDashes))
+            int maxMissileCount = 10;
+            int maxSuperMissileCount = 5;
+            if (type.Contains("Missiles"))
             {
-                Audio.Play(twoDashes ? "event:/new_content/game/10_farewell/pinkdiamond_touch" : "event:/game/general/diamond_touch", Position);
+                string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
+                foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
+                {
+                    if (missileUpgrade.Contains(Prefix))
+                    {
+                        maxMissileCount += 2;
+                    }
+                }
+                foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.Settings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                {
+                    if (superMissileUpgrade.Contains(Prefix))
+                    {
+                        maxSuperMissileCount++;
+                    }
+                }
+            }
+            Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
+            if ((drone != null && ((type == "Missiles" && drone.CurrentMissiles < maxMissileCount && MissilesModule.Active(SceneAs<Level>())) || (type == "Super Missiles" && drone.CurrentSuperMissiles < maxSuperMissileCount && SuperMissilesModule.Active(SceneAs<Level>()))) && XaphanModule.PlayerIsControllingRemoteDrone()) || (player.UseRefill(type == "Two Dashes") && type.Contains("Dashes") && !XaphanModule.PlayerIsControllingRemoteDrone()))
+            {
+                Audio.Play(type == "Two Dashes" ? "event:/new_content/game/10_farewell/pinkdiamond_touch" : "event:/game/general/diamond_touch", Position);
                 Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
                 Collidable = false;
-                Add(new Coroutine(RefillRoutine(player)));
+                Add(new Coroutine(RefillRoutine(player, drone, maxMissileCount, maxSuperMissileCount)));
                 respawnTimer = respawnTime;
             }
         }
 
-        private IEnumerator RefillRoutine(Player player)
+        private IEnumerator RefillRoutine(Player player, Drone drone, int maxMissileCount, int maxSuperMissileCount)
         {
             Celeste.Freeze(0.05f);
             yield return null;
@@ -218,6 +277,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             float num = player.Speed.Angle();
             level.ParticlesFG.Emit(p_shatter, 5, Position, Vector2.One * 4f, num - (float)Math.PI / 2f);
             level.ParticlesFG.Emit(p_shatter, 5, Position, Vector2.One * 4f, num + (float)Math.PI / 2f);
+            if (type.Contains("Missiles") && drone != null)
+            {
+                if (type == "Missiles")
+                {
+                    drone.CurrentMissiles = maxMissileCount;
+                }
+                else
+                {
+                    drone.CurrentSuperMissiles = maxSuperMissileCount;
+                }
+            }
             SlashFx.Burst(Position, num);
             if (oneUse)
             {
