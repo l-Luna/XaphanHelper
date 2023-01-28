@@ -351,5 +351,58 @@ namespace Celeste.Mod.XaphanHelper
                     break;
             }
         }
+
+        [Command("reset_collectables_upgrades", "Remove all collectable upgrades (Energy Tanks, Missiles, Super Missiles and Fire Rate Modules) and allow to collect them again")]
+        private static void Cmd_Reset_Collectables_Upgrades()
+        {
+            List<string> StaminaUpgradesToRemove = new();
+            List<string> DroneMissilesUpgradesToRemove = new();
+            List<string> DroneSuperMissilesUpgradesToRemove = new();
+            List<string> DroneFireRateUpgradesToRemove = new();
+            foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
+            {
+                if (staminaUpgrade.Contains(level.Session.Area.LevelSet))
+                {
+                    StaminaUpgradesToRemove.Add(staminaUpgrade);
+                }
+            }
+            foreach (string droneMissileUpgrade in XaphanModule.ModSaveData.DroneMissilesUpgrades)
+            {
+                if (droneMissileUpgrade.Contains(level.Session.Area.LevelSet))
+                {
+                    DroneMissilesUpgradesToRemove.Add(droneMissileUpgrade);
+                }
+            }
+            foreach (string droneSuperMissileUpgrade in XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+            {
+                if (droneSuperMissileUpgrade.Contains(level.Session.Area.LevelSet))
+                {
+                    DroneSuperMissilesUpgradesToRemove.Add(droneSuperMissileUpgrade);
+                }
+            }
+            foreach (string droneFireRateUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
+            {
+                if (droneFireRateUpgrade.Contains(level.Session.Area.LevelSet))
+                {
+                    DroneFireRateUpgradesToRemove.Add(droneFireRateUpgrade);
+                }
+            }
+            foreach (string value in StaminaUpgradesToRemove)
+            {
+                XaphanModule.ModSaveData.StaminaUpgrades.Remove(value);
+            }
+            foreach (string value in DroneMissilesUpgradesToRemove)
+            {
+                XaphanModule.ModSaveData.DroneMissilesUpgrades.Remove(value);
+            }
+            foreach (string value in DroneSuperMissilesUpgradesToRemove)
+            {
+                XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Remove(value);
+            }
+            foreach (string value in DroneFireRateUpgradesToRemove)
+            {
+                XaphanModule.ModSaveData.DroneFireRateUpgrades.Remove(value);
+            }
+        }
     }
 }
