@@ -42,6 +42,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
+            foreach (CustomDashBlock wall in Scene.Tracker.GetEntities<CustomDashBlock>())
+            {
+                for (int i = 0; i < wall.Height / 8; i++)
+                {
+                    for (int j = 0; j < wall.Width / 8; j++)
+                    {
+                        SceneAs<Level>().Add(new RadarTile(wall.Position + new Vector2(j * 8, i * 8)));
+                    }
+                }
+            }
             foreach (FakeWall wall in Scene.Tracker.GetEntities<FakeWall>())
             {
                 for (int i = 0; i < wall.Height / 8; i++)
