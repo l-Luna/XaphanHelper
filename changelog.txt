@@ -1,3 +1,7 @@
+Version 1.0.53 :
+- Teleporting to the Remote Drone should not longer spawn another drone immediately if the item button is pressed for too long
+- Pressing down when holding a bomb or mega bomb should no longer spawn another bomb or mega bomb if the item button is pressed
+
 Version 1.0.52 :
 - Fixed a bug soft-locking the game when selecting the 'Stay Here' option on the Warp selection menu when using the In-Game map
 
