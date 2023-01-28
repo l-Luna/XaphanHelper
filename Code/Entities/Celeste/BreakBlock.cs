@@ -243,6 +243,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             Collidable = false;
+            foreach (BreakBlockIndicator indicator in SceneAs<Level>().Tracker.GetEntities<BreakBlockIndicator>())
+            {
+                if (indicator.block == this)
+                {
+                    indicator.RemoveSelf();
+                }
+            }
             RemoveSelf();
             if (permanent)
             {

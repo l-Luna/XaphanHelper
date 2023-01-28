@@ -22,7 +22,7 @@ function BreakBlock.fieldInformation(entity)
             editable = false
         },
         type = {
-            options = {"Bomb", "Drone", "LightningDash", "MegaBomb", "RedBooster", "ScrewAttack"},
+            options = {"Bomb", "Drone", "LightningDash", "MegaBomb", "Missile", "RedBooster", "ScrewAttack", "SuperMissile"},
             editable = false
         },
         color = {

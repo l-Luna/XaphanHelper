@@ -54,6 +54,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             blockType.AddLoop("redBooster", "RedBooster", 1f);
             blockType.AddLoop("drone", "Drone", 1f);
             blockType.AddLoop("screwAttack", "ScrewAttack", 1f);
+            blockType.AddLoop("missile", "Missile", 1f);
+            blockType.AddLoop("superMissile", "SuperMissile", 1f);
             Depth = -13001;
         }
 
@@ -174,6 +176,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             else if (mode == "ScrewAttack")
             {
                 blockType.Play("screwAttack");
+            }
+            else if (mode == "Missile")
+            {
+                blockType.Play("missile");
+            }
+            else if (mode == "SuperMissile")
+            {
+                blockType.Play("superMissile");
             }
         }
     }

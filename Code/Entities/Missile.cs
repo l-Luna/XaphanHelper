@@ -343,31 +343,44 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SceneAs<Level>().Shake(0.3f);
                 Audio.Play("event:/game/xaphan/super_missile_collide_solid");
             }
-            foreach (BubbleDoor bubbleDoor in Scene.Tracker.GetEntities<BubbleDoor>())
+            if (XaphanModule.useMetroidGameplay)
             {
-                if (bubbleDoor.color == "Blue" || bubbleDoor.color == "Red" || (SuperMissile && bubbleDoor.color == "Green") || bubbleDoor.color == "Grey" && bubbleDoor.isActive && !bubbleDoor.locked)
+                foreach (BubbleDoor bubbleDoor in Scene.Tracker.GetEntities<BubbleDoor>())
                 {
-                    if (CollideCheck(bubbleDoor, Position + dir))
+                    if (bubbleDoor.color == "Blue" || bubbleDoor.color == "Red" || (SuperMissile && bubbleDoor.color == "Green") || bubbleDoor.color == "Grey" && bubbleDoor.isActive && !bubbleDoor.locked)
                     {
-                        bubbleDoor.keepOpen = true;
-                        bubbleDoor.Open();
+                        if (CollideCheck(bubbleDoor, Position + dir))
+                        {
+                            bubbleDoor.keepOpen = true;
+                            bubbleDoor.Open();
+                        }
+                    }
+                }
+                foreach (DestructibleBlock destructibleBlock in Scene.Tracker.GetEntities<DestructibleBlock>())
+                {
+                    if ((destructibleBlock.mode == "Missile" && !SuperMissile) || (destructibleBlock.mode == "SuperMissile" && SuperMissile))
+                    {
+                        if (CollideCheck(destructibleBlock, Position + dir))
+                        {
+                            destructibleBlock.Break();
+                        }
+                    }
+                    else if (!destructibleBlock.revealed)
+                    {
+                        if (CollideCheck(destructibleBlock, Position + dir))
+                        {
+                            destructibleBlock.Reveal();
+                        }
                     }
                 }
             }
-            foreach (DestructibleBlock destructibleBlock in Scene.Tracker.GetEntities<DestructibleBlock>())
+            foreach (BreakBlock breackBlock in Scene.Tracker.GetEntities<BreakBlock>())
             {
-                if ((destructibleBlock.mode == "Missile" && !SuperMissile) || (destructibleBlock.mode == "SuperMissile" && SuperMissile))
+                if (breackBlock.type == "Missile" || (breackBlock.type == "SuperMissile" && SuperMissile))
                 {
-                    if (CollideCheck(destructibleBlock, Position + dir))
+                    if (CollideCheck(breackBlock, Position + dir))
                     {
-                        destructibleBlock.Break();
-                    }
-                }
-                else if (!destructibleBlock.revealed)
-                {
-                    if (CollideCheck(destructibleBlock, Position + dir))
-                    {
-                        destructibleBlock.Reveal();
+                        breackBlock.Break();
                     }
                 }
             }
