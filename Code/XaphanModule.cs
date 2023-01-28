@@ -2496,6 +2496,7 @@ namespace Celeste.Mod.XaphanHelper
                     Commands.Cmd_Clear_InGameMap(true, true);
                     Commands.Cmd_Clear_Warps();
                     Commands.Cmd_Remove_Upgrades();
+                    Commands.Cmd_Reset_Collectables_Upgrades();
 
                     ModSaveData.SavedRoom.Remove(level.Session.Area.LevelSet);
                     ModSaveData.SavedChapter.Remove(level.Session.Area.LevelSet);
@@ -2512,10 +2513,6 @@ namespace Celeste.Mod.XaphanHelper
                     ModSaveData.SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
                     List<string> FlagsToRemove = new();
                     List<string> CutscenesToRemove = new();
-                    List<string> StaminaUpgradesToRemove = new();
-                    List<string> DroneMissilesUpgradesToRemove = new();
-                    List<string> DroneSuperMissilesUpgradesToRemove = new();
-                    List<string> DroneFireRateUpgradesToRemove = new();
                     List<string> GlobalFlagsToRemove = new();
                     foreach (string savedFlag in ModSaveData.SavedFlags)
                     {
@@ -2529,34 +2526,6 @@ namespace Celeste.Mod.XaphanHelper
                         if (cutscene.Contains(level.Session.Area.LevelSet))
                         {
                             CutscenesToRemove.Add(cutscene);
-                        }
-                    }
-                    foreach (string staminaUpgrade in ModSaveData.StaminaUpgrades)
-                    {
-                        if (staminaUpgrade.Contains(level.Session.Area.LevelSet))
-                        {
-                            StaminaUpgradesToRemove.Add(staminaUpgrade);
-                        }
-                    }
-                    foreach (string droneMissileUpgrade in ModSaveData.DroneMissilesUpgrades)
-                    {
-                        if (droneMissileUpgrade.Contains(level.Session.Area.LevelSet))
-                        {
-                            DroneMissilesUpgradesToRemove.Add(droneMissileUpgrade);
-                        }
-                    }
-                    foreach (string droneSuperMissileUpgrade in ModSaveData.DroneSuperMissilesUpgrades)
-                    {
-                        if (droneSuperMissileUpgrade.Contains(level.Session.Area.LevelSet))
-                        {
-                            DroneSuperMissilesUpgradesToRemove.Add(droneSuperMissileUpgrade);
-                        }
-                    }
-                    foreach (string droneFireRateUpgrade in ModSaveData.DroneFireRateUpgrades)
-                    {
-                        if (droneFireRateUpgrade.Contains(level.Session.Area.LevelSet))
-                        {
-                            DroneFireRateUpgradesToRemove.Add(droneFireRateUpgrade);
                         }
                     }
                     foreach (string globalFlag in ModSaveData.GlobalFlags)
@@ -2573,22 +2542,6 @@ namespace Celeste.Mod.XaphanHelper
                     foreach (string value in CutscenesToRemove)
                     {
                         ModSaveData.WatchedCutscenes.Remove(value);
-                    }
-                    foreach (string value in StaminaUpgradesToRemove)
-                    {
-                        ModSaveData.StaminaUpgrades.Remove(value);
-                    }
-                    foreach (string value in DroneMissilesUpgradesToRemove)
-                    {
-                        ModSaveData.DroneMissilesUpgrades.Remove(value);
-                    }
-                    foreach (string value in DroneSuperMissilesUpgradesToRemove)
-                    {
-                        ModSaveData.DroneSuperMissilesUpgrades.Remove(value);
-                    }
-                    foreach (string value in DroneFireRateUpgradesToRemove)
-                    {
-                        ModSaveData.DroneFireRateUpgrades.Remove(value);
                     }
                     foreach (string value in GlobalFlagsToRemove)
                     {

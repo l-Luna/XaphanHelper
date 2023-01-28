@@ -353,7 +353,7 @@ namespace Celeste.Mod.XaphanHelper
         }
 
         [Command("reset_collectables_upgrades", "Remove all collectable upgrades (Energy Tanks, Missiles, Super Missiles and Fire Rate Modules) and allow to collect them again")]
-        private static void Cmd_Reset_Collectables_Upgrades()
+        public static void Cmd_Reset_Collectables_Upgrades()
         {
             List<string> StaminaUpgradesToRemove = new();
             List<string> DroneMissilesUpgradesToRemove = new();
