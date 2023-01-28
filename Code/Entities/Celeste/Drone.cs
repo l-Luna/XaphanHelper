@@ -67,8 +67,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Vector2? CurrentSpawn;
 
-        public bool respawnPlayerInSameRoom;
-
         public static bool ShouldGetTalkerStatus = true;
 
         public static bool TalkersStatus;
@@ -94,8 +92,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private static FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
-
-        protected XaphanModuleSettings Settings => XaphanModule.ModSettings;
 
         public Drone(Vector2 position, Player player) : base(position)
         {
@@ -142,6 +138,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Jump += OnPlayerjump;
             On.Celeste.Player.Throw += OnPlayerThrow;
             On.Celeste.Level.LoadLevel += OnLevelLoadLevel;
+            On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
         }
 
         private static void OnLevelLoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -202,6 +199,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        private static void onChangeRespawnTriggerOnEnter(On.Celeste.ChangeRespawnTrigger.orig_OnEnter orig, ChangeRespawnTrigger self, Player player)
+        {
+            orig(self, player);
+            bool onSolid = true;
+            Vector2 point = self.Target + Vector2.UnitY * -4f;
+            if (self.Scene.CollideCheck<Solid>(point))
+            {
+                onSolid = self.Scene.CollideCheck<FloatySpaceBlock>(point);
+            }
+            Drone drone = self.SceneAs<Level>().Tracker.GetEntity<Drone>();
+            if (onSolid && XaphanModule.PlayerIsControllingRemoteDrone() && drone != null)
+            {
+                XaphanModule.ModSession.CurrentDroneMissile = drone.CurrentMissiles;
+                XaphanModule.ModSession.CurrentDroneSuperMissile = drone.CurrentSuperMissiles;
+                drone.CurrentSpawn = self.Position + self.Target;
+            }
+        }
+
         public static void Unload()
         {
             On.Celeste.TalkComponent.Update -= OnTalkComponentUpdate;
@@ -209,6 +224,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Die -= OnCelestePlayerDie;
             On.Celeste.Player.Jump -= OnPlayerjump;
             On.Celeste.Player.Throw -= OnPlayerThrow;
+            On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
         }
 
         private static void OnHoldableUpdate(On.Celeste.Holdable.orig_Update orig, Holdable self)
@@ -311,7 +327,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (!Settings.UseBagItemSlot.Check && !XaphanModule.startAsDrone)
+            if (!XaphanModule.ModSettings.UseBagItemSlot.Check && !XaphanModule.startAsDrone)
             {
                 RemoveSelf();
             }
@@ -602,24 +618,40 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public void GiveAmmo()
         {
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            int missileCount = 10;
-            foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
+            if (XaphanModule.ModSession.CurrentDroneMissile == 0)
             {
-                if (missileUpgrade.Contains(Prefix))
+                int missileCount = 10;
+                foreach (string missileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneMissilesUpgrades : XaphanModule.ModSaveData.DroneMissilesUpgrades)
                 {
-                    missileCount += 2;
+                    if (missileUpgrade.Contains(Prefix))
+                    {
+                        missileCount += 2;
+                    }
                 }
+                CurrentMissiles = missileCount;
+                XaphanModule.ModSession.CurrentDroneMissile = missileCount;
             }
-            CurrentMissiles = missileCount;
-            int superMissileCount = 5;
-            foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+            else
             {
-                if (superMissileUpgrade.Contains(Prefix))
-                {
-                    superMissileCount++;
-                }
+                CurrentMissiles = XaphanModule.ModSession.CurrentDroneMissile;
             }
-            CurrentSuperMissiles = superMissileCount;
+            if (XaphanModule.ModSession.CurrentDroneSuperMissile == 0)
+            {
+                int superMissileCount = 5;
+                foreach (string superMissileUpgrade in (XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) ? XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades : XaphanModule.ModSaveData.DroneSuperMissilesUpgrades)
+                {
+                    if (superMissileUpgrade.Contains(Prefix))
+                    {
+                        superMissileCount++;
+                    }
+                }
+                CurrentSuperMissiles = superMissileCount;
+                XaphanModule.ModSession.CurrentDroneSuperMissile = superMissileCount;
+            }
+            else
+            {
+                CurrentSuperMissiles = XaphanModule.ModSession.CurrentDroneSuperMissile;
+            }
         }
 
         public override void Update()
@@ -630,6 +662,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 display.CurrentMissiles = CurrentMissiles;
                 display.CurrentSuperMissiles = CurrentSuperMissiles;
+            }
+            if (SceneAs<Level>().Transitioning)
+            {
+                if (XaphanModule.ModSession.CurrentDroneMissile != CurrentMissiles)
+                {
+                    XaphanModule.ModSession.CurrentDroneMissile = CurrentMissiles;
+                }
+                if (XaphanModule.ModSession.CurrentDroneSuperMissile != CurrentSuperMissiles)
+                {
+                    XaphanModule.ModSession.CurrentDroneSuperMissile = CurrentSuperMissiles;
+                }
             }
             if (!dead && !Teleport)
             {
@@ -647,7 +690,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 TeleportSpawn = SceneAs<Level>().Session.LevelData.Spawns.ClosestTo(player.Position);
                 previousRoom = currentRoom;
             }
-            if (DroneTeleport.Active(SceneAs<Level>()) && Settings.UseBagItemSlot.Pressed && !Hold.IsHeld && enabled && player.StateMachine.State != 11)
+            if (DroneTeleport.Active(SceneAs<Level>()) && XaphanModule.ModSettings.UseBagItemSlot.Pressed && !Hold.IsHeld && enabled && player.StateMachine.State != 11)
             {
                 List<Entity> droneGates = SceneAs<Level>().Tracker.GetEntities<DroneGate>().ToList();
                 droneGates.ForEach(entity => entity.Collidable = true);
@@ -829,7 +872,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (player != null || player.StateMachine.State == Player.StBoost || player.StateMachine.State == Player.StRedDash)
                 {
-                    if (Input.Grab.Check && !Settings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
+                    if (Input.Grab.Check && !XaphanModule.ModSettings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
                     {
                         DestroyTimer += Engine.DeltaTime;
                         if (DestroyTimer >= 0.5f)
@@ -1020,6 +1063,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (forced || !enabled)
                 {
+                    XaphanModule.ModSession.CurrentDroneMissile = 0;
+                    XaphanModule.ModSession.CurrentDroneSuperMissile = 0;
                     Level.Session.RespawnPoint = CurrentSpawn;
                     XaphanModule.fakePlayerFacing = 0;
                     XaphanModule.fakePlayerPosition = Vector2.Zero;

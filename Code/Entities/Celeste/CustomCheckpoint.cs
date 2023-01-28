@@ -148,6 +148,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 }
                             }
                         }
+                        if (XaphanModule.PlayerIsControllingRemoteDrone())
+                        {
+                            Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
+                            if (drone != null)
+                            {
+                                XaphanModule.ModSession.CurrentDroneMissile = drone.CurrentMissiles;
+                                XaphanModule.ModSession.CurrentDroneSuperMissile = drone.CurrentSuperMissiles;
+                                drone.CurrentSpawn = Position;
+                            }
+                        }
                         foreach (CustomCheckpoint customCheckpoint in SceneAs<Level>().Tracker.GetEntities<CustomCheckpoint>())
                         {
                             if (customCheckpoint != this)
