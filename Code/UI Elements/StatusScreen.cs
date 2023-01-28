@@ -250,14 +250,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 yield return null;
             }
-            AreaKey area = SceneAs<Level>().Session.Area;
             string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            int chapterIndex = area.ChapterIndex;
             bool HasStaminaUpgrades = false;
             bool HasFireRateUpgrades = false;
             foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
             {
-                if (staminaUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                if (staminaUpgrade.Contains(Prefix))
                 {
                     HasStaminaUpgrades = true;
                     break;
@@ -265,7 +263,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             foreach (string fireRateUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
             {
-                if (fireRateUpgrade.Contains(chapterIndex >= 0 ? Prefix + "_Ch" + chapterIndex : Prefix))
+                if (fireRateUpgrade.Contains(Prefix))
                 {
                     HasFireRateUpgrades = true;
                     break;
