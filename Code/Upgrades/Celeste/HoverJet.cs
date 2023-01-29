@@ -41,14 +41,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         public override void Load()
         {
             IL.Celeste.Player.NormalUpdate += ilPlayerNormalUpdate;
-            IL.Celeste.Player.Render += ilPlayerRender;
             On.Celeste.Player.Update += onPlayerUpdate;
         }
 
         public override void Unload()
         {
             IL.Celeste.Player.NormalUpdate -= ilPlayerNormalUpdate;
-            IL.Celeste.Player.Render -= ilPlayerRender;
             On.Celeste.Player.Update -= onPlayerUpdate;
         }
 
@@ -71,24 +69,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             {
                 cursor.EmitDelegate<Func<float>>(determineGravityFactor);
                 cursor.Emit(OpCodes.Mul);
-            }
-        }
-
-        private static void ilPlayerRender(ILContext il)
-        {
-            ILCursor cursor = new(il);
-
-            if (cursor.TryGotoNext(instr => instr.MatchCallvirt<StateMachine>("get_State"), instr => instr.MatchLdcI4(19)))
-            {
-                cursor.Index++;
-                cursor.EmitDelegate<Func<int, int>>(orig =>
-                {
-                    if (Floating)
-                    {
-                        return 19;
-                    }
-                    return orig;
-                });
             }
         }
 
@@ -152,9 +132,10 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                             self.SceneAs<Level>().Add(Engine.Pooler.Create<SpeedRing>().Init(self.Center + Vector2.UnitY * 3, (float)Math.PI / 2f, useAltColor ? Calc.HexToColor("873724") : Calc.HexToColor("D9A066")));
                             useAltColor = !useAltColor;
                         }
+                        Drone drone = self.SceneAs<Level>().Tracker.GetEntity<Drone>();
                         if (!FloatTimerRoutine.Active)
                         {
-                            self.Add(FloatTimerRoutine = new Coroutine(FloatTimer(self)));
+                            self.Add(FloatTimerRoutine = new Coroutine(FloatTimer()));
                         }
                     }
                     else
@@ -186,23 +167,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             }
         }
 
-        private IEnumerator FloatTimer(Player player)
+        private IEnumerator FloatTimer()
         {
             while (floatTimer > 0f)
             {
                 if (Floating)
                 {
-                    if (floatTimer <= 0.65f && player.Scene.OnRawInterval(0.06f))
-                    {
-                        if (player.Sprite.Color == Color.Red)
-                        {
-                            player.Sprite.Color = Color.White;
-                        }
-                        else if (player.Sprite.Color == Color.White)
-                        {
-                            player.Sprite.Color = Color.Red;
-                        }
-                    }
                     floatTimer -= Engine.DeltaTime;
                     yield return null;
                 }
@@ -211,7 +181,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                     yield return null;
                 }
             }
-            player.Sprite.Color = Color.White;
             CanFloat = false;
         }
     }

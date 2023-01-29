@@ -15,7 +15,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [Tracked(true)]
     public class Drone : Actor
     {
-        private Sprite droneSprite;
+        public Sprite droneSprite;
 
         public bool dead;
 
@@ -898,7 +898,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     else
                     {
-                        droneSprite.Color = Color.White;
+                        if (HoverJet.Floating)
+                        {
+                            if (HoverJet.floatTimer <= 0.65f && player.Scene.OnRawInterval(0.06f))
+                            {
+                                if (droneSprite.Color == Color.Red)
+                                {
+                                    droneSprite.Color = Color.White;
+                                }
+                                else if (droneSprite.Color == Color.White)
+                                {
+                                    droneSprite.Color = Color.Red;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            droneSprite.Color = Color.White;
+                        }
                     }
                 }
                 if (enabled)
