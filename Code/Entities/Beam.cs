@@ -159,7 +159,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             ShootOffset = new Vector2(0f, -6f);
             Direction = Vector2.UnitX;
-            if (Input.MoveY == 0 || (Input.MoveY == -1 && Input.MoveX != 0 && XaphanModule.useMetroidGameplay) || (Input.MoveY == 1 && (XaphanModule.useMetroidGameplay ? Player.OnGround() : true)))
+            if (Input.MoveY == 0 || HoverJet.Floating || (Input.MoveY == -1 && Input.MoveX != 0 && XaphanModule.useMetroidGameplay) || (Input.MoveY == 1 && (XaphanModule.useMetroidGameplay ? Player.OnGround() : true)))
             {
                 if (Player.Facing == Facings.Left)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Celeste.Mod.XaphanHelper.Colliders;
+using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -44,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             playerSpeedY = Player.Speed.Y < 0 ? Player.Speed.Y : 0;
             ShootOffset = new Vector2(0f, -6f);
             Direction = Vector2.UnitX;
-            if (Input.MoveY == 0 || (Input.MoveY == -1 && Input.MoveX != 0 && XaphanModule.useMetroidGameplay) || (Input.MoveY == 1 && (XaphanModule.useMetroidGameplay ? Player.OnGround() : true)))
+            if (Input.MoveY == 0 || HoverJet.Floating || (Input.MoveY == -1 && Input.MoveX != 0 && XaphanModule.useMetroidGameplay) || (Input.MoveY == 1 && (XaphanModule.useMetroidGameplay ? Player.OnGround() : true)))
             {
                 if (Player.Facing == Facings.Left)
                 {
