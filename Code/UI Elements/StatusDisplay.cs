@@ -672,7 +672,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             inputActionA = "XaphanHelper_Press";
                             break;
                         case "HoverJet":
-                            controlA = Input.MenuUp;
+                            controlA = Input.Grab;
                             inputActionA = "XaphanHelper_Hold";
                             break;
                         case "LightningDash":
