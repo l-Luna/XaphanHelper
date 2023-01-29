@@ -1,4 +1,5 @@
 Version 1.0.53 :
+- Maps that use an Upgrade Controller but have not set the starting stamina value now use 110 stamina as default
 - The Pulse Radar ability now display correctly Custom Dash Blocks
 - Teleporting to the Remote Drone should not longer spawn another drone immediately if the item button is pressed for too long
 - Pressing down when holding a bomb or mega bomb should no longer spawn another bomb or mega bomb if the item button is pressed

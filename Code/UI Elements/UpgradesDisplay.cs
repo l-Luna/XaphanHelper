@@ -62,7 +62,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             string entity = "XaphanHelper/UpgradeController";
             if (MapData.HasEntity(entity))
             {
-                BaseStamina = MapData.GetEntityData(entity).Float("baseStamina");
+                BaseStamina = MapData.GetEntityData(entity).Float("baseStamina", 110);
                 ShowStaminaBar = MapData.GetEntityData(entity).Bool("showStaminaBar", false);
                 Prefix = area.LevelSet;
             }
