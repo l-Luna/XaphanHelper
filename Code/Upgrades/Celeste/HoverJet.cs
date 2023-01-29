@@ -21,7 +21,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static Coroutine FloatTimerRoutine = new();
 
-        public ParticleType P_Dust = new();
+        public bool useAltColor;
 
         public override int GetDefaultValue()
         {
@@ -147,26 +147,11 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                             self.Add(tween);
                         }
                         self.Speed.Y = 0f;
-                        P_Dust = new ParticleType()
+                        if (self.SceneAs<Level>().OnInterval(0.1f))
                         {
-                            Source = GFX.Game["particles/zappysmoke00"],
-                            Color = Calc.HexToColor("D9A066"),
-                            Color2 = Calc.HexToColor("873724"),
-                            ColorMode = ParticleType.ColorModes.Blink,
-                            Acceleration = new Vector2(0f, 4f),
-                            LifeMin = 0.3f,
-                            LifeMax = 0.5f,
-                            Size = 0.5f,
-                            SizeRange = 0.2f,
-                            Direction = (float)Math.PI / 2f,
-                            DirectionRange = 0.5f,
-                            SpeedMin = 5f,
-                            SpeedMax = 15f,
-                            RotationMode = ParticleType.RotationModes.Random,
-                            ScaleOut = true,
-                            UseActualDeltaTime = true
-                        };
-                        Dust.Burst(self.BottomCenter, -(float)Math.PI / 2f, 1, P_Dust);
+                            self.SceneAs<Level>().Add(Engine.Pooler.Create<SpeedRing>().Init(self.Center + Vector2.UnitY * 3, (float)Math.PI / 2f, useAltColor ? Calc.HexToColor("873724") : Calc.HexToColor("D9A066")));
+                            useAltColor = !useAltColor;
+                        }
                         if (!FloatTimerRoutine.Active)
                         {
                             self.Add(FloatTimerRoutine = new Coroutine(FloatTimer(self)));
