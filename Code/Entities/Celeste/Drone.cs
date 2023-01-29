@@ -966,21 +966,30 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         else
                         {
-                            if (player.Speed.Y < 0 && Input.Aim.Value.SafeNormalize().Y >= 0)
+                            if (HoverJet.Active(SceneAs<Level>()) && HoverJet.Floating)
                             {
                                 droneSprite.Play("jump");
+                                droneSprite.SetAnimationFrame(0);
+
                             }
-                            else if (player.Speed.Y < 0 && Input.Aim.Value.Y == -1)
+                            else
                             {
-                                droneSprite.Play("jumpUp");
-                            }
-                            else if (player.Speed.Y > 0 && Input.Aim.Value.SafeNormalize().Y >= 0)
-                            {
-                                droneSprite.Play("fall");
-                            }
-                            else if (player.Speed.Y > 0 && Input.Aim.Value.Y == -1)
-                            {
-                                droneSprite.Play("fallUp");
+                                if (player.Speed.Y < 0 && Input.Aim.Value.SafeNormalize().Y >= 0)
+                                {
+                                    droneSprite.Play("jump");
+                                }
+                                else if (player.Speed.Y < 0 && Input.Aim.Value.Y == -1)
+                                {
+                                    droneSprite.Play("jumpUp");
+                                }
+                                else if (player.Speed.Y > 0 && Input.Aim.Value.SafeNormalize().Y >= 0)
+                                {
+                                    droneSprite.Play("fall");
+                                }
+                                else if (player.Speed.Y > 0 && Input.Aim.Value.Y == -1)
+                                {
+                                    droneSprite.Play("fallUp");
+                                }
                             }
                         }
                     }

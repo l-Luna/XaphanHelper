@@ -5,6 +5,8 @@ Version 1.0.53 :
 - Added a debug command : reset_collectables_upgrades
 - The Remote Drone should now correctly respawn at the correct place after hitting a Change Respawn Trigger or a Custom Checkpoint
 - The Remote Drone can no longer die if the Invincible assist variant is active. It can still be destroyed manually
+- The Hover Boot ability is now only usable by the Remote Drone and has been renamed "Hover Jet"
+- Updated icons for the Dash Boots and Hover Jet abilities
 
 Version 1.0.52 :
 - Fixed a bug soft-locking the game when selecting the 'Stay Here' option on the Warp selection menu when using the In-Game map
