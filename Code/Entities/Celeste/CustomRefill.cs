@@ -251,7 +251,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
-            if ((drone != null && ((type == "Missiles" && drone.CurrentMissiles < maxMissileCount && MissilesModule.Active(SceneAs<Level>())) || (type == "Super Missiles" && drone.CurrentSuperMissiles < maxSuperMissileCount && SuperMissilesModule.Active(SceneAs<Level>()))) && XaphanModule.PlayerIsControllingRemoteDrone()) || (player.UseRefill(type == "Two Dashes") && type.Contains("Dashes") && !XaphanModule.PlayerIsControllingRemoteDrone()))
+            if ((drone != null && ((type == "Missiles" && drone.CurrentMissiles < maxMissileCount && MissilesModule.Active(SceneAs<Level>())) || (type == "Super Missiles" && drone.CurrentSuperMissiles < maxSuperMissileCount && SuperMissilesModule.Active(SceneAs<Level>()))) && XaphanModule.PlayerIsControllingRemoteDrone()) || (player.UseRefill(type == "Two Dashes") && (type == "" || type.Contains("Dashes")) && !XaphanModule.PlayerIsControllingRemoteDrone()))
             {
                 Audio.Play(type == "Two Dashes" ? "event:/new_content/game/10_farewell/pinkdiamond_touch" : "event:/game/general/diamond_touch", Position);
                 Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
