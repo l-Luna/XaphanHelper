@@ -690,7 +690,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 TeleportSpawn = SceneAs<Level>().Session.LevelData.Spawns.ClosestTo(player.Position);
                 previousRoom = currentRoom;
             }
-            if (DroneTeleport.Active(SceneAs<Level>()) && XaphanModule.ModSettings.UseBagItemSlot.Pressed && !Hold.IsHeld && enabled && player.StateMachine.State != 11)
+            if (DroneTeleport.Active(SceneAs<Level>()) && XaphanModule.ModSettings.UseBagItemSlot.Pressed && !Hold.IsHeld && enabled && player.StateMachine.State != 11 && !Teleport)
             {
                 List<Entity> droneGates = SceneAs<Level>().Tracker.GetEntities<DroneGate>().ToList();
                 droneGates.ForEach(entity => entity.Collidable = true);
@@ -872,7 +872,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (player != null || player.StateMachine.State == Player.StBoost || player.StateMachine.State == Player.StRedDash)
                 {
-                    if (Input.Grab.Check && !XaphanModule.ModSettings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
+                    if ((Input.Grab.Pressed || (DestroyTimer > 0 && Input.Grab.Check)) && !XaphanModule.ModSettings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
                     {
                         DestroyTimer += Engine.DeltaTime;
                         if (DestroyTimer >= 0.5f)

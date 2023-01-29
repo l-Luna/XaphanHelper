@@ -43,7 +43,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             IL.Celeste.Player.NormalUpdate += ilPlayerNormalUpdate;
             IL.Celeste.Player.Render += ilPlayerRender;
             On.Celeste.Player.Update += onPlayerUpdate;
-            On.Celeste.Player.UpdateSprite += onPlayerUpdateSprite;
         }
 
         public override void Unload()
@@ -51,7 +50,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             IL.Celeste.Player.NormalUpdate -= ilPlayerNormalUpdate;
             IL.Celeste.Player.Render -= ilPlayerRender;
             On.Celeste.Player.Update -= onPlayerUpdate;
-            On.Celeste.Player.UpdateSprite -= onPlayerUpdateSprite;
         }
 
         public static bool Active(Level level)
@@ -99,9 +97,8 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             if (Engine.Scene is Level)
             {
                 Level level = (Level)Engine.Scene;
-                if (Active(level) && !XaphanModule.PlayerIsControllingRemoteDrone())
+                if (Active(level) && XaphanModule.PlayerIsControllingRemoteDrone())
                 {
-                    Player player = level.Tracker.GetEntity<Player>();
                     if (Floating)
                     {
                         return 0.5f;
@@ -116,9 +113,8 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             if (Engine.Scene is Level)
             {
                 Level level = (Level)Engine.Scene;
-                if (Active(level) && !XaphanModule.PlayerIsControllingRemoteDrone())
+                if (Active(level) && XaphanModule.PlayerIsControllingRemoteDrone())
                 {
-                    Player player = level.Tracker.GetEntity<Player>();
                     if (Floating)
                     {
                         return 0f;
@@ -131,63 +127,60 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
         private void onPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
             orig(self);
-            if (Active(self.SceneAs<Level>()) && !XaphanModule.PlayerIsControllingRemoteDrone())
+            if (self.GetType() == typeof(Player))
             {
-                ScrewAttackManager manager = self.SceneAs<Level>().Tracker.GetEntity<ScrewAttackManager>();
-                if (self.Speed.Y >= 0 && Input.MenuUp.Check && !self.OnGround() && !self.DashAttacking && self.StateMachine.State == 0 && CanFloat && !Liquid.determineIfInQuicksand())
+                if (Active(self.SceneAs<Level>()) && XaphanModule.PlayerIsControllingRemoteDrone())
                 {
-                    if (!Floating)
+                    if (self.Speed.Y >= 0 && Input.Grab.Check && !self.OnGround() && !self.DashAttacking && self.StateMachine.State == 0 && CanFloat && !Liquid.determineIfInQuicksand())
                     {
-                        Floating = true;
-                        Vector2 start = self.Position;
-                        Vector2 end = self.Position + new Vector2(0f, 4f);
-                        float num = Vector2.Distance(start, end) / 12.5f;
-                        tween = Tween.Create(Tween.TweenMode.YoyoLooping, Ease.SineInOut, num, start: true);
-                        tween.OnUpdate = delegate (Tween t)
+                        if (!Floating)
                         {
-                            self.MoveToY(Vector2.Lerp(start, end, t.Eased).Y);
+                            Floating = true;
+                            Vector2 start = self.Position;
+                            Vector2 end = self.Position + new Vector2(0f, 4f);
+                            float num = Vector2.Distance(start, end) / 12.5f;
+                            tween = Tween.Create(Tween.TweenMode.YoyoLooping, Ease.SineInOut, num, start: true);
+                            tween.OnUpdate = delegate (Tween t)
+                            {
+                                self.MoveToY(Vector2.Lerp(start, end, t.Eased).Y);
+                            };
+                            self.Add(tween);
+                        }
+                        self.Speed.Y = 0f;
+                        P_Dust = new ParticleType()
+                        {
+                            Source = GFX.Game["particles/zappysmoke00"],
+                            Color = Calc.HexToColor("D9A066"),
+                            Color2 = Calc.HexToColor("873724"),
+                            ColorMode = ParticleType.ColorModes.Blink,
+                            Acceleration = new Vector2(0f, 4f),
+                            LifeMin = 0.3f,
+                            LifeMax = 0.5f,
+                            Size = 0.5f,
+                            SizeRange = 0.2f,
+                            Direction = (float)Math.PI / 2f,
+                            DirectionRange = 0.5f,
+                            SpeedMin = 5f,
+                            SpeedMax = 15f,
+                            RotationMode = ParticleType.RotationModes.Random,
+                            ScaleOut = true,
+                            UseActualDeltaTime = true
                         };
-                        self.Add(tween);
+                        Dust.Burst(self.BottomCenter, -(float)Math.PI / 2f, 1, P_Dust);
+                        if (!FloatTimerRoutine.Active)
+                        {
+                            self.Add(FloatTimerRoutine = new Coroutine(FloatTimer(self)));
+                        }
                     }
-                    self.Speed.Y = 0f;
-                    Vector2 particlesPosition = self.BottomCenter;
-                    if (manager != null && manager.StartedScrewAttack)
+                    else
                     {
-                        particlesPosition = self.Center;
-                    }
-                    P_Dust = new ParticleType()
-                    {
-                        Source = GFX.Game["particles/zappysmoke00"],
-                        Color = Calc.HexToColor("D9A066"),
-                        Color2 = Calc.HexToColor("873724"),
-                        ColorMode = ParticleType.ColorModes.Blink,
-                        Acceleration = new Vector2(0f, 4f),
-                        LifeMin = 0.3f,
-                        LifeMax = 0.5f,
-                        Size = 0.5f,
-                        SizeRange = 0.2f,
-                        Direction = (float)Math.PI / 2f,
-                        DirectionRange = 0.5f,
-                        SpeedMin = 5f,
-                        SpeedMax = 15f,
-                        RotationMode = ParticleType.RotationModes.Random,
-                        ScaleOut = true,
-                        UseActualDeltaTime = true
-                    };
-                    Dust.Burst(particlesPosition, -(float)Math.PI / 2f, 1, P_Dust);
-                    if (!FloatTimerRoutine.Active)
-                    {
-                        self.Add(FloatTimerRoutine = new Coroutine(FloatTimer(self)));
+                        StopFloating(self);
                     }
                 }
                 else
                 {
                     StopFloating(self);
                 }
-            }
-            else
-            {
-                StopFloating(self);
             }
         }
 
@@ -205,21 +198,6 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
                 Floating = false;
                 floatTimer = 1f;
                 CanFloat = true;
-            }
-        }
-
-        private void onPlayerUpdateSprite(On.Celeste.Player.orig_UpdateSprite orig, Player self)
-        {
-            if (Floating && self.Holding == null)
-            {
-                self.Sprite.Scale = Vector2.One;
-                self.Sprite.Play("fallFast");
-                self.Sprite.SetAnimationFrame(0);
-                self.Sprite.Stop();
-            }
-            else
-            {
-                orig(self);
             }
         }
 
