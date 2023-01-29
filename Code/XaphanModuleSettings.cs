@@ -123,7 +123,7 @@ namespace Celeste.Mod.XaphanHelper
         public bool DashBoots { get; set; } = false;
 
         [SettingIgnore]
-        public bool HoverBoots { get; set; } = false;
+        public bool HoverJet { get; set; } = false;
 
         [SettingIgnore]
         public bool LightningDash { get; set; } = false;

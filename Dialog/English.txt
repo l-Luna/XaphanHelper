@@ -95,9 +95,9 @@
 	XaphanHelper_get_SpaceJump_Name= SPACE JUMP
 	XaphanHelper_get_SpaceJump_Desc= Allows one extra jump in midair
 	XaphanHelper_get_SpaceJump_Desc_b= in midair to jump again
-	XaphanHelper_get_HoverBoots_Name= HOVER BOOTS
-	XaphanHelper_get_HoverBoots_Desc= Allows you to float for a short time
-	XaphanHelper_get_HoverBoots_Desc_b= and a direction while falling to float
+	XaphanHelper_get_HoverJet_Name= HOVER JET
+	XaphanHelper_get_HoverJet_Desc= Allows the drone to float for a short time
+	XaphanHelper_get_HoverJet_Desc_b= and a direction while falling to float
 	XaphanHelper_get_LightningDash_Name= LIGHTNING DASH
 	XaphanHelper_get_LightningDash_Desc= Allows you to perform an infinite horizontal dash
 	XaphanHelper_get_LightningDash_Desc_b= and the direction away from the wall to dash

@@ -123,7 +123,7 @@ namespace Celeste.Mod.XaphanHelper
             PortableStation,
             PulseRadar,
             DashBoots,
-            HoverBoots,
+            HoverJet,
             LightningDash,
             MissilesModule,
             SuperMissilesModule,
@@ -221,9 +221,9 @@ namespace Celeste.Mod.XaphanHelper
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DashBoots");
         }
 
-        public static bool HoverBootsCollected(Level level)
+        public static bool HoverJetCollected(Level level)
         {
-            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HoverBoots");
+            return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_HoverJet");
         }
 
         public static bool LightningDashCollected(Level level)
@@ -506,7 +506,7 @@ namespace Celeste.Mod.XaphanHelper
             UpgradeHandlers[Upgrades.PortableStation] = new PortableStation();
             UpgradeHandlers[Upgrades.PulseRadar] = new PulseRadar();
             UpgradeHandlers[Upgrades.DashBoots] = new DashBoots();
-            UpgradeHandlers[Upgrades.HoverBoots] = new HoverBoots();
+            UpgradeHandlers[Upgrades.HoverJet] = new HoverJet();
             UpgradeHandlers[Upgrades.LightningDash] = new LightningDash();
             UpgradeHandlers[Upgrades.MissilesModule] = new MissilesModule();
             UpgradeHandlers[Upgrades.SuperMissilesModule] = new SuperMissilesModule();
@@ -1586,7 +1586,7 @@ namespace Celeste.Mod.XaphanHelper
                 ModSettings.PulseRadar = false;
                 ModSettings.DashBoots = true;
                 ModSettings.SpaceJump = 1;
-                ModSettings.HoverBoots = false;
+                ModSettings.HoverJet = false;
                 ModSettings.LightningDash = false;
                 ModSettings.LongBeam = false;
                 ModSettings.IceBeam = false;
@@ -1697,7 +1697,7 @@ namespace Celeste.Mod.XaphanHelper
             ModSettings.PulseRadar = false;
             ModSettings.DashBoots = false;
             ModSettings.SpaceJump = 1;
-            ModSettings.HoverBoots = false;
+            ModSettings.HoverJet = false;
             ModSettings.LightningDash = false;
             ModSettings.LongBeam = false;
             ModSettings.IceBeam = false;
@@ -1733,7 +1733,7 @@ namespace Celeste.Mod.XaphanHelper
             bool setPulseRadar = false;
             bool setDashBoots = false;
             bool setSpaceJump = false;
-            bool setHoverBoots = false;
+            bool setHoverJet = false;
             bool setLightningDash = false;
             bool setLongBeam = false;
             bool setIceBeam = false;
@@ -1765,14 +1765,14 @@ namespace Celeste.Mod.XaphanHelper
                         setPulseRadar = entity.Bool("onlyAllowPulseRadar") || entity.Bool("startWithPulseRadar");
                         setDashBoots = entity.Bool("onlyAllowDashBoots") || entity.Bool("startWithDashBoots");
                         setSpaceJump = entity.Bool("onlyAllowSpaceJump") || entity.Bool("startWithSpaceJump");
-                        setHoverBoots = entity.Bool("onlyAllowHoverBoots") || entity.Bool("startWithHoverBoots");
+                        setHoverJet = entity.Bool("onlyAllowHoverJet") || entity.Bool("startWithHoverJet");
                         setLightningDash = entity.Bool("onlyAllowLightningDash") || entity.Bool("startWithLightningDash");
                         setLongBeam = entity.Bool("onlyAllowLongBeam") || entity.Bool("startWithLongBeam");
                         setIceBeam = entity.Bool("onlyAllowIceBeam") || entity.Bool("startWithIceBeam");
                         setWaveBeam = entity.Bool("onlyAllowWaveBeam") || entity.Bool("startWithWaveBeam");
                         setMissilesModule = entity.Bool("onlyAllowMissilesModule") || entity.Bool("startWithMissilesModule");
                         setSuperMissilesModule = entity.Bool("onlyAllowSuperMissilesModule") || entity.Bool("startWithSuperMissilesModule");
-                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverBoots || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissilesModule || setSuperMissilesModule;
+                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverJet || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissilesModule || setSuperMissilesModule;
                         forceStartingUpgrades = entity.Bool("onlyAllowStartingUpgrades", hasStartingUpgrades ? true : false);
                         break;
                     }
@@ -1799,7 +1799,7 @@ namespace Celeste.Mod.XaphanHelper
             bool goldenPulseRadar = false;
             bool goldenDashBoots = false;
             bool goldenSpaceJump = false;
-            bool goldenHoverBoots = false;
+            bool goldenHoverJet = false;
             bool goldenLightningDash = false;
             bool goldenLongBeam = false;
             bool goldenIceBeam = false;
@@ -1830,7 +1830,7 @@ namespace Celeste.Mod.XaphanHelper
                         goldenPulseRadar = entity.Bool("goldenStartWithPulseRadar");
                         goldenDashBoots = entity.Bool("goldenStartWithDashBoots");
                         goldenSpaceJump = entity.Bool("goldenStartWithSpaceJump");
-                        goldenHoverBoots = entity.Bool("goldenStartWithHoverBoots");
+                        goldenHoverJet = entity.Bool("goldenStartWithHoverJet");
                         goldenLightningDash = entity.Bool("goldenStartWithLightningDash");
                         goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
                         goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
@@ -1936,10 +1936,10 @@ namespace Celeste.Mod.XaphanHelper
                     ModSettings.SpaceJump = 2;
                     level.Session.SetFlag("Upgrade_SpaceJump", true);
                 }
-                if (setHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
+                if (setHoverJet || level.Session.GetFlag("Upgrade_HoverJet"))
                 {
-                    ModSettings.HoverBoots = true;
-                    level.Session.SetFlag("Upgrade_HoverBoots", true);
+                    ModSettings.HoverJet = true;
+                    level.Session.SetFlag("Upgrade_HoverJet", true);
                 }
                 if (setLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
                 {
@@ -2050,10 +2050,10 @@ namespace Celeste.Mod.XaphanHelper
                         ModSettings.DashBoots = true;
                         level.Session.SetFlag("Upgrade_DashBoots", true);
                     }
-                    if (HoverBootsCollected(level))
+                    if (HoverJetCollected(level))
                     {
-                        ModSettings.HoverBoots = true;
-                        level.Session.SetFlag("Upgrade_HoverBoots", true);
+                        ModSettings.HoverJet = true;
+                        level.Session.SetFlag("Upgrade_HoverJet", true);
                     }
                     if (LightningDashCollected(level))
                     {
@@ -2221,9 +2221,9 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         ModSettings.SpaceJump = 2;
                     }
-                    if (goldenHoverBoots || level.Session.GetFlag("Upgrade_HoverBoots"))
+                    if (goldenHoverJet || level.Session.GetFlag("Upgrade_HoverJet"))
                     {
-                        ModSettings.HoverBoots = true;
+                        ModSettings.HoverJet = true;
                     }
                     if (goldenLightningDash || level.Session.GetFlag("Upgrade_LightningDash"))
                     {
@@ -3259,8 +3259,8 @@ namespace Celeste.Mod.XaphanHelper
                         ModSettings.DashBoots = false;
                         level.Session.SetFlag("Upgrade_SpaceJump", false);
                         ModSettings.SpaceJump = 1;
-                        level.Session.SetFlag("Upgrade_HoverBoots", false);
-                        ModSettings.HoverBoots = false;
+                        level.Session.SetFlag("Upgrade_HoverJet", false);
+                        ModSettings.HoverJet = false;
                         level.Session.SetFlag("Upgrade_LightningDash", false);
                         ModSettings.LightningDash = false;
                         level.Session.SetFlag("Upgrade_LongBeam", false);
@@ -3314,7 +3314,7 @@ namespace Celeste.Mod.XaphanHelper
                         bool goldenPulseRadar = false;
                         bool goldenDashBoots = false;
                         bool goldenSpaceJump = false;
-                        bool goldenHoverBoots = false;
+                        bool goldenHoverJet = false;
                         bool goldenLightningDash = false;
                         bool goldenLongBeam = false;
                         bool goldenIceBeam = false;
@@ -3345,7 +3345,7 @@ namespace Celeste.Mod.XaphanHelper
                                     goldenPulseRadar = entity.Bool("goldenStartWithPulseRadar");
                                     goldenDashBoots = entity.Bool("goldenStartWithDashBoots");
                                     goldenSpaceJump = entity.Bool("goldenStartWithSpaceJump");
-                                    goldenHoverBoots = entity.Bool("goldenStartWithHoverBoots");
+                                    goldenHoverJet = entity.Bool("goldenStartWithHoverJet");
                                     goldenLightningDash = entity.Bool("goldenStartWithLightningDash");
                                     goldenLongBeam = entity.Bool("goldenStartWithLongBeam");
                                     goldenIceBeam = entity.Bool("goldenStartWithIceBeam");
@@ -3446,10 +3446,10 @@ namespace Celeste.Mod.XaphanHelper
                             ModSettings.SpaceJump = 2;
                             level.Session.SetFlag("Upgrade_SpaceJump", true);
                         }
-                        if (goldenHoverBoots)
+                        if (goldenHoverJet)
                         {
-                            ModSettings.HoverBoots = true;
-                            level.Session.SetFlag("Upgrade_HoverBoots", true);
+                            ModSettings.HoverJet = true;
+                            level.Session.SetFlag("Upgrade_HoverJet", true);
                         }
                         if (goldenLightningDash)
                         {

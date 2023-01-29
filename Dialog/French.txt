@@ -95,9 +95,9 @@
 	XaphanHelper_get_SpaceJump_Name= SAUT SPACIAL
 	XaphanHelper_get_SpaceJump_Desc= Permet un saut supplémentaire dans les airs
 	XaphanHelper_get_SpaceJump_Desc_b= en l'air pour sauter à nouveau
-	XaphanHelper_get_HoverBoots_Name= BOTTES DE SURVOL
-	XaphanHelper_get_HoverBoots_Desc= Permet de flotter dans les airs un court instant
-	XaphanHelper_get_HoverBoots_Desc_b= et une direction lors d'une chûte pour flotter
+	XaphanHelper_get_HoverJet_Name= JET DE SURVOL
+	XaphanHelper_get_HoverJet_Desc= Permet au drone de flotter dans les airs un court instant
+	XaphanHelper_get_HoverJet_Desc_b= et une direction lors d'une chûte pour flotter
 	XaphanHelper_get_LightningDash_Name= SPRINT ECLAIR
 	XaphanHelper_get_LightningDash_Desc= Permet d'effectuer un sprint horizontal infini
 	XaphanHelper_get_LightningDash_Desc_b= et la direction opposée au mur pour sprinter

@@ -67,7 +67,7 @@ namespace Celeste.Mod.XaphanHelper
 
         public HashSet<string> DashBootsInactive = new();
 
-        public HashSet<string> HoverBootsInactive = new();
+        public HashSet<string> HoverJetInactive = new();
 
         public HashSet<string> MissilesModuleInactive = new();
 

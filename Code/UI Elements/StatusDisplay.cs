@@ -362,9 +362,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 470f), 100, getCustomName("JumpBoost"), getCustomSpritePath("JumpBoost"), "JumpBoost", XaphanModule.ModSaveData.JumpBoostInactive));
                 }*/
-                if (XaphanModule.ModSettings.HoverBoots)
+                if (XaphanModule.ModSettings.HoverJet)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 835f), 110, getCustomName("HoverBoots"), getCustomSpritePath("HoverBoots"), "HoverBoots", XaphanModule.ModSaveData.HoverBootsInactive));
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 835f), 110, getCustomName("HoverJet"), getCustomSpritePath("HoverJet"), "HoverJet", XaphanModule.ModSaveData.HoverJetInactive));
                 }
                 if (XaphanModule.ModSettings.VariaJacket)
                 {
@@ -671,7 +671,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             controlA = Input.Jump;
                             inputActionA = "XaphanHelper_Press";
                             break;
-                        case "HoverBoots":
+                        case "HoverJet":
                             controlA = Input.MenuUp;
                             inputActionA = "XaphanHelper_Hold";
                             break;

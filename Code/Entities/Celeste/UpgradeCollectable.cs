@@ -246,7 +246,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     controlA = Input.Jump;
                     inputActionA = "XaphanHelper_Press";
                     break;
-                case "HoverBoots":
+                case "HoverJet":
                     controlA = Input.MenuUp;
                     inputActionA = "XaphanHelper_Hold";
                     break;

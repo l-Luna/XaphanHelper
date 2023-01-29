@@ -9,7 +9,7 @@ using MonoMod.Cil;
 
 namespace Celeste.Mod.XaphanHelper.Upgrades
 {
-    class HoverBoots : Upgrade
+    class HoverJet : Upgrade
     {
         public static bool CanFloat = true;
 
@@ -30,12 +30,12 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public override int GetValue()
         {
-            return XaphanModule.ModSettings.HoverBoots ? 1 : 0;
+            return XaphanModule.ModSettings.HoverJet ? 1 : 0;
         }
 
         public override void SetValue(int value)
         {
-            XaphanModule.ModSettings.HoverBoots = (value != 0);
+            XaphanModule.ModSettings.HoverJet = (value != 0);
         }
 
         public override void Load()
@@ -54,7 +54,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
 
         public static bool Active(Level level)
         {
-            return XaphanModule.ModSettings.HoverBoots && !XaphanModule.ModSaveData.HoverBootsInactive.Contains(level.Session.Area.GetLevelSet());
+            return XaphanModule.ModSettings.HoverJet && !XaphanModule.ModSaveData.HoverJetInactive.Contains(level.Session.Area.GetLevelSet());
         }
 
         private static void ilPlayerNormalUpdate(ILContext il)
