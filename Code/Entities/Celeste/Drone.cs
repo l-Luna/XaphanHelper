@@ -870,7 +870,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
                     }
                 }
-                if (player != null || player.StateMachine.State == Player.StBoost || player.StateMachine.State == Player.StRedDash)
+                if ((player != null || player.StateMachine.State == Player.StBoost || player.StateMachine.State == Player.StRedDash) && player.StateMachine.State != Player.StDummy)
                 {
                     if ((Input.Grab.Pressed || (DestroyTimer > 0 && Input.Grab.Check)) && !XaphanModule.ModSettings.SelectItem.Check && !Hold.IsHeld && canDestroy && player.OnSafeGround && player.Speed == Vector2.Zero)
                     {
