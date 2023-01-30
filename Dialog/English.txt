@@ -84,8 +84,8 @@
 	XaphanHelper_get_DroneTeleport_Desc= Allows you to teleport to the location of your drone
 	XaphanHelper_get_DroneTeleport_Desc_b= while you control the drone to teleport
 	XaphanHelper_get_JumpBoost_Name= JUMP BOOST
-	XaphanHelper_get_JumpBoost_Desc= Allows you to jump up to twice as high
-	XaphanHelper_get_JumpBoost_Desc_b= before jumping to activate
+	XaphanHelper_get_JumpBoost_Desc= Allows the drone to jump up to 50% higher
+	XaphanHelper_get_JumpBoost_Desc_b= to jump higher
 	XaphanHelper_get_ScrewAttack_Name= SCREW ATTACK
 	XaphanHelper_get_ScrewAttack_Desc= Destroy some walls, increase velocity and
 	XaphanHelper_get_ScrewAttack_Desc_b= allows you to go through some obstacles while jumping

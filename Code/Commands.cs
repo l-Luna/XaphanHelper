@@ -140,14 +140,14 @@ namespace Celeste.Mod.XaphanHelper
 
         // Upgrades Commands
 
-        [Command("remove_upgrade", "Remove specified upgrades (Separated by a semicolon). If no upgrades are specified, remove all upgrades. Avaiable upgrades: PowerGrip, ClimbingKit, SpiderMagnet, DashBoots, SpaceJump, HoverJet, LightningDash, LongBeam, IceBeam, WaveBeam, DroneTeleport, VariaJacket, GravityJacket, Bombs, MegaBombs, RemoteDrone, GoldenFeather, EtherealDash, ScrewAttack, Binoculars, PortableStation, PulseRadar, MissilesModule, SuperMissilesModule")]
+        [Command("remove_upgrade", "Remove specified upgrades (Separated by a semicolon). If no upgrades are specified, remove all upgrades. Avaiable upgrades: PowerGrip, ClimbingKit, SpiderMagnet, DashBoots, SpaceJump, LightningDash, LongBeam, IceBeam, WaveBeam, MissilesModule, SuperMissilesModule, DroneTeleport, JumpBoost, HoverJet, VariaJacket, GravityJacket, Bombs, MegaBombs, RemoteDrone, GoldenFeather, EtherealDash, ScrewAttack, Binoculars, PortableStation, PulseRadar")]
         public static void Cmd_Remove_Upgrades(string upg = "")
         {
             if (XaphanModule.useUpgrades)
             {
                 if (upg == "")
                 {
-                    upg = "PowerGrip;ClimbingKit;SpiderMagnet;DashBoots;SpaceJump;HoverJet;LightningDash;LongBeam;IceBeam;WaveBeam;DroneTeleport;VariaJacket;GravityJacket;Bombs;MegaBombs;RemoteDrone;GoldenFeather;EtherealDash;ScrewAttack;Binoculars;PortableStation;PulseRadar;MissilesModule;SuperMissilesModule";
+                    upg = "PowerGrip;ClimbingKit;SpiderMagnet;DashBoots;SpaceJump;HoverJet;LightningDash;LongBeam;IceBeam;WaveBeam;DroneTeleport;VariaJacket;GravityJacket;Bombs;MegaBombs;RemoteDrone;GoldenFeather;EtherealDash;ScrewAttack;Binoculars;PortableStation;PulseRadar;MissilesModule;SuperMissilesModule;JumpBoost";
                 }
                 string[] upgrades = upg.Split(';');
                 foreach (string u in upgrades)
@@ -175,14 +175,14 @@ namespace Celeste.Mod.XaphanHelper
             }
         }
 
-        [Command("give_upgrade", "Give specified upgrades (Separated by a semicolon). If no upgrades are specified, give all upgrades. Avaiable upgrades: PowerGrip, ClimbingKit, SpiderMagnet, DashBoots, SpaceJump, HoverJet, LightningDash, LongBeam, IceBeam, WaveBeam, DroneTeleport, VariaJacket, GravityJacket, Bombs, MegaBombs, RemoteDrone, GoldenFeather, EtherealDash, ScrewAttack, Binoculars, PortableStation, PulseRadar, MissilesModule, SuperMissilesModule")]
+        [Command("give_upgrade", "Give specified upgrades (Separated by a semicolon). If no upgrades are specified, give all upgrades. Avaiable upgrades: PowerGrip, ClimbingKit, SpiderMagnet, DashBoots, SpaceJump, LightningDash, LongBeam, IceBeam, WaveBeam, MissilesModule, SuperMissilesModule, DroneTeleport, JumpBoost, HoverJet, VariaJacket, GravityJacket, Bombs, MegaBombs, RemoteDrone, GoldenFeather, EtherealDash, ScrewAttack, Binoculars, PortableStation, PulseRadar")]
         private static void Cmd_Give_Upgrade(string upg = "")
         {
             if (XaphanModule.useUpgrades)
             {
                 if (upg == "")
                 {
-                    upg = "PowerGrip;ClimbingKit;SpiderMagnet;DashBoots;SpaceJump;HoverJet;LightningDash;LongBeam;IceBeam;WaveBeam;DroneTeleport;VariaJacket;GravityJacket;Bombs;MegaBombs;RemoteDrone;GoldenFeather;EtherealDash;ScrewAttack;Binoculars;PortableStation;PulseRadar;MissilesModule;SuperMissilesModule";
+                    upg = "PowerGrip;ClimbingKit;SpiderMagnet;DashBoots;SpaceJump;HoverJet;LightningDash;LongBeam;IceBeam;WaveBeam;DroneTeleport;VariaJacket;GravityJacket;Bombs;MegaBombs;RemoteDrone;GoldenFeather;EtherealDash;ScrewAttack;Binoculars;PortableStation;PulseRadar;MissilesModule;SuperMissilesModule;JumpBoost";
                 }
                 string[] upgrades = upg.Split(';');
                 foreach (string u in upgrades)
@@ -263,12 +263,12 @@ namespace Celeste.Mod.XaphanHelper
                         XaphanModule.ModSaveData.DroneTeleportInactive.Remove(prefix);
                     }
                     break;
-                /*case "JumpBoost":
+                case "JumpBoost":
                     if (XaphanModule.ModSaveData.JumpBoostInactive.Contains(prefix))
                     {
                         XaphanModule.ModSaveData.JumpBoostInactive.Remove(prefix);
                     }
-                    break;*/
+                    break;
                 case "VariaJacket":
                     if (XaphanModule.ModSaveData.VariaJacketInactive.Contains(prefix))
                     {

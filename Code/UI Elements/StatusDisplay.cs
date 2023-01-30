@@ -358,10 +358,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 735f), 90, getCustomName("DroneTeleport"), getCustomSpritePath("DroneTeleport"), "DroneTeleport", XaphanModule.ModSaveData.DroneTeleportInactive));
                 }
-                /*if (Settings.JumpBoost)
+                if (XaphanModule.ModSettings.JumpBoost)
                 {
-                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(1215f, 470f), 100, getCustomName("JumpBoost"), getCustomSpritePath("JumpBoost"), "JumpBoost", XaphanModule.ModSaveData.JumpBoostInactive));
-                }*/
+                    Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 785f), 100, getCustomName("JumpBoost"), getCustomSpritePath("JumpBoost"), "JumpBoost", XaphanModule.ModSaveData.JumpBoostInactive));
+                }
                 if (XaphanModule.ModSettings.HoverJet)
                 {
                     Scene.Add(new UpgradeDisplay(level, this, new Vector2(155f, 835f), 110, getCustomName("HoverJet"), getCustomSpritePath("HoverJet"), "HoverJet", XaphanModule.ModSaveData.HoverJetInactive));
@@ -738,10 +738,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             controlB = XaphanModule.ModSettings.UseMiscItemSlot;
                             inputActionA = "XaphanHelper_ThenPress";
                             break;
-                        /*case "JumpBoost":
-                            controlA = Input.MenuUp;
+                        case "JumpBoost":
+                            controlA = Input.Jump;
                             inputActionA = "XaphanHelper_Hold";
-                            break;*/
+                            break;
                         case "EnergyTank":
                             UpgDesc_b = null;
                             break;

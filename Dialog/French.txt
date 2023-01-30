@@ -84,8 +84,8 @@
 	XaphanHelper_get_DroneTeleport_Desc= Permet de vous téléporter à votre drone
 	XaphanHelper_get_DroneTeleport_Desc_b= pendant que vous contrôlez le drone pour vous téléporter
 	XaphanHelper_get_JumpBoost_Name= BOOSTEUR DE SAUT
-	XaphanHelper_get_JumpBoost_Desc= Permet de sauter jusqu'à deux fois plus haut
-	XaphanHelper_get_JumpBoost_Desc_b= avant de sauter pour l'activer
+	XaphanHelper_get_JumpBoost_Desc= Permet au drone sauter jusqu'à 50% plus haut
+	XaphanHelper_get_JumpBoost_Desc_b= pour sauter plus haut
 	XaphanHelper_get_ScrewAttack_Name= ATTAQUE EN VRILLE
 	XaphanHelper_get_ScrewAttack_Desc= Détruit certains murs, augmente la vélocité et
 	XaphanHelper_get_ScrewAttack_Desc_b= Permet de passer à travers certains obstacles lors d'un saut

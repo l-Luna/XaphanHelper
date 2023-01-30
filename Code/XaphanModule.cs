@@ -113,7 +113,7 @@ namespace Celeste.Mod.XaphanHelper
             ClimbingKit,
             SpiderMagnet,
             DroneTeleport,
-            //JumpBoost,
+            JumpBoost,
             Bombs,
             MegaBombs,
             RemoteDrone,
@@ -171,10 +171,10 @@ namespace Celeste.Mod.XaphanHelper
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_DroneTeleport");
         }
 
-        /*public static bool JumpBoostCollected(Level level)
+        public static bool JumpBoostCollected(Level level)
         {
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Upgrade_JumpBoost");
-        }*/
+        }
 
         public static bool BombsCollected(Level level)
         {
@@ -496,7 +496,7 @@ namespace Celeste.Mod.XaphanHelper
             UpgradeHandlers[Upgrades.ClimbingKit] = new ClimbingKit();
             UpgradeHandlers[Upgrades.SpiderMagnet] = new SpiderMagnet();
             UpgradeHandlers[Upgrades.DroneTeleport] = new DroneTeleport();
-            //UpgradeHandlers[Upgrades.JumpBoost] = new JumpBoost();
+            UpgradeHandlers[Upgrades.JumpBoost] = new JumpBoost();
             UpgradeHandlers[Upgrades.Bombs] = new Bombs();
             UpgradeHandlers[Upgrades.MegaBombs] = new MegaBombs();
             UpgradeHandlers[Upgrades.RemoteDrone] = new RemoteDrone();
@@ -1572,7 +1572,7 @@ namespace Celeste.Mod.XaphanHelper
                 ModSettings.ClimbingKit = true;
                 ModSettings.SpiderMagnet = false;
                 ModSettings.DroneTeleport = false;
-                //ModSettings.JumpBoost = false;
+                ModSettings.JumpBoost = false;
                 ModSettings.ScrewAttack = false;
                 ModSettings.VariaJacket = false;
                 ModSettings.GravityJacket = false;
@@ -1683,7 +1683,7 @@ namespace Celeste.Mod.XaphanHelper
             ModSettings.ClimbingKit = false;
             ModSettings.SpiderMagnet = false;
             ModSettings.DroneTeleport = false;
-            //ModSettings.JumpBoost = false;
+            ModSettings.JumpBoost = false;
             ModSettings.ScrewAttack = false;
             ModSettings.VariaJacket = false;
             ModSettings.GravityJacket = false;
@@ -1719,7 +1719,7 @@ namespace Celeste.Mod.XaphanHelper
             bool setClimbingKit = false;
             bool setSpiderMagnet = false;
             bool setDroneTeleport = false;
-            //bool setJumpBoost = false;
+            bool setJumpBoost = false;
             bool setScrewAttack = false;
             bool setVariaJacket = false;
             bool setGravityJacket = false;
@@ -1751,7 +1751,7 @@ namespace Celeste.Mod.XaphanHelper
                         setClimbingKit = entity.Bool("onlyAllowClimbingKit") || entity.Bool("startWithClimbingKit");
                         setSpiderMagnet = entity.Bool("onlyAllowSpiderMagnet") || entity.Bool("startWithSpiderMagnet");
                         setDroneTeleport = entity.Bool("onlyAllowDroneTeleport") || entity.Bool("startWithDroneTeleport");
-                        //setJumpBoost = entity.Bool("onlyAllowJumpBoost") || entity.Bool("startWithJumpBoost");
+                        setJumpBoost = entity.Bool("onlyAllowJumpBoost") || entity.Bool("startWithJumpBoost");
                         setScrewAttack = entity.Bool("onlyAllowScrewAttack") || entity.Bool("startWithScrewAttack");
                         setVariaJacket = entity.Bool("onlyAllowVariaJacket") || entity.Bool("startWithVariaJacket");
                         setGravityJacket = entity.Bool("onlyAllowGravityJacket") || entity.Bool("startWithGravityJacket");
@@ -1772,7 +1772,7 @@ namespace Celeste.Mod.XaphanHelper
                         setWaveBeam = entity.Bool("onlyAllowWaveBeam") || entity.Bool("startWithWaveBeam");
                         setMissilesModule = entity.Bool("onlyAllowMissilesModule") || entity.Bool("startWithMissilesModule");
                         setSuperMissilesModule = entity.Bool("onlyAllowSuperMissilesModule") || entity.Bool("startWithSuperMissilesModule");
-                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport /*|| setJumpBoost*/ || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverJet || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissilesModule || setSuperMissilesModule;
+                        hasStartingUpgrades = setPowerGrip || setClimbingKit || setSpiderMagnet || setDroneTeleport || setJumpBoost || setScrewAttack || setVariaJacket || setGravityJacket || setBombs || setMegaBombs || setRemoteDrone || setGoldenFeather || setBinoculars || setEtherealDash || setPortableStation || setPulseRadar || setDashBoots || setSpaceJump || setHoverJet || setLightningDash || setLongBeam || setIceBeam || setWaveBeam || setMissilesModule || setSuperMissilesModule;
                         forceStartingUpgrades = entity.Bool("onlyAllowStartingUpgrades", hasStartingUpgrades ? true : false);
                         break;
                     }
@@ -1785,7 +1785,7 @@ namespace Celeste.Mod.XaphanHelper
             bool goldenClimbingKit = false;
             bool goldenSpiderMagnet = false;
             bool goldenDroneTeleport = false;
-            //bool goldenJumpBoost = false;
+            bool goldenJumpBoost = false;
             bool goldenScrewAttack = false;
             bool goldenVariaJacket = false;
             bool goldenGravityJacket = false;
@@ -1816,7 +1816,7 @@ namespace Celeste.Mod.XaphanHelper
                         goldenClimbingKit = entity.Bool("goldenStartWithClimbingKit");
                         goldenSpiderMagnet = entity.Bool("goldenStartWithSpiderMagnet");
                         goldenDroneTeleport = entity.Bool("goldenStartWithDroneTeleport");
-                        //goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
+                        goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
                         goldenScrewAttack = entity.Bool("goldenStartWithScrewAttack");
                         goldenVariaJacket = entity.Bool("goldenStartWithVariaJacket");
                         goldenGravityJacket = entity.Bool("goldenStartWithGravityJacket");
@@ -1866,11 +1866,11 @@ namespace Celeste.Mod.XaphanHelper
                     ModSettings.DroneTeleport = true;
                     level.Session.SetFlag("Upgrade_DroneTeleport", true);
                 }
-                /*if (setJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
+                if (setJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
                 {
                     ModSettings.JumpBoost = true;
                     level.Session.SetFlag("Upgrade_JumpBoost", true);
-                }*/
+                }
                 if (setScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
                 {
                     ModSettings.ScrewAttack = true;
@@ -2000,11 +2000,11 @@ namespace Celeste.Mod.XaphanHelper
                         ModSettings.DroneTeleport = true;
                         level.Session.SetFlag("Upgrade_DroneTeleport", true);
                     }
-                    /*if (JumpBoostCollected(level))
+                    if (JumpBoostCollected(level))
                     {
                         ModSettings.JumpBoost = true;
                         level.Session.SetFlag("Upgrade_JumpBoost", true);
-                    }*/
+                    }
                     if (BombsCollected(level))
                     {
                         ModSettings.Bombs = true;
@@ -2165,10 +2165,10 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         ModSettings.DroneTeleport = true;
                     }
-                    /*if (goldenJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
+                    if (goldenJumpBoost || level.Session.GetFlag("Upgrade_JumpBoost"))
                     {
                         ModSettings.JumpBoost = true;
-                    }*/
+                    }
                     if (goldenScrewAttack || level.Session.GetFlag("Upgrade_ScrewAttack"))
                     {
                         ModSettings.ScrewAttack = true;
@@ -3231,8 +3231,8 @@ namespace Celeste.Mod.XaphanHelper
                         ModSettings.SpiderMagnet = false;
                         level.Session.SetFlag("Upgrade_DroneTeleport", false);
                         ModSettings.DroneTeleport = false;
-                        /*level.Session.SetFlag("Upgrade_JumpBoost", false);
-                        ModSettings.JumpBoost = false;*/
+                        level.Session.SetFlag("Upgrade_JumpBoost", false);
+                        ModSettings.JumpBoost = false;
                         level.Session.SetFlag("Upgrade_ScrewAttack", false);
                         ModSettings.ScrewAttack = false;
                         level.Session.SetFlag("Upgrade_VariaJacket", false);
@@ -3300,7 +3300,7 @@ namespace Celeste.Mod.XaphanHelper
                         bool goldenClimbingKit = false;
                         bool goldenSpiderMagnet = false;
                         bool goldenDroneTeleport = false;
-                        //bool goldenJumpBoost = false;
+                        bool goldenJumpBoost = false;
                         bool goldenScrewAttack = false;
                         bool goldenVariaJacket = false;
                         bool goldenGravityJacket = false;
@@ -3331,7 +3331,7 @@ namespace Celeste.Mod.XaphanHelper
                                     goldenClimbingKit = entity.Bool("goldenStartWithClimbingKit");
                                     goldenSpiderMagnet = entity.Bool("goldenStartWithSpiderMagnet");
                                     goldenDroneTeleport = entity.Bool("goldenStartWithDroneTeleport");
-                                    //goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
+                                    goldenJumpBoost = entity.Bool("goldenStartWithJumpBoost");
                                     goldenScrewAttack = entity.Bool("goldenStartWithScrewAttack");
                                     goldenVariaJacket = entity.Bool("goldenStartWithVariaJacket");
                                     goldenGravityJacket = entity.Bool("goldenStartWithGravityJacket");
@@ -3376,11 +3376,11 @@ namespace Celeste.Mod.XaphanHelper
                             ModSettings.DroneTeleport = true;
                             level.Session.SetFlag("Upgrade_DroneTeleport", true);
                         }
-                        /*if (goldenJumpBoost)
+                        if (goldenJumpBoost)
                         {
                             ModSettings.JumpBoost = true;
                             level.Session.SetFlag("Upgrade_JumpBoost", true);
-                        }*/
+                        }
                         if (goldenScrewAttack)
                         {
                             ModSettings.ScrewAttack = true;

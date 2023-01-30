@@ -313,10 +313,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     controlB = XaphanModule.ModSettings.UseMiscItemSlot;
                     inputActionA = "XaphanHelper_ThenPress";
                     break;
-                /*case "JumpBoost":
-                    controlA = Input.MenuUp;
+                case "JumpBoost":
+                    controlA = Input.Jump;
                     inputActionA = "XaphanHelper_Hold";
-                    break;*/
+                    break;
                 case "MissilesModule":
                     poemTextC = null;
                     break;
