@@ -9,7 +9,7 @@ Version 1.0.53 :
 - Pressing down when holding a bomb or mega bomb should no longer spawn another bomb or mega bomb if the item button is pressed
 - The Remote Drone should now correctly respawn at the correct place after hitting a Change Respawn Trigger or a Custom Checkpoint
 - The Remote Drone can no longer die if the Invincible assist variant is active. It can still be destroyed manually
-- Fixed a bug preventing the game to redirect a player toward the correct chapter of a camapaign using a Merge Chapters Controller and no interlude when starting the campaign again if the player had saved his progress in chapter 2 or more of that campaign
+- Fixed a bug preventing the game to redirect a player toward the correct chapter of a camapaign with no interlude using a Merge Chapters Controller when starting the campaign again if the player had saved his progress in chapter 2 or more of that campaign
 
 Version 1.0.52 :
 - Fixed a bug soft-locking the game when selecting the 'Stay Here' option on the Warp selection menu when using the In-Game map
