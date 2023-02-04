@@ -94,11 +94,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
             this.directory = directory;
             this.lineColorA = lineColorA;
             this.lineColorB = lineColorB;
-            Add(saw = new Sprite(GFX.Game, directory + "/"));
+            if (string.IsNullOrEmpty(this.directory))
+            {
+                this.directory = "danger/XaphanHelper/Sawblade";
+            }
+            Add(saw = new Sprite(GFX.Game, this.directory + "/"));
             saw.AddLoop("saw", "saw", 0.01f);
             saw.CenterOrigin();
             saw.Play("saw");
-            Add(node = new Sprite(GFX.Game, directory + "/"));
+            Add(node = new Sprite(GFX.Game, this.directory + "/"));
             node.AddLoop("node", "node", 0.15f);
             node.CenterOrigin();
             node.Play("node");
