@@ -10,6 +10,7 @@ using MonoMod.Cil;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
+    [Tracked()]
     [CustomEntity("XaphanHelper/Sawblade")]
     class Sawblade : Entity
     {
@@ -121,23 +122,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (index == 0)
             {
-                Percent = 0f + startOffset;
+                if (startOffset != 0)
+                {
+                    SetPositionOnTrack(startOffset);
+                }
+                else
+                {
+                    Percent = 0f;
+                }
             }
             else
             {
-                Percent = spacingOffset + startOffset;
-            }
-            if (Percent > 1f)
-            {
-                float sectionPercent = Percent % 1;
-                currentNode = (int)(Percent - sectionPercent) % (nodes.Length - 1);
-                Percent = sectionPercent;
+                SetPositionOnTrack(spacingOffset);
             }
             UpdatePosition();
-            if (StopAtEachNode && index != 0)
-            {
-                Moving = false;
-            }
         }
 
         private void GenerateNodeInfo(bool Clockwise, bool generateTotalLength = false)
@@ -152,6 +150,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     totalLength += distance;
                 }
                 nodesInfo.Add(distance);
+            }
+        }
+
+        private void SetPositionOnTrack(float offset)
+        {
+            float targetDistance = totalLength * offset + (index != 0 ? totalLength * startOffset : 0);
+            float previousSectionsTotalDistance = 0;
+            int node = 0;
+            for (int i = 0; i < (nodesInfo.Count - 1); i++)
+            {
+                if (targetDistance > previousSectionsTotalDistance + nodesInfo[i])
+                {
+                    previousSectionsTotalDistance += nodesInfo[i];
+                    node++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (!SwapDirection && node == nodes.Length - 1)
+            {
+                node = 0;
+            }
+            currentNode = node;
+            float distanceOnCurrentSection = targetDistance - (previousSectionsTotalDistance);
+            Percent = distanceOnCurrentSection * 100 / nodesInfo[currentNode] / 100;
+            if (!SwapDirection && index != 0 && Percent >= 1f && currentNode == (nodes.Length - 2))
+            {
+                RemoveSelf();
             }
         }
 
