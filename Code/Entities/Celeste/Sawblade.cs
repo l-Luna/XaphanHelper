@@ -14,7 +14,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/Sawblade")]
     class Sawblade : Entity
     {
-        private Sprite saw;
+        private string Mode;
+        
+        public Sprite saw;
 
         private Sprite node;
 
@@ -22,7 +24,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Vector2[] nodes;
 
-        private int currentNode;
+        public int currentNode;
 
         public bool Moving = true;
 
@@ -32,13 +34,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public float Percent { get; private set; }
 
-        private bool Clockwise = true;
-
         private float TotalTime;
-
-        private bool SwapDirection;
-
-        private bool StopAtEachNode;
 
         private string stopFlag;
 
@@ -46,11 +42,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string resumeFlag;
 
+        private string moveFlag;
+
         private bool drawTrack;
 
         private bool swapped;
 
-        private float index;
+        private bool flagSwapped;
+
+        public float index;
 
         private int amount;
 
@@ -66,14 +66,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string lineColorB;
 
-        public Sawblade(EntityData data, Vector2 offset) : this(data.NodesWithPosition(offset), data.Attr("directory", "danger/XaphanHelper/Sawblade"), data.Float("radius", 12f), data.Bool("swapDirection", false), data.Float("totalTime", 2f),
-            data.Attr("stopFlag", ""), data.Attr("swapFlag", ""), data.Attr("resumeFlag", ""), data.Bool("drawTrack", true), 0,
-            data.Int("amount", 3), data.Float("startOffset", 0f), data.Float("spacingOffset", 0.5f), data.Bool("stopAtEachNode", false), data.Attr("lineColorA", "2A251F"), data.Attr("lineColorB", "C97F35"))
+        private int ID;
+
+        private int StartNode;
+
+        private float StartPercent;
+
+        public bool NodePaused;
+
+        public bool AtStartOfTrack;
+
+        public bool AtEndOfTrack;
+
+        public Sawblade(EntityData data, Vector2 offset, EntityID eid) : this(data.NodesWithPosition(offset), data.Attr("mode", "Restart"), data.Attr("directory", "danger/XaphanHelper/Sawblade"), data.Float("radius", 12f),
+            data.Float("totalTime", 2f), data.Attr("stopFlag", ""), data.Attr("swapFlag", ""), data.Attr("resumeFlag", ""), data.Attr("moveFlag", ""), data.Bool("drawTrack", true), 0, data.Int("amount", 3),
+            data.Float("startOffset", 0f), data.Float("spacingOffset", 0.5f), data.Attr("lineColorA", "2A251F"), data.Attr("lineColorB", "C97F35"), eid.ID)
         {
             
         }
 
-        public Sawblade(Vector2[] nodes, string directory, float radius, bool swapDirection, float totalTime, string stopFlag, string swapFlag, string resumeFlag, bool drawTrack, int index, int amount, float startOffset, float spacingOffset, bool stopAtEachNode, string lineColorA, string lineColorB)
+        public Sawblade(Vector2[] nodes, string mode, string directory, float radius, float totalTime, string stopFlag, string swapFlag, string resumeFlag, string moveFlag, bool drawTrack, int index, int amount, float startOffset, float spacingOffset, string lineColorA, string lineColorB, int id)
         {
             Tag = Tags.TransitionUpdate;
             Position = nodes[0];
@@ -81,20 +93,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Add(new PlayerCollider(OnPlayer));
             this.nodes = nodes;
             this.radius = radius;
-            SwapDirection = swapDirection;
+            Mode = mode;
             TotalTime = totalTime;
             this.stopFlag = stopFlag;
             this.swapFlag = swapFlag;
             this.resumeFlag = resumeFlag;
+            this.moveFlag = moveFlag;
             this.drawTrack = drawTrack;
             this.index = index;
             this.amount = amount;
             this.startOffset = startOffset;
             this.spacingOffset = spacingOffset;
-            StopAtEachNode = stopAtEachNode;
             this.directory = directory;
             this.lineColorA = lineColorA;
             this.lineColorB = lineColorB;
+            ID = id;
             if (string.IsNullOrEmpty(this.directory))
             {
                 this.directory = "danger/XaphanHelper/Sawblade";
@@ -112,14 +125,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            GenerateNodeInfo(Clockwise, true);
-            if (index == 0 && nodes.Count() > 1 && !StopAtEachNode)
+            if (Mode.Contains("Pause At Each Node"))
             {
-                for (int i = 1; i < amount; i++)
-                {
-                    Scene.Add(new Sawblade(nodes, directory, radius, SwapDirection, TotalTime, stopFlag, swapFlag, resumeFlag, false, i, amount, startOffset, spacingOffset * i, false, lineColorA, lineColorB));
-                }
+                NodePaused = true;
             }
+            GenerateNodeInfo(true);
             if (index == 0)
             {
                 if (startOffset != 0)
@@ -135,17 +145,24 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 SetPositionOnTrack(spacingOffset);
             }
+            if (index == 0 && nodes.Count() > 1)
+            {
+                for (int i = 1; i < amount; i++)
+                {
+                    Scene.Add(new Sawblade(nodes, Mode, directory, radius, TotalTime, stopFlag, swapFlag, resumeFlag, moveFlag, false, i, amount, startOffset, spacingOffset * i, lineColorA, lineColorB, ID));
+                }
+            }
             UpdatePosition();
         }
 
-        private void GenerateNodeInfo(bool Clockwise, bool generateTotalLength = false)
+        public void GenerateNodeInfo(bool generateTotalLength = false)
         {
             nodesInfo.Clear();
-            for (int i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < (nodes.Length - 1); i++)
             {
                 float distance = 0f;
-                distance = Vector2.Distance(nodes[i], nodes[Clockwise ? (i + 1) % nodes.Length : ((i - 1) % nodes.Length < 0) ? nodes.Length - 1 : (i - 1) % nodes.Length]);
-                if (generateTotalLength && i < (nodes.Length - 1))
+                distance = Vector2.Distance(nodes[i], nodes[(i + 1) % nodes.Length]);
+                if (generateTotalLength)
                 {
                     totalLength += distance;
                 }
@@ -170,14 +187,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
-            if (!SwapDirection && node == nodes.Length - 1)
+            if (Mode == "Restart" && node == nodes.Length - 1)
             {
                 node = 0;
             }
-            currentNode = node;
+            currentNode = StartNode = node;
             float distanceOnCurrentSection = targetDistance - (previousSectionsTotalDistance);
-            Percent = distanceOnCurrentSection * 100 / nodesInfo[currentNode] / 100;
-            if (!SwapDirection && index != 0 && Percent >= 1f && currentNode == (nodes.Length - 2))
+            Percent = StartPercent = distanceOnCurrentSection * 100 / nodesInfo[currentNode] / 100;
+            if (Mode == "Restart" && index != 0 && Percent >= 1f && currentNode == (nodes.Length - 2))
             {
                 RemoveSelf();
             }
@@ -185,8 +202,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public void UpdatePosition()
         {
-            var start = nodes[currentNode];
-            var end = nodes[Clockwise ? (currentNode + 1) % nodes.Length : ((currentNode - 1) % nodes.Length < 0) ? nodes.Length - 1 : (currentNode - 1) % nodes.Length] ;
+
+            Vector2 start = nodes[Math.Max(0, currentNode)];
+            Vector2 end = nodes[Math.Min(currentNode + 1, (nodes.Length - 1))];
             Position = Vector2.Lerp(start, end, Ease.Linear(Percent));
         }
 
@@ -194,71 +212,273 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             base.Update();
             alpha += Engine.DeltaTime * 4f;
-            if (!string.IsNullOrEmpty(swapFlag) && SceneAs<Level>().Session.GetFlag(swapFlag) && !swapped)
+            if (!string.IsNullOrEmpty(swapFlag))
             {
-                swapped = true;
-                GenerateNodeInfo(!Clockwise);
-                currentNode = Clockwise ? currentNode + 1 : currentNode - 1;
-                if (currentNode < 0)
-                {
-                    currentNode = nodes.Length - 1;
-                }
-                else if (currentNode > nodes.Length - 1)
-                {
-                    currentNode = 0;
-                }
-                Clockwise = !Clockwise;
-                Percent = 1 - Percent;
+                flagSwapped = SceneAs<Level>().Session.GetFlag(swapFlag);
             }
-            else if (!string.IsNullOrEmpty(swapFlag) && !SceneAs<Level>().Session.GetFlag(swapFlag) && swapped)
+            if (Mode == "Flag To Move" && !string.IsNullOrEmpty(moveFlag))
             {
-                swapped = false;
-                GenerateNodeInfo(!Clockwise);
-                currentNode = Clockwise ? currentNode + 1 : currentNode - 1;
-                if (currentNode < 0)
+                if (!SceneAs<Level>().Session.GetFlag(moveFlag))
                 {
-                    currentNode = nodes.Length - 1;
+                    swapped = true;
+                    if (AtEndOfTrack)
+                    {
+                        AtEndOfTrack = false;
+                    }
                 }
-                else if (currentNode > nodes.Length - 1)
+                else
                 {
-                    currentNode = 0;
+                    swapped = false;
+                    if (AtStartOfTrack)
+                    {
+                        AtStartOfTrack = false;
+                    }
                 }
-                Clockwise = !Clockwise;
-                Percent = 1 - Percent;
             }
-            if (!Moving ||nodes.Count() == 1 || (!string.IsNullOrEmpty(stopFlag) && SceneAs<Level>().Session.GetFlag(stopFlag)) || (StopAtEachNode && Percent == 0 && !string.IsNullOrEmpty(resumeFlag) && !SceneAs<Level>().Session.GetFlag(resumeFlag)))
+            if (!Moving ||nodes.Count() == 1 || (!string.IsNullOrEmpty(stopFlag) && SceneAs<Level>().Session.GetFlag(stopFlag)) || (NodePaused && !string.IsNullOrEmpty(resumeFlag) && !SceneAs<Level>().Session.GetFlag(resumeFlag)) || AtStartOfTrack || AtEndOfTrack)
             {
                 return;
             }
-            Percent = Calc.Approach(Percent, 1, Engine.DeltaTime / (nodesInfo[currentNode] * TotalTime / totalLength));
+            NodePaused = false;
+            if (!flagSwapped || Mode == "Flag To Move")
+            {
+                if (swapped)
+                {
+                    Percent = Calc.Approach(Percent, 0, Engine.DeltaTime / (nodesInfo[Math.Max(0, currentNode)] * TotalTime / totalLength));
+                }
+                else
+                {
+                    Percent = Calc.Approach(Percent, 1, Engine.DeltaTime / (nodesInfo[Math.Min(currentNode, (nodesInfo.Count - 1))] * TotalTime / totalLength));
+                }
+            }
+            else
+            {
+                if (swapped)
+                {
+                    Percent =  Calc.Approach(Percent, 1, Engine.DeltaTime / (nodesInfo[Math.Min(currentNode, (nodesInfo.Count - 1))] * TotalTime / totalLength));
+                }
+                else
+                {
+                    Percent = Calc.Approach(Percent, 0, Engine.DeltaTime / (nodesInfo[Math.Max(0, currentNode)] * TotalTime / totalLength));
+                }
+            }
             UpdatePosition();
             if (Percent >= 1f)
             {
-                currentNode = Clockwise ? (currentNode + 1) % nodes.Length : ((currentNode - 1) % nodes.Length < 0) ? nodes.Length - 1 : (currentNode - 1) % nodes.Length;
-                if (!SwapDirection && currentNode == nodes.Length - 1 && !swapped)
+                if (!swapped)
                 {
-                    currentNode = 0;
+                    if (Mode == "Restart")
+                    {
+                        if (currentNode < nodes.Length - 2)
+                        {
+                            currentNode++;
+                        }
+                        else
+                        {
+                            currentNode = 0;
+                        }
+                        Percent = 0f;
+                    }
+                    else if (Mode.Contains("Back And Forth"))
+                    {
+                        if (currentNode < (nodes.Length - 2))
+                        {
+                            currentNode++;
+                            Percent = 0f;
+                        }
+                        else
+                        {
+                            if (Mode.Contains("All Sawblades"))
+                            {
+                                foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                                {
+                                    if (blade.ID == ID)
+                                    {
+                                        blade.swapped = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swapped = true;
+                            }
+                        }
+                    }
+                    else if (Mode == "Flag To Move" && SceneAs<Level>().Session.GetFlag(moveFlag))
+                    {
+                        if (currentNode < nodes.Length - 2)
+                        {
+                            currentNode++;
+                            Percent = 0f;
+                        }
+                        else
+                        {
+                            Percent = 1f;
+                            foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                            {
+                                if (blade.ID == ID)
+                                {
+                                    blade.AtEndOfTrack = true;
+                                }
+                            }
+                        }
+                    }
                 }
-                else if (!SwapDirection && currentNode == 0 && swapped)
+                if (flagSwapped)
                 {
-                    currentNode = nodes.Length - 1;
+
+                    if (currentNode < (nodes.Length - 2))
+                    {
+                        currentNode++;
+                        Percent = 0f;
+                    }
+                    else if (Mode.Contains("Back And Forth"))
+                    {
+                        if (Mode.Contains("All Sawblades"))
+                        {
+                            foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                            {
+                                if (blade.ID == ID)
+                                {
+                                    blade.swapped = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            swapped = false;
+                        }
+                    }
                 }
-                else if (SwapDirection && currentNode == (nodes.Length - 1))
-                {
-                    GenerateNodeInfo(!Clockwise);
-                    currentNode = nodes.Length - 1;
-                    Clockwise = !Clockwise;
-                }
-                else if (SwapDirection && currentNode == 0)
-                {
-                    GenerateNodeInfo(!Clockwise);
-                    currentNode = 0;
-                    Clockwise = !Clockwise;
-                }
-                Percent = 0f;
-                if (StopAtEachNode && !string.IsNullOrEmpty(resumeFlag))
+                if (Mode.Contains("Pause At Each Node") && !string.IsNullOrEmpty(resumeFlag))
                 {
                     SceneAs<Level>().Session.SetFlag(resumeFlag, false);
+                    foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                    {
+                        if (blade.ID == ID)
+                        {
+                            blade.NodePaused = true;
+                        }
+                    }
+                }
+            }
+            else if (Percent <= 0)
+            {
+                if (swapped)
+                {
+                    if (Mode == "Restart")
+                    {
+                        if (currentNode > 0)
+                        {
+                            currentNode--;
+                        }
+                        else
+                        {
+                            currentNode = (nodes.Length - 2);
+                        }
+                        Percent = 1f;
+                    }
+                    else if (Mode.Contains("Back And Forth"))
+                    {
+                        if (currentNode > 0)
+                        {
+                            currentNode--;
+                            Percent = 1f;
+                        }
+                        else
+                        {
+                            if (Mode.Contains("All Sawblades"))
+                            {
+                                foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                                {
+                                    if (blade.ID == ID)
+                                    {
+                                        blade.swapped = false;
+                                        blade.currentNode = blade.StartNode;
+                                        blade.Percent = blade.StartPercent;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swapped = false;
+                            }
+                        }
+                    }
+                    else if (Mode == "Flag To Move" && !SceneAs<Level>().Session.GetFlag(moveFlag))
+                    {
+                        if (currentNode > 0)
+                        {
+                            currentNode--;
+                            Percent = 1f;
+                        }
+                        else
+                        {
+                            Percent = 0f;
+                            foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                            {
+                                if (blade.ID == ID)
+                                {
+                                    blade.currentNode = blade.StartNode;
+                                    blade.Percent = blade.StartPercent;
+                                    blade.AtStartOfTrack = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (flagSwapped)
+                {
+                    if (Mode == "Restart")
+                    {
+                        if (currentNode > 0)
+                        {
+                            currentNode--;
+                        }
+                        else
+                        {
+                            currentNode = nodes.Length - 2;
+                        }
+                        Percent = 1f;
+                    }
+                    else if (Mode.Contains("Back And Forth"))
+                    {
+                        if (currentNode > 0)
+                        {
+                            currentNode--;
+                            Percent = 1f;
+                        }
+                        else
+                        {
+                            if (Mode.Contains("All Sawblades"))
+                            {
+                                foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                                {
+                                    if (blade.ID == ID)
+                                    {
+                                        blade.swapped = true;
+                                        blade.currentNode = blade.StartNode;
+                                        blade.Percent = blade.StartPercent;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                swapped = true;
+                            }
+                        }
+                    }
+                }
+                if (Mode.Contains("Pause At Each Node") && !string.IsNullOrEmpty(resumeFlag))
+                {
+                    SceneAs<Level>().Session.SetFlag(resumeFlag, false);
+                    foreach (Sawblade blade in SceneAs<Level>().Tracker.GetEntities<Sawblade>())
+                    {
+                        if (blade.ID == ID)
+                        {
+                            blade.NodePaused = true;
+                        }
+                    }
                 }
             }
         }
