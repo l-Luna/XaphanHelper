@@ -2294,8 +2294,6 @@ namespace Celeste.Mod.XaphanHelper
             ModSaveData.CountdownStartRoom = "";
             ModSaveData.CountdownSpawn = new Vector2();
             ModSaveData.CountdownUseLevelWipe = false;
-            // ModSaveData.GeneratedVisitedLobbyMapTiles.Clear();
-            // ModSaveData.GeneratedVisitedLobbyMapTiles2.Clear();
             ModSaveData.BagUIId1 = 0;
             ModSaveData.BagUIId2 = 0;
             ModSaveData.LoadedPlayer = false;

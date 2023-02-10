@@ -173,7 +173,6 @@
 	XaphanHelper_Warp_Select_Destination= - Select your destination -
 	XaphanHelper_Warp_Stay= Stay here
 	XaphanHelper_Warp_None= You need to unlock at least one other{n}Warp Station before you can use them
-	XaphanHelper_Warp_Lobby_None= You need to find at least one other{n}Bench before you can fast travel
 
 #Mod Options Menu
 	ModOptions_XaphanModule_ShowMiniMap= Show Minimap
@@ -239,10 +238,6 @@
 	XaphanHelper_UI_progress_subarea= Progress: Current Sub Area
 	XaphanHelper_UI_showWorldMap= Show World Map
 	XaphanHelper_UI_showAreaMap= Show Area Map
-	XaphanHelper_UI_changeDestination= Change Destination
-	XaphanHelper_UI_changeLobby= Change Lobby
-	XaphanHelper_UI_fastTravel= Fast Travel
-	XaphanHelper_UI_zoom= Change Zoom
 	XaphanHelper_UI_confirm= Confirm
 	Xaphanhelper_UI_Arms= ARMS
 	Xaphanhelper_UI_Legs= LEGS

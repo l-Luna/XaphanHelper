@@ -173,8 +173,6 @@
 	XaphanHelper_Warp_Select_Destination= - Selectionnez votre destination -
 	XaphanHelper_Warp_Stay= Rester ici
 	XaphanHelper_Warp_None= Vous devez débloquer au moins une autre{n}station de téléportation avant de pouvoir les utiliser
-	XaphanHelper_Warp_Lobby_None= Vous devez trouver au moins un autre{n}banc avant de pouvoir voyager rapidement
-
 
 #Mod Options Menu
 	ModOptions_XaphanModule_ShowMiniMap= Afficher la mini carte
@@ -226,7 +224,6 @@
 	XaphanHelper_UI_map= Carte
 	XaphanHelper_UI_mapExplored= Carte explorée :
 	XaphanHelper_UI_itemsCollected= Items collectés :
-	XaphanHelper_UI_items= Items
 	XaphanHelper_UI_skip= Passer
 	XaphanHelper_UI_abilities= Capacités
 	XaphanHelper_UI_activate= Activer
@@ -241,10 +238,6 @@
 	XaphanHelper_UI_progress_subarea= Progression : sous-zone actuelle
 	XaphanHelper_UI_showWorldMap= Afficher carte du monde
 	XaphanHelper_UI_showAreaMap= Afficher carte de la zone
-	XaphanHelper_UI_changeDestination= Changer destination
-	XaphanHelper_UI_changeLobby= Changer difficulté
-	XaphanHelper_UI_fastTravel= Voyage rapide
-	XaphanHelper_UI_zoom= Changer le zoom
 	XaphanHelper_UI_confirm= Confirmer
 	Xaphanhelper_UI_Arms= BRAS
 	Xaphanhelper_UI_Legs= JAMBES

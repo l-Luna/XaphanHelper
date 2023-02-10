@@ -183,10 +183,6 @@ namespace Celeste.Mod.XaphanHelper
 
         public Dictionary<string, HashSet<EntityID>> SavedSessionStrawberries = new();
 
-        // Lobbies variables
-
-        public Dictionary<string, string> VisitedLobbyPositions = new();
-
         // Metroid variables
 
         public Dictionary<string, int> MaxHealth = new();

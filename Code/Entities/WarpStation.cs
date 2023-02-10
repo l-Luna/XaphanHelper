@@ -14,10 +14,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
     {
         private Sprite warpStationSprite;
 
-        private Sprite PlayerSprite;
-
-        private Sprite PlayerHairSprite;
-
         private WarpBeam beam;
 
         private TalkComponent talker;
@@ -45,8 +41,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private string warpId;
 
         private Level level => (Level)Scene;
-
-        private bool InSJLobby => SceneAs<Level>()?.Session.Area.LevelSet == "StrawberryJam2021/0-Lobbies";
 
         public WarpStation(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: true)
         {
@@ -78,14 +72,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Activate();
             }
-
-            if (InSJLobby)
+            Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
             {
-                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
-                {
-                    PlayerMustBeFacing = false
-                });
-            }
+                PlayerMustBeFacing = false
+            });
         }
 
         public override void Update()
@@ -272,28 +262,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return player.DummyWalkToExact((int)X + 16, false, 1f, true);
                 player.Facing = Facings.Right;
 
-                if (InSJLobby)
-                {
-                    player.Sprite.Visible = player.Hair.Visible = false;
-
-                    Add(PlayerSprite = new Sprite(GFX.Game, "characters/Xaphan/player/"));
-                    PlayerSprite.Add("sit", "sitBench", 0.08f);
-                    PlayerSprite.CenterOrigin();
-                    PlayerSprite.Position += new Vector2(16f, -16f);
-                    Add(PlayerHairSprite = new Sprite(GFX.Game, "characters/Xaphan/player/"));
-                    PlayerHairSprite.Add("sit", "sitBenchHair", 0.08f);
-                    PlayerHairSprite.CenterOrigin();
-                    PlayerHairSprite.Position += new Vector2(16f, -16f);
-                    PlayerHairSprite.Color = player.Hair.Color;
-                    PlayerSprite.Play("sit");
-                    PlayerHairSprite.Play("sit");
-
-                    while (PlayerSprite.Animating)
-                    {
-                        yield return null;
-                    }
-                }
-
                 WarpScreen warpScreen;
                 level.Add(warpScreen = new WarpScreen(warpId, confirmSfx, wipeType, wipeDuration));
 
@@ -302,8 +270,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     yield return null;
                 }
 
-                PlayerSprite?.RemoveSelf();
-                PlayerHairSprite?.RemoveSelf();
                 player.Sprite.Visible = player.Hair.Visible = true;
             }
         }
@@ -316,14 +282,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 level.Add(beam = new WarpBeam(Position + new Vector2(16, 0), beamColor));
             }
-            if (!InSJLobby)
-            {
-                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
-                {
-                    PlayerMustBeFacing = false
-                });
-            }
-
             WarpManager.ActivateWarp(warpId);
         }
 
@@ -332,11 +290,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             activated = false;
             warpStationSprite.Play("idle");
             beam?.RemoveSelf();
-            if (!InSJLobby)
-            {
-                talker?.RemoveSelf();
-            }
-
             WarpManager.DeactivateWarp(warpId);
         }
 

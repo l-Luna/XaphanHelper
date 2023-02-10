@@ -82,7 +82,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Focused = false;
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
-            if (!mapData.HasEntity("XaphanHelper/LobbyMapController") && (SceneAs<Level>().Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/InGameMapController")))
+            if ((SceneAs<Level>().Session.Level == warp.Room && !mapData.HasEntity("XaphanHelper/InGameMapController")))
             {
                 WarpScreen warpScreen = SceneAs<Level>().Tracker.GetEntity<WarpScreen>();
                 if (warpScreen != null)
@@ -91,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     warpScreen.StartDelay();
                 }
             }
-            WarpManager.Teleport(warp, (mapData.HasEntity("XaphanHelper/LobbyMapController") && warp.ID == CurrentWarp ? "Fade" : WipeType), WipeDuration);
+            WarpManager.Teleport(warp,  WipeType, WipeDuration);
         }
 
         public class WarpButton : Button

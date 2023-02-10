@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.Managers;
-using Celeste.Mod.XaphanHelper.UI_Elements.LobbyMap;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
@@ -28,20 +26,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private float progressWiggleDelay;
         private bool displayIcon;
 
-        private static readonly string changeDestinationLabel = Dialog.Clean("XaphanHelper_UI_changeDestination");
-        private static readonly string changeLobbyLabel = Dialog.Clean("XaphanHelper_UI_changeLobby");
-        private static readonly string closeLabel = Dialog.Clean("XaphanHelper_UI_close");
-        private static readonly string confirmLabel = Dialog.Clean("XaphanHelper_UI_confirm");
-        private static readonly string zoomLabel = Dialog.Clean("XaphanHelper_UI_zoom");
-        private readonly Wiggler closeWiggle;
-        private readonly Wiggler zoomWiggle;
-        private readonly Wiggler confirmWiggle;
-        private readonly Wiggler lobbyWiggle;
-        private LobbyMapDisplay lobbyMapDisplay;
-        private float closeWiggleDelay;
-        private float zoomWiggleDelay;
-        private float confirmWiggleDelay;
-
         private readonly string confirmSfx;
         private readonly string wipeType;
         private readonly float wipeDuration;
@@ -63,10 +47,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Depth = -10002;
 
             Add(progressWiggle = Wiggler.Create(0.4f, 4f));
-            Add(closeWiggle = Wiggler.Create(0.4f, 4f));
-            Add(zoomWiggle = Wiggler.Create(0.4f, 4f));
-            Add(confirmWiggle = Wiggler.Create(0.4f, 4f));
-            Add(lobbyWiggle = Wiggler.Create(0.4f, 4f));
         }
 
         public WarpInfo SelectedWarp => warpMenu.SelectedWarp;
@@ -128,45 +108,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Draw.Rect(new Vector2(90, 1020), 940, 8, Color.White);
             }
 
-            if (lobbyMapDisplay != null)
-            {
-                Draw.Rect(new Vector2(-10, -10), 1940, 182, Color.Black);
-                Draw.Rect(new Vector2(-10, 172), 100, 856, Color.Black);
-                Draw.Rect(new Vector2(1830, 172), 100, 856, Color.Black);
-                Draw.Rect(new Vector2(-10, 1028), 1940, 62, Color.Black);
-                Draw.Rect(new Vector2(90, 172), 1740, 8, Color.White);
-                Draw.Rect(new Vector2(90, 180), 10, 840, Color.White);
-                Draw.Rect(new Vector2(1820, 180), 10, 840, Color.White);
-                Draw.Rect(new Vector2(90, 1020), 1740, 8, Color.White);
-            }
-
             float colorAlpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(SceneAs<Level>().FormationBackdrop).Get("fade") : 1f;
 
             if (!string.IsNullOrEmpty(title))
             {
                 ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray * colorAlpha, 4f, Color.DarkSlateBlue * colorAlpha, 2f, Color.Black * colorAlpha);
-                if (lobbyMapDisplay == null)
+                if (currentMenu > 0)
                 {
-                    if (currentMenu > 0)
-                    {
-                        arrowTex.DrawCentered(new Vector2(960f - ActiveFont.Measure(title).X - 100f, 80f), Color.White * colorAlpha);
-                    }
-                    if (currentMenu < warpsPerArea.Count - 1)
-                    {
-                        arrowTex.DrawCentered(new Vector2(960f + ActiveFont.Measure(title).X + 100f, 80f), Color.White * colorAlpha , 1f, (float)Math.PI);
-                    }
+                    arrowTex.DrawCentered(new Vector2(960f - ActiveFont.Measure(title).X - 100f, 80f), Color.White * colorAlpha);
                 }
-            }
-
-            if (lobbyMapDisplay?.Scene == null)
-            {
-                if (warpMenu.LastPossibleSelection > 10 && warpMenu.Selection <= ActiveWarps.Count - 5)
+                if (currentMenu < warpsPerArea.Count - 1)
                 {
-                    arrowTex.DrawCentered(new Vector2(X, 1024f), Color.White, 1f, (float)Math.PI * 3f / 2f);
-                }
-                if (warpMenu.Selection > 5 && warpMenu.LastPossibleSelection > 10)
-                {
-                    arrowTex.DrawCentered(new Vector2(X, 175f), Color.White, 1f, (float)Math.PI / 2f);
+                    arrowTex.DrawCentered(new Vector2(960f + ActiveFont.Measure(title).X + 100f, 80f), Color.White * colorAlpha, 1f, (float)Math.PI);
                 }
             }
 
@@ -191,33 +144,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Vector2 iconPos = new(mapDisplay.Grid.Left + 441f, mapDisplay.Grid.Top + 401f);
                     playerIcon.Draw(iconPos);
                     playerIconHair.Draw(iconPos, Vector2.Zero, Scene.Tracker.GetEntity<Player>()?.Hair.Color ?? Color.White);
-                }
-            }
-
-            if (lobbyMapDisplay != null)
-            {
-                float inputEase = 0f;
-                inputEase = Calc.Approach(inputEase, 1, Engine.DeltaTime * 4f);
-                if (inputEase > 0f)
-                {
-                    float scale = 0.5f;
-                    if (warpMenu.Items.Count > 2)
-                    {
-                        DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f), changeDestinationLabel, Input.MenuUp, Input.MenuDown, scale, true, true, 1f, warpMenu.Current.SelectWiggler.Value * 0.05f);
-                    }
-                    if (currentMenu > 0 || currentMenu < warpsPerArea.Count - 1)
-                    {
-                        DoubleButtonUI.Render(new Vector2(100f + DoubleButtonUI.Width(changeLobbyLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 1055f) + (warpMenu.Items.Count > 2 ? new Vector2(32f + DoubleButtonUI.Width(changeDestinationLabel, Input.MenuUp, Input.MenuDown) / 2 - 8f, 0f) : Vector2.Zero), changeLobbyLabel, Input.MenuLeft, Input.MenuRight, scale, currentMenu > 0, currentMenu < warpsPerArea.Count - 1, 1f, lobbyWiggle.Value * 0.05f);
-                    }
-
-                    float num = ButtonUI.Width(closeLabel, Input.MenuCancel);
-                    float num2 = ButtonUI.Width(confirmLabel, Input.MenuConfirm);
-                    Vector2 position = new(1830f, 1055f);
-                    ButtonUI.Render(position, closeLabel, Input.MenuCancel, scale, 1f, closeWiggle.Value * 0.05f);
-                    position.X -= num / 2 + 32;
-                    ButtonUI.Render(position, confirmLabel, Input.MenuConfirm, scale, 1f, confirmWiggle.Value * 0.05f);
-                    position.X -= num2 / 2 + 32;
-                    ButtonUI.Render(position, zoomLabel, Input.MenuJournal, scale, 1f, zoomWiggle.Value * 0.05f);
                 }
             }
         }
@@ -264,17 +190,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 mapProgressDisplay?.RemoveSelf();
             }
 
-            if (mapData.HasEntity("XaphanHelper/LobbyMapController"))
-            {
-                warpMenu.Visible = false;
-                usingMap = true;
-                Add(new Coroutine(LobbyMapRoutine()));
-            }
-            else
-            {
-                lobbyMapDisplay?.RemoveSelf();
-                warpMenu.Visible = true;
-            }
+            warpMenu.Visible = true;
 
             SceneAs<Level>().FormationBackdrop.Display = !usingMap;
         }
@@ -284,7 +200,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             warpMenu.Close();
             mapDisplay?.RemoveSelf();
             mapProgressDisplay?.RemoveSelf();
-            lobbyMapDisplay?.RemoveSelf();
             SceneAs<Level>().FormationBackdrop.Display = false;
             Visible = false;
         }
@@ -313,7 +228,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Audio.Play(SFX.ui_game_unpause);
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
-            if (!mapData.HasEntity("XaphanHelper/LobbyMapController") && !mapData.HasEntity("XaphanHelper/InGameMapController"))
+            if (!mapData.HasEntity("XaphanHelper/InGameMapController"))
             {
                 Level level = Scene as Level;
                 UninitializeScreen();
@@ -349,7 +264,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             MapData mapData = AreaData.Areas[SceneAs<Level>().Session.Area.ID].Mode[0].MapData;
             warpMenu.Focused = false;
 
-            if (mapData.HasEntity("XaphanHelper/InGameMapController") || mapData.HasEntity("XaphanHelper/LobbyMapController"))
+            if (mapData.HasEntity("XaphanHelper/InGameMapController"))
             {
                 yield return new FadeWipe(Scene, false)
                 {
@@ -395,23 +310,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
         }
 
-        private IEnumerator LobbyMapRoutine()
-        {
-            int zoomLevel = lobbyMapDisplay?.ZoomLevel ?? LobbyMapDisplay.DefaultZoomLevel;
-            lobbyMapDisplay?.Finished();
-            SceneAs<Level>()?.Tracker.GetEntity<LobbyMapController>()?.VisitManager.Save();
-            Scene.Add(lobbyMapDisplay = new LobbyMapDisplay(this, SelectedWarp.AreaId, SelectedWarp.Room, zoomLevel));
-            yield return null;
-        }
-
-        public int currentLobbyHeartAnimation = 0;
-
         private void UpdateMenu()
         {
             progressWiggleDelay -= Engine.DeltaTime;
-            closeWiggleDelay -= Engine.DeltaTime;
-            zoomWiggleDelay -= Engine.DeltaTime;
-            confirmWiggleDelay -= Engine.DeltaTime;
 
             if (Scene.OnRawInterval(0.3f))
             {
@@ -425,31 +326,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             if (Input.MenuLeft.Pressed && currentMenu > 0)
             {
-                lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_down");
-                if (lobbyMapDisplay?.heartDisplay != null)
-                {
-                    currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
-                }
-                /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
-                    currentMenu--;
-                    InitializeScreen();
-                })));*/
                 currentMenu--;
                 InitializeScreen();
             }
             else if (Input.MenuRight.Pressed && currentMenu < warpsPerArea.Count - 1)
             {
-                lobbyWiggle?.Start();
                 Audio.Play("event:/ui/main/rollover_up");
-                if (lobbyMapDisplay?.heartDisplay != null)
-                {
-                    currentLobbyHeartAnimation = lobbyMapDisplay.heartDisplay.Heart.CurrentAnimationFrame;
-                }
-                /*Add(new Coroutine(TransitionRoutine(onFadeOut: () => {
-                    currentMenu++;
-                    InitializeScreen();
-                })));*/
                 currentMenu++;
                 InitializeScreen();
             }
@@ -469,24 +352,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         progressWiggle.Start();
                         progressWiggleDelay = 0.5f;
-                    }
-                }
-                if (lobbyMapDisplay != null)
-                {
-                    if (Input.MenuCancel.Check && closeWiggleDelay <= 0f)
-                    {
-                        closeWiggle.Start();
-                        closeWiggleDelay = 0.5f;
-                    }
-                    if (Input.MenuJournal.Check && zoomWiggleDelay <= 0f)
-                    {
-                        zoomWiggle.Start();
-                        zoomWiggleDelay = 0.5f;
-                    }
-                    if (Input.MenuConfirm.Check && confirmWiggleDelay <= 0f)
-                    {
-                        confirmWiggle.Start();
-                        confirmWiggleDelay = 0.5f;
                     }
                 }
             }
