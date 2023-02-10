@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Controllers;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -8,7 +7,6 @@ using Monocle;
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
-    [CustomEntity("XaphanHelper/Slope")]
     class FakePlayerPlatform : Solid
     {
         private Vector2 StartPosition;

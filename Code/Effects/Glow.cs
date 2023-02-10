@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 using CelesteTags = Celeste.Tags;
 
 namespace Celeste.Mod.XaphanHelper.Effects
 {
-    [CustomEntity("XaphanHelper/Glow")]
     public class Glow : Backdrop
     {
         [Tracked(true)]

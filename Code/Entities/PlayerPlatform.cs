@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Celeste.Mod.XaphanHelper.Upgrades;
@@ -11,7 +10,6 @@ using Monocle;
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
-    [CustomEntity("XaphanHelper/Slope")]
     class PlayerPlatform : Solid
     {
         private Sprite PlayerSprite;

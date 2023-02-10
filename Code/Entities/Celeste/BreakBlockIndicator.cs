@@ -1,12 +1,9 @@
-﻿using Celeste.Mod.Entities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Monocle;
-using static Monocle.ComponentList;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
-    [CustomEntity("XaphanHelper/BreakBlockIndicator")]
     public class BreakBlockIndicator : Entity
     {
         public Sprite blockType;
