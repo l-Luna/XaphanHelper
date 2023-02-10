@@ -105,7 +105,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private static void onLevelLoad(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
         {
-            if (XaphanModule.useUpgrades)
+            if (XaphanModule.useUpgrades && !XaphanModule.useMetroidGameplay)
             {
                 getStaminaData(level);
             }
@@ -118,7 +118,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 cursor.EmitDelegate<Func<float, float>>(orig =>
                 {
-                    if (XaphanModule.useUpgrades)
+                    if (XaphanModule.useUpgrades && !XaphanModule.useMetroidGameplay)
                     {
                         return determineBaseStamina();
                     }
@@ -130,7 +130,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private static void modRefillStamina(On.Celeste.Player.orig_RefillStamina orig, Player self)
         {
             orig.Invoke(self);
-            if (XaphanModule.useUpgrades)
+            if (XaphanModule.useUpgrades && !XaphanModule.useMetroidGameplay)
             {
                 self.Stamina = determineBaseStamina();
             }
@@ -155,7 +155,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private static void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
         {
             orig(self);
-            if (XaphanModule.useUpgrades)
+            if (XaphanModule.useUpgrades && !XaphanModule.useMetroidGameplay)
             {
                 bool sliding = false;
                 player = self.Tracker.GetEntity<Player>();
