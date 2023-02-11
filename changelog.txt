@@ -1,3 +1,6 @@
+Version 1.0.54 :
+- Added a debug command : reset_campaign
+
 Version 1.0.53 :
 - Added back the Jump Boost ability, usable by the Remote Drone and allowing it to jump up to 50% higher
 - The Hover Boot ability is now only usable by the Remote Drone and has been renamed "Hover Jet"

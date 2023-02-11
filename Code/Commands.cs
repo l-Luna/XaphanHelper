@@ -404,5 +404,74 @@ namespace Celeste.Mod.XaphanHelper
                 XaphanModule.ModSaveData.DroneFireRateUpgrades.Remove(value);
             }
         }
+
+        // General Commands
+
+        [Command("reset_campaign", "Delete all progress on the current campaign and restart it from the beggining (Campaigns that use a Merge Chapter Controller only)")]
+        public static void Cmd_Reset_Campaign()
+        {
+            if (XaphanModule.isInLevel && XaphanModule.useMergeChaptersController)
+            {
+                Cmd_Clear_InGameMap(true, true);
+                Cmd_Clear_Warps();
+                Cmd_Remove_Upgrades();
+                Cmd_Reset_Collectables_Upgrades();
+
+                XaphanModule.ModSaveData.SavedRoom.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedChapter.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedSpawn.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedLightingAlphaAdd.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedBloomBaseAdd.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedCoreMode.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedMusic.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedAmbience.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedNoLoadEntities.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedTime.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedFromBeginning.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedSesionFlags.Remove(level.Session.Area.LevelSet);
+                XaphanModule.ModSaveData.SavedSessionStrawberries.Remove(level.Session.Area.LevelSet);
+                List<string> FlagsToRemove = new();
+                List<string> CutscenesToRemove = new();
+                List<string> GlobalFlagsToRemove = new();
+                foreach (string savedFlag in XaphanModule.ModSaveData.SavedFlags)
+                {
+                    if (savedFlag.Contains(level.Session.Area.LevelSet) && savedFlag != "Xaphan/0_Skip_Vignette")
+                    {
+                        FlagsToRemove.Add(savedFlag);
+                    }
+                }
+                foreach (string cutscene in XaphanModule.ModSaveData.WatchedCutscenes)
+                {
+                    if (cutscene.Contains(level.Session.Area.LevelSet))
+                    {
+                        CutscenesToRemove.Add(cutscene);
+                    }
+                }
+                foreach (string globalFlag in XaphanModule.ModSaveData.GlobalFlags)
+                {
+                    if (globalFlag.Contains(level.Session.Area.LevelSet))
+                    {
+                        GlobalFlagsToRemove.Add(globalFlag);
+                    }
+                }
+                foreach (string value in FlagsToRemove)
+                {
+                    XaphanModule.ModSaveData.SavedFlags.Remove(value);
+                }
+                foreach (string value in CutscenesToRemove)
+                {
+                    XaphanModule.ModSaveData.WatchedCutscenes.Remove(value);
+                }
+                foreach (string value in GlobalFlagsToRemove)
+                {
+                    XaphanModule.ModSaveData.GlobalFlags.Remove(value);
+                }
+                LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (XaphanModule.MergeChaptersControllerKeepPrologue ? 1 : 0), AreaMode.Normal)), fromSaveData: false);
+            }
+            else
+            {
+                Engine.Commands.Log("You are not currently in a campaign, or this campaign do not use a Merge Chapter Controller. Aborting...");
+            }
+        }
     }
 }

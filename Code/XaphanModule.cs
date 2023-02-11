@@ -100,6 +100,8 @@ namespace Celeste.Mod.XaphanHelper
 
         private string lastLevelSet;
 
+        public static bool isInLevel = false;
+
         public static bool CanOpenMap(Level level)
         {
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || ModSettings.SpeedrunMode ? true : false;
@@ -1471,6 +1473,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private void onLevelLoad(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
         {
+            isInLevel = true;
             string room = level.Session.Level;
             string Prefix = level.Session.Area.GetLevelSet();
             int chapterIndex = level.Session.Area.ChapterIndex == -1 ? 0 : level.Session.Area.ChapterIndex;
@@ -2301,6 +2304,8 @@ namespace Celeste.Mod.XaphanHelper
             minimapEnabled = false;
             TriggeredCountDown = false;
             SaveSettings();
+
+            isInLevel = false;
         }
 
         private static void onCreatePauseMenuButtons(Level level, TextMenu menu, bool minimal)
