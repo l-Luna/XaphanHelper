@@ -214,6 +214,10 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                 {
                     Player player2 = level.Tracker.GetEntity<Player>();
                     player2.Position = spawnPosition;
+                    if (XaphanModule.useMergeChaptersController && XaphanModule.MergeChaptersControllerMode == "Warps")
+                    {
+                        level.Session.RespawnPoint = level.GetSpawnPoint(spawnPosition);
+                    }
                     if (wakeUpAnim)
                     {
                         player2.StateMachine.State = 11;
