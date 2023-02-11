@@ -111,9 +111,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 lengths[i] = lengths[i - 1] + Vector2.Distance(nodes[i - 1], nodes[i]);
             }
             speed = speedMult / lengths[lengths.Length - 1];
-            if (startPercent == -1f)
+            if (startPercent == -1f && index != 0)
             {
-                if ((float)index * spacingOffset < 1f)
+                if (((float)index - 1) * spacingOffset < 1f)
                 {
                     percent = ((float)index - 1) * spacingOffset;
                 }
