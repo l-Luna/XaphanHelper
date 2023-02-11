@@ -89,6 +89,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public int CurrentSuperMissiles;
 
+        private Coroutine DestroyRoutine = new();
+
         private static FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -365,7 +367,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void ForceDestroy(bool normalRespawn = false, bool silence = false)
         {
-            Add(new Coroutine(Destroy(normalRespawn, silence)));
+            if (!DestroyRoutine.Active)
+            {
+                Add(DestroyRoutine = new Coroutine(Destroy(normalRespawn, silence)));
+            }
         }
 
         private void OnPickup()
