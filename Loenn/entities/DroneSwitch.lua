@@ -5,12 +5,16 @@ local DroneSwitch = {}
 DroneSwitch.name = "XaphanHelper/DroneSwitch"
 DroneSwitch.depth = 0
 DroneSwitch.fieldOrder = {
-    "x", "y", "side", "flag", "registerInSaveData", "saveDataOnlyAfterCheckpoint", "persistent"
+    "x", "y", "side", "type", "flag", "registerInSaveData", "saveDataOnlyAfterCheckpoint", "persistent"
 }
 DroneSwitch.canResize = {false, false}
 DroneSwitch.fieldInformation = {
     side = {
         options = {"Left", "Right", "Down"},
+        editable = false
+    },
+    type = {
+        options = {"Beam", "Missile", "SuperMissile"},
         editable = false
     }
 }
@@ -21,13 +25,20 @@ DroneSwitch.placements = {
         side = "Left",
         persistent = false,
         registerInSaveData = false,
-        saveDataOnlyAfterCheckpoint = false
+        saveDataOnlyAfterCheckpoint = false,
+        type = "Beam"
     }
 }
 
 function DroneSwitch.sprite(room, entity)
     local side = entity.side or "Left"
-    local sprite = drawableSprite.fromTexture("objects/XaphanHelper/DroneSwitch/idle00", entity)
+    local switchType = entity.type or "Beam"
+    local sprite = nil
+    if switchType == "Beam" then
+        sprite = drawableSprite.fromTexture("objects/XaphanHelper/DroneSwitch/button00", entity)
+    else
+        sprite = drawableSprite.fromTexture("objects/XaphanHelper/DroneSwitch/button" .. switchType .. "00", entity)
+    end
     sprite:addPosition(4, 4)
 
     if side == "Down" then

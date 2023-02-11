@@ -278,6 +278,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Position.Y -= 300f * Engine.DeltaTime * Math.Min(Math.Max(multY, 1f), 2f);
             }
+            if (CollideCheck<DroneSwitch>())
+            {
+                CollideDroneSwitch(Direction);
+            }
             if (CollideCheck<Solid>())
             {
                 CollideSolid(Direction);
@@ -386,6 +390,31 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             RemoveSelf();
+        }
+
+        public void CollideDroneSwitch(Vector2 dir)
+        {
+            string Direction = null;
+            if (dir == new Vector2(-1, 0))
+            {
+                Direction = "Left";
+            }
+            else if (dir == new Vector2(1, 0))
+            {
+                Direction = "Right";
+            }
+            else if (dir == new Vector2(0, -1))
+            {
+                Direction = "Down";
+            }
+            foreach (Entity entity in Scene.Tracker.GetEntities<DroneSwitch>())
+            {
+                DroneSwitch droneSwitch = (DroneSwitch)entity;
+                if (CollideCheck(droneSwitch) && (droneSwitch.type == "Beam" || droneSwitch.type == "Missile" || (SuperMissile && droneSwitch.type == "SuperMissile")))
+                {
+                    droneSwitch.Triggered(Direction);
+                }
+            }
         }
     }
 }

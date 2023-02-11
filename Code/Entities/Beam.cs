@@ -498,13 +498,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (CollideCheck<Solid>() && !CollideCheck<PlayerBlocker>())
-            {
-                CollideSolid(Direction);
-            }
             if (CollideCheck<DroneSwitch>())
             {
                 CollideDroneSwitch(Direction);
+            }
+            if (CollideCheck<Solid>() && !CollideCheck<PlayerBlocker>())
+            {
+                CollideSolid(Direction);
             }
             if (Left > SceneAs<Level>().Bounds.Right || Right < SceneAs<Level>().Bounds.Left || Top > SceneAs<Level>().Bounds.Bottom || Bottom < SceneAs<Level>().Bounds.Top)
             {
@@ -631,10 +631,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             foreach (Entity entity in Scene.Tracker.GetEntities<DroneSwitch>())
             {
-                DroneSwitch playerSwitch = (DroneSwitch)entity;
-                if (CollideCheck(playerSwitch))
+                DroneSwitch droneSwitch = (DroneSwitch)entity;
+                if (CollideCheck(droneSwitch) && droneSwitch.type == "Beam")
                 {
-                    playerSwitch.Triggered(Direction);
+                    droneSwitch.Triggered(Direction);
                 }
             }
         }

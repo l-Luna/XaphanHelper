@@ -32,6 +32,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public bool saveDataOnlyAfterCheckpoint;
 
+        public string type;
+
         public bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -52,12 +54,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Tag = Tags.TransitionUpdate;
             side = data.Attr("side");
             flag = data.Attr("flag");
+            type = data.Attr("type", "Beam");
+            if (string.IsNullOrEmpty(type))
+            {
+                type = "Beam";
+            }
             persistent = data.Bool("persistent");
             registerInSaveData = data.Bool("registerInSaveData");
             saveDataOnlyAfterCheckpoint = data.Bool("saveDataOnlyAfterCheckpoint");
             Add(buttonSprite = new Sprite(GFX.Game, "objects/XaphanHelper/DroneSwitch/"));
-            buttonSprite.Add("idle", "idle", 0.2f);
-            buttonSprite.Add("active", "active", 0.2f);
+            buttonSprite.Add("idle", "button" + (type != "Beam" ? type : ""), 0.2f, 0);
+            buttonSprite.Add("active", "button" + (type != "Beam" ? type : ""), 0.2f);
             buttonSprite.Origin = new Vector2(buttonSprite.Width / 2, buttonSprite.Height / 2);
             buttonSprite.Position = new Vector2(4f, 4f);
             staticMover = new StaticMover();

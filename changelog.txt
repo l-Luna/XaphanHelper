@@ -1,4 +1,5 @@
 Version 1.0.54 :
+- Added "Type" attribute to Drone Switches
 - Added a debug command : reset_campaign
 
 Version 1.0.53 :
