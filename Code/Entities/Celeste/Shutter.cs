@@ -2,8 +2,7 @@
 using Monocle;
 using Microsoft.Xna.Framework;
 using System.Collections;
-using static Celeste.Mod.XaphanHelper.Entities.DroneGate;
-using static Celeste.GaussianBlur;
+using static Celeste.TrackSpinner;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -66,10 +65,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private int length;
 
+        private int speed;
+
         public Shutter(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: false)
         {
             direction = data.Attr("direction", "Bottom");
             length = data.Int("length", 8);
+            speed = data.Int("speed", 20);
             Collider = new Hitbox(Width, length + 1);
             Collider.Position += Vector2.UnitY * 7;
             MaxHeight = length + 1;
@@ -111,10 +113,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             while (Collider.Height > 0f && SceneAs<Level>().Session.GetFlag("testFlagShutter"))
             {
-                Collider.Position.Y += Engine.DeltaTime * 20;
-                Collider.Height -= Engine.DeltaTime * 20;
-                openOffset += Engine.DeltaTime * 20;
-                MoveV(Engine.DeltaTime * -20);
+                Collider.Position.Y += Engine.DeltaTime * speed;
+                Collider.Height -= Engine.DeltaTime * speed;
+                openOffset += Engine.DeltaTime * speed;
+                MoveV(Engine.DeltaTime * -speed);
                 yield return null;
             }
             if (openOffset > MaxHeight)
@@ -127,10 +129,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             while (Collider.Height < MaxHeight && !SceneAs<Level>().Session.GetFlag("testFlagShutter"))
             {
-                Collider.Position.Y -= Engine.DeltaTime * 20;
-                Collider.Height += Engine.DeltaTime * 20;
-                openOffset -= Engine.DeltaTime * 20;
-                MoveV(Engine.DeltaTime * 20);
+                Collider.Position.Y -= Engine.DeltaTime * speed;
+                Collider.Height += Engine.DeltaTime * speed;
+                openOffset -= Engine.DeltaTime * speed;
+                MoveV(Engine.DeltaTime * speed);
                 yield return null;
             }
             if (openOffset < 0)
