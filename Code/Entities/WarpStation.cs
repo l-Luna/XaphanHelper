@@ -72,10 +72,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Activate();
             }
-            Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
-            {
-                PlayerMustBeFacing = false
-            });
         }
 
         public override void Update()
@@ -269,8 +265,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     yield return null;
                 }
-
-                player.Sprite.Visible = player.Hair.Visible = true;
             }
         }
 
@@ -282,6 +276,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 level.Add(beam = new WarpBeam(Position + new Vector2(16, 0), beamColor));
             }
+            Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
+            {
+                PlayerMustBeFacing = false
+            });
             WarpManager.ActivateWarp(warpId);
         }
 
@@ -290,6 +288,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             activated = false;
             warpStationSprite.Play("idle");
             beam?.RemoveSelf();
+            talker?.RemoveSelf();
             WarpManager.DeactivateWarp(warpId);
         }
 

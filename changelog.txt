@@ -1,6 +1,9 @@
 Version 1.0.54 :
 - Added "Type" attribute to Drone Switches
 - Added a debug command : reset_campaign
+- Fixed a bug allowing to interact with warps before they were activated, leading to a crash if a warp could be only activated when a flag was true and that flag was false
+- Fixed a bug killing the player instead of the Remote Drone if the drone was squished by solids entities or tiles
+- Fixed a render bug for the Remote Drone when holding against a moving solid
 
 Version 1.0.53 :
 - Added back the Jump Boost ability, usable by the Remote Drone and allowing it to jump up to 50% higher
