@@ -2,7 +2,7 @@
 using Monocle;
 using Microsoft.Xna.Framework;
 using System.Collections;
-using static Celeste.TrackSpinner;
+using System;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -21,20 +21,38 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 this.shutter = shutter;
                 Collider = new Hitbox(8f, 8f);
                 Add(bloom = new BloomPoint(0.5f, 8f));
-                bloom.Position = new Vector2(4);
-                Add(top = new Sprite(GFX.Game, "objects/XaphanHelper/Shutter/"));
+                Add(top = new Sprite(GFX.Game, shutter.directory + "/"));
                 top.Add("off", "top", 0, 0);
                 top.Add("on", "top", 0, 1);
                 top.CenterOrigin();
                 top.Position = new Vector2(4);
                 top.Play("off");
+                if (shutter.direction == "Bottom")
+                {
+                    bloom.Position = new Vector2(4, 6);
+                }
+                else if (shutter.direction == "Top")
+                {
+                    top.FlipY = true;
+                    bloom.Position = new Vector2(4, 2);
+                }
+                else if (shutter.direction == "Left")
+                {
+                    top.Rotation = (float)Math.PI / 2f;
+                    bloom.Position = new Vector2(2, 4);
+                }
+                else if (shutter.direction == "Right")
+                {
+                    top.Rotation = -(float)Math.PI / 2f;
+                    bloom.Position = new Vector2(6, 4);
+                }
                 Add(new LightOcclude(1f));
             }
 
             public override void Update()
             {
                 base.Update();
-                if (shutter.openOffset > 0 && shutter.openOffset != (shutter.MaxHeight - 8f))
+                if (shutter.openOffset > 0 && shutter.openOffset != shutter.MaxLength)
                 {
                     top.Play("on");
                 }
@@ -57,7 +75,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float openOffset;
 
-        private float MaxHeight;
+        private float MaxLength;
 
         private Vector2 startPosition;
 
@@ -67,28 +85,112 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private int speed;
 
+        private string directory;
+
+        private string flag;
+
+        private bool open;
+
+        private bool closed;
+
+        private bool opening;
+
+        private bool closing;
+
+        private bool silent;
+
+        private string sound;
+
         public Shutter(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, safe: false)
         {
             direction = data.Attr("direction", "Bottom");
+            directory = data.Attr("directory", "objects/XaphanHelper/Shutter");
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = "objects/XaphanHelper/Shutter";
+            }
+            flag = data.Attr("flag");
             length = data.Int("length", 8);
+            silent = data.Bool("silent", false);
+            sound = data.Attr("sound", "");
+            if (string.IsNullOrEmpty(sound))
+            {
+                sound = "event:/game/xaphan/shutter";
+            }
+            if (length > 40)
+            {
+                length = 40;
+            }
             speed = data.Int("speed", 20);
-            Collider = new Hitbox(Width, length + 1);
-            Collider.Position += Vector2.UnitY * 7;
-            MaxHeight = length + 1;
-            startPosition = Position;
-            Add(gate = new Sprite(GFX.Game, "objects/XaphanHelper/Shutter/"));
+            Add(gate = new Sprite(GFX.Game, directory + "/"));
             gate.Add("gate", "gate", 0);
+            gate.CenterOrigin();
             gate.Play("gate");
+            if (direction == "Bottom")
+            {
+                Collider = new Hitbox(8, length + 1);
+                Collider.Position += Vector2.UnitY * 7;
+            }
+            else if (direction == "Top")
+            {
+                Collider = new Hitbox(8, length + 1);
+                gate.FlipY = true;
+            }
+            else if (direction == "Left")
+            {
+                Collider = new Hitbox(length + 1, 8);
+                gate.Rotation = (float)Math.PI / 2f;
+            }
+            else if (direction == "Right")
+            {
+                Collider = new Hitbox(length + 1, 8);
+                gate.Rotation = -(float)Math.PI / 2f;
+                Collider.Position += Vector2.UnitX * 7;
+            }
+            MaxLength = length + 1;
+            startPosition = Position;
             Add(new LightOcclude());
+            closed = true;
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            SceneAs<Level>().Add(new ShutterLightWall(this, Vector2.Zero));
+            if (direction == "Bottom" || direction == "Right")
+            {
+                SceneAs<Level>().Add(new ShutterLightWall(this, Vector2.Zero));
+            }
+            else if (direction == "Top")
+            {
+                SceneAs<Level>().Add(new ShutterLightWall(this, Vector2.UnitY * length));
+            }
+            else if (direction == "Left")
+            {
+                SceneAs<Level>().Add(new ShutterLightWall(this, Vector2.UnitX * length));
+            }
             if (SceneAs<Level>().Session.GetFlag("testFlagShutter"))
             {
-                openOffset = MaxHeight;
+                openOffset = MaxLength;
+                open = true;
+                closed = false;
+                if (direction == "Bottom")
+                {
+                    Collider.Height = 0f;
+                }
+                else if (direction == "Top")
+                {
+                    Collider.Height = 0f;
+                    Collider.Position.Y += MaxLength;
+                }
+                else if (direction == "Left")
+                {
+                    Collider.Width = 0f;
+                    Collider.Position.X += MaxLength;
+                }
+                else if (direction == "Right")
+                {
+                    Collider.Width = 0f;
+                }
             }
         }
 
@@ -98,11 +200,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
             if (!GateRoutine.Active)
             {
-                if (SceneAs<Level>().Session.GetFlag("testFlagShutter"))
+                if (!string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag) && (closed || closing))
                 {
                     Add(GateRoutine = new Coroutine(Open()));
                 }
-                else
+                else if (!string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag) && (open || opening))
                 {
                     Add(GateRoutine = new Coroutine(Close(player)));
                 }
@@ -111,44 +213,165 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private IEnumerator Open()
         {
-            while (Collider.Height > 0f && SceneAs<Level>().Session.GetFlag("testFlagShutter"))
+            while (!string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
             {
-                Collider.Position.Y += Engine.DeltaTime * speed;
-                Collider.Height -= Engine.DeltaTime * speed;
-                openOffset += Engine.DeltaTime * speed;
-                MoveV(Engine.DeltaTime * -speed);
                 yield return null;
             }
-            if (openOffset > MaxHeight)
+            if (!silent)
             {
-                openOffset = MaxHeight;
+                Audio.Play(sound, Position);
             }
+            closed = false;
+            closing = false;
+            opening = true;
+            if (direction == "Bottom")
+            {
+                while (Collider.Height > 0f && !string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Position.Y += Engine.DeltaTime * speed;
+                    Collider.Height -= Engine.DeltaTime * speed;
+                    openOffset += Engine.DeltaTime * speed;
+                    MoveV(Engine.DeltaTime * -speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Top")
+            {
+                while (Collider.Height > 0f && !string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Height -= Engine.DeltaTime * speed;
+                    openOffset += Engine.DeltaTime * speed;
+                    MoveV(Engine.DeltaTime * speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Left")
+            {
+                while (Collider.Width > 0f && !string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Width -= Engine.DeltaTime * speed;
+                    openOffset += Engine.DeltaTime * speed;
+                    MoveH(Engine.DeltaTime * speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Right")
+            {
+                while (Collider.Width > 0f && !string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Position.X += Engine.DeltaTime * speed;
+                    Collider.Width -= Engine.DeltaTime * speed;
+                    openOffset += Engine.DeltaTime * speed;
+                    MoveH(Engine.DeltaTime * -speed);
+                    yield return null;
+                }
+            }
+            if (openOffset >= MaxLength)
+            {
+                openOffset = MaxLength;
+            }
+            opening = false;
+            open = true;
         }
 
         private IEnumerator Close(Player player)
         {
-            while (Collider.Height < MaxHeight && !SceneAs<Level>().Session.GetFlag("testFlagShutter"))
+            while (!string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
             {
-                Collider.Position.Y -= Engine.DeltaTime * speed;
-                Collider.Height += Engine.DeltaTime * speed;
-                openOffset -= Engine.DeltaTime * speed;
-                MoveV(Engine.DeltaTime * speed);
                 yield return null;
             }
-            if (openOffset < 0)
+            if (!silent)
+            {
+                Audio.Play(sound, Position);
+            }
+            open = false;
+            opening = false;
+            closing = true;
+            if (direction == "Bottom")
+            {
+                while (Collider.Height < MaxLength && !string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Position.Y -= Engine.DeltaTime * speed;
+                    Collider.Height += Engine.DeltaTime * speed;
+                    openOffset -= Engine.DeltaTime * speed;
+                    MoveV(Engine.DeltaTime * speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Top")
+            {
+                while (Collider.Height < MaxLength && !string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Height += Engine.DeltaTime * speed;
+                    openOffset -= Engine.DeltaTime * speed;
+                    MoveV(Engine.DeltaTime * -speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Left")
+            {
+                while (Collider.Width < MaxLength && !string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Width += Engine.DeltaTime * speed;
+                    openOffset -= Engine.DeltaTime * speed;
+                    MoveH(Engine.DeltaTime * -speed);
+                    yield return null;
+                }
+            }
+            else if (direction == "Right")
+            {
+                while (Collider.Width < MaxLength && !string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                {
+                    Collider.Position.X -= Engine.DeltaTime * speed;
+                    Collider.Width += Engine.DeltaTime * speed;
+                    openOffset -= Engine.DeltaTime * speed;
+                    MoveH(Engine.DeltaTime * speed);
+                    yield return null;
+                }
+            }
+            if (openOffset <= 0)
             {
                 openOffset = 0;
             }
+            closing = false;
+            closed = true;
         }
 
         public override void Render()
         {
-            for (int i = 0; i <= MaxHeight / 8; i++)
+            for (int i = 0; i <= MaxLength / 8; i++)
             {
-                gate.RenderPosition = startPosition + new Vector2(0, i * 8 - openOffset);
-                if (gate.RenderPosition.Y > startPosition.Y)
+                if (direction == "Bottom")
                 {
-                    gate.Render();
+                    gate.RenderPosition = startPosition + new Vector2(4, 4 + i * 8 - openOffset);
+                    if (gate.RenderPosition.Y > 4 + startPosition.Y)
+                    {
+                        gate.Render();
+                    }
+                }
+                else if (direction == "Top")
+                {
+                    gate.RenderPosition = startPosition + new Vector2(4, 4 + i * 8 + openOffset);
+                    if (gate.RenderPosition.Y < 4 + startPosition.Y + length)
+                    {
+                        gate.Render();
+                    }
+                }
+                else if (direction == "Left")
+                {
+                    gate.RenderPosition = startPosition + new Vector2(4 + i * 8 + openOffset, 4);
+                    if (gate.RenderPosition.X < 4 + startPosition.X + length)
+                    {
+                        gate.Render();
+                    }
+                }
+                else if (direction == "Right")
+                {
+                    gate.RenderPosition = startPosition + new Vector2(4 + i * 8 - openOffset, 4);
+                    if (gate.RenderPosition.X > 4 + startPosition.X)
+                    {
+                        gate.Render();
+                    }
                 }
             }
         }
