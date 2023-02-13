@@ -326,6 +326,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        protected override void OnSquish(CollisionData data)
+        {
+            if (!TrySquishWiggle(data, 3, 3) && !SaveData.Instance.Assists.Invincible)
+            {
+                ForceDestroy();
+            }
+        }
+
         public override void Added(Scene scene)
         {
             base.Added(scene);
@@ -1241,6 +1249,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         });
                     }
                 }
+            }
+        }
+
+        public override void Render()
+        {
+            if (!Hold.IsHeld)
+            {
+                droneSprite.RenderPosition = player.Position;
+                droneSprite.Render();
+            }
+            else
+            {
+                base.Render();
             }
         }
 
