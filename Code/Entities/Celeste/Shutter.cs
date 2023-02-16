@@ -110,18 +110,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 directory = "objects/XaphanHelper/Shutter";
             }
             flag = data.Attr("flag");
-            length = data.Int("length", 8);
+            length = data.Int("length", 4) * 8;
             silent = data.Bool("silent", false);
             sound = data.Attr("sound", "");
             if (string.IsNullOrEmpty(sound))
             {
                 sound = "event:/game/xaphan/shutter";
             }
-            if (length > 40)
-            {
-                length = 40;
-            }
-            speed = data.Int("speed", 20);
+            speed = data.Int("speed", 30);
             Add(gate = new Sprite(GFX.Game, directory + "/"));
             gate.Add("gate", "gate", 0);
             gate.CenterOrigin();
