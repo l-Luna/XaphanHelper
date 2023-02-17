@@ -30,7 +30,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
-            if (CollideCheck<Actor>())
+            if (CollideCheck<Actor>() || CollideCheck<WorkRobot>())
             {
                 sprite.Position = Vector2.UnitY;
                 if (!string.IsNullOrEmpty(flag))
