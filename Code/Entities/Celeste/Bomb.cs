@@ -415,6 +415,23 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
+
+            foreach (WorkRobot workRobot in Scene.Tracker.GetEntities<WorkRobot>())
+            {
+                int dir = 0;
+                if (workRobot.Position.X < Position.X)
+                {
+                    dir = -1;
+                }
+                else if (workRobot.Position.X > Position.X)
+                {
+                    dir = 1;
+                }
+                if (CollideCheck(workRobot, Position + new Vector2(dir, 0)))
+                {
+                    workRobot.Push(new Vector2(75, 0), new Vector2(dir, 0));
+                }
+            }
         }
 
         private void onLastFrame(string s)

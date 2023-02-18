@@ -348,6 +348,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SceneAs<Level>().Shake(0.3f);
                 Audio.Play("event:/game/xaphan/super_missile_collide_solid");
             }
+            foreach (WorkRobot workRobot in Scene.Tracker.GetEntities<WorkRobot>())
+            {
+                if (CollideCheck(workRobot, Position + dir))
+                {
+                    workRobot.Push(new Vector2(SuperMissile ? 150 : 75, SuperMissile ? -75 : 0), dir);
+                }
+            }
             if (XaphanModule.useMetroidGameplay)
             {
                 foreach (BubbleDoor bubbleDoor in Scene.Tracker.GetEntities<BubbleDoor>())
