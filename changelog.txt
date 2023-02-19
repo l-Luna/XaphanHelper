@@ -1,3 +1,6 @@
+Version 1.0.55 :
+- Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
+
 Version 1.0.54 :
 - Added "Type" attribute to Drone Switches
 - Added a debug command : reset_campaign

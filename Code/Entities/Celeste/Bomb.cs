@@ -363,7 +363,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Speed = Vector2.Zero;
             noGravityTimer = 0.01f;
             yield return 0.01f;
-            Hold.RemoveSelf();
+            Hold.PickupCollider = new Hitbox(0, 0);
             explode = true;
             bombSprite.Position += new Vector2(0, 12);
             Audio.Play("event:/game/xaphan/bomb_explode", Position);
