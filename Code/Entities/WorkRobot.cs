@@ -85,23 +85,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 7, 1, height) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y - 2, 1, height) : new Rectangle((int)Position.X - 3, (int)Position.Y - 11, 1, height);
                 Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 7, 1, height) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y - 2, 1, height) : new Rectangle((int)Position.X + 18, (int)Position.Y - 11, 1, height);
                 Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24, width - 2, 1);
-                if (!Scene.CollideCheck<Solid>(BottomHit))
+                if (Scene.CollideCheck<Solid>(LeftHit))
                 {
-                    if (Scene.CollideCheck<Solid>(LeftHit))
-                    {
-                        Logger.Log(LogLevel.Info, "XH", " Collide left");
-                        MoveH(2);
-                    }
-                    else if (Scene.CollideCheck<Solid>(RightHit) && !TurnAroundRoutine.Active)
-                    {
-                        Logger.Log(LogLevel.Info, "XH", " Collide right");
-                        MoveH(-2);
-                    }
+                    MoveH(1);
                 }
-                else
+                else if (Scene.CollideCheck<Solid>(RightHit) && !TurnAroundRoutine.Active)
                 {
-                    Logger.Log(LogLevel.Info, "XH", " Collide bottom");
-                    MoveV(-2);
+                    MoveH(-1);
+                }
+                if (Scene.CollideCheck<Solid>(BottomHit))
+                {
+                    MoveV(-1);
                 }
             }
             if (!CollideCheck<Solid>(Position + Vector2.UnitY))
@@ -182,11 +176,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             while (Speed.X > speed || Speed.X < -speed)
             {
-                if (CollideCheck<Solid>(Position + Vector2.UnitX * direction.X))
-                {
-                    Speed.X = 0f;
-                    yield return 0.3f;
-                }
                 if (Speed.X > 0)
                 {
                     Speed.X -= Engine.DeltaTime * 300;
@@ -194,6 +183,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 else
                 {
                     Speed.X += Engine.DeltaTime * 300;
+                }
+                if (CollideCheck<Solid>(Position + Vector2.UnitX * direction.X))
+                {
+                    Speed.X = 0f;
+                    yield return 0.3f;
                 }
                 yield return null;
             }
