@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -9,13 +10,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [Tracked(true)]
     public class MegaBomb : Actor
     {
+        private FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
+
         private Sprite bombSprite;
 
         public Vector2 Speed;
 
         public float noGravityTimer;
-
-        private Vector2 previousPosition;
 
         private Vector2 prevLiftSpeed;
 
@@ -318,7 +319,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
                     }
                 }
-                previousPosition = ExactPosition;
                 MoveH(Speed.X * Engine.DeltaTime, onCollideH);
                 MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
                 foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
@@ -372,13 +372,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
                 timer -= Engine.DeltaTime;
             }
+            HoldableCannotHoldTimer.SetValue(Hold, 1f);
             AllowPushing = false;
             Collider = new Circle(21f, 0f, -6f);
             Hold.PickupCollider = Collider;
             Speed = Vector2.Zero;
             noGravityTimer = 0.01f;
             yield return 0.01f;
-            Hold.PickupCollider = new Hitbox(0, 0);
             explode = true;
             bombSprite.Position += new Vector2(0, 26);
             Audio.Play("event:/new_content/game/10_farewell/puffer_splode", Position);

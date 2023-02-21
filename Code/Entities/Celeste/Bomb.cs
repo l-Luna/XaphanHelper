@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -10,13 +11,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [Tracked(true)]
     public class Bomb : Actor
     {
+
+        private FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
+
         private Sprite bombSprite;
 
         public Vector2 Speed;
 
         public float noGravityTimer;
-
-        private Vector2 previousPosition;
 
         private Vector2 prevLiftSpeed;
 
@@ -29,8 +31,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private Collision onCollideV;
 
         public Holdable Hold;
-
-        public static Holdable Hold2;
 
         private HoldableCollider hitSeeker;
 
@@ -50,7 +50,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             bombSprite.Justify = new Vector2(0.5f, 1f);
             bombSprite.Play("idle");
             Add(Hold = new Holdable(0.1f));
-            Hold2 = Hold;
             Hold.PickupCollider = new Hitbox(12f, 14f, -6f, -14f);
             Hold.SlowFall = false;
             Hold.SlowRun = false;
@@ -303,7 +302,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
                     }
                 }
-                previousPosition = ExactPosition;
                 MoveH(Speed.X * Engine.DeltaTime, onCollideH);
                 MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
                 foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
@@ -357,15 +355,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
                 timer -= Engine.DeltaTime;
             }
+            HoldableCannotHoldTimer.SetValue(Hold, 1f);
             AllowPushing = false;
             Collider = new Circle(12f, 0f, -4f);
             Hold.PickupCollider = Collider;
             Speed = Vector2.Zero;
             noGravityTimer = 0.01f;
             yield return 0.01f;
-            Hold.PickupCollider = new Hitbox(0, 0);
             explode = true;
-            bombSprite.Position += new Vector2(0, 12);
             Audio.Play("event:/game/xaphan/bomb_explode", Position);
             bombSprite.Play("explode", false);
             bombSprite.OnLastFrame = onLastFrame;
