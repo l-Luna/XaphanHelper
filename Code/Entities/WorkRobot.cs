@@ -92,7 +92,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Speed.X = 0;
             }
-            if (!TurnAroundRoutine.Active && !ActiveRoutine.Active && active)
+            if (!TurnAroundRoutine.Active && !ActiveRoutine.Active && active && (!string.IsNullOrEmpty(flag) ? SceneAs<Level>().Session.GetFlag(flag) : true))
             {
                 sprite.FlipX = goLeft;
                 if (!pushed && CollideCheck<Solid>(Position + Vector2.UnitY))
@@ -199,6 +199,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         MoveV(1, 0);
                         yield return 0.08f;
                     }
+                    if (sprite.CurrentAnimationFrame == 9 && (!string.IsNullOrEmpty(flag) ? !SceneAs<Level>().Session.GetFlag(flag) : true))
+                    {
+                        active = false;
+                        sprite.Play("idle");
+                        sprite.FlipX = goLeft;
+                        yield break;
+                    }
                     if (sprite.CurrentAnimationFrame >= upFirstFrame && sprite.CurrentAnimationFrame <= upLastFrame)
                     {
                         Collider.Height += 1;
@@ -209,6 +216,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     yield return null;
                 }
                 sprite.Play("walk");
+                sprite.FlipX = goLeft;
             }
         }
 
