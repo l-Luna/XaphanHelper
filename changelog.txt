@@ -1,4 +1,5 @@
 Version 1.0.55 :
+- Added "Tutorial" attribute to Drone Switches
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 
 Version 1.0.54 :

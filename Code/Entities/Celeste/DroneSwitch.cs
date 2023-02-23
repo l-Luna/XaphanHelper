@@ -34,6 +34,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string type;
 
+        private BirdTutorialGui tutorialGui;
+
+        private float tutorialTimer = 0f;
+
+        private bool tutorial;
+
         public bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -52,6 +58,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public DroneSwitch(EntityData data, Vector2 position) : base(data.Position + position)
         {
             Tag = Tags.TransitionUpdate;
+            tutorial = data.Bool("tutorial");
             side = data.Attr("side");
             flag = data.Attr("flag");
             type = data.Attr("type", "Beam");
@@ -188,6 +195,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 buttonSprite.Play("active");
             }
+            if (tutorial)
+            {
+                tutorialGui = new BirdTutorialGui(this, new Vector2(4f, -4f), Dialog.Clean("XaphanHelper_Shoot"), Input.Dash);
+                tutorialGui.Open = false;
+                Scene.Add(tutorialGui);
+            }
         }
 
         public override void Update()
@@ -219,6 +232,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
             else
             {
                 buttonSprite.Play("active");
+            }
+            if (tutorialGui != null)
+            {
+                if (XaphanModule.PlayerIsControllingRemoteDrone())
+                {
+                    if (!SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        tutorialTimer += Engine.DeltaTime;
+                    }
+                    else
+                    {
+                        tutorialTimer = 0f;
+                    }
+                    tutorialGui.Open = (tutorial && tutorialTimer > 0.25f);
+                }
+                else
+                {
+                    tutorialTimer = 0f;
+                    tutorialGui.Open = false;
+                }
             }
         }
 

@@ -20,6 +20,7 @@
 
 #Tutorials
 	XaphanHelper_SwitchAbility= CHANGER CAPACITÉ
+	XaphanHelper_Shoot= TIRER
 
 #Infos
 	XaphanHelper_ToSelect= pour sélectionner

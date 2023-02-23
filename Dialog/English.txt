@@ -20,6 +20,7 @@
 
 #Tutorials
 	XaphanHelper_SwitchAbility= SWITCH ABILITY
+	XaphanHelper_Shoot= SHOOT
 
 #Infos
 	XaphanHelper_ToSelect= to select
