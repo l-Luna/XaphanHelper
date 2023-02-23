@@ -91,6 +91,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Coroutine DestroyRoutine = new();
 
+        private BirdTutorialGui tutorialGui;
+
+        private float tutorialTimer = 0f;
+
+        private bool tutorial;
+
         private static FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -370,6 +376,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (FakePlayer != null)
             {
                 FakePlayer.RemoveSelf();
+            }
+            if (tutorialGui != null)
+            {
+                tutorialGui.RemoveSelf();
             }
         }
 
@@ -670,6 +680,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
+            if (tutorialGui == null)
+            {
+                tutorialGui = new BirdTutorialGui(this, new Vector2(0f, -16f), Dialog.Clean("XaphanHelper_Destroy"), Dialog.Clean("tutorial_hold"), Input.Grab);
+                tutorialGui.Open = false;
+                Scene.Add(tutorialGui);
+            }
             UpgradesDisplay display = SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
             if (display != null)
             {
@@ -685,6 +701,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (XaphanModule.ModSession.CurrentDroneSuperMissile != CurrentSuperMissiles)
                 {
                     XaphanModule.ModSession.CurrentDroneSuperMissile = CurrentSuperMissiles;
+                }
+                if (tutorialGui != null)
+                {
+                    tutorialGui = null;
                 }
             }
             if (!dead && !Teleport)
@@ -1028,11 +1048,29 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         droneSprite.Play("idle");
                     }
                 }
+                if (tutorialGui != null)
+                {
+                    if (enabled && tutorial)
+                    {
+                        
+                        tutorialTimer += Engine.DeltaTime;
+                    }
+                    else
+                    {
+                        tutorialTimer = 0f;
+                    }
+                    tutorialGui.Open = (tutorial && tutorialTimer > 0.25f);
+                }
             }
             else
             {
                 RemoveSelf();
             }
+        }
+
+        public void ShowTutorial(bool action)
+        {
+            tutorial = action;
         }
 
         private IEnumerator Shoot(Level level)
@@ -1098,6 +1136,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     Audio.Play("event:/game/xaphan/drone_destroy", Position);
                 }
                 Visible = false;
+                if (tutorialGui != null)
+                {
+                    tutorialGui.Open = false;
+                    tutorialTimer = 0f;
+                }
                 DroneDebris.Burst(Position, Calc.HexToColor("DEAC75"), 12);
                 yield return 0.5f;
                 if (player != null)

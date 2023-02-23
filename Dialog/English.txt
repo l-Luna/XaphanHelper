@@ -21,6 +21,7 @@
 #Tutorials
 	XaphanHelper_SwitchAbility= SWITCH ABILITY
 	XaphanHelper_Shoot= SHOOT
+	XaphanHelper_Destroy= DESTROY
 
 #Infos
 	XaphanHelper_ToSelect= to select

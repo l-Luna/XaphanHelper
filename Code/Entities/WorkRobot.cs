@@ -259,7 +259,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 int value = size == "Small" ? 2 : size == "Medium" ? 3 : 4;
                 if (sprite.CurrentAnimationFrame >= sprite.CurrentAnimationTotalFrames - value - 1)
                 {
-                    Logger.Log(LogLevel.Info, "XH", "Frame : " + sprite.CurrentAnimationFrame);
                     Collider.Height -= 1;
                     sprite.Position.Y -= 1;
                     MoveV(1, 0);
@@ -270,7 +269,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 int value = size == "Small" ? 2 : size == "Medium" ? 3 : 4;
                 if (sprite.CurrentAnimationFrame >= 2 && sprite.CurrentAnimationFrame < 2 + value)
                 {
-                    Logger.Log(LogLevel.Info, "XH", "Frame : " + sprite.CurrentAnimationFrame);
                     Collider.Height += 1;
                     sprite.Position.Y += 1;
                     MoveV(-1, 0);

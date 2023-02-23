@@ -21,6 +21,7 @@
 #Tutorials
 	XaphanHelper_SwitchAbility= CHANGER CAPACITÉ
 	XaphanHelper_Shoot= TIRER
+	XaphanHelper_Destroy= DETRUIRE
 
 #Infos
 	XaphanHelper_ToSelect= pour sélectionner
