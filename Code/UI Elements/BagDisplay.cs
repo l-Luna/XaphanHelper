@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Entities;
@@ -39,6 +40,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<CustomUpgradesData> CustomUpgradesData = new();
 
+        VirtualButton SlotButton = new();
+
+        VirtualButton SelectButton = new();
+
         public BagDisplay(Level level, string type)
         {
             this.level = level;
@@ -50,10 +55,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Sprite.Scale = new Vector2(0.15f);
             borderColor = Calc.HexToColor("262626");
             Opacity = 1f;
-            VirtualButton Button = new();
             ButtonBinding Control = type == "bag" ? XaphanModule.ModSettings.UseBagItemSlot : XaphanModule.ModSettings.UseMiscItemSlot;
-            Button.Binding = Control.Binding;
-            buttonTexture = Input.GuiButton(Button, "controls/keyboard/oemquestion");
+            SlotButton.Binding = Control.Binding;
+            buttonTexture = Input.GuiButton(SlotButton, "controls/keyboard/oemquestion");
+            ButtonBinding SelectControl = XaphanModule.ModSettings.SelectItem;
+            SelectButton.Binding = SelectControl.Binding;
         }
 
         public static void Load()
@@ -290,6 +296,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return "collectables/XaphanHelper/UpgradeCollectable";
         }
 
+        private CustomTutorialUI tutorialGui;
+
+        private float tutorialTimer = 0f;
+
+        private bool tutorial;
+
+        public bool preventTutorialDisplay;
+
         public override void Update()
         {
             base.Update();
@@ -325,6 +339,35 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Position.X = 1790f;
                 }
             }
+            if (!preventTutorialDisplay)
+            {
+                if (tutorialGui == null)
+                {
+                    tutorialGui = new CustomTutorialUI(Position + new Vector2(50, 425f), Dialog.Clean("XaphanHelper_SwitchAbility"), Dialog.Clean("XaphanHelper_Hold"), SelectButton, "{n}", Dialog.Clean("XaphanHelper_AndPress"), SlotButton);
+                    tutorialGui.Open = false;
+                    Scene.Add(tutorialGui);
+                }
+                else if (!tutorialGui.Open && tutorial)
+                {
+                    int totalActiveUpgrades = 0;
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        if (CheckIfUpgradeIsActive(i))
+                        {
+                            totalActiveUpgrades++;
+                        }
+                    }
+                    if (totalActiveUpgrades > 1)
+                    {
+                        tutorialTimer += Engine.DeltaTime;
+                        tutorialGui.Open = tutorialTimer > 0.25f;
+                    }
+                }
+                else if (tutorialGui.Open && !tutorial)
+                {
+                    tutorialGui.Open = false;
+                }
+            }
             if ((type == "bag" ? XaphanModule.ModSettings.UseBagItemSlot.Pressed : XaphanModule.ModSettings.UseMiscItemSlot.Pressed) && XaphanModule.ModSettings.SelectItem.Check)
             {
                 StatusScreen statusScreen = level.Tracker.GetEntity<StatusScreen>();
@@ -352,6 +395,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         else
                         {
                             XaphanModule.ModSaveData.BagUIId2 = nextSelection;
+                        }
+                        if (tutorialGui != null && tutorial)
+                        {
+                            preventTutorialDisplay = true;
+                            tutorial = false;
+                            tutorialTimer = 0;
+                            tutorialGui.Open = false;
                         }
                         Audio.Play("event:/ui/main/rollover_up");
                     }
@@ -480,6 +530,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
         }
 
+        public void ShowTutorial(bool action)
+        {
+            tutorial = action;
+        }
+
         public static bool playerIsInHideTrigger(Level level)
         {
             foreach (HideMiniMapTrigger trigger in level.Tracker.GetEntities<HideMiniMapTrigger>())
@@ -546,6 +601,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Sprite.RenderPosition = Position + new Vector2(14f);
                 Sprite.Color = Color.White * Opacity;
                 Sprite.Render();
+            }
+        }
+
+        public override void Removed(Scene scene)
+        {
+            base.Removed(scene);
+            if (tutorialGui != null)
+            {
+                tutorialGui.RemoveSelf();
             }
         }
     }

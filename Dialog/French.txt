@@ -18,6 +18,9 @@
 # {trigger x} this triggers an in-game event
 # {anchor} controls the visual position of the textbox in-game
 
+#Tutorials
+	XaphanHelper_SwitchAbility= CHANGER CAPACITÉ
+
 #Infos
 	XaphanHelper_ToSelect= pour sélectionner
 	XaphanHelper_Press= Appuyez sur
