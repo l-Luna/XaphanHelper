@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using FMOD;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -44,9 +41,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private float arrowOffset;
 
-        private static Dictionary<VirtualButton, ButtonPrompt> controlsButtonsToID = new Dictionary<VirtualButton, ButtonPrompt>();
+        private static Dictionary<VirtualButton, ButtonPrompt> controlsButtonsToID = new();
 
-        private static Dictionary<ButtonPrompt, VirtualButton> controlsIDToButton = new Dictionary<ButtonPrompt, VirtualButton>();
+        private static Dictionary<ButtonPrompt, VirtualButton> controlsIDToButton = new();
 
         public CustomTutorialUI(Vector2 position, object info, params object[] controls)
         {
@@ -182,7 +179,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 return;
             }
-            Vector2 vector2 = new Vector2(Position.X, num4 + 16f);
+            Vector2 vector2 = new(Position.X, num4 + 16f);
             if (info is string)
             {
                 ActiveFont.Draw((string)info, vector2, new Vector2(0.5f, 0f), new Vector2(Scale, 1f), textColor);
@@ -192,7 +189,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 ((MTexture)info).DrawJustified(vector2, new Vector2(0.5f, 0f), Color.White, new Vector2(Scale, 1f));
             }
             vector2.Y += infoHeight + lineHeight * 0.5f;
-            Vector2 vector3 = new Vector2((0f - controlsWidth) / 2f, 0f);
+            Vector2 vector3 = new((0f - controlsWidth) / 2f, 0f);
             int startIndex = 0;
             foreach (object control in controls)
             {

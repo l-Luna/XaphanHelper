@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Entities;
@@ -43,6 +42,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         VirtualButton SlotButton = new();
 
         VirtualButton SelectButton = new();
+
+        private CustomTutorialUI tutorialGui;
+
+        private float tutorialTimer = 0f;
+
+        private bool tutorial;
+
+        public bool preventTutorialDisplay;
 
         public BagDisplay(Level level, string type)
         {
@@ -295,14 +302,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             return "collectables/XaphanHelper/UpgradeCollectable";
         }
-
-        private CustomTutorialUI tutorialGui;
-
-        private float tutorialTimer = 0f;
-
-        private bool tutorial;
-
-        public bool preventTutorialDisplay;
 
         public override void Update()
         {

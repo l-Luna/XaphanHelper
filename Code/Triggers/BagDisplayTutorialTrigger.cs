@@ -9,7 +9,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
     class BagDisplayTutorialTrigger : Trigger
     {
         EntityID ID;
-        
+
         string slot;
 
         bool keepUIOpenOnLeave;
@@ -74,7 +74,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                     }
                 }
             }
-            
+
         }
     }
 }

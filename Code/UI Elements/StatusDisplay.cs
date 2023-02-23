@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Xml.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
@@ -348,7 +346,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (superMissileUpgrade.Contains(Prefix))
                         {
-                            superMissileCount ++;
+                            superMissileCount++;
                         }
                     }
                     string qty = "x " + superMissileCount;
@@ -389,7 +387,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (fireRateModuleUpgrade.Contains(Prefix))
                         {
-                            fireRateCount ++;
+                            fireRateCount++;
                         }
                     }
                     if (fireRateCount > 0)

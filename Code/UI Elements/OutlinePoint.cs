@@ -20,7 +20,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public static List<OutlinePoint> GenerateSolidOutline(Solid solid)
         {
-            List<OutlinePoint> outline = new List<OutlinePoint>();
+            List<OutlinePoint> outline = new();
             for (int i = (int)solid.Width / 2; i < solid.Width; i++)
             {
                 Math.DivRem(i, 4, out int pos);

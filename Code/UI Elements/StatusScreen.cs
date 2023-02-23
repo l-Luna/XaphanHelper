@@ -307,7 +307,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection == 10 && HasStaminaUpgrades) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
                                 {
-                                    Selection ++;
+                                    Selection++;
                                 }
                                 Selection++;
                                 Audio.Play("event:/ui/main/rollover_up");
@@ -342,7 +342,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             while (!statusDisplay.RightDisplays.Contains(Selection - 10))
                             {
-                                Selection -= 10 ;
+                                Selection -= 10;
                             }
                             Selection -= 10;
                             Audio.Play("event:/ui/main/rollover_up");

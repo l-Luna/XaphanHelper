@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -177,9 +175,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             else if (TimesDashed == 3)
             {
                 List<Debris> debris = new();
-                for (int i = 0; i <= 4; i ++)
+                for (int i = 0; i <= 4; i++)
                 {
-                    for (int j = 0; j <= 3; j ++)
+                    for (int j = 0; j <= 3; j++)
                     {
                         Vector2 vector2 = new(i * 8 + 4f, j * 8 + 4f);
                         Debris debris2 = Engine.Pooler.Create<Debris>().Init(Position + new Vector2(-21f, -15f) + vector2, Center);

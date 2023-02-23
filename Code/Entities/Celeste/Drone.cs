@@ -149,7 +149,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (XaphanModule.startAsDrone)
             {
                 Player player = self.Tracker.GetEntity<Player>();
-                if(player != null)
+                if (player != null)
                 {
                     player.Position = (self.Session.Level == XaphanModule.droneStartRoom && self.Session.RespawnPoint.GetValueOrDefault() == XaphanModule.droneCurrentSpawn) ? XaphanModule.fakePlayerPosition : self.Session.RespawnPoint.GetValueOrDefault();
                     self.Camera.Position = player.CameraTarget;
@@ -342,7 +342,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 RemoveSelf();
             }
             else
-            {                
+            {
                 if (startedAsDrone)
                 {
                     FakePlayer = new FakePlayer(XaphanModule.fakePlayerPosition, SceneAs<Level>().Session.Inventory.Backpack ? PlayerSpriteMode.Madeline : PlayerSpriteMode.MadelineNoBackpack, true);

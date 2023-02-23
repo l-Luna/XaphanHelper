@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
 using Celeste.Mod.XaphanHelper.Cutscenes;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;

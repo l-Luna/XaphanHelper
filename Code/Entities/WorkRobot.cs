@@ -169,7 +169,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     num *= 0.5f;
                 }
-                Speed.Y = Calc.Approach(Speed.Y, 200f , num * Engine.DeltaTime);
+                Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
             }
             else
             {
@@ -265,7 +265,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     MoveV(1, 0);
                 }
             }
-            else if(sprite.CurrentAnimationID == "activate")
+            else if (sprite.CurrentAnimationID == "activate")
             {
                 int value = size == "Small" ? 2 : size == "Medium" ? 3 : 4;
                 if (sprite.CurrentAnimationFrame >= 2 && sprite.CurrentAnimationFrame < 2 + value)

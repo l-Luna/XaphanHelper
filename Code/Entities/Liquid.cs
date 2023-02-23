@@ -505,7 +505,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 return actualValue;
             }
 
-            if (moveX == -(int) self.Facing)
+            if (moveX == -(int)self.Facing)
             {
                 // This will lead to a wall jump. We want to kill climb jumping. So let it go
                 return actualValue;

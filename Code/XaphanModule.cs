@@ -2823,7 +2823,7 @@ namespace Celeste.Mod.XaphanHelper
                                 break;
                             }
                         }
-                        LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : ModSaveData.SavedChapter[self.Session.Area.LevelSet] - (hasInterlude ? 0 :1))))
+                        LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : ModSaveData.SavedChapter[self.Session.Area.LevelSet] - (hasInterlude ? 0 : 1))))
                         {
                             Time = ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet) ? ModSaveData.SavedTime[self.Session.Area.LevelSet] : 0L
                         }, fromSaveData: false);

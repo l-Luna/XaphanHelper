@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Managers;
-using Monocle;
 using Microsoft.Xna.Framework;
+using Monocle;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
@@ -91,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     warpScreen.StartDelay();
                 }
             }
-            WarpManager.Teleport(warp,  WipeType, WipeDuration);
+            WarpManager.Teleport(warp, WipeType, WipeDuration);
         }
 
         public class WarpButton : Button

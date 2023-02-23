@@ -45,7 +45,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             if (!string.IsNullOrEmpty(conditionFlags))
             {
                 string[] flags = conditionFlags.Split(',');
-                
+
                 foreach (string flag in flags)
                 {
                     if (!SceneAs<Level>().Session.GetFlag(flag))

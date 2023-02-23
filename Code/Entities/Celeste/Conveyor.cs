@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -30,7 +28,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private int currentTotalActors;
 
-        private List<Actor> actors = new List<Actor>();
+        private List<Actor> actors = new();
 
         private List<Sprite> sprites = new();
 
@@ -73,10 +71,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public List<Sprite> BuildSprite()
         {
-            List<Sprite> list = new List<Sprite>();
+            List<Sprite> list = new();
             for (int i = -8; i <= Width + 8; i++)
             {
-                Sprite sprite = new Sprite(GFX.Game, directory + "/");
+                Sprite sprite = new(GFX.Game, directory + "/");
                 sprite.AddLoop("belt", "belt", 0f);
                 sprite.Play("belt");
                 sprite.Position = Vector2.UnitX * i;

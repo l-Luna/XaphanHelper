@@ -47,10 +47,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private HashSet<CustomCrumbleBlock> groupedCustomCrumbleBlocks = new();
 
-        public CustomCrumbleBlock(EntityData data, Vector2 offset) : this (data.Position, offset, data.Width, data.Height, data.Float("respawnTime", 2f), data.Float("crumbleDelay", 0.4f), data.Bool("oneUse", false), data.Bool("triggerAdjacents", false),
+        public CustomCrumbleBlock(EntityData data, Vector2 offset) : this(data.Position, offset, data.Width, data.Height, data.Float("respawnTime", 2f), data.Float("crumbleDelay", 0.4f), data.Bool("oneUse", false), data.Bool("triggerAdjacents", false),
             data.Int("rotation"), data.Attr("texture"))
         {
-            
+
         }
 
         public CustomCrumbleBlock(Vector2 position, Vector2 offset, int width, int height, float respawnTime, float crumbleDelay, bool oneUse, bool triggerAdjacents, int rotation = 0, string texture = null) : base(position + offset, width, height, safe: false)
@@ -119,13 +119,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         texture = Calc.Random.Next(mTexture.Width / 8);
                     }
-                    Image image = new Image(mTexture.GetSubtexture(texture * 8, 0, 8, 8));
+                    Image image = new(mTexture.GetSubtexture(texture * 8, 0, 8, 8));
                     image.Position = new Vector2(4 + i, 4f + j);
                     image.CenterOrigin();
                     if (rotation != 0)
                     {
                         image.Rotation = rotation == 1 ? (float)Math.PI / 2 : (rotation == 2 ? (float)Math.PI : -(float)Math.PI / 2);
-                    }              
+                    }
                     Add(image);
                     images.Add(image);
                     if (previousTexturePosition != -1)
@@ -133,7 +133,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         secondPreviousTexturePosition = previousTexturePosition;
                     }
                     previousTexturePosition = texture;
-                    Coroutine coroutine = new Coroutine();
+                    Coroutine coroutine = new();
                     coroutine.RemoveOnComplete = false;
                     falls.Add(coroutine);
                     Add(coroutine);
@@ -352,7 +352,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Render()
         {
             base.Render();
-            for (int i = 0; i < outline.Count; i ++)
+            for (int i = 0; i < outline.Count; i++)
             {
                 if (respawnTimer < i * outlineColorTimer)
                 {

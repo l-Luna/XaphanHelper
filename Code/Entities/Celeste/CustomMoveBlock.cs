@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using FMOD.Studio;

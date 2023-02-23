@@ -423,7 +423,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         private static void modPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
-        {   
+        {
             if (XaphanModule.onSlope && self.Bottom != XaphanModule.onSlopeTop && self.Speed.X != 0 && XaphanModule.onSlopeAffectPlayerSpeed)
             {
                 XaphanModule.MaxRunSpeed += 0.025f;
@@ -471,7 +471,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void ilPlayerNormalUpdate(ILContext il)
         {
-            ILCursor cursor = new ILCursor(il);
+            ILCursor cursor = new(il);
 
             // Increase X speed based on MaxRunSpeed value
 
@@ -726,7 +726,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 if (Side == "Left")
                 {
                     SlopeTop = Position + new Vector2(7, 0);
-                    SlopeBottom =   Position + new Vector2(7 + (Gentle ? 16 : 8) * SlopeHeight, 8 * SlopeHeight);
+                    SlopeBottom = Position + new Vector2(7 + (Gentle ? 16 : 8) * SlopeHeight, 8 * SlopeHeight);
                 }
                 else if (Side == "Right")
                 {

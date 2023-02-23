@@ -98,7 +98,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             {
                 return actualValue;
             }
-            if (moveX == -(int) self.Facing)
+            if (moveX == -(int)self.Facing)
             {
                 return actualValue;
             }

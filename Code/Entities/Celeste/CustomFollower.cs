@@ -35,7 +35,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 sprites = new Sprite[text.Length];
                 for (int i = 0; i < text.Length; i++)
                 {
-                    Sprite sprite = new Sprite(GFX.Game, "collectables/XaphanHelper/CustomFollower/collectText/");
+                    Sprite sprite = new(GFX.Game, "collectables/XaphanHelper/CustomFollower/collectText/");
                     if (text[i] == ' ')
                     {
                         sprite.Add("start", "_", 0.08f, 0, 0, 0);
@@ -51,9 +51,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     sprite.Play("start");
                     sprites[i] = sprite;
-                    
+
                 }
-                textWidth = sprites.Sum((Sprite sprite) => sprite.Width -1) + 1;
+                textWidth = sprites.Sum((Sprite sprite) => sprite.Width - 1) + 1;
                 Add(light = new VertexLight(Color.White, 1f, 16, 24));
                 Add(bloom = new BloomPoint(1f, 12f));
                 Depth = -2000100;
@@ -122,7 +122,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Y = Calc.Clamp(Y, camera.Top + 8f, camera.Bottom - 8f);
                 light.Alpha = Calc.Approach(light.Alpha, 0f, Engine.DeltaTime * 4f);
                 bloom.Alpha = light.Alpha;
-                ParticleType particleType = (color == 0 ? Strawberry.P_GhostGlow : ( color == 1 ? Strawberry.P_Glow : Strawberry.P_MoonGlow));
+                ParticleType particleType = (color == 0 ? Strawberry.P_GhostGlow : (color == 1 ? Strawberry.P_Glow : Strawberry.P_MoonGlow));
                 Sprite[] array = sprites;
                 foreach (Sprite sprite in array)
                 {
@@ -423,7 +423,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 float num = Vector2.Distance(Position, start);
                 float num2 = Calc.ClampedMap(num, 16f, 120f, 16f, 96f);
                 Vector2 control = start + vector * 16f + vector.Perpendicular() * num2 * Calc.Random.Choose(1, -1);
-                SimpleCurve curve = new SimpleCurve(Position, start, control);
+                SimpleCurve curve = new(Position, start, control);
                 Tween tween = Tween.Create(Tween.TweenMode.Oneshot, Ease.SineOut, MathHelper.Max(num / 100f, 0.4f), start: true);
                 tween.OnUpdate = delegate (Tween f)
                 {
