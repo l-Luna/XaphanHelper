@@ -49,7 +49,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             {
                 foreach (MagneticCeiling ceiling in self.SceneAs<Level>().Tracker.GetEntities<MagneticCeiling>())
                 {
-                    if (ceiling.playerWasAttached)
+                    if (ceiling.playerWasAttached && ceiling.Active)
                     {
                         Player_dashCooldownTimer.SetValue(self, Engine.DeltaTime + 0.01f);
                     }
