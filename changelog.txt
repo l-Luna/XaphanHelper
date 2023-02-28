@@ -2,6 +2,7 @@ Version 1.0.55 :
 - Added "Tutorial" attribute to Drone Switches
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 - Fixed a bug preventing the player to dash if they were grabbing a Magnetic Ceiling that got disabled
+- Fixed a bug preventing Break Blocks set to Lightning Dash to break correctly if the player dashed into them from too far
 
 Version 1.0.54 :
 - Added "Type" attribute to Drone Switches
