@@ -155,7 +155,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 foreach (Actor actor in actors)
                 {
-                    if (actor.GetType() != typeof(Player) && actor.GetType() != typeof(FakePlayer) && actor.GetType() != typeof(Drone) && actor.IsRiding(this) && actor.AllowPushing)
+                    if (actor.GetType() != typeof(Player) && actor.GetType() != typeof(FakePlayer) && actor.GetType() != typeof(Drone) && actor.GetType() != typeof(DroneDebris) && actor.GetType() != typeof(Debris) && actor.IsRiding(this) && actor.AllowPushing)
                     {
                         actor.MoveH(conveyorSpeed / 100f * direction);
                         actor.Bottom = Top;
