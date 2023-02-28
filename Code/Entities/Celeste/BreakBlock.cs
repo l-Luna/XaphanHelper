@@ -72,6 +72,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (indicator.block == this && (indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitX * 2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitX * -2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitY * 2) || indicator.CollideCheck<Player>(indicator.Position + Vector2.UnitY * -2)))
                 {
+                    Logger.Log(LogLevel.Info, "XH", "Test");
                     indicator.OnPlayer(player);
                 }
             }
@@ -205,8 +206,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 return;
             }
-            Player player = CollideFirst<Player>();
-            if (player != null && player.StateMachine.State != 9)
+            Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+            if (player != null && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Shinesparking") && (CollideCheck(player, Position + Vector2.UnitX) || (CollideCheck(player, Position - Vector2.UnitX))))
+            {
+                OnDashed(player, new Vector2(player.Facing == Facings.Left ? -1 : 1, 0));
+            }
+            if (player != null & player.CollideCheck(this))
             {
                 Break();
             }

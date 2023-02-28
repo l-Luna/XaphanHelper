@@ -42,7 +42,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 directory = "objects/XaphanHelper/BreakBlock";
             }
-            Collider = new Hitbox(8f, 8f, 0f, 0f);
+            Collider = new Hitbox(8f, 8f);
             Add(new PlayerCollider(OnPlayerBooster, new Hitbox(16f, 16f, -4f, -4f)));
             Add(blockType = new Sprite(GFX.Game, directory + "/"));
             blockType.AddLoop("bomb", "Bomb", 1f);
