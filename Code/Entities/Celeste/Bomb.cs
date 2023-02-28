@@ -363,6 +363,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             noGravityTimer = 0.01f;
             yield return 0.01f;
             explode = true;
+            bombSprite.Position += new Vector2(0, 12);
             Audio.Play("event:/game/xaphan/bomb_explode", Position);
             bombSprite.Play("explode", false);
             bombSprite.OnLastFrame = onLastFrame;
