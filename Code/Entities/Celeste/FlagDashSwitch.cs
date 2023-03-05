@@ -70,6 +70,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Vector2 spriteOffset;
 
+        private bool haveGolden;
+
         public bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -373,7 +375,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Awake(Scene scene)
         {
             base.Awake(scene);
-            bool haveGolden = false;
             foreach (Strawberry item in Scene.Entities.FindAll<Strawberry>())
             {
                 if (item.Golden && item.Follower.Leader != null)
@@ -382,6 +383,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     break;
                 }
             }
+        }
+
+        public override void Update()
+        {
+            base.Update();
             if (!haveGolden && !XaphanModule.ModSettings.SpeedrunMode)
             {
                 if ((((mode == "SetTrue" && SceneAs<Level>().Session.GetFlag(flag)) || (mode == "SetFalse" && !SceneAs<Level>().Session.GetFlag(flag))) || FlagRegiseredInSaveData()) && !canSwapFlag)
@@ -402,11 +408,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     pressed = true;
                 }
             }
-        }
-
-        public override void Update()
-        {
-            base.Update();
             if (inWall && (side == Sides.Left || side == Sides.Right))
             {
                 DisplacePlayerOnTop();
