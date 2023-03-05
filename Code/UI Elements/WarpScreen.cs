@@ -123,6 +123,15 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
 
+            if (warpMenu.LastPossibleSelection > 10 && warpMenu.Selection <= ActiveWarps.Count - 5)
+            {
+                arrowTex.DrawCentered(new Vector2(warpMenu.X, 1009f), Color.White, 1f, (float)Math.PI * 3f / 2f);
+            }
+            if (warpMenu.Selection > 6 && warpMenu.LastPossibleSelection > 10)
+            {
+                arrowTex.DrawCentered(new Vector2(warpMenu.X, 190f), Color.White, 1f, (float)Math.PI / 2f);
+            }
+
             if (mapDisplay?.Scene != null)
             {
                 if (mapProgressDisplay?.Scene != null && !mapProgressDisplay.Hidden)
@@ -175,7 +184,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             MapData mapData = AreaData.Areas[SelectedWarp.AreaId].Mode[0].MapData;
             if (mapData.GetEntityData("XaphanHelper/InGameMapController") is EntityData mapController)
             {
-                warpMenu.Position = new Vector2(Celeste.TargetWidth - 400f, Celeste.TargetHeight / 2f + 98f);
                 string mapName = mapController.Attr("mapName");
                 if (!string.IsNullOrEmpty(mapName))
                 {

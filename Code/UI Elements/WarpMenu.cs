@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public string CurrentWarp;
         public string WipeType = "Fade";
         public float WipeDuration = 0.75f;
+        public new float Height;
 
         public WarpMenu()
         {
@@ -25,8 +27,89 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
+            Position = new Vector2(Celeste.TargetWidth - 445f, Celeste.TargetHeight / 2f + 38f);
             FormationBackdrop formationBackdrop = SceneAs<Level>().FormationBackdrop;
             Alpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(formationBackdrop).Get("fade") : 1f;
+            if (IndexOf(Current) <= 5)
+            {
+                foreach (Item item in Items)
+                {
+                    if (item is WarpButton)
+                    {
+                        WarpButton warpButton = (WarpButton)item;
+                        if (IndexOf(warpButton) > 10)
+                        {
+                            warpButton.Hide = true;
+                        }
+                        else
+                        {
+                            warpButton.Hide = false;
+                        }
+                    }
+                }
+            }
+            if (IndexOf(Current) > 5 && IndexOf(Current) <= LastPossibleSelection - 5)
+            {
+                foreach (Item item in Items)
+                {
+                    if (item is WarpButton)
+                    {
+                        WarpButton warpButton = (WarpButton)item;
+                        if (IndexOf(warpButton) <= IndexOf(Current) - 6 || IndexOf(warpButton) >= IndexOf(Current) + 5)
+                        {
+                            warpButton.Hide = true;
+                        }
+                        else
+                        {
+                            warpButton.Hide = false;
+                        }
+                    }
+                }
+            }
+            if (IndexOf(Current) > LastPossibleSelection - 5)
+            {
+                foreach (Item item in Items)
+                {
+                    if (item is WarpButton)
+                    {
+                        WarpButton warpButton = (WarpButton)item;
+                        if (IndexOf(warpButton) <= LastPossibleSelection - 10)
+                        {
+                            warpButton.Hide = true;
+                        }
+                        else
+                        {
+                            warpButton.Hide = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        public new void RecalculateSize()
+        {
+            Height = 0f;
+            base.RecalculateSize();
+            foreach (Item item in Items)
+            {
+                if (item is WarpButton)
+                {
+                    WarpButton warpButton = (WarpButton)item;
+                    if (warpButton.Visible && !warpButton.Hide)
+                    {
+                        Height += warpButton.Height() + ItemSpacing;
+                    }
+                }
+                else
+                {
+                    if (item.Visible)
+                    {
+                        Height += item.Height() + ItemSpacing;
+                    }
+                }
+            }
+            Height -= ItemSpacing;
+            Height = Math.Min(Height, 10 * ActiveFont.LineHeight + 37);
         }
 
         public void UpdateWarps(List<WarpInfo> warps)
@@ -94,9 +177,47 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             WarpManager.Teleport(warp, WipeType, WipeDuration);
         }
 
+        public override void Render()
+        {
+            RecalculateSize();
+            Vector2 value = Position - Justify * new Vector2(Width, Height);
+            foreach (Item item in Items)
+            {
+                if (item is WarpButton)
+                {
+                    WarpButton warpButton = (WarpButton)item;
+                    if (warpButton.Visible && !warpButton.Hide)
+                    {
+                        float num = warpButton.Height();
+                        Vector2 position = value + new Vector2(0f, num * 0.5f + warpButton.SelectWiggler.Value * 8f);
+                        if (position.Y + num * 0.5f > 0f && position.Y - num * 0.5f < Engine.Height)
+                        {
+                            warpButton.Render(position, Focused && Current == warpButton);
+                        }
+                        value.Y += num + ItemSpacing;
+                    }
+                }
+                else
+                {
+                    if (item.Visible)
+                    {
+                        float num = item.Height();
+                        Vector2 position = value + new Vector2(0f, num * 0.5f + item.SelectWiggler.Value * 8f);
+                        if (position.Y + num * 0.5f > 0f && position.Y - num * 0.5f < Engine.Height)
+                        {
+                            item.Render(position, Focused && Current == item);
+                        }
+                        value.Y += num + ItemSpacing;
+                    }
+                }
+            }
+        }
+
         public class WarpButton : Button
         {
             public WarpInfo Warp;
+
+            public bool Hide;
 
             public WarpButton(WarpInfo warp)
                 : base(Dialog.Clean(warp.DialogKey))
@@ -106,7 +227,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public override void Render(Vector2 position, bool highlighted)
             {
-                base.Render(position, highlighted);
+                if (!Hide)
+                {
+                    base.Render(position, highlighted);
+                }
             }
         }
     }
