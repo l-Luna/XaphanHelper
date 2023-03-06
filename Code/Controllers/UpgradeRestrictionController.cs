@@ -63,7 +63,7 @@ public class UpgradeRestrictionController : Entity{
 		ISet<Upgrade> seen = new HashSet<Upgrade>();
 		int used = 0;
 		foreach(Upgrade upgrade in upgrades)
-			if(!seen.Contains(upgrade)){
+			if(!Ignored.Contains(upgrade) && !seen.Contains(upgrade)){
 				seen.Add(upgrade);
 				used++;
 
