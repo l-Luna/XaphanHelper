@@ -30,51 +30,54 @@ namespace Celeste.Mod.XaphanHelper.Events
 
         public IEnumerator Cutscene(Level level)
         {
-            while (!level.Session.GetFlag("Gem_Collected"))
+            if (!level.Session.GetFlag("Ch4_Escape_Complete"))
             {
-                yield return null;
-            }
-            if (!level.Session.GetFlag("Lab_Escape"))
-            {
-                alarmSfx = Audio.Play("event:/game/xaphan/alarm");
-                StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
-                Vector2 triggerStartPosition = trigger.Position;
-                trigger.Position = player.Position - Vector2.UnitY * 16;
-                yield return 0.01f;
-                level.Session.SetFlag("Lab_Escape", true);
-                trigger.Position = triggerStartPosition;
-                float timer = 2f;
-                bool countdownStarted = false;
-                while (timer > 0 && !countdownStarted)
+                while (!level.Session.GetFlag("Gem_Collected"))
                 {
-                    timer -= Engine.DeltaTime;
                     yield return null;
-                    if (level.Tracker.GetEntity<CountdownDisplay>() != null)
-                    {
-                        countdownStarted = true;
-                    }
                 }
-                level.Session.Audio.Music.Event = SFX.EventnameByHandle("event:/music/xaphan/lvl_0_escape");
-                level.Session.Audio.Apply(forceSixteenthNoteHack: false);
-                CountdownDisplay display = null;
-                while (true)
+                if (!level.Session.GetFlag("Lab_Escape"))
                 {
-                    if (Scene != null)
+                    alarmSfx = Audio.Play("event:/game/xaphan/alarm");
+                    StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
+                    Vector2 triggerStartPosition = trigger.Position;
+                    trigger.Position = player.Position - Vector2.UnitY * 16;
+                    yield return 0.01f;
+                    level.Session.SetFlag("Lab_Escape", true);
+                    trigger.Position = triggerStartPosition;
+                    float timer = 2f;
+                    bool countdownStarted = false;
+                    while (timer > 0 && !countdownStarted)
                     {
-                        if (Scene.Tracker.GetEntities<CountdownDisplay>().Count == 1)
+                        timer -= Engine.DeltaTime;
+                        yield return null;
+                        if (level.Tracker.GetEntity<CountdownDisplay>() != null)
                         {
-                            if (display == null)
-                            {
-                                display = Scene.Tracker.GetEntity<CountdownDisplay>();
-                            }
-                            else if (display.TimerRanOut)
-                            {
-                                alarmSfx.stop(STOP_MODE.IMMEDIATE);
-                                break;
-                            }
+                            countdownStarted = true;
                         }
                     }
-                    yield return null;
+                    level.Session.Audio.Music.Event = SFX.EventnameByHandle("event:/music/xaphan/lvl_0_escape");
+                    level.Session.Audio.Apply(forceSixteenthNoteHack: false);
+                    CountdownDisplay display = null;
+                    while (true)
+                    {
+                        if (Scene != null)
+                        {
+                            if (Scene.Tracker.GetEntities<CountdownDisplay>().Count == 1)
+                            {
+                                if (display == null)
+                                {
+                                    display = Scene.Tracker.GetEntity<CountdownDisplay>();
+                                }
+                                else if (display.TimerRanOut)
+                                {
+                                    alarmSfx.stop(STOP_MODE.IMMEDIATE);
+                                    break;
+                                }
+                            }
+                        }
+                        yield return null;
+                    }
                 }
             }
         }

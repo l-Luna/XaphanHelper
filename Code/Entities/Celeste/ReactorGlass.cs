@@ -153,7 +153,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Added(Scene scene)
         {
             base.Added(scene);
-            if (SceneAs<Level>().Session.GetFlag("reactor_glass_broken"))
+            if (SceneAs<Level>().Session.GetFlag("reactor_glass_dashed_1"))
+            {
+                Sprite.Play("fissured");
+                TimesDashed = 1;
+            }
+            else if (SceneAs<Level>().Session.GetFlag("reactor_glass_dashed_2"))
+            {
+                Sprite.Play("fissured_b");
+                TimesDashed = 2;
+            }
+            else if (SceneAs<Level>().Session.GetFlag("reactor_glass_broken") || SceneAs<Level>().Session.GetFlag("Ch4_Escape_Complete"))
             {
                 Break();
             }
@@ -166,11 +176,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Sprite.Play("fissured");
                 Audio.Play("event:/game/06_reflection/fall_spike_smash", Position);
+                SceneAs<Level>().Session.SetFlag("reactor_glass_dashed_1", true);
             }
             else if (TimesDashed == 2)
             {
                 Sprite.Play("fissured_b");
                 Audio.Play("event:/game/06_reflection/fall_spike_smash", Position);
+                SceneAs<Level>().Session.SetFlag("reactor_glass_dashed_1", false);
+                SceneAs<Level>().Session.SetFlag("reactor_glass_dashed_2", true);
             }
             else if (TimesDashed == 3)
             {
@@ -186,6 +199,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
                 Audio.Play("event:/game/general/wall_break_ice", Position);
+                SceneAs<Level>().Session.SetFlag("reactor_glass_dashed_2", false);
                 SceneAs<Level>().Session.SetFlag("reactor_glass_broken", true);
                 Break();
             }
