@@ -46,6 +46,8 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         public bool Canceled;
 
+        private Vector2 SpawnPosition;
+
         public StartCountdownTrigger(EntityData data, Vector2 offset, EntityID ID) : base(data, offset)
         {
             Tag = Tags.Global;
@@ -72,6 +74,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             {
                 MessageColor = "FFFFFF";
             }
+            SpawnPosition = data.Position;
         }
 
         public override void Added(Scene scene)
@@ -81,6 +84,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             SceneAs<Level>().Session.SetFlag("Countdown_" + eid.Key, false);
             SceneAs<Level>().Session.SetFlag(activeFlag, false);
             XaphanModule.ModSaveData.CountdownActiveFlag = "";
+            
         }
 
         public override void Update()
@@ -132,7 +136,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             display = SceneAs<Level>().Tracker.GetEntity<CountdownDisplay>();
             if (display == null)
             {
-                SceneAs<Level>().Add(new CountdownDisplay(this, CrossChapter, Center, immediate));
+                SceneAs<Level>().Add(new CountdownDisplay(this, CrossChapter, SpawnPosition, immediate));
             }
         }
 
