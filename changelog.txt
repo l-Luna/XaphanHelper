@@ -1,5 +1,7 @@
 Version 1.0.55 :
 - Added "Tutorial" attribute to Drone Switches
+- Added "Only Need One Flag" attribute to Bubble Doors
+- Added "Inverted" attribute to Reset Flags Trigger
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 - Fixed a bug preventing the player to dash if they were grabbing a Magnetic Ceiling that got disabled
 - Fixed a bug preventing Break Blocks set to Lightning Dash to break correctly if the player dashed into them from too far

@@ -28,6 +28,7 @@ entities.XaphanHelper/BubbleDoor.attributes.description.closeSound=Sound event t
 entities.XaphanHelper/BubbleDoor.attributes.description.unlockSound=Sound event that play when the door unlock. (when the flag switch from false to true while the player is in the same room)
 entities.XaphanHelper/BubbleDoor.attributes.description.lockSound=Sound event that play when the door lock. (when the door closes behind the player but the flag is not set)
 entities.XaphanHelper/BubbleDoor.attributes.description.forceLockedFlag=If this flag is set, the door will be locked and use the Grey color, regardless of other settings.
+entities.XaphanHelper/BubbleDoor.attributes.description.onlyNeedOneFlag=If true, the door will be active if any of the flags specified in "flags" is set.
 
 # Cell
 entities.XaphanHelper/Cell.placements.name.Cell=Cell
@@ -666,6 +667,7 @@ triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.transitionUpdate=
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.removeWhenOutside=If true, the trigger is removed if the player spawn or move outside of it.
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.registerInSaveData=If true, the flags in "Set True Flags" will be registered in the player save file and will be true forever. The flags in "Set False Flags" will be removed from the player save file.
 triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.conditionFlags=The flags that must be set for this trigger to take effect, separated by a comma (,).\nLeave empty if you want this trigger to always take effect.
+triggers.XaphanHelper/ResetFlagsTrigger.attributes.description.inverted=If true, the flags specified in "Condition Flags" must not be set for this trigger to take effect.
 
 # StartCountdownTrigger
 triggers.XaphanHelper/StartCountdownTrigger.placements.name.StartCountdownTrigger=Start Countdown
