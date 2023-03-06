@@ -5,7 +5,7 @@ local BubbleDoor = {}
 BubbleDoor.name = "XaphanHelper/BubbleDoor"
 BubbleDoor.depth = -9000
 BubbleDoor.fieldOrder = {
-    "x", "y", "directory", "side", "color", "flags", "forceLockedFlag", "openSound", "closeSound", "lockSound", "unlockSound"
+    "x", "y", "directory", "side", "color", "flags", "forceLockedFlag", "openSound", "closeSound", "lockSound", "unlockSound", "onlyNeedOneFlag"
 }
 BubbleDoor.canResize = {false, false}
 BubbleDoor.fieldInformation = {
@@ -29,7 +29,8 @@ BubbleDoor.placements = {
         openSound = "",
         closeSound = "",
         unlockSound = "",
-        lockSound = ""
+        lockSound = "",
+        onlyNeedOneFlag = false
     }
 }
 

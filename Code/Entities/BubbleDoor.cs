@@ -40,6 +40,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string forceLockedFlag;
 
+        public bool OnlyNeedOneFlag;
+
         private Sprite doorCap;
 
         private Sprite doorStruct;
@@ -66,6 +68,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             forceLockedFlag = data.Attr("forceLockedFlag");
             forceLockedFlag = string.IsNullOrEmpty(forceLockedFlag) ? null : forceLockedFlag;
+            OnlyNeedOneFlag = data.Bool("onlyNeedOneFlag", false);
             openSound = data.Attr("openSound", "event:/game/05_mirror_temple/gate_main_open");
             closeSound = data.Attr("closeSound", "event:/game/05_mirror_temple/gate_main_close");
             unlockSound = data.Attr("unlockSound", "");
@@ -187,15 +190,28 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             base.Update();
             bool allFlagsTrue = true;
+            bool oneFlagTrue = false;
             foreach (string flag in flags)
             {
-                if (!string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                if (!OnlyNeedOneFlag)
                 {
-                    allFlagsTrue = false;
-                    break;
+                    if (!string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        allFlagsTrue = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(flag) && SceneAs<Level>().Session.GetFlag(flag))
+                    {
+                        oneFlagTrue = true;
+                        break;
+                    }
                 }
             }
-            if (allFlagsTrue && ((!string.IsNullOrEmpty(forceLockedFlag) && !SceneAs<Level>().Session.GetFlag(forceLockedFlag)) || string.IsNullOrEmpty(forceLockedFlag)))
+            bool shouldBeActive = !OnlyNeedOneFlag ? allFlagsTrue : oneFlagTrue;
+            if (shouldBeActive && ((!string.IsNullOrEmpty(forceLockedFlag) && !SceneAs<Level>().Session.GetFlag(forceLockedFlag)) || string.IsNullOrEmpty(forceLockedFlag)))
             {
                 isActive = true;
             }
