@@ -2,7 +2,7 @@ local ResetFlagsTrigger = {}
 
 ResetFlagsTrigger.name = "XaphanHelper/ResetFlagsTrigger"
 ResetFlagsTrigger.fieldOrder = {
-    "x", "y", "width", "height", "setTrueFlags", "setFalseFlags", "conditionFlags", "transitionUpdate", "removeWhenOutside", "registerInSaveData"
+    "x", "y", "width", "height", "setTrueFlags", "setFalseFlags", "conditionFlags", "transitionUpdate", "removeWhenOutside", "registerInSaveData", "inverted"
 }
 ResetFlagsTrigger.placements = {
     name = "ResetFlagsTrigger",
@@ -12,7 +12,8 @@ ResetFlagsTrigger.placements = {
         transitionUpdate = false,
         removeWhenOutside = false,
         registerInSaveData = false,
-        conditionFlags = ""
+        conditionFlags = "",
+        inverted = false
     }
 }
 

@@ -21,6 +21,8 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         private string conditionFlags;
 
+        private bool inverted;
+
         public ResetFlagsTrigger(EntityData data, Vector2 offset) : base(data, offset)
         {
             setTrueFlags = data.Attr("setTrueFlags");
@@ -29,6 +31,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             removeWhenOutside = data.Bool("removeWhenOutside");
             registerInSaveData = data.Bool("registerInSaveData");
             conditionFlags = data.Attr("conditionFlags");
+            inverted = data.Bool("inverted");
             if (transitionUpdate)
             {
                 Tag = Tags.TransitionUpdate;
@@ -48,10 +51,21 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
                 foreach (string flag in flags)
                 {
-                    if (!SceneAs<Level>().Session.GetFlag(flag))
+                    if (!inverted)
                     {
-                        allConditionFlagsSet = false;
-                        break;
+                        if (!SceneAs<Level>().Session.GetFlag(flag))
+                        {
+                            allConditionFlagsSet = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (SceneAs<Level>().Session.GetFlag(flag))
+                        {
+                            allConditionFlagsSet = false;
+                            break;
+                        }
                     }
                 }
             }
