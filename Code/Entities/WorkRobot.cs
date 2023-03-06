@@ -123,7 +123,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (!string.IsNullOrEmpty(flag) && !TurnAroundRoutine.Active && !ActiveRoutine.Active)
+            if (!TurnAroundRoutine.Active && !ActiveRoutine.Active)
             {
                 if (!active)
                 {
