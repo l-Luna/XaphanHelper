@@ -26,6 +26,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string flag;
 
+        private string noInteractFlag;
+
         private string sprite;
 
         private int index;
@@ -53,6 +55,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             beamColor = Calc.HexToColor(data.Attr("beamColor", "FFFFFF"));
             noBeam = data.Bool("noBeam");
             flag = data.Attr("flag");
+            noInteractFlag = data.Attr("noInteractFlag");
             Collider.Width = 32f;
             Collider.Height = 16f;
             SurfaceSoundIndex = 8;
@@ -272,14 +275,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             activated = true;
             warpStationSprite.Play("active");
-            if (!noBeam)
+            if (string.IsNullOrEmpty(noInteractFlag) || (!string.IsNullOrEmpty(noInteractFlag) && !SceneAs<Level>().Session.GetFlag(noInteractFlag)))
             {
-                level.Add(beam = new WarpBeam(Position + new Vector2(16, 0), beamColor));
+                if (!noBeam)
+                {
+                    level.Add(beam = new WarpBeam(Position + new Vector2(16, 0), beamColor));
+                }
+                Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
+                {
+                    PlayerMustBeFacing = false
+                });
             }
-            Add(talker = new TalkComponent(new Rectangle(4, -8, 24, 8), new Vector2(16f, -16f), (player) => Add(new Coroutine(InteractRoutine(player))))
-            {
-                PlayerMustBeFacing = false
-            });
             WarpManager.ActivateWarp(warpId);
         }
 
