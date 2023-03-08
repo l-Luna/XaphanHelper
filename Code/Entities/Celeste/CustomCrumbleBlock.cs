@@ -151,7 +151,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     images[k].Position = new Vector2(4 + PosX * 8, 4 + PosY * 8) + v[k];
                 }
             }));
-            Add(occluder = new LightOcclude(0.2f));
+            Add(occluder = new LightOcclude(0.8f));
         }
 
         private IEnumerator Sequence()
