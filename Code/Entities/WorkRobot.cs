@@ -36,7 +36,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public WorkRobot(EntityData data, Vector2 offset) : base(data.Position + offset, 10f, 17f, false)
         {
-            Tag = Tags.TransitionUpdate;
             SurfaceSoundIndex = 7;
             size = data.Attr("size", "Medium");
             flag = data.Attr("flag");
@@ -72,7 +71,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (SceneAs<Level>().Session.GetFlag(flag))
                 {
-                    Add(new Coroutine(Activate()));
+                    active = true;
                 }
                 else
                 {
@@ -123,7 +122,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (!TurnAroundRoutine.Active && !ActiveRoutine.Active)
+            if (!string.IsNullOrEmpty(flag) && !TurnAroundRoutine.Active && !ActiveRoutine.Active)
             {
                 if (!active)
                 {
@@ -199,7 +198,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         MoveV(1, 0);
                         yield return 0.08f;
                     }
-                    if (sprite.CurrentAnimationFrame == 9 && (!string.IsNullOrEmpty(flag) ? !SceneAs<Level>().Session.GetFlag(flag) : true))
+                    if (sprite.CurrentAnimationFrame == 9 && (!string.IsNullOrEmpty(flag) ? !SceneAs<Level>().Session.GetFlag(flag) : false))
                     {
                         active = false;
                         sprite.Play("idle");
