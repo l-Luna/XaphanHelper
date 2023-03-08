@@ -127,6 +127,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Update += onPlayerUpdate;
         }
 
+
         public static void Unload()
         {
             On.Celeste.Player.Update -= onPlayerUpdate;
@@ -137,7 +138,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             List<Entity> pushBlocks = self.Scene.Tracker.GetEntities<PushBlock>().ToList();
             foreach (PushBlock pushBlock in pushBlocks)
             {
-                if (!SaveData.Instance.Assists.Invincible && pushBlock.canKill && (!self.DashAttacking || self.DashAttacking && (self.Bottom <= pushBlock.Top && self.DashDir.Y <= 0)))
+                if (!SaveData.Instance.Assists.Invincible && pushBlock.canKill && (!self.DashAttacking || (self.DashAttacking && (self.Bottom < pushBlock.Top - 5 && self.DashDir.Y <= 0))))
                 {
                     pushBlock.Collidable = false;
                 }
