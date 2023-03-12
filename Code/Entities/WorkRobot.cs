@@ -34,6 +34,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string directory;
 
+        private float SpeedH;
+
+        private float SpeedV;
+
         public WorkRobot(EntityData data, Vector2 offset) : base(data.Position + offset, 10f, 17f, false)
         {
             SurfaceSoundIndex = 7;
@@ -62,6 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Add(new ClimbBlocker(edge: true));
             sprite.OnFrameChange = onFrameChange;
             sprite.Play("walk");
+            Depth = -1;
         }
 
         public override void Added(Scene scene)
@@ -87,38 +92,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
+            MoveHCollideSolids(SpeedH * Engine.DeltaTime, false);
+            MoveVCollideSolids(SpeedV * Engine.DeltaTime, false);
             if (ActiveRoutine.Active && !pushed)
             {
-                Speed.X = 0;
+                SpeedH = 0;
             }
+            Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24, width - 2, 1);
             if (!TurnAroundRoutine.Active && !ActiveRoutine.Active && active && (!string.IsNullOrEmpty(flag) ? SceneAs<Level>().Session.GetFlag(flag) : true))
             {
                 sprite.FlipX = goLeft;
-                if (!pushed && CollideCheck<Solid>(Position + Vector2.UnitY))
+                if (!pushed && (Scene.CollideCheck<Solid>(BottomHit) || Scene.CollideCheck<JumpThru>(BottomHit)))
                 {
                     Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 2, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X - 3, (int)Position.Y + 24, 1, 1);
                     Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X + 18, (int)Position.Y + 24, 1, 1);
-                    if (goLeft && Scene.CollideCheck<Solid>(LeftHit) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f))
+                    if (goLeft && (Scene.CollideCheck<Solid>(LeftHit) || Scene.CollideCheck<JumpThru>(LeftHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f))
                     {
-                        Speed.X = -speed;
+                        SpeedH = -speed;
                     }
-                    else if (!goLeft && Scene.CollideCheck<Solid>(RightHit) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f))
+                    else if (!goLeft && (Scene.CollideCheck<Solid>(RightHit) || Scene.CollideCheck<JumpThru>(RightHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f))
                     {
-                        Speed.X = speed;
+                        SpeedH = speed;
                     }
                     else
                     {
-                        Speed.X = 0f;
-                    }
-                    if (goLeft && (!Scene.CollideCheck<Solid>(LeftHit) || CollideCheck<Solid>(Position + Vector2.UnitX * -1f)))
-                    {
-                        goLeft = false;
-                        Add(TurnAroundRoutine = new Coroutine(TurnAround()));
-                    }
-                    else if (!goLeft && (!Scene.CollideCheck<Solid>(RightHit) || CollideCheck<Solid>(Position + Vector2.UnitX * 1f)))
-                    {
-                        goLeft = true;
-                        Add(TurnAroundRoutine = new Coroutine(TurnAround()));
+                        SpeedH = 0f;
+                        if ((goLeft && ((!Scene.CollideCheck<Solid>(LeftHit) && !Scene.CollideCheck<JumpThru>(LeftHit)) || CollideCheck<Solid>(Position + Vector2.UnitX * -1f))) || (!goLeft && ((!Scene.CollideCheck<Solid>(RightHit) && !Scene.CollideCheck<JumpThru>(RightHit)) || CollideCheck<Solid>(Position + Vector2.UnitX * 1f))))
+                        {
+                            goLeft = !goLeft;
+                            Add(TurnAroundRoutine = new Coroutine(TurnAround()));
+                        }
                     }
                 }
             }
@@ -143,46 +146,28 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (CollideCheck<Solid>(Position))
-            {
-                Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 7, 1, height) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y - 2, 1, height) : new Rectangle((int)Position.X - 3, (int)Position.Y - 11, 1, height);
-                Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 7, 1, height) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y - 2, 1, height) : new Rectangle((int)Position.X + 18, (int)Position.Y - 11, 1, height);
-                Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24, width - 2, 1);
-                if (Scene.CollideCheck<Solid>(LeftHit))
-                {
-                    MoveH(1);
-                }
-                else if (Scene.CollideCheck<Solid>(RightHit))
-                {
-                    MoveH(-1);
-                }
-                if (Scene.CollideCheck<Solid>(BottomHit))
-                {
-                    MoveV(-1);
-                }
-            }
-            if (!CollideCheck<Solid>(Position + Vector2.UnitY))
+            if (!Scene.CollideCheck<Solid>(BottomHit) && !Scene.CollideCheck<JumpThru>(BottomHit))
             {
                 float num = 800f;
-                if (Math.Abs(Speed.Y) <= 30f)
+                if (Math.Abs(SpeedV) <= 30f)
                 {
                     num *= 0.5f;
                 }
-                Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
+                SpeedV = Calc.Approach(SpeedV, 200f, num * Engine.DeltaTime);
             }
             else
             {
-                if (Speed.Y > 0)
+                if (SpeedV > 0)
                 {
-                    Speed.X = 0;
+                    SpeedH = 0;
                 }
-                Speed.Y = 0f;
+                SpeedV = 0f;
             }
         }
 
         private IEnumerator TurnAround()
         {
-            if (!CollideCheck<Solid>(Position + Vector2.UnitY) || (Speed.Y == 0 && CollideCheck<Solid>(Position + Vector2.UnitY)))
+            if (!CollideCheck<Solid>(Position + Vector2.UnitY) || (SpeedV == 0 && CollideCheck<Solid>(Position + Vector2.UnitY)))
             {
                 sprite.Play("turn");
                 int downFirstFrame = size == "Small" ? 6 : size == "Medium" ? 5 : 4;
@@ -293,25 +278,25 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private IEnumerator PushedRoutine(Vector2 force, Vector2 direction)
         {
-            Speed.X = force.X * direction.X;
-            Speed.Y = force.Y;
+            SpeedH = force.X * direction.X;
+            SpeedV = force.Y;
             if (sprite.CurrentAnimationID == "walk")
             {
                 sprite.Rate = 2.5f;
             }
-            while (Speed.X > speed || Speed.X < -speed)
+            while (SpeedH > speed || SpeedH < -speed)
             {
-                if (Speed.X > 0)
+                if (SpeedH > 0)
                 {
-                    Speed.X -= Engine.DeltaTime * 300;
+                    SpeedH -= Engine.DeltaTime * 300;
                 }
                 else
                 {
-                    Speed.X += Engine.DeltaTime * 300;
+                    SpeedH += Engine.DeltaTime * 300;
                 }
                 if (CollideCheck<Solid>(Position + Vector2.UnitX * direction.X))
                 {
-                    Speed.X = 0f;
+                    SpeedH = 0f;
                     yield return 0.3f;
                 }
                 yield return null;
