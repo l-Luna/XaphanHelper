@@ -8,7 +8,7 @@ CustomBadelineBoss.nodeLineRenderType = "line"
 CustomBadelineBoss.texture = "characters/badelineBoss/charge00"
 CustomBadelineBoss.nodeLimits = {0, -1}
 CustomBadelineBoss.fieldOrder = {
-    "x", "y", "cameraPastY", "cameraLockY", "canChangeMusic", "startHit", "patternIndex",  "spriteName", "trailColor", "MoveParticleColor1", "MoveParticleColor2", "hitParticleColor1", "hitParticleColor2", "shotTrailParticleColor1", "shotTrailParticleColor2", "beamDissipateParticleColor"
+    "x", "y", "cameraPastY", "patternIndex", "spriteName", "trailColor", "MoveParticleColor1", "MoveParticleColor2", "hitParticleColor1", "hitParticleColor2", "shotTrailParticleColor1", "shotTrailParticleColor2", "beamDissipateParticleColor", "startHit", "cameraLock", "cameraLockY", "canChangeMusic", "drawProjectilesOutline"
 }
 CustomBadelineBoss.fieldInformation = {
     patternIndex = {
@@ -57,7 +57,9 @@ CustomBadelineBoss.placements = {
         MoveParticleColor1 = "ac3232",
         MoveParticleColor2 = "e05959",
         trailColor = "ac3232",
-        spriteName = "badeline_boss"
+        spriteName = "badeline_boss",
+        cameraLock = true,
+        drawProjectilesOutline = true
     }
 }
 

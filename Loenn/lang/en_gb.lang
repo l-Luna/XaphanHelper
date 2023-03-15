@@ -98,7 +98,7 @@ entities.XaphanHelper/CollectableDoor.attributes.description.levelSet=The level 
 entities.XaphanHelper/CustomBadelineBoss.placements.name.CustomBadelineBoss=Custom Badeline Boss
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.startHit=Determines whether or not Badeline waits to attack until the first hit or upon room entry.
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.patternIndex=Determines what pattern of attack Badeline uses.\n0 - Badeline transforms into the boss after being hit once\n1 - Shoots orbs\n2 - Shoots laser followed by one orb\n3 - Shoots five streams of two orbs\n4 - Shoots five streams of two orbs followed by one laser\n5 - Shoots laser followed by three streams of two orbs\n6 - Shoots lasers\n7 - Shoots orbs with less delay\n8 - Shoots lasers with less delay\n9 - Shoots streams of two orbs\n10 - Does nothing\n11 - Shoots orbs with more delay\n12 - Does nothing\n13 - Shoots orbs after getting hit once\n14 - Shoots lasers with very short delay\n15 - Shoots lasers with more delay
-entities.XaphanHelper/CustomBadelineBoss.attributes.description.cameraLockY=Whether the camera should be locked vertically, functioning similarly as a killbox.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.cameraLockY=Whether the camera should be locked vertically, functioning similarly as a killbox. (No effect if Camera Lock is not true)
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.hitParticleColor1=Hexadecimal code for the first color of the particles appearing when the boss is hit.
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.hitParticleColor2=Hexadecimal code for the second color of the particles appearing when the boss is hit.
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.shotTrailParticleColor1=Hexadecimal code for the first color of the particles appearing behind the boss shots.
@@ -108,6 +108,8 @@ entities.XaphanHelper/CustomBadelineBoss.attributes.description.MoveParticleColo
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.trailColor=Hexadecimal code for the color of the trail when the boss move.
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.beamDissipateParticleColor=Hexadecimal code for the color of the particles appearing when the boss beam dissipate.
 entities.XaphanHelper/CustomBadelineBoss.attributes.description.spriteName=The name of the variant for the sprite in Sprites.xml.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.cameraLock=If true, the boss will prevent the camera to move freely.
+entities.XaphanHelper/CustomBadelineBoss.attributes.description.drawProjectilesOutline=If true, draw a black outline arround the projectiles shoot by the boss.
 
 # CustomCheckpoint
 entities.XaphanHelper/CustomCheckpoint.placements.name.CustomCheckpoint=Custom Checkpoint

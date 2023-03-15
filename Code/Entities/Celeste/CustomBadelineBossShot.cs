@@ -54,18 +54,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Sprite sprite;
 
+        private bool outline;
+
         public CustomBadelineBossShot() : base(Vector2.Zero)
         {
             Add(sprite = GFX.SpriteBank.Create("badeline_projectile"));
-            base.Collider = new Hitbox(4f, 4f, -2f, -2f);
+            Collider = new Hitbox(4f, 4f, -2f, -2f);
             Add(new PlayerCollider(OnPlayer));
-            base.Depth = -1000000;
+            Depth = -1000000;
             Add(sine = new SineWave(1.4f, 0f));
         }
 
-        public CustomBadelineBossShot Init(CustomBadelineBoss boss, Player target, string shotTrailParticleColor1, string shotTrailParticleColor2, float angleOffset = 0f)
+        public CustomBadelineBossShot Init(CustomBadelineBoss boss, Player target, string shotTrailParticleColor1, string shotTrailParticleColor2, float angleOffset = 0f, bool outline = true)
         {
             this.boss = boss;
+            this.outline = outline;
             P_Trail = new ParticleType
             {
                 Size = 1f,
@@ -92,9 +95,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             return this;
         }
 
-        public CustomBadelineBossShot InitAt(CustomBadelineBoss boss, Vector2 target, string shotTrailParticleColor1, string shotTrailParticleColor2)
+        public CustomBadelineBossShot InitAt(CustomBadelineBoss boss, Vector2 target, string shotTrailParticleColor1, string shotTrailParticleColor2, bool outline = true)
         {
             this.boss = boss;
+            this.outline = outline;
             P_Trail = new ParticleType
             {
                 Size = 1f,
@@ -192,19 +196,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public override void Render()
         {
-            Color color = sprite.Color;
-            Vector2 position = sprite.Position;
-            sprite.Color = Color.Black;
-            sprite.Position = position + new Vector2(-1f, 0f);
+            if (outline)
+            {
+                sprite.DrawOutline(Color.Black);
+            }
             sprite.Render();
-            sprite.Position = position + new Vector2(1f, 0f);
-            sprite.Render();
-            sprite.Position = position + new Vector2(0f, -1f);
-            sprite.Render();
-            sprite.Position = position + new Vector2(0f, 1f);
-            sprite.Render();
-            sprite.Color = color;
-            sprite.Position = position;
             base.Render();
         }
 

@@ -89,12 +89,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string spriteName;
 
+        private bool cameraLock;
+
+        private bool drawProjectilesOutline;
+
         public CustomBadelineBoss(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
             canChangeMusic = data.Bool("canChangeMusic", defaultValue: true);
             patternIndex = data.Int("patternIndex");
             CameraYPastMax = data.Float("cameraYPastMax");
             startHit = data.Bool("startHit");
+            cameraLock = data.Bool("cameraLock", true);
             cameraLockY = data.Bool("cameraLockY");
             spriteName = data.Attr("spriteName");
             if (string.IsNullOrEmpty(spriteName))
@@ -118,7 +123,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Add(attackCoroutine);
             triggerBlocksCoroutine = new Coroutine(removeOnComplete: false);
             Add(triggerBlocksCoroutine);
-            Add(new CameraLocker(cameraLockY ? Level.CameraLockModes.FinalBoss : Level.CameraLockModes.FinalBossNoY, 140f, CameraYPastMax));
+            if (cameraLock)
+            {
+                Add(new CameraLocker(cameraLockY ? Level.CameraLockModes.FinalBoss : Level.CameraLockModes.FinalBossNoY, 140f, CameraYPastMax));
+            }
             Add(floatSine = new SineWave(0.6f, 0f));
             Add(scaleWiggler = Wiggler.Create(0.6f, 3f));
             Add(chargeSfx = new SoundSource());
@@ -151,6 +159,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Acceleration = new Vector2(0f, 8f),
                 DirectionRange = (float)Math.PI / 3f
             };
+            drawProjectilesOutline = data.Bool("drawProjectilesOutline", true);
         }
 
         public override void Added(Scene scene)
@@ -840,7 +849,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Player entity = level.Tracker.GetEntity<Player>();
             if (entity != null)
             {
-                level.Add(Engine.Pooler.Create<CustomBadelineBossShot>().Init(this, entity, ShotTrailParticleColor1, ShotTrailParticleColor2, angleOffset));
+                level.Add(Engine.Pooler.Create<CustomBadelineBossShot>().Init(this, entity, ShotTrailParticleColor1, ShotTrailParticleColor2, angleOffset, drawProjectilesOutline));
             }
         }
 
@@ -855,7 +864,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 chargeSfx.Param("end", 1f);
             }
             Sprite.Play("attack1Recoil", restart: true);
-            level.Add(Engine.Pooler.Create<CustomBadelineBossShot>().InitAt(this, at, ShotTrailParticleColor1, ShotTrailParticleColor2));
+            level.Add(Engine.Pooler.Create<CustomBadelineBossShot>().InitAt(this, at, ShotTrailParticleColor1, ShotTrailParticleColor2, drawProjectilesOutline));
         }
 
         private IEnumerator Beam()
