@@ -141,10 +141,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             base.Awake(scene);
             Player player = Scene.Tracker.GetEntity<Player>();
+            FakePlayer fakePlayer = Scene.Tracker.GetEntity<FakePlayer>();
             switch (side)
             {
                 case "Left":
-                    if (player != null && player.Left < Right && player.Bottom > Top && player.Top < Bottom)
+                    if ((player != null && player.Left < Right && player.Bottom > Top && player.Top < Bottom) || !FakePlayerNotCloseToDoor())
                     {
                         StartOpened();
                     }
@@ -154,7 +155,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     break;
                 case "Right":
-                    if (player != null && player.Right > Left && player.Bottom > Top && player.Top < Bottom)
+                    if ((player != null && player.Right > Left && player.Bottom > Top && player.Top < Bottom) || !FakePlayerNotCloseToDoor())
                     {
                         StartOpened();
                     }
@@ -164,7 +165,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     break;
                 case "Top":
-                    if (player != null && player.Top < Bottom && player.Left < Right && player.Right > Left)
+                    if ((player != null && player.Top < Bottom && player.Left < Right && player.Right > Left) || !FakePlayerNotCloseToDoor())
                     {
                         StartOpened();
                     }
@@ -174,7 +175,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     break;
                 case "Bottom":
-                    if (player != null && player.Bottom > Top && player.Left < Right && player.Right > Left)
+                    if ((player != null && player.Bottom > Top && player.Left < Right && player.Right > Left) || !FakePlayerNotCloseToDoor())
                     {
                         StartOpened();
                     }
@@ -324,44 +325,94 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!keepOpen)
             {
-                while (open)
+                bool isNotCloseToDoor = false;
+                while (!isNotCloseToDoor)
                 {
-                    Player player = Scene.Tracker.GetEntity<Player>();
-                    if (side == "Right")
+                    if (FakePlayerNotCloseToDoor())
                     {
-                        if (player != null && (player.Right < Left - 16 || player.Bottom < Top || player.Top > Bottom))
-                        {
-                            break;
-                        }
-                        yield return null;
+                        isNotCloseToDoor = PlayerNotCloseToDoor();
                     }
-                    else if (side == "Left")
-                    {
-                        if (player != null && (player.Left > Right + 16 || player.Bottom < Top || player.Top > Bottom))
-                        {
-                            break;
-                        }
-                        yield return null;
-                    }
-                    else if (side == "Top")
-                    {
-                        if (player != null && (player.Right < Left || player.Left > Right || player.Top > Bottom + 10))
-                        {
-                            break;
-                        }
-                        yield return null;
-                    }
-                    else if (side == "Bottom")
-                    {
-                        if (player != null && (player.Right < Left || player.Left > Right || player.Bottom < Top - 10))
-                        {
-                            break;
-                        }
-                        yield return null;
-                    }
+                    yield return null;
                 }
                 Close();
             }
+        }
+
+        private bool FakePlayerNotCloseToDoor()
+        {
+            bool isNotCloseToDoor = false;
+            FakePlayer player = Scene.Tracker.GetEntity<FakePlayer>();
+            if (player != null && SceneAs<Level>().Bounds.Contains((int)player.Position.X, (int)player.Position.Y))
+            {
+                if (side == "Right")
+                {
+                    if ((player.Right < Left - 16 || player.Bottom < Top || player.Top > Bottom))
+                    {
+                        isNotCloseToDoor = true;
+                    }
+                }
+                else if (side == "Left")
+                {
+                    if ((player.Left > Right + 16 || player.Bottom < Top || player.Top > Bottom))
+                    {
+                        isNotCloseToDoor = true;
+                    }
+                }
+                else if (side == "Top")
+                {
+                    if ( (player.Right < Left || player.Left > Right || player.Top > Bottom + 10))
+                    {
+                        isNotCloseToDoor = true;
+                    }
+                }
+                else if (side == "Bottom")
+                {
+                    if ((player.Right < Left || player.Left > Right || player.Bottom < Top - 10))
+                    {
+                        isNotCloseToDoor = true;
+                    }
+                }
+            }
+            else
+            {
+                isNotCloseToDoor = true;
+            }
+            return isNotCloseToDoor;
+        }
+
+        private bool PlayerNotCloseToDoor()
+        {
+            bool isNotCloseToDoor = false;
+            Player player = Scene.Tracker.GetEntity<Player>();
+            if (side == "Right")
+            {
+                if (player != null && (player.Right < Left - 16 || player.Bottom < Top || player.Top > Bottom))
+                {
+                    isNotCloseToDoor = true;
+                }
+            }
+            else if (side == "Left")
+            {
+                if (player != null && (player.Left > Right + 16 || player.Bottom < Top || player.Top > Bottom))
+                {
+                    isNotCloseToDoor = true;
+                }
+            }
+            else if (side == "Top")
+            {
+                if (player != null && (player.Right < Left || player.Left > Right || player.Top > Bottom + 10))
+                {
+                    isNotCloseToDoor = true;
+                }
+            }
+            else if (side == "Bottom")
+            {
+                if (player != null && (player.Right < Left || player.Left > Right || player.Bottom < Top - 10))
+                {
+                    isNotCloseToDoor = true;
+                }
+            }
+            return isNotCloseToDoor;
         }
 
         private IEnumerator OpenInFrontPlayer()
