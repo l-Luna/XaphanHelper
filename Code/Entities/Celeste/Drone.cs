@@ -147,6 +147,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Throw += OnPlayerThrow;
             On.Celeste.Level.LoadLevel += OnLevelLoadLevel;
             On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
+            On.Celeste.CameraTargetTrigger.OnLeave += onCameratargetTriggerOnLeave;
         }
 
         private static void OnLevelLoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -225,6 +226,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        private static void onCameratargetTriggerOnLeave(On.Celeste.CameraTargetTrigger.orig_OnLeave orig, CameraTargetTrigger self, Player player)
+        {
+            if (self.Scene != null)
+            {
+                orig(self, player);
+            }
+        }
+
         public static void Unload()
         {
             On.Celeste.TalkComponent.Update -= OnTalkComponentUpdate;
@@ -233,6 +242,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Jump -= OnPlayerjump;
             On.Celeste.Player.Throw -= OnPlayerThrow;
             On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
+            On.Celeste.CameraTargetTrigger.OnLeave -= onCameratargetTriggerOnLeave;
         }
 
         private static void OnHoldableUpdate(On.Celeste.Holdable.orig_Update orig, Holdable self)
