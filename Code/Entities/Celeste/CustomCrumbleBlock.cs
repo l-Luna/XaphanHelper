@@ -218,7 +218,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 occluder.Visible = false;
                 Collidable = false;
                 DisableStaticMovers();
-                for (int j = 0; j < Width / 8; j++)
+                for (int j = 0; j < images.Count; j++)
                 {
                     for (int k = 0; k < images.Count; k++)
                     {
@@ -252,7 +252,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 occluder.Visible = true;
                 Collidable = true;
                 EnableStaticMovers();
-                for (int j = 0; j < Width / 8; j++)
+                for (int j = 0; j < images.Count; j++)
                 {
                     for (int k = 0; k < images.Count; k++)
                     {
