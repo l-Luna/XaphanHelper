@@ -3,6 +3,7 @@ Version 1.0.55 :
 - Added "Only Need One Flag" attribute to Bubble Doors
 - Added "Inverted" attribute to Reset Flags Trigger
 - Added "Camera Lock" and "Draw Projectiles Outline" attributes to Custom Badeline Boss
+- Added "Render Method" attribute to Slopes
 - Bubble doors no longer close when the player is going away from them with the Remote Drone if Madeline is close enough to the door
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 - Fixed a crash happening when the Remote Drone was destroyed or died inside of a Camera Target Trigger

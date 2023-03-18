@@ -78,7 +78,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private List<LightOccludeBlock> lightOccludeBlocks = new();
 
-        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool affectPlayerSpeed, bool visualOnly = false) : base(position + offset, 0, 0, true)
+        private string RenderMethod;
+
+        public Slope(Vector2 position, Vector2 offset, bool gentle, string side, int soundIndex, int slopeHeight, string tilesTop, string tilesBottom, string texture, string flagTexture, bool canSlide, string directory, string flagDirectory, bool upsideDown, bool noRender, bool stickyDash, bool rainbow, bool canJumpThrough, string flag, bool affectPlayerSpeed, string renderMethod = "Type A", bool visualOnly = false) : base(position + offset, 0, 0, true)
         {
 
             Tag = Tags.TransitionUpdate;
@@ -102,6 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             VisualOnly = visualOnly;
             Flag = flag;
             AffectPlayerSpeed = affectPlayerSpeed;
+            RenderMethod = renderMethod;
             if (!VisualOnly)
             {
                 if (!upsideDown)
@@ -244,7 +247,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Slope(EntityData data, Vector2 offset) : this(data.Position, offset, data.Bool("gentle"), data.Attr("side"), data.Int("soundIndex"), data.Int("slopeHeight", 1), data.Attr("tilesTop"), data.Attr("tilesBottom"),
             data.Attr("texture", "cement"), data.Attr("flagTexture", ""), data.Bool("canSlide", false), data.Attr("customDirectory", ""), data.Attr("flagCustomDirectory", ""), data.Bool("upsideDown", false), data.Bool("noRender", false), data.Bool("stickyDash", false), data.Bool("rainbow", false),
-            data.Bool("canJumpThrough", false), data.Attr("flag", ""), data.Bool("affectPlayerSpeed", false))
+            data.Bool("canJumpThrough", false), data.Attr("flag", ""), data.Bool("affectPlayerSpeed", false), data.Attr("renderMethod", "Type A"))
         {
 
         }
@@ -670,12 +673,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     BaseTextures[i, j] = mtexture.GetSubtexture(new Rectangle(i * 8, j * 8, 8, 8));
                 }
             }
-            SlopeTextures = new MTexture[32];
+            SlopeTextures = new MTexture[96];
             if (!UpsideDown)
             {
                 for (int k = 0; k < 32; k++)
                 {
                     SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k, 0, 1, 8));
+                }
+                for (int k = 32; k < 64; k++)
+                {
+                    SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k - 32, 88, 1, 8));
+                }
+                for (int k = 64; k < 96; k++)
+                {
+                    SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k - 64, 96, 1, 8));
                 }
             }
             else
@@ -683,6 +694,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 for (int k = 0; k < 32; k++)
                 {
                     SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k, 8, 1, 8));
+                }
+                for (int k = 32; k < 64; k++)
+                {
+                    SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k - 32, 104, 1, 8));
+                }
+                for (int k = 64; k < 96; k++)
+                {
+                    SlopeTextures[k] = mtexture.GetSubtexture(new Rectangle(k - 64, 112, 1, 8));
                 }
             }
             int Variation;
@@ -769,6 +788,375 @@ namespace Celeste.Mod.XaphanHelper.Entities
             else
             {
                 Collidable = false;
+            }
+        }
+
+        public void DrawSlopesTiles(Vector2 Pos)
+        {
+            if (!UpsideDown)
+            {
+                if (Side == "Left")
+                {
+                    if (Gentle)
+                    {
+                        for (int i = 1; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 1)
+                            {
+                                BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(-24f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(-16f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(-8f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * 16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * 16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * 16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * 16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * 16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * 16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * 16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * 16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            if (j + 1 != SlopeHeight || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = 1; k <= SlopeHeight - 1; k++)
+                        {
+                            if (k > 1)
+                            {
+                                if (TilesTop != "Small Edge" || k > 2)
+                                {
+                                    BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(-16 + k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                }
+                                BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(-8 + k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int l = 0; l <= SlopeHeight - 1; l++)
+                        {
+                            if (l != SlopeHeight - 1 || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+
+                            }
+                        }
+                    }
+                }
+                else if (Side == "Right")
+                {
+                    if (Gentle)
+                    {
+                        for (int i = 1; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 1)
+                            {
+                                BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(40f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(32f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(24f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(16f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * -16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * -16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * -16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * -16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * -16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * -16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * -16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * -16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            if (j + 1 != SlopeHeight || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = 1; k <= SlopeHeight - 1; k++)
+                        {
+                            if (k > 1)
+                            {
+                                if (TilesTop != "Small Edge" || k > 2)
+                                {
+                                    BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(32f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                }
+                                BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(24f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(16f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int l = 0; l <= SlopeHeight - 1; l++)
+                        {
+                            if (l != SlopeHeight - 1 || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (Side == "Left")
+                {
+                    if (Gentle)
+                    {
+                        for (int i = 1; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 1)
+                            {
+                                BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(-24f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(-16f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(-8f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * 16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * 16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * 16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * 16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * 16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * 16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * 16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * 16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            if (j + 1 != SlopeHeight || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = 1; k <= SlopeHeight - 1; k++)
+                        {
+                            if (k > 1)
+                            {
+                                if (TilesTop != "Small Edge" || k > 2)
+                                {
+                                    BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(-16 + k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                }
+                                BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(-8 + k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int l = 0; l <= SlopeHeight - 1; l++)
+                        {
+                            if (l != SlopeHeight - 1 || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+
+                            }
+                        }
+                    }
+                }
+                else if (Side == "Right")
+                {
+                    if (Gentle)
+                    {
+                        for (int i = 1; i <= SlopeHeight - 1; i++)
+                        {
+                            if (i > 1)
+                            {
+                                BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(40f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(32f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(24f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(16f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int j = 0; j <= SlopeHeight - 1; j++)
+                        {
+                            SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * -16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * -16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * -16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * -16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * -16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * -16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * -16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * -16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            if (j + 1 != SlopeHeight || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int k = 1; k <= SlopeHeight - 1; k++)
+                        {
+                            if (k > 1)
+                            {
+                                if (TilesTop != "Small Edge" || k > 2)
+                                {
+                                    BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(32f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                }
+                                BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(24f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(16f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                        }
+                        for (int l = 0; l <= SlopeHeight - 1; l++)
+                        {
+                            if (l != SlopeHeight - 1 || TilesBottom == "Horizontal" || RenderMethod == "Type A")
+                            {
+                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                            else
+                            {
+                                SlopeTextures[64 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[65 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[66 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[67 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[68 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[69 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[70 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                                SlopeTextures[71 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -872,65 +1260,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                         }
 
-                        // Slope Tiles
-
-                        if (Gentle)
+                        if (RenderMethod == "Type A")
                         {
-                            for (int i = 1; i <= SlopeHeight - 1; i++)
-                            {
-                                if (i > 1)
-                                {
-                                    BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(-24f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(-16f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(-8f + i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(i * 16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int j = 0; j <= SlopeHeight - 1; j++)
-                            {
-                                SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * 16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * 16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * 16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * 16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * 16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * 16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * 16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * 16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                        }
-                        else
-                        {
-                            for (int k = 1; k <= SlopeHeight - 1; k++)
-                            {
-                                if (k > 1)
-                                {
-                                    if (TilesTop != "Small Edge" || k > 2)
-                                    {
-                                        BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(-16 + k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    }
-                                    BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(-8 + k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(k * 8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int l = 0; l <= SlopeHeight - 1; l++)
-                            {
-                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
+                            DrawSlopesTiles(Pos);
                         }
 
                         // Bottom Tiles
@@ -1043,6 +1375,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 BaseTextures[0 + variation[30], 14].Draw(Pos = Position + new Vector2(SlopeHeight * 8, SlopeHeight * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
                             }
                         }
+
+                        if (RenderMethod == "Type B")
+                        {
+                            DrawSlopesTiles(Pos);
+                        }
+
                     }
                     else if (Side == "Right")
                     {
@@ -1136,65 +1474,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                         }
 
-                        // Slope Tiles
-
-                        if (Gentle)
+                        if (RenderMethod == "Type A")
                         {
-                            for (int i = 1; i <= SlopeHeight - 1; i++)
-                            {
-                                if (i > 1)
-                                {
-                                    BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(40f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(32f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(24f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(16f + i * -16f, i * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int j = 0; j <= SlopeHeight - 1; j++)
-                            {
-                                SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * -16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * -16f, j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * -16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * -16f, 1f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * -16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * -16f, 2f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * -16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * -16f, 3f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                        }
-                        else
-                        {
-                            for (int k = 1; k <= SlopeHeight - 1; k++)
-                            {
-                                if (k > 1)
-                                {
-                                    if (TilesTop != "Small Edge" || k > 2)
-                                    {
-                                        BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(32f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    }
-                                    BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(24f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(16f + k * -8f, k * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int l = 0; l <= SlopeHeight - 1; l++)
-                            {
-                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
+                            DrawSlopesTiles(Pos);
                         }
 
                         // Bottom Tiles
@@ -1307,6 +1589,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 BaseTextures[0 + variation[30], 13].Draw(Pos = Position + new Vector2(SlopeHeight * -8 + 16f, SlopeHeight * 8f), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
                             }
                         }
+
+                        if (RenderMethod == "Type B")
+                        {
+                            DrawSlopesTiles(Pos);
+                        }
+
                     }
                 }
                 else
@@ -1402,65 +1690,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                         }
 
-                        // Slope Tiles
-
-                        if (Gentle)
+                        if (RenderMethod == "Type A")
                         {
-                            for (int i = 1; i <= SlopeHeight - 1; i++)
-                            {
-                                if (i > 1)
-                                {
-                                    BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(-24f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(-16f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(-8f + i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(i * 16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int j = 0; j <= SlopeHeight - 1; j++)
-                            {
-                                SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * 16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * 16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * 16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * 16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * 16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * 16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * 16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * 16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(16f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(17f + j * 16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(18f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(19f + j * 16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(20f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(21f + j * 16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(22f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(23f + j * 16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                        }
-                        else
-                        {
-                            for (int k = 1; k <= SlopeHeight - 1; k++)
-                            {
-                                if (k > 1)
-                                {
-                                    if (TilesTop != "Small Edge" || k > 2)
-                                    {
-                                        BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(-16 + k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    }
-                                    BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(-8 + k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(k * 8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int l = 0; l <= SlopeHeight - 1; l++)
-                            {
-                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * 8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * 8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * 8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * 8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * 8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * 8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * 8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * 8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
+                            DrawSlopesTiles(Pos);
                         }
 
                         // Bottom Tiles
@@ -1573,6 +1805,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 BaseTextures[0 + variation[30], 12].Draw(Pos = Position + new Vector2(SlopeHeight * 8, SlopeHeight * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
                             }
                         }
+
+                        if (RenderMethod == "Type B")
+                        {
+                            DrawSlopesTiles(Pos);
+                        }
+
                     }
                     else if (Side == "Right")
                     {
@@ -1666,65 +1904,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                         }
 
-                        // Slope Tiles
-
-                        if (Gentle)
+                        if (RenderMethod == "Type A")
                         {
-                            for (int i = 1; i <= SlopeHeight - 1; i++)
-                            {
-                                if (i > 1)
-                                {
-                                    BaseTextures[5, 0 + variationInner[i]].Draw(Pos = Position + new Vector2(40f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    BaseTextures[5, 0 + variationInner[i + 1]].Draw(Pos = Position + new Vector2(32f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[i + 2]].Draw(Pos = Position + new Vector2(24f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                BaseTextures[5, 0 + variationInner[i + 3]].Draw(Pos = Position + new Vector2(16f + i * -16f, i * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int j = 0; j <= SlopeHeight - 1; j++)
-                            {
-                                SlopeTextures[7 + variation[j] * 8].Draw(Pos = Position + new Vector2(15f + j * -16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j] * 8].Draw(Pos = Position + new Vector2(14f + j * -16f, j * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j] * 8].Draw(Pos = Position + new Vector2(13f + j * -16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j] * 8].Draw(Pos = Position + new Vector2(12f + j * -16f, 1f + j * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j] * 8].Draw(Pos = Position + new Vector2(11f + j * -16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j] * 8].Draw(Pos = Position + new Vector2(10f + j * -16f, 2f + j * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j] * 8].Draw(Pos = Position + new Vector2(9f + j * -16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j] * 8].Draw(Pos = Position + new Vector2(8f + j * -16f, 3f + j * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[7 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(7f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(6f + j * -16f, 4f + j * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(5f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(4f + j * -16f, 5f + j * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(3f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(2f + j * -16f, 6f + j * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(1f + j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[j + 1] * 8].Draw(Pos = Position + new Vector2(j * -16f, 7f + j * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                        }
-                        else
-                        {
-                            for (int k = 1; k <= SlopeHeight - 1; k++)
-                            {
-                                if (k > 1)
-                                {
-                                    if (TilesTop != "Small Edge" || k > 2)
-                                    {
-                                        BaseTextures[5, 0 + variationInner[k]].Draw(Pos = Position + new Vector2(32f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                    }
-                                    BaseTextures[5, 0 + variationInner[k + 1]].Draw(Pos = Position + new Vector2(24f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                }
-                                BaseTextures[5, 0 + variationInner[k + 2]].Draw(Pos = Position + new Vector2(16f + k * -8f, k * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
-                            for (int l = 0; l <= SlopeHeight - 1; l++)
-                            {
-                                SlopeTextures[7 + variation[l] * 8].Draw(Pos = Position + new Vector2(15f + l * -8f, l * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[6 + variation[l] * 8].Draw(Pos = Position + new Vector2(14f + l * -8f, 1f + l * -8f + 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[5 + variation[l] * 8].Draw(Pos = Position + new Vector2(13f + l * -8f, 2f + l * -8f + 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[4 + variation[l] * 8].Draw(Pos = Position + new Vector2(12f + l * -8f, 3f + l * -8f + 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[3 + variation[l] * 8].Draw(Pos = Position + new Vector2(11f + l * -8f, 4f + l * -8f + 0), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[2 + variation[l] * 8].Draw(Pos = Position + new Vector2(10f + l * -8f, 5f + l * -8f - 2), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[1 + variation[l] * 8].Draw(Pos = Position + new Vector2(9f + l * -8f, 6f + l * -8f - 4), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                                SlopeTextures[0 + variation[l] * 8].Draw(Pos = Position + new Vector2(8f + l * -8f, 7f + l * -8f - 6), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
-                            }
+                            DrawSlopesTiles(Pos);
                         }
 
                         // Bottom Tiles
@@ -1837,6 +2019,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 BaseTextures[0 + variation[30], 11].Draw(Pos = Position + new Vector2(SlopeHeight * -8 + 16f, SlopeHeight * -8f + 8), Vector2.Zero, Rainbow ? GetHue(Pos) : Color.White);
                             }
                         }
+
+                        if (RenderMethod == "Type B")
+                        {
+                            DrawSlopesTiles(Pos);
+                        }
+
                     }
                 }
             }
