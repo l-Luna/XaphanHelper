@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -12,9 +13,9 @@ using Upgrade = XaphanModule.Upgrades;
 [CustomEntity("XaphanHelper/UpgradeRestrictionController")]
 public class UpgradeRestrictionController : Entity{
 	// basic idea: a list of grouped upgrades + list of ignored upgrades
-	private readonly ISet<ISet<Upgrade>> Groups = new HashSet<ISet<Upgrade>>();
-	private readonly ISet<Upgrade> Ignored = new HashSet<Upgrade>();
-	private readonly int Max;
+	public readonly ISet<ISet<Upgrade>> Groups = new HashSet<ISet<Upgrade>>();
+	public readonly ISet<Upgrade> Ignored = new HashSet<Upgrade>();
+	public readonly int Max;
 
 	public UpgradeRestrictionController(EntityData data, Vector2 offset) : base(data.Position + offset){
 		Max = data.Int("max");
@@ -49,6 +50,17 @@ public class UpgradeRestrictionController : Entity{
 		return s.Tracker.GetEntity<UpgradeRestrictionController>();
 	}
 
+	public static List<Upgrade> Collected() => (
+		from upgradeType
+			in XaphanModule.Instance.UpgradeHandlers
+		where upgradeType.Value.GetValue() != upgradeType.Value.GetDefaultValue()
+		select upgradeType.Key
+	).ToList();
+
+	public static bool CanObtainIn(Scene s, Upgrade u, List<Upgrade> existing){
+		return GetFrom(s)?.AllowsObtaining(u, existing) ?? true;
+	}
+	
 	public bool AllowsObtaining(Upgrade u, List<Upgrade> existing){
 		// if `u` is an ignored upgrade, we don't care
 		if(Ignored.Contains(u))

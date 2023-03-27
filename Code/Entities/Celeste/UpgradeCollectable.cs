@@ -1,5 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -198,6 +202,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Engine.TimeRate = 1f;
             Tag = Tags.FrozenUpdate;
             level.Frozen = true;
+
+            var collected = UpgradeRestrictionController.Collected();
+            if(!UpgradeRestrictionController.CanObtainIn(Scene, upg, collected)){
+                // force the player to remove an existing upgrade first, or don't collect it
+                var urc = UpgradeRestrictionController.GetFrom(Scene);
+                
+                // find every upgrade set that could be dropped
+                List<List<XaphanModule.Upgrades>> options = new();
+                // first offer individual upgrades; it's always advantageous to drop less
+                foreach(XaphanModule.Upgrades choice in Enum.GetValues(typeof(XaphanModule.Upgrades))){
+                    if(collected.Contains(choice) && !urc.Ignored.Contains(choice)){
+                        var without = new List<XaphanModule.Upgrades>(collected);
+                        without.Remove(choice);
+                        if(urc.AllowsObtaining(upg, without))
+                            options.Add(new List<XaphanModule.Upgrades>{ choice });
+                    }
+                }
+                // then offer defined groups, *if* dropping their components isn't sufficient
+                foreach(var group in urc.Groups){
+                    if(group.Any(member => options.Contains(new List<XaphanModule.Upgrades>{ member })))
+                        continue;
+                    var without = new List<XaphanModule.Upgrades>(collected);
+                    without.RemoveAll(v => group.Contains(v));
+                    if(urc.AllowsObtaining(upg, without))
+                        options.Add(new List<XaphanModule.Upgrades>(group));
+                }
+                
+                // display choices...
+            }
+
             if (string.IsNullOrEmpty(customName))
             {
                 poemTextA = Dialog.Clean("XaphanHelper_get_" + upgrade + "_Name");
