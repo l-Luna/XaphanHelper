@@ -28,6 +28,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Coroutine ActiveRoutine = new();
 
+        private Coroutine PushRoutine = new();
+
         private bool active;
 
         private string flag;
@@ -62,6 +64,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             sprite.Add("turn", "turn", 0.08f);
             sprite.Add("activate", "turn", 0.08f, 7, 7, 6, 5, 4, 3, 2, 1, 0);
             sprite.Add("deactivate", "turn", 0.08f, 0, 1, 2, 3, 4, 5, 6, 7, 7);
+            sprite.Add("stun", "turn", 0.08f, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0);
             goLeft = sprite.FlipX = data.Bool("startWalkLeft", false);
             Add(new ClimbBlocker(edge: true));
             sprite.OnFrameChange = onFrameChange;
@@ -98,7 +101,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 SpeedH = 0;
             }
-            Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24, width - 2, 1);
+            Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24 - (active ? 0 : 2), width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24 - (active ? 0 : 3), width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24 - (active ? 0 : 4), width - 2, 1);
             if (!TurnAroundRoutine.Active && !ActiveRoutine.Active && active && (!string.IsNullOrEmpty(flag) ? SceneAs<Level>().Session.GetFlag(flag) : true))
             {
                 sprite.FlipX = goLeft;
@@ -165,6 +168,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        private float cancelYPos = 0f;
+
         private IEnumerator TurnAround()
         {
             if (!CollideCheck<Solid>(Position + Vector2.UnitY) || (SpeedV == 0 && CollideCheck<Solid>(Position + Vector2.UnitY)))
@@ -180,6 +185,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         Collider.Height -= 1;
                         sprite.Position.Y -= 1;
+                        cancelYPos += 1;
                         MoveV(1, 0);
                         yield return 0.08f;
                     }
@@ -194,6 +200,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         Collider.Height += 1;
                         sprite.Position.Y += 1;
+                        cancelYPos -= 1;
                         MoveV(-1, 0);
                         yield return 0.08f;
                     }
@@ -273,15 +280,31 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public void Push(Vector2 force, Vector2 direction)
         {
             pushed = true;
-            Add(new Coroutine(PushedRoutine(force, direction)));
+            if (PushRoutine.Active)
+            {
+                PushRoutine.Cancel();
+            }
+            if (TurnAroundRoutine.Active)
+            {
+                TurnAroundRoutine.Cancel();
+                if (cancelYPos != 0)
+                {
+                    Collider.Height += cancelYPos;
+                    sprite.Position.Y += cancelYPos;
+                    MoveV(-cancelYPos, 0);                    
+                    cancelYPos = 0f;
+                }
+            }
+            Add(PushRoutine = new Coroutine(PushedRoutine(force, direction)));
         }
 
         private IEnumerator PushedRoutine(Vector2 force, Vector2 direction)
         {
             SpeedH = force.X * direction.X;
             SpeedV = force.Y;
-            if (sprite.CurrentAnimationID == "walk")
+            if (active)
             {
+                sprite.Play("walk");
                 sprite.Rate = 2.5f;
             }
             while (SpeedH > speed || SpeedH < -speed)
@@ -300,6 +323,35 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     yield return 0.3f;
                 }
                 yield return null;
+            }
+            if (active)
+            {
+                float stunTimer = 1f;
+                SpeedH = 50 * direction.X;
+                while (stunTimer > 0.5f)
+                {
+                    if (SpeedH > 0)
+                    {
+                        SpeedH -= Engine.DeltaTime * 100;
+                    }
+                    else
+                    {
+                        SpeedH += Engine.DeltaTime * 100;
+                    }
+                    stunTimer -= Engine.DeltaTime;
+                    yield return null;
+                }
+                sprite.Play("stun");
+                while (stunTimer > 0)
+                {
+                    stunTimer -= Engine.DeltaTime;
+                    yield return null;
+                }
+                sprite.Play("walk");
+            }
+            else
+            {
+                SpeedH = 0f;
             }
             pushed = false;
             sprite.Rate = 1f;
