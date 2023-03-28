@@ -53,7 +53,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         }
 
-        public CustomCrumbleBlock(Vector2 position, Vector2 offset, int width, int height, float respawnTime, float crumbleDelay, bool oneUse, bool triggerAdjacents, int rotation = 0, string texture = null) : base(position + offset, width, height, safe: false)
+        public CustomCrumbleBlock(Vector2 position, Vector2 offset, int width, int height, float respawnTime, float crumbleDelay, bool oneUse, bool triggerAdjacents, int rotation = 0, string texture = null, float lightOccludeValue = 0.8f) : base(position + offset, width, height, safe: false)
         {
             EnableAssistModeChecks = false;
             this.respawnTime = respawnTime;
@@ -66,6 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 this.texture = "objects/crumbleBlock/default";
             }
             this.rotation = rotation;
+            Add(occluder = new LightOcclude(lightOccludeValue));
         }
 
         private void addRange(HashSet<CustomCrumbleBlock> set, IEnumerable<CustomCrumbleBlock> elements)
@@ -151,7 +152,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     images[k].Position = new Vector2(4 + PosX * 8, 4 + PosY * 8) + v[k];
                 }
             }));
-            Add(occluder = new LightOcclude(0.8f));
         }
 
         private IEnumerator Sequence()
