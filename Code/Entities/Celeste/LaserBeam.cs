@@ -65,7 +65,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Color darker = Calc.HexToColor("798EB0");
             borderColor = new Color(darker.R / 255f * (color.R / 255f), darker.G / 255f * (color.G / 255f), darker.B / 255f * (color.B / 255f), 1f);
             Add(pc = new PlayerCollider(OnCollide));
-            Depth = Emitter.Depth + 1;
             /*P_Collide = new ParticleType
             {
                 Color = Type == "Must Dash" ? Color.Orange : (Type == "No Dash" ? Color.CadetBlue : Color.IndianRed),

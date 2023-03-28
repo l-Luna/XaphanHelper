@@ -142,7 +142,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             staticMover.OnEnable = OnEnable;
             staticMover.OnDisable = OnDisable;
-            Depth = -9001;
+            Depth = -1;
         }
 
         public override void Added(Scene scene)
