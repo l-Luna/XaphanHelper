@@ -8,7 +8,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 {
     [Tracked(true)]
     [CustomEntity("XaphanHelper/DroneSwitch")]
-    public class DroneSwitch : Entity
+    public class DroneSwitch : Solid
     {
         public string flag;
 
@@ -55,7 +55,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public DroneSwitch(EntityData data, Vector2 position) : base(data.Position + position)
+        public DroneSwitch(EntityData data, Vector2 position) : base(data.Position + position, data.Width, data.Height, true)
         {
             Tag = Tags.TransitionUpdate;
             tutorial = data.Bool("tutorial");
@@ -82,21 +82,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             switch (side)
             {
                 case "Left":
-                    Collider = new Hitbox(4f, 6f, 0f, 1f);
+                    Collider = new Hitbox(4f, 10f, 0f, -1f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position - Vector2.UnitX));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position - Vector2.UnitX));
                     Add(staticMover);
                     buttonSprite.Rotation = (float)Math.PI / 2f;
                     break;
                 case "Right":
-                    Collider = new Hitbox(4f, 6f, 4f, 1f);
+                    Collider = new Hitbox(4f, 10f, 4f, -1f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position + Vector2.UnitX));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position + Vector2.UnitX));
                     Add(staticMover);
                     buttonSprite.Rotation = -(float)Math.PI / 2f;
                     break;
                 case "Down":
-                    Collider = new Hitbox(6f, 4f, 1f, 0f);
+                    Collider = new Hitbox(10f, 4f, -1f, 0f);
                     staticMover.SolidChecker = ((Solid s) => CollideCheck(s, Position - Vector2.UnitY));
                     staticMover.JumpThruChecker = ((JumpThru jt) => CollideCheck(jt, Position - Vector2.UnitY));
                     Add(staticMover);
@@ -206,6 +206,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
+            if (side == "Left" || side == "Right")
+            {
+                DisplacePlayerOnTop();
+            }
             if (SceneAs<Level>().Transitioning && wasPressed)
             {
                 flagState = SceneAs<Level>().Session.GetFlag(flag);
@@ -303,9 +307,39 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        private void DisplacePlayerOnTop()
+        {
+            if (!HasPlayerOnTop())
+            {
+                return;
+            }
+            Player player = GetPlayerOnTop();
+            if (player == null)
+            {
+                return;
+            }
+            else if (player.Bottom == Top && player.Speed.Y >= 0)
+            {
+                if (side == "Left")
+                {
+                    if (player.Left >= Left)
+                    {
+                        player.Left = Right;
+                        player.Y += 1f;
+                    }
+                }
+                else if (player.Right <= Right)
+                {
+                    player.Right = Left;
+                    player.Y += 1f;
+                }
+            }
+        }
+
         public override void Render()
         {
             base.Render();
+            buttonSprite.DrawOutline();
             buttonSprite.Render();
         }
     }
