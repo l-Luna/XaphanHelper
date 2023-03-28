@@ -257,13 +257,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (direction.X != 0)
                 {
-                    MoveTowardsX(direction.X, speed * direction.X * Engine.DeltaTime);
+                    MoveHCollideSolids(direction.X * speed * Engine.DeltaTime, true);
                     yield return null;
                 }
                 if (direction.Y != 0f)
                 {
-                    // Why tho ?
-                    MoveTowardsY(direction.Y, (Position.Y < 0 ? speed : -speed) * direction.Y * Engine.DeltaTime);
+                    MoveVCollideSolids(direction.Y * speed * Engine.DeltaTime, true);
                     yield return null;
                 }
                 if (Scene.OnInterval(0.02f))
