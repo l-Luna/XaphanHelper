@@ -4,12 +4,14 @@ Version 1.0.55 :
 - Added "Inverted" attribute to Reset Flags Trigger
 - Added "Camera Lock" and "Draw Projectiles Outline" attributes to Custom Badeline Boss
 - Added "Render Method" attribute to Slopes
+- Increased the size of Drone Switches to make it easier to aim at them
 - Bubble doors no longer close when the player is going away from them with the Remote Drone if Madeline is close enough to the door
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 - Fixed a crash happening when the Remote Drone was destroyed or died inside of a Camera Target Trigger
 - Fixed a bug preventing the player to dash if they were grabbing a Magnetic Ceiling that got disabled
 - Fixed a bug preventing Break Blocks set to Lightning Dash to break correctly if the player dashed into them from too far
 - Fixed a bug sometimes preventing Flag Dash Switches to be in the correct state based on their mode and the state of their flag
+- Lowered the Remote Drone beam and other projectiles vertical offset when shooting horizontaly by 1 pixel
 
 Version 1.0.54 :
 - Added "Type" attribute to Drone Switches
