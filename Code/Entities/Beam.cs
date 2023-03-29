@@ -225,7 +225,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 particlesColor = "D0A500";
                 if (Direction.X != 0)
                 {
-                    ShootOffset.Y = -7f;
+                    ShootOffset.Y = -6f;
                     if (Player.Facing == Facings.Left)
                     {
                         ShootOffset.X = -5f;

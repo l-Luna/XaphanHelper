@@ -104,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 colliderHeight = 3f;
                 if (Direction.X != 0)
                 {
-                    ShootOffset.Y = -7f;
+                    ShootOffset.Y = -6f;
                     if (Player.Facing == Facings.Left)
                     {
                         ShootOffset.X = -5f;
@@ -126,7 +126,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     else
                     {
-                        ShootOffset.X = -1f;
+                        ShootOffset.X = -1f - (SuperMissile ? 2 : 0);
                         if (Player.Speed.X != 0 && !Player.CollideCheck<Solid>(Player.Position + new Vector2(1, 0)))
                         {
                             ShootOffset.X = 2f;
