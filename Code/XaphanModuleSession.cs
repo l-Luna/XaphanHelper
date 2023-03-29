@@ -7,5 +7,7 @@
         public int CurrentDroneMissile = 0;
 
         public int CurrentDroneSuperMissile = 0;
+
+        public int CurrentAmmoSelected = 0;
     }
 }

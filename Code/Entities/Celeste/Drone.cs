@@ -391,6 +391,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 tutorialGui.RemoveSelf();
             }
+            UpgradesDisplay display = scene.Tracker.GetEntity<UpgradesDisplay>();
+            display.ResetSelectedAmmo = false;
         }
 
         private void ForceDestroy(bool normalRespawn = false, bool silence = false)
@@ -690,13 +692,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public override void Update()
         {
             base.Update();
+            UpgradesDisplay display = SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
+            if (startedAsDrone)
+            {
+                if (XaphanModule.ModSession.CurrentAmmoSelected == 1)
+                {
+                    display.MissileSelected = true;
+                }
+                else if (XaphanModule.ModSession.CurrentAmmoSelected == 2)
+                {
+                    display.SuperMissileSelected = true;
+                }
+                display.ResetSelectedAmmo = false;
+                startedAsDrone = false;
+            }
             if (tutorialGui == null)
             {
                 tutorialGui = new BirdTutorialGui(this, new Vector2(0f, -16f), Dialog.Clean("XaphanHelper_Destroy"), Dialog.Clean("tutorial_hold"), Input.Grab);
                 tutorialGui.Open = false;
                 Scene.Add(tutorialGui);
             }
-            UpgradesDisplay display = SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
             if (display != null)
             {
                 display.CurrentMissiles = CurrentMissiles;
@@ -1157,6 +1172,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (forced || !enabled)
                     {
+                        UpgradesDisplay display = SceneAs<Level>().Tracker.GetEntity<UpgradesDisplay>();
+                        display.ResetSelectedAmmo = true;
                         XaphanModule.ModSession.CurrentDroneMissile = 0;
                         XaphanModule.ModSession.CurrentDroneSuperMissile = 0;
                         Level.Session.RespawnPoint = CurrentSpawn;

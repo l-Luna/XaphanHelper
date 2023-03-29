@@ -53,6 +53,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private bool HasSuperMissilesUpgrade;
 
+        public bool ResetSelectedAmmo;
+
         public static void getStaminaData(Level level)
         {
             AreaKey area = level.Session.Area;
@@ -265,6 +267,23 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     SuperMissileSelected = false;
                     Audio.Play("event:/game/xaphan/item_select");
+                }
+                if (!ResetSelectedAmmo && (MissileSelected || SuperMissileSelected))
+                {
+                    if (MissileSelected)
+                    {
+                        XaphanModule.ModSession.CurrentAmmoSelected = 1;
+                    }
+                    else if (SuperMissileSelected)
+                    {
+                        XaphanModule.ModSession.CurrentAmmoSelected = 2;
+                    }
+                }
+                else
+                {
+                    MissileSelected = false;
+                    SuperMissileSelected = false;
+                    XaphanModule.ModSession.CurrentAmmoSelected = 0;
                 }
                 if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0) && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
