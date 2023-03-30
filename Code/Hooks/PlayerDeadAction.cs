@@ -17,7 +17,7 @@ namespace Celeste.Mod.XaphanHelper.Hooks
 
         private static void onPlayerDeaDBodyEnd(On.Celeste.PlayerDeadBody.orig_End orig, PlayerDeadBody self)
         {
-            if (self.SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>().Count > 0 || self.SceneAs<Level>().Tracker.GetEntities<DroneSwitch>().Count > 0)
+            if ((self.SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>().Count > 0 || self.SceneAs<Level>().Tracker.GetEntities<DroneSwitch>().Count > 0) && !self.SceneAs<Level>().Session.GrabbedGolden)
             {
                 self.DeathAction = DeathAction;
             }

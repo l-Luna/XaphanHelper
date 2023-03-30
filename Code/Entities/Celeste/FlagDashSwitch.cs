@@ -225,7 +225,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Seeker.SlammedIntoWall += onSeekerSlammedIntoWall;
             On.Celeste.TheoCrystal.OnCollideH += onTheoCrystalCollideH;
             On.Celeste.TheoCrystal.OnCollideV += onTheoCrystalCollideV;
-            On.Celeste.PlayerDeadBody.End += onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
         }
 
@@ -235,7 +234,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Seeker.SlammedIntoWall -= onSeekerSlammedIntoWall;
             On.Celeste.TheoCrystal.OnCollideH -= onTheoCrystalCollideH;
             On.Celeste.TheoCrystal.OnCollideV -= onTheoCrystalCollideV;
-            On.Celeste.PlayerDeadBody.End -= onPlayerDeaDBodyEnd;
             On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
         }
 
@@ -273,15 +271,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 (data.Hit as FlagDashSwitch).OnDashCollide(null, Vector2.UnitY * Math.Sign(self.Speed.Y));
             }
             orig(self, data);
-        }
-
-        private static void onPlayerDeaDBodyEnd(On.Celeste.PlayerDeadBody.orig_End orig, PlayerDeadBody self)
-        {
-            if (self.SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>().Count > 0)
-            {
-                self.DeathAction = DeathAction;
-            }
-            orig(self);
         }
 
         private static void onChangeRespawnTriggerOnEnter(On.Celeste.ChangeRespawnTrigger.orig_OnEnter orig, ChangeRespawnTrigger self, Player player)
