@@ -210,14 +210,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         break;
                     }
-                /*case "superMissile":
+                case "superMissile":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneSuperMissilesUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
                         {
                             RemoveSelf();
                         }
                         break;
-                    }*/
+                    }
                 case "fireRateModule":
                     {
                         if ((!XaphanModule.PlayerHasGolden && !XaphanModule.ModSettings.SpeedrunMode && XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)) || ((XaphanModule.PlayerHasGolden || XaphanModule.ModSettings.SpeedrunMode) && XaphanModule.ModSaveData.SpeedrunModeDroneFireRateUpgrades.Contains(Prefix + "_Ch" + chapterIndex + "_" + ID)))
