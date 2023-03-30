@@ -293,7 +293,10 @@ namespace Celeste.Mod.XaphanHelper.Managers
         {
             base.Removed(scene);
             Player player = scene.Tracker.GetEntity<Player>();
-            player.Sprite.Visible = player.Hair.Visible = true;
+            if (player != null)
+            {
+                player.Sprite.Visible = player.Hair.Visible = true;
+            }
         }
     }
 }
