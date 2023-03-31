@@ -222,7 +222,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 XaphanModule.ModSession.CurrentDroneMissile = drone.CurrentMissiles;
                 XaphanModule.ModSession.CurrentDroneSuperMissile = drone.CurrentSuperMissiles;
-                drone.CurrentSpawn = self.Position + self.Target;
+                if (self.SceneAs<Level>().Session.Level == drone.startRoom)
+                {
+                    drone.CurrentSpawn = self.Target;
+                    XaphanModule.droneCurrentSpawn = self.Target;
+                }
             }
         }
 
@@ -1208,6 +1212,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             XaphanModule.ModSession.CurrentDroneMissile = 0;
                             XaphanModule.ModSession.CurrentDroneSuperMissile = 0;
                             Level.Session.RespawnPoint = CurrentSpawn;
+                            Logger.Log(LogLevel.Info, "XH", "Drone Destroy Changed Session Respawn Point to : " + CurrentSpawn);
                             XaphanModule.fakePlayerFacing = 0;
                             XaphanModule.fakePlayerPosition = Vector2.Zero;
                             if (startRoom == Level.Session.Level)

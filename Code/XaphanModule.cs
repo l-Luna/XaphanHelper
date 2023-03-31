@@ -2640,6 +2640,8 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool minimapEnabled;
 
+        private Vector2? CurrentSessionSpawn;
+
         private void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
         {
             orig(self);
