@@ -292,6 +292,11 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
                         timerDisplay.StopTimer(false, true);
                     }
                 }
+                if (XaphanModule.droneCurrentSpawn != null)
+                {
+                    level.Session.RespawnPoint = XaphanModule.droneCurrentSpawn;
+                    XaphanModule.droneCurrentSpawn = null;
+                }
                 if (useLevelWipe)
                 {
                     level.DoScreenWipe(true);

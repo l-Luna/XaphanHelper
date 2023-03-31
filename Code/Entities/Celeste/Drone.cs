@@ -164,7 +164,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         canDestroy = true,
                         startRoom = XaphanModule.droneStartRoom,
-                        startedAsDrone = true
+                    startedAsDrone = true
                     });
                     XaphanModule.droneStartRoom = null;
                     player.Visible = false;
@@ -377,7 +377,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             XaphanModule.startAsDrone = false;
-            XaphanModule.droneCurrentSpawn = null;
         }
 
         public override void Removed(Scene scene)
@@ -438,6 +437,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 duckPlayerHurtbox.Left = -3f;
                 duckPlayerHurtbox.Top = -6f;
                 CurrentSpawn = SceneAs<Level>().Session.RespawnPoint;
+                XaphanModule.droneCurrentSpawn = CurrentSpawn;
                 cameraPosition = new Vector2(SceneAs<Level>().Camera.Position.X - SceneAs<Level>().Bounds.Left, SceneAs<Level>().Camera.Position.Y - SceneAs<Level>().Bounds.Top);
                 released = true;
                 startRoom = SceneAs<Level>().Session.Level;
@@ -1262,6 +1262,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                     player.StateMachine.State = 0;
                                     Level.PauseLock = false;
                                 }
+                                XaphanModule.droneCurrentSpawn = null;
                             }
                             else
                             {
@@ -1321,7 +1322,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 Level.PauseLock = false;
                                 XaphanModule.startAsDrone = true;
                                 XaphanModule.droneStartRoom = startRoom;
-                                XaphanModule.droneCurrentSpawn = CurrentSpawn;
                                 if (FakePlayer != null)
                                 {
                                     XaphanModule.fakePlayerSpriteFrame = FakePlayer.Sprite.CurrentAnimationFrame;
