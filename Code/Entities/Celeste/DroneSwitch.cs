@@ -71,7 +71,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             saveDataOnlyAfterCheckpoint = data.Bool("saveDataOnlyAfterCheckpoint");
             Add(buttonSprite = new Sprite(GFX.Game, "objects/XaphanHelper/DroneSwitch/"));
             buttonSprite.Add("idle", "button" + (type != "Beam" ? type : ""), 0.2f, 0);
-            buttonSprite.Add("active", "button" + (type != "Beam" ? type : ""), 0.2f);
+            buttonSprite.AddLoop("active", "button" + (type != "Beam" ? type : ""), 0.2f);
+            buttonSprite.Add("blink", "blink");
             buttonSprite.Origin = new Vector2(buttonSprite.Width / 2, buttonSprite.Height / 2);
             buttonSprite.Position = new Vector2(4f, 4f);
             staticMover = new StaticMover();
@@ -229,14 +230,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (!SceneAs<Level>().Session.GetFlag(flag))
-            {
-                buttonSprite.Play("idle");
-            }
-            else
-            {
-                buttonSprite.Play("active");
-            }
             if (tutorialGui != null)
             {
                 if (XaphanModule.PlayerIsControllingRemoteDrone())
@@ -300,10 +293,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             Audio.Play("event:/game/05_mirror_temple/button_activate", Position);
             cooldown = 0.5f;
+            buttonSprite.Play("blink");
+            Add(new Coroutine(BlinkSwitch()));
             while (cooldown > 0)
             {
                 cooldown -= Engine.DeltaTime;
                 yield return null;
+            }
+        }
+
+        private IEnumerator BlinkSwitch()
+        {
+            while (cooldown > 0)
+            {
+                if (buttonSprite.CurrentAnimationID == "blink")
+                {
+                    buttonSprite.Play("idle");
+                }
+                else
+                {
+                    buttonSprite.Play("blink");
+                }
+                yield return 0.1f;
+            }
+            if (!SceneAs<Level>().Session.GetFlag(flag))
+            {
+                buttonSprite.Play("idle");
+            }
+            else
+            {
+                buttonSprite.Play("active");
             }
         }
 
