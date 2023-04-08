@@ -996,7 +996,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         droneSprite.Rate = 0;
                         Transitioning = true;
                     }
-                    else if (previousSpriteRate != 0)
+                    else if (!SceneAs<Level>().Transitioning && previousSpriteRate != 0 && Transitioning)
                     {
                         droneSprite.Rate = previousSpriteRate;
                         previousSpriteRate = 0;
@@ -1212,7 +1212,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             XaphanModule.ModSession.CurrentDroneMissile = 0;
                             XaphanModule.ModSession.CurrentDroneSuperMissile = 0;
                             Level.Session.RespawnPoint = CurrentSpawn;
-                            Logger.Log(LogLevel.Info, "XH", "Drone Destroy Changed Session Respawn Point to : " + CurrentSpawn);
                             XaphanModule.fakePlayerFacing = 0;
                             XaphanModule.fakePlayerPosition = Vector2.Zero;
                             if (startRoom == Level.Session.Level)

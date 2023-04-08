@@ -50,6 +50,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public BubbleDoor(EntityData data, Vector2 offset, EntityID eid) : base(data.Position + offset, data.Width, data.Height, safe: false)
         {
+            Tag = Tags.TransitionUpdate;
             ID = eid;
             side = data.Attr("side", "Left");
             directory = data.Attr("directory", "objects/XaphanHelper/BubbleDoor");
@@ -87,7 +88,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             doorStruct.Justify = new Vector2(1f, 0f);
             doorStruct.Play("struct", restart: true);
-            Depth = -9000;
+            Depth = -90000;
         }
 
         public override void Added(Scene scene)

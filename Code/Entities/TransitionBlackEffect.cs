@@ -1,0 +1,179 @@
+﻿using System;
+using System.Collections;
+using System.Linq;
+using System.Reflection;
+using Celeste.Mod.XaphanHelper.Effects;
+using Microsoft.Xna.Framework;
+using Monocle;
+using MonoMod.Utils;
+
+namespace Celeste.Mod.XaphanHelper.Entities
+{
+    [Tracked(true)]
+    public class TransitionBlackEffect : Entity
+    {
+        private Camera camera = new();
+
+        private static float alpha;
+
+        private static FieldInfo LevelTransition = typeof(Level).GetField("transition", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        public TransitionBlackEffect() : base()
+        {
+            Tag = (Tags.Persistent | Tags.TransitionUpdate);
+            Depth = -89990;
+            alpha = 0f;
+        }
+
+        public static void Load()
+        {
+            On.Celeste.Level.TransitionRoutine += OnLevelTransitionRoutine;
+            On.Celeste.TalkComponent.TalkComponentUI.Update += OnTalkComponentTalkComponentUIUpdate;
+            On.Celeste.TalkComponent.TalkComponentUI.ctor += OnTalkComponentTalkComponentUICtor;
+            On.Celeste.Parallax.Update += OnParallaxUpdate;
+        }
+
+        private static void OnParallaxUpdate(On.Celeste.Parallax.orig_Update orig, Parallax self, Scene scene)
+        {
+            orig(self, scene);
+        }
+
+        public static void Unload()
+        {
+            On.Celeste.Level.TransitionRoutine -= OnLevelTransitionRoutine;
+            On.Celeste.TalkComponent.TalkComponentUI.Update -= OnTalkComponentTalkComponentUIUpdate;
+            On.Celeste.TalkComponent.TalkComponentUI.ctor -= OnTalkComponentTalkComponentUICtor;
+        }
+
+        private static IEnumerator OnLevelTransitionRoutine(On.Celeste.Level.orig_TransitionRoutine orig, Level self, LevelData next, Vector2 direction)
+        {
+            if (self.Session.Area.LevelSet == "Xaphan/0")
+            {
+                self.Add(new TransitionBlackEffect());
+                yield return 0.5f;
+                yield return new SwapImmediately(orig(self, next, direction));
+                LevelTransition.SetValue(self, new Coroutine(TranstionRoutine(self)));
+            }
+            else
+            {
+                yield return new SwapImmediately(orig(self, next, direction));
+            }
+        }
+
+        private static void OnTalkComponentTalkComponentUICtor(On.Celeste.TalkComponent.TalkComponentUI.orig_ctor orig, TalkComponent.TalkComponentUI self, TalkComponent handler)
+        {
+            orig(self, handler);
+            self.AddTag(Tags.TransitionUpdate);
+        }
+
+        private static void OnTalkComponentTalkComponentUIUpdate(On.Celeste.TalkComponent.TalkComponentUI.orig_Update orig, TalkComponent.TalkComponentUI self)
+        {
+            if (self.SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0")
+            {
+                if (self.SceneAs<Level>().Tracker.GetEntities<TransitionBlackEffect>().Count() != 0)
+                {
+                    self.Visible = false;
+                }
+                else
+                {
+                    self.Visible = true;
+                    orig(self);
+                }
+            }
+            else
+            {
+                orig(self);
+            }
+        }
+
+        private static IEnumerator TranstionRoutine(Level level)
+        {
+            yield return 0.5f;
+            LevelTransition.SetValue(level, null);
+        }
+
+        public override void Added(Scene scene)
+        {
+            base.Added(scene);
+            camera = SceneAs<Level>().Camera;
+            Add(new Coroutine(FadeRoutine()));
+        }
+
+        private IEnumerator FadeRoutine()
+        {
+            Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+            Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
+            if (player != null)
+            {
+                if (SceneAs<Level>().Transitioning)
+                {
+                    player.Depth = Depth - 1;
+                }
+            }
+            if (drone != null)
+            {
+                drone.Depth = Depth - 1;
+            }
+            float fadeTimer = 0.5f;
+            while (fadeTimer > 0)
+            {
+                fadeTimer -= Engine.DeltaTime;
+                alpha += Engine.DeltaTime * 2;
+                alpha = Math.Min(1f, alpha);
+                foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
+                {
+                    if (backdrop.Visible)
+                    {
+                        if (backdrop is HeatParticles)
+                        {
+                            backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
+                        }
+                        else
+                        {
+                            backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
+                        }
+                    }
+                }
+                yield return null;
+            }
+            yield return 0.65f;
+            fadeTimer = 0.5f;
+            while (fadeTimer > 0)
+            {
+                fadeTimer -= Engine.DeltaTime;
+                alpha -= Engine.DeltaTime * 2;
+                alpha = Math.Max(0f, alpha);
+                foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
+                {
+                    if (backdrop.Visible)
+                    {
+                        if (backdrop is HeatParticles)
+                        {
+                            backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
+                        }
+                        else
+                        {
+                            backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
+                        }
+                    }
+                }
+                yield return null;
+            }
+            if (player != null)
+            {
+                player.Depth = 0;
+            }
+            if (drone != null)
+            {
+                drone.Depth = 0;
+            }
+            RemoveSelf();
+        }
+
+        public override void Render()
+        {
+            base.Render();
+            Draw.Rect(camera.X - 10, camera.Y - 10, Engine.Width + 20, Engine.Height + 20, Color.Black * alpha);
+        }
+    }
+}

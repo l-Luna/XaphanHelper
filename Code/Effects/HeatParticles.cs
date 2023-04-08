@@ -23,7 +23,7 @@ namespace Celeste.Mod.XaphanHelper.Effects
             public int Color;
         }
 
-        private Color[] Colors;
+        public Color[] Colors;
 
         private Color[] currentColors;
 
@@ -47,8 +47,8 @@ namespace Celeste.Mod.XaphanHelper.Effects
             string[] colors = particlesColors.Split(',');
             Colors = new Color[2]
             {
-                Calc.HexToColor(colors.GetLength(0) >= 1 ? colors[0] : "FFFFFF"),
-                Calc.HexToColor(colors.GetLength(0) >= 2 ? colors[1] : "FFFFFF")
+                Calc.HexToColor(colors.GetLength(0) >= 1 ? colors[0] : "FFFFFF") * (Color.A / 255),
+                Calc.HexToColor(colors.GetLength(0) >= 2 ? colors[1] : "FFFFFF") * (Color.A / 255)
             };
             for (int i = 0; i < particles.Length; i++)
             {
@@ -71,7 +71,7 @@ namespace Celeste.Mod.XaphanHelper.Effects
             particles[i].Spin = Calc.Random.Range(0.25f, (float)Math.PI * 6f);
             particles[i].Duration = Calc.Random.Range(1f, 4f);
             particles[i].Direction = Calc.AngleToVector(Calc.Random.NextFloat((float)Math.PI * 2f), 1f);
-            particles[i].Color = Calc.Random.Next(Colors.Length);
+            particles[i].Color = Calc.Random.Next(Colors.Length) * (Color.A / 255);
         }
 
         public override void Update(Scene scene)
@@ -98,11 +98,11 @@ namespace Celeste.Mod.XaphanHelper.Effects
                 particles[j].Direction.Rotate(particles[j].Spin * Engine.DeltaTime);
                 particles[j].Position.Y -= 10f * Engine.DeltaTime;
             }
-            fade = Calc.Approach(fade, 0.5f, Engine.DeltaTime);
+            fade = Calc.Approach(fade, 0.5f, Engine.DeltaTime) * (Color.A / 255);
             if (!NoMist)
             {
-                mist1.Color = Calc.HexToColor("f1b22b") * fade * 0.7f;
-                mist2.Color = Calc.HexToColor("f12b3a") * fade * 0.7f;
+                mist1.Color = Calc.HexToColor("f1b22b") * fade * 0.7f * (Color.A / 255);
+                mist2.Color = Calc.HexToColor("f12b3a") * fade * 0.7f * (Color.A / 255);
                 mist1.Speed = new Vector2(4f, -20f);
                 mist2.Speed = new Vector2(4f, -40f);
                 mist1.Update(scene);
