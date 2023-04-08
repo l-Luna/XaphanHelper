@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Reflection;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Colliders;
 using Microsoft.Xna.Framework;
 using Monocle;
+using static Celeste.GaussianBlur;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -40,8 +43,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private float SpeedV;
 
+        private float cancelYPos = 0f;
+
         public WorkRobot(EntityData data, Vector2 offset) : base(data.Position + offset, 10f, 17f, false)
         {
+            AllowStaticMovers = false;
             SurfaceSoundIndex = 7;
             size = data.Attr("size", "Medium");
             flag = data.Attr("flag");
@@ -70,6 +76,30 @@ namespace Celeste.Mod.XaphanHelper.Entities
             sprite.OnFrameChange = onFrameChange;
             sprite.Play("walk");
             Depth = -1;
+            Add(new SpringCollider(OnSpring, Collider));
+        }
+
+        public static void Load()
+        {
+            On.Monocle.Entity.Update += OnEntityUpdate;
+        }
+
+        public static void Unload()
+        {
+            On.Monocle.Entity.Update -= OnEntityUpdate;
+        }
+
+        private static void OnEntityUpdate(On.Monocle.Entity.orig_Update orig, Entity self)
+        {
+            orig(self);
+            if (self is Spring)
+            {
+                Spring spring = self as Spring;
+                foreach (SpringCollider springCollider in spring.Scene.Tracker.GetComponents<SpringCollider>())
+                {
+                    springCollider.Check(spring);
+                }
+            }
         }
 
         public override void Added(Scene scene)
@@ -168,7 +198,27 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        private float cancelYPos = 0f;
+        private void OnSpring(Spring spring)
+        {
+            if (spring.Orientation == Spring.Orientations.Floor)
+            {
+                Spring_BounceAnimate.Invoke(spring, null);
+                Bottom = spring.Top;
+                Push(new Vector2(active ? (goLeft ? -100 : 100) : 0, -240), goLeft ? -Vector2.UnitX : Vector2.UnitX);
+            }
+            else if (spring.Orientation == Spring.Orientations.WallLeft)
+            {
+                Spring_BounceAnimate.Invoke(spring, null);
+                Push(new Vector2(200, -180), Vector2.UnitX);
+            }
+            else if (spring.Orientation == Spring.Orientations.WallRight)
+            {
+                Spring_BounceAnimate.Invoke(spring, null);
+                Push(new Vector2(200, -180), -Vector2.UnitX);
+            }
+        }
+
+        private static MethodInfo Spring_BounceAnimate = typeof(Spring).GetMethod("BounceAnimate", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private IEnumerator TurnAround()
         {

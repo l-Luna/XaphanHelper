@@ -634,6 +634,8 @@ namespace Celeste.Mod.XaphanHelper
             FakePlayer.Load();
             PlayerDeadAction.Load();
             DroneSwitch.Load();
+            TransitionBlackEffect.Load();
+            WorkRobot.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -717,6 +719,8 @@ namespace Celeste.Mod.XaphanHelper
             FakePlayer.Unload();
             PlayerDeadAction.Unload();
             DroneSwitch.Unload();
+            TransitionBlackEffect.Unload();
+            WorkRobot.Unload();
         }
 
         // Custom States
@@ -2639,8 +2643,6 @@ namespace Celeste.Mod.XaphanHelper
         }
 
         public static bool minimapEnabled;
-
-        private Vector2? CurrentSessionSpawn;
 
         private void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
         {
