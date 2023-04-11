@@ -10,9 +10,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/Conveyor")]
     class Conveyor : Solid
     {
-        private int conveyorSpeed;
+        public int conveyorSpeed;
 
-        private int direction;
+        public int direction;
 
         private string swapFlag;
 
@@ -125,7 +125,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 foreach (Sprite sprite in sprites)
                 {
-                    sprite.Position.X += conveyorSpeed / 100f * direction;
+                    sprite.Position.X += conveyorSpeed * Engine.DeltaTime * direction;
                     if (sprite.Position.X > Width + 8)
                     {
                         sprite.Position.X -= (Width + 8);
@@ -144,7 +144,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             while (conveyor.HasPlayerRider())
             {
                 conveyor.GetPlayerRider().LiftSpeed = Vector2.UnitX * conveyorSpeed * direction;
-                conveyor.GetPlayerRider().MoveH(conveyorSpeed / 100f * direction);
+                conveyor.GetPlayerRider().MoveH(conveyorSpeed * Engine.DeltaTime * direction);
                 yield return null;
             }
         }
@@ -157,7 +157,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     if (actor.GetType() != typeof(Player) && actor.GetType() != typeof(FakePlayer) && actor.GetType() != typeof(Drone) && actor.GetType() != typeof(DroneDebris) && actor.GetType() != typeof(Debris) && actor.IsRiding(this) && actor.AllowPushing)
                     {
-                        actor.MoveH(conveyorSpeed / 100f * direction);
+                        actor.MoveH(conveyorSpeed * Engine.DeltaTime * direction);
                         actor.Bottom = Top;
                     }
                 }

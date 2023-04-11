@@ -66,7 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Add(sprite = new Sprite(GFX.Game, directory + "/" + size + "/"));
             sprite.Position = new Vector2(-8, -16);
             sprite.AddLoop("idle", "turn", 0f, 7);
-            sprite.AddLoop("walk", "walk", 0.1f);
+            sprite.AddLoop("walk", "walk", 0.1f / Math.Min(2, speed / 20));
             sprite.Add("turn", "turn", 0.08f);
             sprite.Add("activate", "turn", 0.08f, 7, 7, 6, 5, 4, 3, 2, 1, 0);
             sprite.Add("deactivate", "turn", 0.08f, 0, 1, 2, 3, 4, 5, 6, 7, 7);
@@ -122,6 +122,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        private int conveyorSpeed;
+        private int conveyorDir;
+
         public override void Update()
         {
             base.Update();
@@ -132,24 +135,34 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SpeedH = 0;
             }
             Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24 - (active ? 0 : 2), width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24 - (active ? 0 : 3), width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24 - (active ? 0 : 4), width - 2, 1);
+            Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 2, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X - 3, (int)Position.Y + 24, 1, 1);
+            Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X + 18, (int)Position.Y + 24, 1, 1);
+            foreach (Conveyor conveyor in SceneAs<Level>().Tracker.GetEntities<Conveyor>())
+            {
+                if (CollideCheck(conveyor, BottomCenter))
+                {
+                    conveyorSpeed = conveyor.conveyorSpeed;
+                    conveyorDir = conveyor.direction;
+                    break;
+                }
+            }
+            int conveyorSpeedAdjust = conveyorSpeed * conveyorDir;
             if (!TurnAroundRoutine.Active && !ActiveRoutine.Active && active && (!string.IsNullOrEmpty(flag) ? SceneAs<Level>().Session.GetFlag(flag) : true))
             {
                 sprite.FlipX = goLeft;
                 if (!pushed && (Scene.CollideCheck<Solid>(BottomHit) || Scene.CollideCheck<JumpThru>(BottomHit)))
                 {
-                    Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 2, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X - 3, (int)Position.Y + 24, 1, 1);
-                    Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X + 18, (int)Position.Y + 24, 1, 1);
                     if (goLeft && (Scene.CollideCheck<Solid>(LeftHit) || Scene.CollideCheck<JumpThru>(LeftHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f))
                     {
-                        SpeedH = -speed;
+                        SpeedH = -speed + conveyorSpeedAdjust;
                     }
                     else if (!goLeft && (Scene.CollideCheck<Solid>(RightHit) || Scene.CollideCheck<JumpThru>(RightHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f))
                     {
-                        SpeedH = speed;
+                        SpeedH = speed + conveyorSpeedAdjust;
                     }
                     else
                     {
-                        SpeedH = 0f;
+                        SpeedH = conveyorSpeedAdjust;
                         if ((goLeft && ((!Scene.CollideCheck<Solid>(LeftHit) && !Scene.CollideCheck<JumpThru>(LeftHit)) || CollideCheck<Solid>(Position + Vector2.UnitX * -1f))) || (!goLeft && ((!Scene.CollideCheck<Solid>(RightHit) && !Scene.CollideCheck<JumpThru>(RightHit)) || CollideCheck<Solid>(Position + Vector2.UnitX * 1f))))
                         {
                             goLeft = !goLeft;
@@ -160,6 +173,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (!string.IsNullOrEmpty(flag) && !TurnAroundRoutine.Active && !ActiveRoutine.Active)
             {
+                if ((!pushed || (pushed && sprite.CurrentAnimationID == "stun")) && (Scene.CollideCheck<Solid>(BottomHit) || Scene.CollideCheck<JumpThru>(BottomHit)))
+                {
+                    if ((goLeft && (Scene.CollideCheck<Solid>(LeftHit) || Scene.CollideCheck<JumpThru>(LeftHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f)) || (!goLeft && (Scene.CollideCheck<Solid>(RightHit) || Scene.CollideCheck<JumpThru>(RightHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f)))
+                    {
+                        SpeedH = conveyorSpeedAdjust;
+                    }
+                }
                 if (!active)
                 {
                     if (SceneAs<Level>().Session.GetFlag(flag))
@@ -374,6 +394,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 yield return null;
             }
+            int conveyorSpeedAdjust = conveyorSpeed * conveyorDir;
             if (active)
             {
                 float stunTimer = 1f;
@@ -392,6 +413,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     yield return null;
                 }
                 sprite.Play("stun");
+                SpeedH = conveyorSpeedAdjust;
                 while (stunTimer > 0)
                 {
                     stunTimer -= Engine.DeltaTime;
@@ -401,7 +423,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                SpeedH = 0f;
+                SpeedH = conveyorSpeedAdjust;
             }
             pushed = false;
             sprite.Rate = 1f;
