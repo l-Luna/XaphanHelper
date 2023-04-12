@@ -167,8 +167,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         break;
                     }
                 }
-                if ((self.Frozen || self.RetryPlayerCorpse != null || self.SkippingCutscene || self.InCutscene) || (player != null && !player.Sprite.Visible && !self.Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (self.Tracker.GetEntity<ScrewAttackManager>() != null ? !self.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || (self.Tracker.GetEntity<MapScreen>() != null && self.Tracker.GetEntity<MapScreen>().ShowUI)
-                    || (self.Tracker.GetEntity<StatusScreen>() != null && self.Tracker.GetEntity<StatusScreen>().ShowUI) || (self.Tracker.GetEntity<WarpScreen>() != null && self.Tracker.GetEntity<WarpScreen>().ShowUI))
+                if ((self.Frozen || self.RetryPlayerCorpse != null || self.SkippingCutscene || self.InCutscene) || (player != null && !player.Sprite.Visible && !self.Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (self.Tracker.GetEntity<ScrewAttackManager>() != null ? !self.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || XaphanModule.ShowUI)
                 {
                     if (self.Tracker.GetEntity<UpgradesDisplay>() != null)
                     {

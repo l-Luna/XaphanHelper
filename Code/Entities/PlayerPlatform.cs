@@ -248,7 +248,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                             if (Side == "Left")
                             {
-                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != -1 && player.Left >= Left && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
+                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != -1 && player.Left >= Left && !XaphanModule.UIOpened)
                                 {
                                     Sliding = true;
                                     player.Sprite.Visible = false;
@@ -276,7 +276,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             }
                             else if (Side == "Right")
                             {
-                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != 1 && player.Right <= Right && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null)
+                                if (CanSlide && drone == null && player.IsRiding(this) && Input.MoveY == 1 && Input.MoveX != 1 && player.Right <= Right && !XaphanModule.UIOpened)
                                 {
                                     Sliding = true;
                                     player.Sprite.Visible = false;

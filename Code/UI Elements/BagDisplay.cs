@@ -114,8 +114,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         break;
                     }
                 }
-                if ((self.FrozenOrPaused || self.RetryPlayerCorpse != null || self.SkippingCutscene || self.InCutscene) || (player != null && !player.Sprite.Visible && !self.Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (self.Tracker.GetEntity<ScrewAttackManager>() != null ? !self.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || (self.Tracker.GetEntity<MapScreen>() != null && self.Tracker.GetEntity<MapScreen>().ShowUI)
-                    || (self.Tracker.GetEntity<StatusScreen>() != null && self.Tracker.GetEntity<StatusScreen>().ShowUI) || (self.Tracker.GetEntity<WarpScreen>() != null && self.Tracker.GetEntity<WarpScreen>().ShowUI) || XaphanModule.PlayerIsControllingRemoteDrone() || playerIsInHideTrigger(self))
+                if ((self.FrozenOrPaused || self.RetryPlayerCorpse != null || self.SkippingCutscene || self.InCutscene) || (player != null && !player.Sprite.Visible && !self.Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (self.Tracker.GetEntity<ScrewAttackManager>() != null ? !self.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || XaphanModule.ShowUI || XaphanModule.PlayerIsControllingRemoteDrone() || playerIsInHideTrigger(self))
                 {
                     if (canAddDisplay && self.Tracker.CountEntities<BagDisplay>() > 0)
                     {
@@ -369,9 +368,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if ((type == "bag" ? XaphanModule.ModSettings.UseBagItemSlot.Pressed : XaphanModule.ModSettings.UseMiscItemSlot.Pressed) && XaphanModule.ModSettings.SelectItem.Check)
             {
-                StatusScreen statusScreen = level.Tracker.GetEntity<StatusScreen>();
-                MapScreen mapScreen = level.Tracker.GetEntity<MapScreen>();
-                if (player != null && Visible && !level.Paused && !XaphanModule.PlayerIsControllingRemoteDrone() && player.Holding == null && statusScreen == null & mapScreen == null)
+                if (player != null && Visible && !level.Paused && !XaphanModule.PlayerIsControllingRemoteDrone() && player.Holding == null && !XaphanModule.UIOpened)
                 {
                     int nextSelection = currentSelection;
                     bool nextActiveUpgrade = false;

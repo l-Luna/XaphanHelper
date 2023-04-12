@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -53,11 +54,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public List<WarpInfo> ActiveWarps => warpsPerArea[currentMenu];
 
-        public bool ShowUI => Visible;
-
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            XaphanModule.UIOpened = true;
             Level level = Scene as Level;
 
             int currentAreaId = level.Session.Area.ID;
@@ -175,6 +175,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private void InitializeScreen()
         {
+            XaphanModule.ShowUI = true;
             warpMenu.UpdateWarps(ActiveWarps);
 
             AreaKey area = new(SelectedWarp.AreaId);
@@ -209,7 +210,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             mapDisplay?.RemoveSelf();
             mapProgressDisplay?.RemoveSelf();
             SceneAs<Level>().FormationBackdrop.Display = false;
-            Visible = false;
+            XaphanModule.ShowUI = false;
         }
 
         public void StartDelay()
@@ -246,6 +247,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     player.StateMachine.State = Player.StNormal;
                 }
+                XaphanModule.UIOpened = false;
                 RemoveSelf();
             }
             else
@@ -261,6 +263,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         player.StateMachine.State = Player.StNormal;
                     }
+                    XaphanModule.ShowUI = false;
+                    XaphanModule.UIOpened = false;
                     RemoveSelf();
                 })));
             }

@@ -73,15 +73,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (StatusScreen.Selection == ID)
                 {
                     Selected = true;
-                    if (Input.MenuConfirm.Pressed && InactiveList.Contains(LevelSet))
+                    if (StatusScreen.prompt == null)
                     {
-                        InactiveList.Remove(LevelSet);
-                        Audio.Play("event:/ui/main/message_confirm");
-                    }
-                    else if (Input.MenuConfirm.Pressed && !InactiveList.Contains(LevelSet))
-                    {
-                        InactiveList.Add(LevelSet);
-                        Audio.Play("event:/ui/main/button_back");
+                        if (Input.MenuConfirm.Pressed && InactiveList.Contains(LevelSet))
+                        {
+                            InactiveList.Remove(LevelSet);
+                            Audio.Play("event:/ui/main/message_confirm");
+                        }
+                        else if (Input.MenuConfirm.Pressed && !InactiveList.Contains(LevelSet))
+                        {
+                            InactiveList.Add(LevelSet);
+                            Audio.Play("event:/ui/main/button_back");
+                        }
                     }
                     if (alphaStatus == 0 || (alphaStatus == 1 && selectedAlpha != 0.9f))
                     {

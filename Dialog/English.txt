@@ -244,6 +244,7 @@
 	XaphanHelper_UI_showWorldMap= Show World Map
 	XaphanHelper_UI_showAreaMap= Show Area Map
 	XaphanHelper_UI_confirm= Confirm
+	XaphanHelper_UI_achievements= Achievements
 	Xaphanhelper_UI_Arms= ARMS
 	Xaphanhelper_UI_Legs= LEGS
 	Xaphanhelper_UI_Drone= DRONE
@@ -256,6 +257,7 @@
 	XaphanHelper_UI_Currently_In= Currently In:
 	XaphanHelper_UI_ReturnToMap_Rooms= Returning to Map will save your progress.{n}You will restart at your current spawn point.
 	XaphanHelper_UI_ReturnToMap_Warps= Returning to Map will save your progress.{n}You will restart at the last Warp Station you stood on.
+	XaphanHelper_UI_Menu= Menu
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?

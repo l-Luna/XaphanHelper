@@ -244,6 +244,7 @@
 	XaphanHelper_UI_showWorldMap= Afficher carte du monde
 	XaphanHelper_UI_showAreaMap= Afficher carte de la zone
 	XaphanHelper_UI_confirm= Confirmer
+	XaphanHelper_UI_achievements= Succès
 	Xaphanhelper_UI_Arms= BRAS
 	Xaphanhelper_UI_Legs= JAMBES
 	Xaphanhelper_UI_Drone= DRONE
@@ -256,6 +257,7 @@
 	XaphanHelper_UI_Currently_In= Actuellement dans :
 	XaphanHelper_UI_ReturnToMap_Rooms= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à ton point de départ actuel.
 	XaphanHelper_UI_ReturnToMap_Warps= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à la dernière station de téléportation où tu t'es arrêté.
+	XaphanHelper_UI_Menu= Menu
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= SOUHAITEZ-VOUS SAUVEGARDER ?

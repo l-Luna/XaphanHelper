@@ -105,7 +105,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             base.Update();
             Visible = !SceneAs<Level>().FrozenOrPaused;
             player = SceneAs<Level>().Tracker.GetEntity<Player>();
-            if ((SceneAs<Level>().Tracker.GetEntity<WarpScreen>() != null || SceneAs<Level>().Tracker.GetEntity<MapScreen>() != null || SceneAs<Level>().Tracker.GetEntity<StatusScreen>() != null) || (SceneAs<Level>().Tracker.GetEntity<HeatController>() == null && !GravityJacket.determineIfInLiquid()))
+            if (XaphanModule.UIOpened || (SceneAs<Level>().Tracker.GetEntity<HeatController>() == null && !GravityJacket.determineIfInLiquid()))
             {
                 stopDamageSfx();
             }

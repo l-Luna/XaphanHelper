@@ -1048,9 +1048,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         {
                             if (!XaphanModule.PlayerIsControllingRemoteDrone())
                             {
-                                StatusScreen statusScreen = SceneAs<Level>().Tracker.GetEntity<StatusScreen>();
-                                MapScreen mapScreen = SceneAs<Level>().Tracker.GetEntity<MapScreen>();
-                                if (statusScreen == null && mapScreen == null)
+                                if (!XaphanModule.UIOpened)
                                 {
                                     if (!XaphanModule.useMetroidGameplay)
                                     {
@@ -1129,7 +1127,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 healthDisplay.playDamageSfx();
             }
-            while (healthDisplay != null && healthDisplay.CurrentHealth > 0 && !SceneAs<Level>().Transitioning && !SceneAs<Level>().FrozenOrPaused && SceneAs<Level>().Tracker.GetEntity<WarpScreen>() == null && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null && GravityJacket.determineIfInLiquid())
+            while (healthDisplay != null && healthDisplay.CurrentHealth > 0 && !SceneAs<Level>().Transitioning && !SceneAs<Level>().FrozenOrPaused && !XaphanModule.UIOpened && GravityJacket.determineIfInLiquid())
             {
                 healthDisplay.CurrentHealth -= 1;
                 healthDisplay.GetEnergyTanks();

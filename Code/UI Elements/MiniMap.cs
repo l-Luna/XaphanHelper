@@ -85,8 +85,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     break;
                 }
             }
-            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible && !SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (level.Tracker.GetEntity<ScrewAttackManager>() != null ? !level.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || (level.Tracker.GetEntity<MapScreen>() != null && level.Tracker.GetEntity<MapScreen>().ShowUI)
-                || (level.Tracker.GetEntity<StatusScreen>() != null && level.Tracker.GetEntity<StatusScreen>().ShowUI) || (level.Tracker.GetEntity<WarpScreen>() != null && level.Tracker.GetEntity<WarpScreen>().ShowUI) || playerIsInHideTrigger() || !XaphanModule.CanOpenMap(level))
+            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible && !SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling") && !sliding && (level.Tracker.GetEntity<ScrewAttackManager>() != null ? !level.Tracker.GetEntity<ScrewAttackManager>().StartedScrewAttack : true)) || XaphanModule.ShowUI || playerIsInHideTrigger() || !XaphanModule.CanOpenMap(level))
             {
                 RemoveSelf();
             }

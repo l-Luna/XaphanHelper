@@ -41,8 +41,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Level level = SceneAs<Level>();
             Player player = Scene.Tracker.GetEntity<Player>();
             HeatController controller = level.Tracker.GetEntity<HeatController>();
-            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible) || (level.Tracker.GetEntity<MapScreen>() != null && level.Tracker.GetEntity<MapScreen>().ShowUI)
-                || (level.Tracker.GetEntity<StatusScreen>() != null && level.Tracker.GetEntity<StatusScreen>().ShowUI) || (level.Tracker.GetEntity<WarpScreen>() != null && level.Tracker.GetEntity<WarpScreen>().ShowUI) || !XaphanModule.CanOpenMap(level) || level.Session.GetFlag(inactiveFlag))
+            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible) || XaphanModule.ShowUI || !XaphanModule.CanOpenMap(level) || level.Session.GetFlag(inactiveFlag))
             {
                 Visible = false;
             }
@@ -50,7 +49,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 Visible = true;
             }
-            if (!level.FrozenOrPaused && level.Tracker.GetEntity<WarpScreen>() == null && level.Tracker.GetEntity<MapScreen>() == null && level.Tracker.GetEntity<StatusScreen>() == null && !level.Session.GetFlag(inactiveFlag))
+            if (!level.FrozenOrPaused && !XaphanModule.UIOpened && !level.Session.GetFlag(inactiveFlag))
             {
                 if (!XaphanModule.useMetroidGameplay)
                 {
@@ -105,7 +104,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private IEnumerator HeatDamage()
         {
             HealthDisplay healthDisplay = SceneAs<Level>().Tracker.GetEntity<HealthDisplay>();
-            while (healthDisplay != null && healthDisplay.CurrentHealth > 0 && !VariaJacket.Active(SceneAs<Level>()) && !SceneAs<Level>().Transitioning && !SceneAs<Level>().FrozenOrPaused && SceneAs<Level>().Tracker.GetEntity<WarpScreen>() == null && SceneAs<Level>().Tracker.GetEntity<MapScreen>() == null && SceneAs<Level>().Tracker.GetEntity<StatusScreen>() == null && !SceneAs<Level>().Session.GetFlag(inactiveFlag))
+            while (healthDisplay != null && healthDisplay.CurrentHealth > 0 && !VariaJacket.Active(SceneAs<Level>()) && !SceneAs<Level>().Transitioning && !SceneAs<Level>().FrozenOrPaused && !XaphanModule.UIOpened && !SceneAs<Level>().Session.GetFlag(inactiveFlag))
             {
                 healthDisplay.playDamageSfx();
                 healthDisplay.CurrentHealth -= 1;

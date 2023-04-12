@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
@@ -19,8 +20,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private List<MapDisplay> worldMapMapDisplays = new();
 
-        public bool ShowUI;
-
         private bool NoInput;
 
         public float LeftMoves;
@@ -38,6 +37,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public BigTitle BigTitle;
 
         public BigTitle SubAreaName;
+
+        public SwitchUIPrompt prompt;
+
+        public bool promptChoice;
 
         private Wiggler statusWiggle;
 
@@ -98,6 +101,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            XaphanModule.UIOpened = true;
             Level level = Scene as Level;
             level.PauseLock = true;
             level.Session.SetFlag("Map_Opened", true);
@@ -110,7 +114,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public override void Update()
         {
-            if (ShowUI)
+            if (XaphanModule.ShowUI)
             {
                 foreach (Player player in SceneAs<Level>().Tracker.GetEntities<Player>())
                 {
@@ -200,7 +204,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if (XaphanModule.useUpgrades && !XaphanModule.PlayerIsControllingRemoteDrone())
             {
-                if (Input.Pause.Pressed && statusWiggleDelay <= 0f && switchTimer <= 0)
+                if (Input.Pause.Pressed && statusWiggleDelay <= 0f && switchTimer <= 0 && prompt == null)
                 {
                     statusWiggle.Start();
                     statusWiggleDelay = 0.5f;
@@ -263,7 +267,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 timerDisplay.StopTimer(true, false);
             }
-            ShowUI = true;
+            XaphanModule.ShowUI = true;
             duration = 0.25f;
             FadeWipe Wipe2 = new(SceneAs<Level>(), true)
             {
@@ -305,7 +309,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     bagDisplay.SetToFirstActiveUpgrade();
                 }
             }
-            ShowUI = false;
+            XaphanModule.ShowUI = false;
             duration = 0.25f;
             Wipe = new FadeWipe(SceneAs<Level>(), true)
             {
@@ -764,7 +768,39 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             while (!Input.ESC.Pressed && !Input.MenuCancel.Pressed && !XaphanSettings.OpenMap.Pressed && player != null)
             {
-                if (mode == "map")
+                if (prompt != null)
+                {
+                    if (!prompt.open)
+                    {
+                        prompt = null;
+                        promptChoice = false;
+                    }
+                    else
+                    {
+                        if (Input.MenuLeft.Pressed && prompt.Selection > 0)
+                        {
+                            prompt.Selection--;
+                        }
+                        if (Input.MenuRight.Pressed && prompt.Selection < 2)
+                        {
+                            prompt.Selection++;
+                        }
+                        if ((Input.MenuConfirm.Pressed || Input.Pause.Pressed) && prompt.drawContent && !promptChoice)
+                        {
+                            promptChoice = true;
+                            if (prompt.Selection == 0)
+                            {
+                                Add(new Coroutine(TransitionToStatusScreen()));
+                            }
+                            else if (prompt.Selection == 2)
+                            {
+
+                            }
+                            prompt.ClosePrompt();
+                        }
+                    }
+                }
+                else if (mode == "map")
                 {
                     if (mapDisplay.MapWidth / 8 > 1640)
                     {
@@ -838,9 +874,19 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
-                if (Input.Pause.Check && XaphanModule.useUpgrades && switchTimer <= 0 && !XaphanModule.PlayerIsControllingRemoteDrone() && !XaphanModule.DisableStatusScreen)
+                if (Input.Pause.Pressed && XaphanModule.useUpgrades && switchTimer <= 0 && !XaphanModule.PlayerIsControllingRemoteDrone() && !XaphanModule.DisableStatusScreen)
                 {
-                    Add(new Coroutine(TransitionToStatusScreen()));
+                    if (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0")
+                    {
+                        if (prompt == null)
+                        {
+                            Scene.Add(prompt = new SwitchUIPrompt(Vector2.Zero, 1));
+                        }
+                    }
+                    else
+                    {
+                        Add(new Coroutine(TransitionToStatusScreen()));
+                    }
                 }
                 yield return null;
             }
@@ -895,6 +941,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Level level = Scene as Level;
             Player player = Scene.Tracker.GetEntity<Player>();
             level.Remove(BigTitle);
+            level.Remove(prompt);
             if (SubAreaName != null)
             {
                 level.Remove(SubAreaName);
@@ -923,13 +970,14 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 yield return 0.1f;
                 level.Session.SetFlag("Map_Opened", false);
             }
+            XaphanModule.UIOpened = false;
             RemoveSelf();
         }
 
         public override void Render()
         {
             base.Render();
-            if (ShowUI)
+            if (XaphanModule.ShowUI)
             {
                 Draw.Rect(new Vector2(-10, -10), 1940, 182, Color.Black);
                 Draw.Rect(new Vector2(-10, 172), 100, 856, Color.Black);
@@ -962,7 +1010,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     float scale = 0.5f;
                     string label = Dialog.Clean("XaphanHelper_UI_close");
-                    string label2 = Dialog.Clean("XaphanHelper_UI_abilities");
+                    string label2 = SceneAs<Level>().Session.Area.LevelSet != "Xaphan/0" ? Dialog.Clean("XaphanHelper_UI_abilities") : Dialog.Clean("XaphanHelper_UI_menu");
                     string label3 = Dialog.Clean("XaphanHelper_UI_showhints");
                     string label4 = Dialog.Clean("XaphanHelper_UI_hidehints");
                     string label5 = Dialog.Clean("XaphanHelper_UI_progress_area");

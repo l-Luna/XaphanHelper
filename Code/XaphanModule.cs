@@ -107,6 +107,10 @@ namespace Celeste.Mod.XaphanHelper
             return ModSaveData.SavedFlags.Contains(level.Session.Area.GetLevelSet() + "_Can_Open_Map") || ModSettings.SpeedrunMode ? true : false;
         }
 
+        public static bool UIOpened;
+
+        public static bool ShowUI;
+
         public enum Upgrades
         {
             // Celeste Upgrades
