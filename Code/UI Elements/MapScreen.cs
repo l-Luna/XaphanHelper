@@ -339,7 +339,29 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 Add(new Coroutine(CloseMap(true)));
                 level.Add(new StatusScreen(level, true));
             }
+        }
 
+        private IEnumerator TransitionToAchievementsScreen()
+        {
+            if (!NoInput)
+            {
+                NoInput = true;
+                Player player = Scene.Tracker.GetEntity<Player>();
+                float duration = 0.5f;
+                FadeWipe Wipe = new(SceneAs<Level>(), false)
+                {
+                    Duration = duration
+                };
+                SceneAs<Level>().Add(Wipe);
+                duration = duration - 0.25f;
+                while (duration > 0f)
+                {
+                    yield return null;
+                    duration -= Engine.DeltaTime;
+                }
+                Add(new Coroutine(CloseMap(true)));
+                level.Add(new AchievementsScreen(level));
+            }
         }
 
         public void CalcMoves(int previousLeftMoves = 0, int previousRightMoves = 0, int previousUpMoves = 0, int previousDownMoves = 0)
@@ -794,7 +816,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             }
                             else if (prompt.Selection == 2)
                             {
-
+                                Add(new Coroutine(TransitionToAchievementsScreen()));
                             }
                             prompt.ClosePrompt();
                         }
