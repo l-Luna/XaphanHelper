@@ -258,6 +258,9 @@
 	XaphanHelper_UI_ReturnToMap_Rooms= Returning to Map will save your progress.{n}You will restart at your current spawn point.
 	XaphanHelper_UI_ReturnToMap_Warps= Returning to Map will save your progress.{n}You will restart at the last Warp Station you stood on.
 	XaphanHelper_UI_Menu= Menu
+	XaphanHelper_UI_Medals= MEDALS
+	XaphanHelper_UI_Categories= CATEGORIES
+	XaphanHelper_UI_General= General
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?

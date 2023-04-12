@@ -4,6 +4,7 @@ using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
+    [Tracked(true)]
     class AchievementsScreen : Entity
     {
         protected static XaphanModuleSettings XaphanSettings => XaphanModule.ModSettings;
@@ -11,6 +12,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private bool NoInput;
 
         private Level level;
+
+        private AchievementsDisplay achievementsDisplay;
 
         public string Title;
 
@@ -30,7 +33,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private float switchTimer;
 
-        public int Selection;
+        public int categorySelection;
 
         public AchievementsScreen(Level level)
         {
@@ -39,7 +42,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Title = Dialog.Clean("XaphanHelper_UI_achievements");
             Add(menuWiggle = Wiggler.Create(0.4f, 4f));
             Add(closeWiggle = Wiggler.Create(0.4f, 4f));
-            Selection = 0;
+            categorySelection = 0;
             Depth = -10003;
         }
 
@@ -188,6 +191,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Player player = Scene.Tracker.GetEntity<Player>();
             Scene.Add(BigTitle = new BigTitle(Title, new Vector2(960, 80), true));
+            Scene.Add(achievementsDisplay = new AchievementsDisplay(level));
+            yield return achievementsDisplay.GennerateAchievementsDisplay();
             while (switchTimer > 0)
             {
                 yield return null;
@@ -226,11 +231,24 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
+                else
+                {
+                    if (Input.MenuUp.Pressed && categorySelection > 0)
+                    {
+                        categorySelection--;
+                        Audio.Play("event:/ui/main/rollover_up");
+                    }
+                    if (Input.MenuDown.Pressed && categorySelection < 5)
+                    {
+                        categorySelection++;
+                        Audio.Play("event:/ui/main/rollover_down");
+                    }
+                }
                 if (Input.Pause.Check && XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level) && switchTimer <= 0)
                 {
                     if (prompt == null)
                     {
-                        Scene.Add(prompt = new SwitchUIPrompt(Vector2.Zero, 0));
+                        Scene.Add(prompt = new SwitchUIPrompt(Vector2.Zero, 2));
                     }
                 }
                 yield return null;
@@ -244,7 +262,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Level level = Scene as Level;
             Player player = Scene.Tracker.GetEntity<Player>();
             level.Remove(BigTitle);
-            //level.Remove(statusDisplay);
+            level.Remove(achievementsDisplay);
             level.Remove(prompt);
             if (!switchtoMap)
             {

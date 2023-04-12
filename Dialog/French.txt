@@ -258,6 +258,9 @@
 	XaphanHelper_UI_ReturnToMap_Rooms= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à ton point de départ actuel.
 	XaphanHelper_UI_ReturnToMap_Warps= Retourner à la carte sauvegardera ta progression.{n}Tu repartira à la dernière station de téléportation où tu t'es arrêté.
 	XaphanHelper_UI_Menu= Menu
+	XaphanHelper_UI_Medals= MEDAILLES
+	XaphanHelper_UI_Categories= CATEGORIES
+	XaphanHelper_UI_General= Général
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= SOUHAITEZ-VOUS SAUVEGARDER ?
