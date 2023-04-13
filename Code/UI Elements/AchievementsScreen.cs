@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Microsoft.Xna.Framework;
 using Monocle;
+using static Celeste.Mod.XaphanHelper.UI_Elements.AchievementsDisplay;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -34,6 +35,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         private float switchTimer;
 
         public int categorySelection;
+
+        public int previousCategorySelection;
+
+        public int achievementSelection = -1;
 
         public AchievementsScreen(Level level)
         {
@@ -233,15 +238,75 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 else
                 {
-                    if (Input.MenuUp.Pressed && categorySelection > 0)
+                    if (Input.MenuConfirm.Pressed)
                     {
-                        categorySelection--;
-                        Audio.Play("event:/ui/main/rollover_up");
+                        bool locked = false;
+                        foreach (CategoryDisplay categoryDisplay in level.Tracker.GetEntities<CategoryDisplay>())
+                        {
+                            if (categoryDisplay.Selected)
+                            {
+                                locked = categoryDisplay.Locked;
+                                break;
+                            }
+                        }
+                        if (!locked)
+                        {
+                            if (achievementSelection == -1)
+                            {
+                                previousCategorySelection = categorySelection;
+                                categorySelection = -1;
+                                achievementSelection = 0;
+                            }
+                            else
+                            {
+                                achievementSelection = -1;
+                                categorySelection = previousCategorySelection;
+                                previousCategorySelection = -1;
+                                achievementsDisplay.GenerateAchievementsList(categorySelection);
+                            }
+                        }
                     }
-                    if (Input.MenuDown.Pressed && categorySelection < 5)
+                    if (categorySelection != -1)
                     {
-                        categorySelection++;
-                        Audio.Play("event:/ui/main/rollover_down");
+                        if (Input.MenuUp.Pressed && categorySelection > 0)
+                        {
+                            categorySelection--;
+                            achievementsDisplay.GenerateAchievementsList(categorySelection);
+                            Audio.Play("event:/ui/main/rollover_up");
+                        }
+                        if (Input.MenuDown.Pressed && categorySelection < 5)
+                        {
+                            categorySelection++;
+                            achievementsDisplay.GenerateAchievementsList(categorySelection);
+                            Audio.Play("event:/ui/main/rollover_down");
+                        }
+                    }
+                    if (achievementSelection != -1)
+                    {
+                        if (Input.MenuUp.Pressed && achievementSelection > 0)
+                        {
+                            achievementSelection--;
+                            if (achievementSelection <= SceneAs<Level>().Tracker.GetEntities<AchievementsDisplay.AchievementDisplay>().Count - 4 && achievementSelection >= 2)
+                            {
+                                foreach (AchievementsDisplay.AchievementDisplay display in SceneAs<Level>().Tracker.GetEntities<AchievementsDisplay.AchievementDisplay>())
+                                {
+                                    display.Position.Y += display.height;
+                                }
+                            }
+                            Audio.Play("event:/ui/main/rollover_up");
+                        }
+                        if (Input.MenuDown.Pressed && achievementSelection < SceneAs<Level>().Tracker.GetEntities<AchievementsDisplay.AchievementDisplay>().Count - 1)
+                        {
+                            achievementSelection++;
+                            if (achievementSelection >= 3 && SceneAs<Level>().Tracker.GetEntities<AchievementsDisplay.AchievementDisplay>().Count - 1 >= achievementSelection + 2)
+                            {
+                                foreach (AchievementsDisplay.AchievementDisplay display in SceneAs<Level>().Tracker.GetEntities<AchievementsDisplay.AchievementDisplay>())
+                                {
+                                    display.Position.Y -= display.height;
+                                }
+                            }
+                            Audio.Play("event:/ui/main/rollover_down");
+                        }
                     }
                 }
                 if (Input.Pause.Check && XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level) && switchTimer <= 0)

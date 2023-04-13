@@ -261,6 +261,9 @@
 	XaphanHelper_UI_Medals= MEDALS
 	XaphanHelper_UI_Categories= CATEGORIES
 	XaphanHelper_UI_General= General
+	XaphanHelper_UI_Objective= Objective:
+	XaphanHelper_UI_Achievements_Locked= This category{n}is currently locked
+	XaphanHelper_UI_Achievements_Locked_Description= Continue your adventure{n}to unlock this category
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?
