@@ -43,6 +43,18 @@ namespace Celeste.Mod.XaphanHelper
 
         public static int[] TotalEnergyTanks;
 
+        public static int[] CurrentFireRateModules;
+
+        public static int[] TotalFireRateModules;
+
+        public static int[] CurrentMissiles;
+
+        public static int[] TotalMissiles;
+
+        public static int[] CurrentSuperMissiles;
+
+        public static int[] TotalSuperMissiles;
+
         public static int[] CurrentStrawberries;
 
         public static int[] TotalStrawberries;
@@ -147,6 +159,12 @@ namespace Celeste.Mod.XaphanHelper
             TotalSubAreaTiles = new Dictionary<int, int>[maxChapters];
             CurrentEnergyTanks = new int[maxChapters];
             TotalEnergyTanks = new int[maxChapters];
+            CurrentFireRateModules = new int[maxChapters];
+            TotalFireRateModules = new int[maxChapters];
+            CurrentMissiles = new int[maxChapters];
+            TotalMissiles = new int[maxChapters];
+            CurrentSuperMissiles = new int[maxChapters];
+            TotalSuperMissiles = new int[maxChapters];
             BSideHearts = new bool[maxChapters];
             CurrentStrawberries = new int[maxChapters];
             TotalStrawberries = new int[maxChapters];
@@ -172,6 +190,12 @@ namespace Celeste.Mod.XaphanHelper
                 TotalSubAreaTiles[i] = getSubAreaTiles(Prefix, i, true);
                 CurrentEnergyTanks[i] = getCurrentEnergyTanks(Prefix, i);
                 TotalEnergyTanks[i] = getTotalEnergyTanks();
+                CurrentFireRateModules[i] = getCurrentFireRateModules(Prefix, i);
+                TotalFireRateModules[i] = getTotalFireRateModules();
+                CurrentMissiles[i] = getCurrentMissiles(Prefix, i);
+                TotalMissiles[i] = getTotalMissiles();
+                CurrentSuperMissiles[i] = getCurrentSuperMissiles(Prefix, i);
+                TotalSuperMissiles[i] = getTotalSuperMissiles();
                 GetStrawberries(MapData);
                 GetAlreadyCollectedStrawberries(MapData);
                 CurrentSubAreaStrawberries[i] = getSubAreaStrawberries(Prefix, i);
@@ -253,15 +277,12 @@ namespace Celeste.Mod.XaphanHelper
                         {
                             if (CurrentSubAreaTiles[i][subAreIndex] == TotalSubAreaTiles[i][subAreIndex])
                             {
-                                int currentTileValue = 0;
-                                int totalTileValue = 0;
-                                if (CurrentSubAreaTiles[i].TryGetValue(subAreIndex, out currentTileValue) == TotalSubAreaTiles[i].TryGetValue(subAreIndex, out totalTileValue))
+                                if (CurrentSubAreaTiles[i].TryGetValue(subAreIndex, out int currentTileValue) == TotalSubAreaTiles[i].TryGetValue(subAreIndex, out int totalTileValue))
                                 {
                                     self.Session.SetFlag("XaphanHelper_StatFlag_MapCh" + i + "-" + subAreIndex);
                                 }
                             }
-                            int currentTileValue2 = 0;
-                            CurrentSubAreaTiles[i].TryGetValue(subAreIndex, out currentTileValue2);
+                            CurrentSubAreaTiles[i].TryGetValue(subAreIndex, out int currentTileValue2);
                             if (currentTileValue2 > 0)
                             {
                                 self.Session.SetFlag("XaphanHelper_StatFlag_MapCh" + i + "-" + subAreIndex + "-Visited");
@@ -280,6 +301,48 @@ namespace Celeste.Mod.XaphanHelper
                         if (CurrentEnergyTanks[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTank");
+                        }
+                    }
+                }
+                if (CurrentFireRateModules != null && TotalFireRateModules != null)
+                {
+                    for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
+                    {
+                        if (CurrentFireRateModules[i] == TotalFireRateModules[i])
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_FireRateModulesCh" + i);
+                        }
+                        if (CurrentFireRateModules[i] > 0)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_FireRateModule");
+                        }
+                    }
+                }
+                if (CurrentMissiles != null && TotalMissiles != null)
+                {
+                    for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
+                    {
+                        if (CurrentMissiles[i] == TotalMissiles[i])
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_MissilesCh" + i);
+                        }
+                        if (CurrentMissiles[i] > 0)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_Missile");
+                        }
+                    }
+                }
+                if (CurrentSuperMissiles != null && TotalSuperMissiles != null)
+                {
+                    for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
+                    {
+                        if (CurrentSuperMissiles[i] == TotalSuperMissiles[i])
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_SuperMissilesCh" + i);
+                        }
+                        if (CurrentSuperMissiles[i] > 0)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_SuperMissile");
                         }
                     }
                 }
@@ -305,9 +368,7 @@ namespace Celeste.Mod.XaphanHelper
                         {
                             if (CurrentSubAreaStrawberries[i][subAreIndex] == TotalSubAreaStrawberries[i][subAreIndex])
                             {
-                                int currentStrawberriesValue = 0;
-                                int totalStrawberriesValue = 0;
-                                if (CurrentSubAreaStrawberries[i].TryGetValue(subAreIndex, out currentStrawberriesValue) == TotalSubAreaStrawberries[i].TryGetValue(subAreIndex, out totalStrawberriesValue))
+                                if (CurrentSubAreaStrawberries[i].TryGetValue(subAreIndex, out int currentStrawberriesValue) == TotalSubAreaStrawberries[i].TryGetValue(subAreIndex, out int totalStrawberriesValue))
                                 {
                                     self.Session.SetFlag("XaphanHelper_StatFlag_StrawberriesCh" + i + "-" + subAreIndex);
                                 }
@@ -663,6 +724,92 @@ namespace Celeste.Mod.XaphanHelper
             return totalEnergyTanks;
         }
 
+        public static int getCurrentFireRateModules(string prefix, int chapterIndex)
+        {
+            int currentFireRateModules = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "fireRateModule")
+                {
+                    if (XaphanModule.ModSaveData.DroneFireRateUpgrades.Contains(prefix + "_Ch" + chapterIndex + "_" + entityData.Room + ":" + entityData.ID))
+                    {
+                        currentFireRateModules++;
+                    }
+                }
+            }
+            return currentFireRateModules;
+        }
+
+        public static int getTotalFireRateModules()
+        {
+            int totalFireRateModules = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "fireRateModule")
+                {
+                    totalFireRateModules++;
+                }
+            }
+            return totalFireRateModules;
+        }
+
+        public static int getCurrentMissiles(string prefix, int chapterIndex)
+        {
+            int currentMissiles = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "missile")
+                {
+                    if (XaphanModule.ModSaveData.DroneMissilesUpgrades.Contains(prefix + "_Ch" + chapterIndex + "_" + entityData.Room + ":" + entityData.ID))
+                    {
+                        currentMissiles++;
+                    }
+                }
+            }
+            return currentMissiles;
+        }
+
+        public static int getTotalMissiles()
+        {
+            int totalMissiles = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "missile")
+                {
+                    totalMissiles++;
+                }
+            }
+            return totalMissiles;
+        }
+
+        public static int getCurrentSuperMissiles(string prefix, int chapterIndex)
+        {
+            int currentSuperMissiles = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "superMissile")
+                {
+                    if (XaphanModule.ModSaveData.DroneSuperMissilesUpgrades.Contains(prefix + "_Ch" + chapterIndex + "_" + entityData.Room + ":" + entityData.ID))
+                    {
+                        currentSuperMissiles++;
+                    }
+                }
+            }
+            return currentSuperMissiles;
+        }
+
+        public static int getTotalSuperMissiles()
+        {
+            int totalSuperMissiles = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "superMissile")
+                {
+                    totalSuperMissiles++;
+                }
+            }
+            return totalSuperMissiles;
+        }
 
         public static Dictionary<int, int> getSubAreaTiles(string prefix, int chapterIndex, bool total = false)
         {

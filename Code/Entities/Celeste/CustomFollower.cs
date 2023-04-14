@@ -419,17 +419,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                     case "missile":
                         {
-                            // ToDo
+                            StatsFlags.CurrentMissiles[chapterIndex]++;
                             break;
                         }
                     case "superMissile":
                         {
-                            // ToDo
+                            StatsFlags.CurrentSuperMissiles[chapterIndex]++;
                             break;
                         }
                     case "fireRateModule":
                         {
-                            // ToDo
+                            StatsFlags.CurrentFireRateModules[chapterIndex]++;
                             break;
                         }
                 }
