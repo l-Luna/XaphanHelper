@@ -122,125 +122,128 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     player.DummyAutoAnimate = false;
                 }
             }
-            if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && mapDisplay != null)
+            if (prompt == null)
             {
-                if (mode == "map")
+                if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && mapDisplay != null)
                 {
-                    Audio.Play("event:/ui/main/message_confirm");
-                    mapDisplay.Display = false;
-                    MapProgressDisplay.Visible = false;
-                    mode = "worldmap";
-                    foreach (MapDisplay display in worldMapMapDisplays)
+                    if (mode == "map")
                     {
-                        display.Visible = true;
-                    }
-                    WorldMapProgressDisplay.Visible = true;
-                    CalcMoves(WorldMapOffset.X > 0 ? (int)WorldMapOffset.X / 40 : 0, WorldMapOffset.X < 0 ? Math.Abs((int)WorldMapOffset.X / 40) : 0, WorldMapOffset.Y > 0 ? (int)WorldMapOffset.Y / 40 : 0, WorldMapOffset.Y < 0 ? Math.Abs((int)WorldMapOffset.Y / 40) : 0);
-                }
-                else
-                {
-                    Audio.Play("event:/ui/main/button_back");
-                    mapDisplay.Display = true;
-                    MapProgressDisplay.Visible = true;
-                    mode = "map";
-                    foreach (MapDisplay display in worldMapMapDisplays)
-                    {
-                        display.Visible = false;
-                    }
-                    WorldMapProgressDisplay.Visible = false;
-                    CalcMoves(MapOffset.X > 0 ? (int)MapOffset.X / 40 : 0, MapOffset.X < 0 ? Math.Abs((int)MapOffset.X / 40) : 0, MapOffset.Y > 0 ? (int)MapOffset.Y / 40 : 0, MapOffset.Y < 0 ? Math.Abs((int)MapOffset.Y / 40) : 0);
-                }
-            }
-            if (XaphanSettings.MapScreenShowHints.Pressed && mapDisplay != null)
-            {
-                if (mapDisplay.useHints)
-                {
-                    mapDisplay.ShowHints = !mapDisplay.ShowHints;
-                    if (XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix])
-                    {
-                        Audio.Play("event:/ui/main/button_back");
-                        XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = false;
-                        mapDisplay.MapWidth = mapDisplay.BeforeHintsMapWidth;
-                        mapDisplay.MapHeight = mapDisplay.BeforeHintsMapHeight;
-                        mapDisplay.MostLeftRoomX = mapDisplay.BeforeHintsMostLeftRoomX;
-                        mapDisplay.MostTopRoomY = mapDisplay.BeforeHintsMostTopRoomY;
-                        mapDisplay.MostRightRoomX = mapDisplay.BeforeHintsMostRightRoomX;
-                        mapDisplay.MostBottomRoomY = mapDisplay.BeforeHintsMostBottomRoomY;
-                        mapDisplay.SetCurrentMapCoordinates();
-                        MoveMapX((int)-MapOffset.X, silence: true);
-                        MoveMapY((int)-MapOffset.Y, silence: true);
-                        if (mode == "map")
+                        Audio.Play("event:/ui/main/message_confirm");
+                        mapDisplay.Display = false;
+                        MapProgressDisplay.Visible = false;
+                        mode = "worldmap";
+                        foreach (MapDisplay display in worldMapMapDisplays)
                         {
-                            CalcMoves();
+                            display.Visible = true;
                         }
+                        WorldMapProgressDisplay.Visible = true;
+                        CalcMoves(WorldMapOffset.X > 0 ? (int)WorldMapOffset.X / 40 : 0, WorldMapOffset.X < 0 ? Math.Abs((int)WorldMapOffset.X / 40) : 0, WorldMapOffset.Y > 0 ? (int)WorldMapOffset.Y / 40 : 0, WorldMapOffset.Y < 0 ? Math.Abs((int)WorldMapOffset.Y / 40) : 0);
                     }
                     else
                     {
-                        Audio.Play("event:/ui/main/message_confirm");
-                        XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = true;
-                        mapDisplay.MapWidth = mapDisplay.AfterHintsMapWidth;
-                        mapDisplay.MapHeight = mapDisplay.AfterHintsMapHeight;
-                        mapDisplay.MostLeftRoomX = mapDisplay.AfterHintsMostLeftRoomX;
-                        mapDisplay.MostTopRoomY = mapDisplay.AfterHintsMostTopRoomY;
-                        mapDisplay.MostRightRoomX = mapDisplay.AfterHintsMostRightRoomX;
-                        mapDisplay.MostBottomRoomY = mapDisplay.AfterHintsMostBottomRoomY;
-                        mapDisplay.GetMapSize();
-                        mapDisplay.SetCurrentMapCoordinates();
-                        MoveMapX((int)-MapOffset.X, silence: true);
-                        MoveMapY((int)-MapOffset.Y, silence: true);
-                        if (mode == "map")
+                        Audio.Play("event:/ui/main/button_back");
+                        mapDisplay.Display = true;
+                        MapProgressDisplay.Visible = true;
+                        mode = "map";
+                        foreach (MapDisplay display in worldMapMapDisplays)
                         {
-                            CalcMoves();
+                            display.Visible = false;
+                        }
+                        WorldMapProgressDisplay.Visible = false;
+                        CalcMoves(MapOffset.X > 0 ? (int)MapOffset.X / 40 : 0, MapOffset.X < 0 ? Math.Abs((int)MapOffset.X / 40) : 0, MapOffset.Y > 0 ? (int)MapOffset.Y / 40 : 0, MapOffset.Y < 0 ? Math.Abs((int)MapOffset.Y / 40) : 0);
+                    }
+                }
+                if (XaphanSettings.MapScreenShowHints.Pressed && mapDisplay != null)
+                {
+                    if (mapDisplay.useHints)
+                    {
+                        mapDisplay.ShowHints = !mapDisplay.ShowHints;
+                        if (XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix])
+                        {
+                            Audio.Play("event:/ui/main/button_back");
+                            XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = false;
+                            mapDisplay.MapWidth = mapDisplay.BeforeHintsMapWidth;
+                            mapDisplay.MapHeight = mapDisplay.BeforeHintsMapHeight;
+                            mapDisplay.MostLeftRoomX = mapDisplay.BeforeHintsMostLeftRoomX;
+                            mapDisplay.MostTopRoomY = mapDisplay.BeforeHintsMostTopRoomY;
+                            mapDisplay.MostRightRoomX = mapDisplay.BeforeHintsMostRightRoomX;
+                            mapDisplay.MostBottomRoomY = mapDisplay.BeforeHintsMostBottomRoomY;
+                            mapDisplay.SetCurrentMapCoordinates();
+                            MoveMapX((int)-MapOffset.X, silence: true);
+                            MoveMapY((int)-MapOffset.Y, silence: true);
+                            if (mode == "map")
+                            {
+                                CalcMoves();
+                            }
+                        }
+                        else
+                        {
+                            Audio.Play("event:/ui/main/message_confirm");
+                            XaphanModule.ModSaveData.ShowHints[mapDisplay.Prefix] = true;
+                            mapDisplay.MapWidth = mapDisplay.AfterHintsMapWidth;
+                            mapDisplay.MapHeight = mapDisplay.AfterHintsMapHeight;
+                            mapDisplay.MostLeftRoomX = mapDisplay.AfterHintsMostLeftRoomX;
+                            mapDisplay.MostTopRoomY = mapDisplay.AfterHintsMostTopRoomY;
+                            mapDisplay.MostRightRoomX = mapDisplay.AfterHintsMostRightRoomX;
+                            mapDisplay.MostBottomRoomY = mapDisplay.AfterHintsMostBottomRoomY;
+                            mapDisplay.GetMapSize();
+                            mapDisplay.SetCurrentMapCoordinates();
+                            MoveMapX((int)-MapOffset.X, silence: true);
+                            MoveMapY((int)-MapOffset.Y, silence: true);
+                            if (mode == "map")
+                            {
+                                CalcMoves();
+                            }
+                        }
+                    }
+                    foreach (MapDisplay display in worldMapMapDisplays)
+                    {
+                        if (display.useHints)
+                        {
+                            display.ShowHints = !display.ShowHints;
                         }
                     }
                 }
-                foreach (MapDisplay display in worldMapMapDisplays)
+                if (XaphanModule.useUpgrades && !XaphanModule.PlayerIsControllingRemoteDrone())
                 {
-                    if (display.useHints)
+                    if (Input.Pause.Pressed && statusWiggleDelay <= 0f && switchTimer <= 0)
                     {
-                        display.ShowHints = !display.ShowHints;
+                        statusWiggle.Start();
+                        statusWiggleDelay = 0.5f;
                     }
                 }
-            }
-            if (XaphanModule.useUpgrades && !XaphanModule.PlayerIsControllingRemoteDrone())
-            {
-                if (Input.Pause.Pressed && statusWiggleDelay <= 0f && switchTimer <= 0 && prompt == null)
+                if (mapDisplay != null && mapDisplay.useHints)
                 {
-                    statusWiggle.Start();
-                    statusWiggleDelay = 0.5f;
+                    if (XaphanSettings.MapScreenShowHints.Pressed && hintWiggleDelay <= 0f)
+                    {
+                        hintWiggle.Start();
+                        hintWiggleDelay = 0.5f;
+                    }
                 }
+                if (mapDisplay != null && MapProgressDisplay != null)
+                {
+                    if (XaphanSettings.MapScreenShowProgressDisplay.Pressed && progressWiggleDelay <= 0f)
+                    {
+                        progressWiggle.Start();
+                        progressWiggleDelay = 0.5f;
+                    }
+                }
+                if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && worldMapWiggleDelay <= 0f)
+                {
+                    worldMapWiggle.Start();
+                    worldMapWiggleDelay = 0.5f;
+                }
+                statusWiggleDelay -= Engine.DeltaTime;
+                hintWiggleDelay -= Engine.DeltaTime;
+                progressWiggleDelay -= Engine.DeltaTime;
+                worldMapWiggleDelay -= Engine.DeltaTime;
             }
             if (Input.MenuCancel.Pressed && closeWiggleDelay <= 0f)
             {
                 closeWiggle.Start();
                 closeWiggleDelay = 0.5f;
             }
-            if (mapDisplay != null && mapDisplay.useHints)
-            {
-                if (XaphanSettings.MapScreenShowHints.Pressed && hintWiggleDelay <= 0f)
-                {
-                    hintWiggle.Start();
-                    hintWiggleDelay = 0.5f;
-                }
-            }
-            if (mapDisplay != null && MapProgressDisplay != null)
-            {
-                if (XaphanSettings.MapScreenShowProgressDisplay.Pressed && progressWiggleDelay <= 0f)
-                {
-                    progressWiggle.Start();
-                    progressWiggleDelay = 0.5f;
-                }
-            }
-            if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && worldMapWiggleDelay <= 0f)
-            {
-                worldMapWiggle.Start();
-                worldMapWiggleDelay = 0.5f;
-            }
-            statusWiggleDelay -= Engine.DeltaTime;
             closeWiggleDelay -= Engine.DeltaTime;
-            hintWiggleDelay -= Engine.DeltaTime;
-            progressWiggleDelay -= Engine.DeltaTime;
-            worldMapWiggleDelay -= Engine.DeltaTime;
             base.Update();
         }
 

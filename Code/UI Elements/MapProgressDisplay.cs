@@ -55,6 +55,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            MapScreen = Level.Tracker.GetEntity<MapScreen>();
             Prefix = Level.Session.Area.GetLevelSet();
             if (chapterIndex != -1)
             {
@@ -73,7 +74,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             else
             {
-                MapScreen = Level.Tracker.GetEntity<MapScreen>();
                 if (!XaphanModule.ModSaveData.WorldMapProgressMode.ContainsKey(Prefix))
                 {
                     XaphanModule.ModSaveData.WorldMapProgressMode.Add(Prefix, 0);
@@ -136,7 +136,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
             }
             SubAreaMapPercent = (getCurrentMapTiles(getSubAreaIndex()) * 100 / getTotalMapTiles(getSubAreaIndex())).ToString();
-            if (XaphanModule.ModSettings.MapScreenShowProgressDisplay.Pressed && Visible)
+            if (XaphanModule.ModSettings.MapScreenShowProgressDisplay.Pressed && Visible && MapScreen.prompt == null)
             {
                 if (chapterIndex != -1)
                 {

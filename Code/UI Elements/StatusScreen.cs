@@ -78,23 +78,26 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     player.DummyAutoAnimate = false;
                 }
             }
-            if (XaphanModule.useIngameMap)
+            if (prompt == null)
             {
-                if (Input.Pause.Check && mapWiggleDelay <= 0f && switchTimer <= 0 && prompt == null)
+                if (XaphanModule.useIngameMap)
                 {
-                    mapWiggle.Start();
-                    mapWiggleDelay = 0.5f;
+                    if (Input.Pause.Check && mapWiggleDelay <= 0f && switchTimer <= 0)
+                    {
+                        mapWiggle.Start();
+                        mapWiggleDelay = 0.5f;
+                    }
+                }
+                if (Input.MenuConfirm.Check && actionWiggleDelay <= 0f)
+                {
+                    actionWiggle.Start();
+                    actionWiggleDelay = 0.5f;
                 }
             }
             if (Input.MenuCancel.Check && closeWiggleDelay <= 0f)
             {
                 closeWiggle.Start();
                 closeWiggleDelay = 0.5f;
-            }
-            if (Input.MenuConfirm.Check && actionWiggleDelay <= 0f)
-            {
-                actionWiggle.Start();
-                actionWiggleDelay = 0.5f;
             }
             mapWiggleDelay -= Engine.DeltaTime;
             closeWiggleDelay -= Engine.DeltaTime;
