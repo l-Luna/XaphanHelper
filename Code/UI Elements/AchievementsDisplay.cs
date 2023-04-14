@@ -44,7 +44,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     totalMedals += achievement.Medals;
                 }
-                this.medals = medals.ToString() + " / " + totalMedals.ToString();
+                this.medals = $"{medals} / {totalMedals}";
                 color = medals.ToString() == totalMedals.ToString() ? Color.Gold : Color.White;
             }
 
@@ -70,6 +70,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             private string Name;
 
+            private string Completed;
+
             private AchievementsScreen AchievementsScreen;
 
             public bool Selected;
@@ -80,12 +82,25 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             private int alphaStatus = 0;
 
-            public CategoryDisplay(Level level, Vector2 position, int id, string name, bool noDialog = false) : base(position)
+            public CategoryDisplay(Level level, Vector2 position, int id, string name, List<AchievementData> data, bool noDialog = false) : base(position)
             {
                 Tag = Tags.HUD;
                 AchievementsScreen = level.Tracker.GetEntity<AchievementsScreen>();
                 ID = id;
                 Name = noDialog ? name : Dialog.Clean(name);
+
+                int completedAchievements = 0;
+                int totalAchievements = 0;
+                foreach (AchievementData achievement in data)
+                {
+                    if (level.Session.GetFlag(achievement.Flag))
+                    {
+                        completedAchievements++;
+                    }
+                    totalAchievements++;
+                }
+
+                Completed = $"{completedAchievements} / {totalAchievements} {Dialog.Clean("XaphanHelper_UI_Completed")}";
                 Locked = Name == "???";
                 Depth = -10001;
             }
@@ -135,7 +150,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     Draw.Rect(Position, width, height, Color.Yellow * selectedAlpha);
                 }
-                ActiveFont.DrawOutline(Name, Position + new Vector2(60 + lenght / 2 - 10, height / 2), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Name != "???" ? Color.White : Color.Gray, 2f, Color.Black);
+                ActiveFont.DrawOutline(Name, Position + new Vector2(60 + lenght / 2 - 10, Locked ? height / 2 : 26f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Name != "???" ? Color.White : Color.Gray, 2f, Color.Black);
+                if (!Locked)
+                {
+                    ActiveFont.DrawOutline(Completed, Position + new Vector2(50f, 45f), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
+                }
             }
         }
 
@@ -181,7 +200,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 description = Dialog.Clean(data.Description);
                 medals = data.Medals.ToString();
                 completionPercent = data.CurrentValue * 100 / data.MaxValue;
-                completion = Dialog.Clean("XaphanHelper_UI_Objective") + " " + data.CurrentValue.ToString() + " / " + data.MaxValue.ToString() + " (" + completionPercent + "%)";
+                completion = $"{Dialog.Clean("XaphanHelper_UI_Objective")} {data.CurrentValue} / {data.MaxValue} ({completionPercent}%)";
                 Depth = -10001;
             }
 
@@ -302,17 +321,17 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public IEnumerator GennerateAchievementsDisplay()
         {
             Scene.Add(medalDisplay = new MedalsDisplay(level, new Vector2(155f, 245f), AchievementsData));
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 470f), 0, "XaphanHelper_UI_General"));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 470f), 0, "XaphanHelper_UI_General", AchievementsData.FindAll(achievement => achievement.CategoryID == 0)));
             bool visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch1_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 555f), 1, visitedChapter ? "Xaphan_0_1_AncientRuins" : "???", visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 555f), 1, visitedChapter ? "Xaphan_0_1_AncientRuins" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 1), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch2_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 640f), 2, visitedChapter ? "Xaphan_0_2_ForgottenAbyss" : "???", visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 640f), 2, visitedChapter ? "Xaphan_0_2_ForgottenAbyss" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 2), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch3_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 725f), 3, visitedChapter ? "Xaphan_0_3_ExoticUndergrowdth" : "???", visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 725f), 3, visitedChapter ? "Xaphan_0_3_ExoticUndergrowdth" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 3), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch4_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 810f), 4, visitedChapter ? "Xaphan_0_4_DevilBasin": "???", visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 810f), 4, visitedChapter ? "Xaphan_0_4_DevilBasin": "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 4), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch5_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 895f), 5, visitedChapter ? "Xaphan_0_5_SubterraneanTerminal" : "???", visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 895f), 5, visitedChapter ? "Xaphan_0_5_SubterraneanTerminal" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 5), visitedChapter ? false : true));
 
             GenerateAchievementsList(0);
 
