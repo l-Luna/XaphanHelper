@@ -91,16 +91,22 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
                 int completedAchievements = 0;
                 int totalAchievements = 0;
+                int hiddenAchievements = 0;
                 foreach (AchievementData achievement in data)
                 {
                     if (level.Session.GetFlag(achievement.Flag))
                     {
                         completedAchievements++;
                     }
+                    if (achievement.Hidden && achievement.CurrentValue == 0)
+                    {
+                        hiddenAchievements++;
+                        totalAchievements--;
+                    }
                     totalAchievements++;
                 }
-
-                Completed = $"{completedAchievements} / {totalAchievements} {Dialog.Clean("XaphanHelper_UI_Completed")}";
+                string HiddenAchievements = $" (+{hiddenAchievements} {Dialog.Clean("XaphanHelper_UI_Hidden")})";
+                Completed = $"{completedAchievements} / {totalAchievements} {Dialog.Clean("XaphanHelper_UI_Completed")}" + (hiddenAchievements > 0 ? HiddenAchievements : "");
                 Locked = Name == "???";
                 Depth = -10001;
             }
@@ -363,7 +369,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 foreach (AchievementData achievement in AchievementsData)
                 {
-                    if (achievement.CategoryID == categoryID)
+                    if (achievement.CategoryID == categoryID && (achievement.Hidden ? achievement.CurrentValue > 0 : true))
                     {
                         Scene.Add(new AchievementDisplay(level, new Vector2(755f, 245f + YPos), ID, achievement));
                         YPos += 147;

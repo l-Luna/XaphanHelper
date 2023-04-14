@@ -265,6 +265,7 @@
 	XaphanHelper_UI_Achievements_Locked= This category{n}is currently locked
 	XaphanHelper_UI_Achievements_Locked_Description= Continue your adventure{n}to unlock this category
 	XaphanHelper_UI_Completed= Completed
+	XaphanHelper_UI_Hidden= Hidden
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?

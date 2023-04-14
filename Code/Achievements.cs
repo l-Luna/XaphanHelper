@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper
@@ -25,19 +24,19 @@ namespace Celeste.Mod.XaphanHelper
             List<AchievementData> list = new();
 
             // General
-            list.Add(new AchievementData("upg1", 0, "321Dash", "achievements/Xaphan/321Dash", "Upgrade_DashBoots", session.GetFlag("Upgrade_DashBoots") ? 1 : 0, 1, 5));
-            list.Add(new AchievementData("upg2", 0, "FirmlyGraspIt", "achievements/Xaphan/FirmlyGraspIt", "Upgrade_PowerGrip", session.GetFlag("Upgrade_PowerGrip") ? 1 : 0, 1, 5));
-            list.Add(new AchievementData("upg3", 0, "TimeToAscend", "achievements/Xaphan/TimeToAscend", "Upgrade_ClimbingKit", session.GetFlag("Upgrade_ClimbingKit") ? 1 : 0, 1, 5));
-            list.Add(new AchievementData("upg4", 0, "FeelingSpacey", "achievements/Xaphan/FeelingSpacey", "Upgrade_SpaceJump", session.GetFlag("Upgrade_SpaceJump") ? 1 : 0, 1, 5));
-            list.Add(new AchievementData("upg5", 0, "WheresTheKaboom", "achievements/Xaphan/WheresTheKaboom", "Upgrade_Bombs", session.GetFlag("Upgrade_Bombs") ? 1 : 0, 1, 5));
+            list.Add(new AchievementData("upg1", 0, "321Dash", "achievements/Xaphan/321Dash", "Upgrade_DashBoots", session.GetFlag("Upgrade_DashBoots") ? 1 : 0, 1, 5, true));
+            list.Add(new AchievementData("upg2", 0, "FirmlyGraspIt", "achievements/Xaphan/FirmlyGraspIt", "Upgrade_PowerGrip", session.GetFlag("Upgrade_PowerGrip") ? 1 : 0, 1, 5, true));
+            list.Add(new AchievementData("upg3", 0, "TimeToAscend", "achievements/Xaphan/TimeToAscend", "Upgrade_ClimbingKit", session.GetFlag("Upgrade_ClimbingKit") ? 1 : 0, 1, 5, true));
+            list.Add(new AchievementData("upg4", 0, "FeelingSpacey", "achievements/Xaphan/FeelingSpacey", "Upgrade_SpaceJump", session.GetFlag("Upgrade_SpaceJump") ? 1 : 0, 1, 5, true));
+            list.Add(new AchievementData("upg5", 0, "WheresTheKaboom", "achievements/Xaphan/WheresTheKaboom", "Upgrade_Bombs", session.GetFlag("Upgrade_Bombs") ? 1 : 0, 1, 5, true));
 
             if (SoCMVersion() >= new Version(3, 0, 0))
             {
-                list.Add(new AchievementData("upg6", 0, "ImALittleSpider", "achievements/Xaphan/ImALittleSpider", "Upgrade_SpiderMagnet", session.GetFlag("Upgrade_SpiderMagnet") ? 1 : 0, 1, 5));
-                list.Add(new AchievementData("upg7", 0, "Robopede", "achievements/Xaphan/Robopede", "Upgrade_RemoteDrone", session.GetFlag("Upgrade_RemoteDrone") ? 1 : 0, 1, 5));
-                list.Add(new AchievementData("upg8", 0, "PackingAPunch", "achievements/Xaphan/PackingAPunch", "Upgrade_MissilesModule", session.GetFlag("Upgrade_MissilesModule") ? 1 : 0, 1, 5));
-                list.Add(new AchievementData("upgOpt1", 0, "PlanningAhead", "achievements/Xaphan/PlanningAhead", "Upgrade_Binoculars", session.GetFlag("Upgrade_Binoculars") ? 1 : 0, 1, 5));
-                list.Add(new AchievementData("upgOpt2", 0, "UnnaturalObserver", "achievements/Xaphan/UnnaturalObserver", "Upgrade_PulseRadar", session.GetFlag("Upgrade_PulseRadar") ? 1 : 0, 1, 5));
+                list.Add(new AchievementData("upg6", 0, "ImALittleSpider", "achievements/Xaphan/ImALittleSpider", "Upgrade_SpiderMagnet", session.GetFlag("Upgrade_SpiderMagnet") ? 1 : 0, 1, 5, true));
+                list.Add(new AchievementData("upg7", 0, "Robopede", "achievements/Xaphan/Robopede", "Upgrade_RemoteDrone", session.GetFlag("Upgrade_RemoteDrone") ? 1 : 0, 1, 5, true));
+                list.Add(new AchievementData("upg8", 0, "PackingAPunch", "achievements/Xaphan/PackingAPunch", "Upgrade_MissilesModule", session.GetFlag("Upgrade_MissilesModule") ? 1 : 0, 1, 5, true));
+                list.Add(new AchievementData("upgOpt1", 0, "PlanningAhead", "achievements/Xaphan/PlanningAhead", "Upgrade_Binoculars", session.GetFlag("Upgrade_Binoculars") ? 1 : 0, 1, 5, true));
+                list.Add(new AchievementData("upgOpt2", 0, "UnnaturalObserver", "achievements/Xaphan/UnnaturalObserver", "Upgrade_PulseRadar", session.GetFlag("Upgrade_PulseRadar") ? 1 : 0, 1, 5, true));
             }
 
             list.Add(new AchievementData("map0", 0, "MysteriousExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh0", StatsFlags.CurrentTiles[0], StatsFlags.TotalTiles[0], 10));
@@ -62,6 +61,8 @@ namespace Celeste.Mod.XaphanHelper
 
             if (SoCMVersion() >= new Version(3, 0, 0))
             {
+                // Area 3
+
                 // Area 4
                 list.Add(new AchievementData("map4", 4, "BasinExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh4", StatsFlags.CurrentTiles[4], StatsFlags.TotalTiles[4], 25));
 

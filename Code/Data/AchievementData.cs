@@ -20,7 +20,9 @@
 
         public int Medals;
 
-        public AchievementData(string achievementID, int categoryID, string name, string icon, string flag, int currentValue, int maxValue, int medals)
+        public bool Hidden;
+
+        public AchievementData(string achievementID, int categoryID, string name, string icon, string flag, int currentValue, int maxValue, int medals, bool hidden = false)
         {
             AchievementID = achievementID;
             CategoryID = categoryID;
@@ -31,6 +33,7 @@
             CurrentValue = currentValue;
             MaxValue = maxValue;
             Medals = medals;
+            Hidden = hidden;
         }
     }
 }
