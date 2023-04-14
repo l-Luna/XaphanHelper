@@ -110,7 +110,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             float colorAlpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(SceneAs<Level>().FormationBackdrop).Get("fade") : 1f;
 
-            if (!string.IsNullOrEmpty(title))
+            if (!string.IsNullOrEmpty(title) && XaphanModule.ShowUI)
             {
                 ActiveFont.DrawEdgeOutline(title, new Vector2(Celeste.TargetWidth / 2f, 80f), new Vector2(0.5f, 0.5f), Vector2.One * 2f, Color.Gray * colorAlpha, 4f, Color.DarkSlateBlue * colorAlpha, 2f, Color.Black * colorAlpha);
                 if (currentMenu > 0)
@@ -206,11 +206,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public void UninitializeScreen()
         {
+            XaphanModule.ShowUI = false;
             warpMenu.Close();
             mapDisplay?.RemoveSelf();
             mapProgressDisplay?.RemoveSelf();
             SceneAs<Level>().FormationBackdrop.Display = false;
-            XaphanModule.ShowUI = false;
         }
 
         public void StartDelay()
@@ -230,6 +230,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 player.StateMachine.State = Player.StNormal;
             }
+            XaphanModule.ShowUI = false;
             RemoveSelf();
         }
 

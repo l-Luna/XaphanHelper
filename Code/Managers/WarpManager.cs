@@ -132,6 +132,7 @@ namespace Celeste.Mod.XaphanHelper.Managers
         {
             if (Engine.Scene is Level level)
             {
+                XaphanModule.ShowUI = false;
                 if (level.Tracker.GetEntity<CountdownDisplay>() is CountdownDisplay timerDisplay && timerDisplay.SaveTimer)
                 {
                     AreaKey area = level.Session.Area;

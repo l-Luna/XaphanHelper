@@ -198,6 +198,7 @@ namespace Celeste.Mod.XaphanHelper.Cutscenes
         {
             level.OnEndOfFrame += () =>
             {
+                XaphanModule.ShowUI = false;
                 string Prefix = level.Session.Area.GetLevelSet();
                 XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_teleporting");
                 Leader.StoreStrawberries(player.Leader);
