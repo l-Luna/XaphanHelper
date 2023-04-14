@@ -29,7 +29,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         {
             Tag = (Tags.HUD | Tags.Persistent | Tags.PauseUpdate | Tags.TransitionUpdate);
             Position = new Vector2(Engine.Width - 720f, Engine.Height - 149f);
-            MedalIcon = GFX.Gui["common/medal"];
+            MedalIcon = GFX.Gui["achievements/medal"];
             Visible = false;
             Depth = -1000000;
         }
