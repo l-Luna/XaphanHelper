@@ -26,7 +26,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             public MedalsDisplay(Level level, Vector2 position, List<AchievementData> data) : base(position)
             {
                 Tag = Tags.HUD;
-                medalIcon = GFX.Gui["common/medal"];
+                medalIcon = GFX.Gui["achievements/medal"];
                 AchievementsList = data;
                 Depth = -10001;
             }
@@ -201,7 +201,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 AchievementsScreen = level.Tracker.GetEntity<AchievementsScreen>();
                 ID = id;
                 icon = GFX.Gui[data.Icon];
-                medalIcon = GFX.Gui["common/medal"];
+                medalIcon = GFX.Gui["achievements/medal"];
                 name = Dialog.Clean(data.Name);
                 description = Dialog.Clean(data.Description);
                 medals = data.Medals.ToString();
@@ -288,7 +288,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             public LockedDisplay(Level level, Vector2 position) : base(position)
             {
                 Tag = Tags.HUD;
-                lockIcon = GFX.Gui["common/lock"];
+                lockIcon = GFX.Gui["achievements/lock"];
                 title = Dialog.Clean("XaphanHelper_UI_Achievements_Locked");
                 description = Dialog.Clean("XaphanHelper_UI_Achievements_Locked_Description");
                 Depth = -10001;
