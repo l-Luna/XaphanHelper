@@ -561,7 +561,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "warp", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY))));
                     }
-                    else if (entity.Name == "XaphanHelper/UpgradeCollectable" && (entity.Attr("upgrade") != "Map" && entity.Attr("upgrade") != "MapShard") && (entity.Attr("upgrade") != "EnergyTank") && (entity.Attr("upgrade") != "FireRateModule"))
+                    else if (entity.Name == "XaphanHelper/UpgradeCollectable" && (entity.Attr("upgrade") != "Map" && entity.Attr("upgrade") != "MapShard"))
                     {
                         EntitiesData.Add(new InGameMapEntitiesData(chapterIndex, level.Name, level, "upgrade", new Vector2(entity.Position.X, entity.Position.Y), new Vector2((float)Math.Floor(entity.Position.X / ScreenTilesX), (float)Math.Floor(entity.Position.Y / ScreenTilesY)), upgradeCollectableUpgrade: entity.Attr("upgrade")));
                     }
