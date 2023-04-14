@@ -43,7 +43,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
-            if (!PopupRoutine.Active)
+            if (!PopupRoutine.Active && !XaphanModule.ModSaveData.SpeedrunMode ? XaphanModule.ModSaveData.LoadedPlayer : true)
             {
                 foreach (AchievementData achievement in achievements)
                 {
