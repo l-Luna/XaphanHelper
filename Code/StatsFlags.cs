@@ -277,6 +277,10 @@ namespace Celeste.Mod.XaphanHelper
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTanksCh" + i);
                         }
+                        if (CurrentEnergyTanks[i] > 0)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTank");
+                        }
                     }
                 }
                 if (CurrentStrawberries != null && TotalStrawberries != null)
@@ -286,6 +290,10 @@ namespace Celeste.Mod.XaphanHelper
                         if (CurrentStrawberries[i] == TotalStrawberries[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_StrawberriesCh" + i);
+                        }
+                        if (CurrentStrawberries[i] > 0)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_Strawberry");
                         }
                     }
                 }
