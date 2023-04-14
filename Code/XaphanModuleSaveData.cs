@@ -213,6 +213,8 @@ namespace Celeste.Mod.XaphanHelper
 
         // Achievements
 
+        public bool CanDisplayAchievementsPopups = false;
+
         public HashSet<string> Achievements = new();
 
         // Others

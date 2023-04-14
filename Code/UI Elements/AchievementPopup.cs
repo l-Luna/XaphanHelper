@@ -43,7 +43,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
-            if (!PopupRoutine.Active && !XaphanModule.ModSaveData.SpeedrunMode ? XaphanModule.ModSaveData.LoadedPlayer : true)
+            if (!PopupRoutine.Active && XaphanModule.ModSaveData.CanDisplayAchievementsPopups)
             {
                 foreach (AchievementData achievement in achievements)
                 {
@@ -90,7 +90,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Draw.Rect(Position + Vector2.UnitY * 5f, 5f, 139f, Color.Gold * alpha);
             Draw.Rect(Position + new Vector2(715f, 5f), 5f, 139f, Color.Gold * alpha);
             Draw.Rect(Position + Vector2.UnitY * 144f, 720f, 5f, Color.Gold * alpha);
-            Icon.Draw(Position + new Vector2(5f), Vector2.Zero, Color.White * alpha, 0.9f);
+            Icon.Draw(Position + Vector2.One * 7f, Vector2.Zero, Color.White * alpha, 0.9f);
             float lenght = ActiveFont.Measure(Name).X * 0.8f;
             float descHeight = ActiveFont.Measure(Description).Y * 0.4f;
             ActiveFont.DrawOutline(Name, Position + new Vector2(167f + lenght / 2 - 10, 50f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Color.White * alpha, 2f, Color.Black * alpha);

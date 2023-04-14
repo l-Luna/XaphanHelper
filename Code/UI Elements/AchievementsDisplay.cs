@@ -275,7 +275,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         Draw.Rect(Position + Vector2.UnitY * (height - 5f), width, 5f, Color.Yellow * selectedAlpha);
                         Draw.Rect(Position + new Vector2(width - 5f, 5f), 5f, height - 10f, Color.Yellow * selectedAlpha);
                     }
-                    icon.Draw(Position + Vector2.One * 5, Vector2.Zero, Color.White, 0.9f);
+                    icon.Draw(Position + Vector2.One * 6, Vector2.Zero, Color.White, 0.9f);
                     float lenght = ActiveFont.Measure(name).X;
                     float descHeight = ActiveFont.Measure(description).Y * 0.5f;
                     ActiveFont.DrawOutline(name, Position + new Vector2(167f + lenght / 2 - 10, 60f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One, completionPercent == 100 ? Color.Gold : Color.White, 2f, Color.Black);

@@ -2304,6 +2304,7 @@ namespace Celeste.Mod.XaphanHelper
             startedAnySoCMChapter = false;
             minimapEnabled = false;
             TriggeredCountDown = false;
+            ModSaveData.CanDisplayAchievementsPopups = false;
             SaveSettings();
 
             isInLevel = false;
@@ -2720,7 +2721,7 @@ namespace Celeste.Mod.XaphanHelper
 
             // Add the Achievements Popup UI if current chapter is SoCM
 
-            if (self.Session.Area.LevelSet == "Xaphan/0")
+            if (self.Session.Area.LevelSet == "Xaphan/0" && ModSaveData.CanDisplayAchievementsPopups)
             {
                 if (self.Tracker.CountEntities<AchievementPopup>() == 0)
                 {
@@ -2783,6 +2784,7 @@ namespace Celeste.Mod.XaphanHelper
                         || !ModSaveData.SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset))
                     {
                         ModSaveData.LoadedPlayer = true;
+                        ModSaveData.CanDisplayAchievementsPopups = true;
                     }
                     else if (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == self.Session.Area.ChapterIndex)
                     {
