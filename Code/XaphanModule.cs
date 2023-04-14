@@ -60,11 +60,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private bool hasOldExtendedVariants = false;
 
-        private bool hasAchievementHelper = false;
-
         private bool displayedOldExtVariantsPostcard = false;
-
-        private bool displayedAchievementHelperPostcard = false;
 
         public static bool startedAnyChapter = false;
 
@@ -85,8 +81,6 @@ namespace Celeste.Mod.XaphanHelper
         public static bool ChangingSide;
 
         private Postcard oldExtVariantsPostcard;
-
-        private Postcard achievementHelperPostcard;
 
         public static bool useMergeChaptersControllerCheck;
 
@@ -1124,7 +1118,6 @@ namespace Celeste.Mod.XaphanHelper
         {
             base.Initialize();
             hasOldExtendedVariants = Everest.Modules.Any(module => module.Metadata.Name == "ExtendedVariantMode" && module.Metadata.Version < new Version(0, 15, 9));
-            hasAchievementHelper = Everest.Modules.Any(module => module.Metadata.Name == "AchievementHelper" && module.Metadata.Version >= new Version(1, 0, 3));
         }
 
         private void onLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset)
@@ -2605,13 +2598,6 @@ namespace Celeste.Mod.XaphanHelper
                     displayedOldExtVariantsPostcard = true;
                     oldExtVariantsPostcard = null;
                 }
-                if (!hasAchievementHelper && !displayedAchievementHelperPostcard)
-                {
-                    self.Add(achievementHelperPostcard = new Postcard(Dialog.Get("postcard_Xaphan_AchievementHelper")));
-                    yield return achievementHelperPostcard.DisplayRoutine();
-                    displayedAchievementHelperPostcard = true;
-                    achievementHelperPostcard = null;
-                }
             }
             IEnumerator origEnum = orig(self);
             while (origEnum.MoveNext()) yield return origEnum.Current;
@@ -2621,7 +2607,6 @@ namespace Celeste.Mod.XaphanHelper
         {
             orig(self);
             if (oldExtVariantsPostcard != null) oldExtVariantsPostcard.BeforeRender();
-            if (achievementHelperPostcard != null) achievementHelperPostcard.BeforeRender();
         }
 
         private void onLevelEnterGo(On.Celeste.LevelEnter.orig_Go orig, Session session, bool fromSaveData)
@@ -2730,6 +2715,16 @@ namespace Celeste.Mod.XaphanHelper
                             minimap.RemoveSelf();
                         }
                     }
+                }
+            }
+
+            // Add the Achievements Popup UI if current chapter is SoCM
+
+            if (self.Session.Area.LevelSet == "Xaphan/0")
+            {
+                if (self.Tracker.CountEntities<AchievementPopup>() == 0)
+                {
+                    self.Add(new AchievementPopup());
                 }
             }
 

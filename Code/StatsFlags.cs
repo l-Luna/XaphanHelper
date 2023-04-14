@@ -63,6 +63,8 @@ namespace Celeste.Mod.XaphanHelper
 
         public static bool initialized;
 
+        public static bool fixedAchievements;
+
         public static void Load()
         {
             Everest.Events.Level.OnEnter += onLevelEnter;
@@ -101,6 +103,7 @@ namespace Celeste.Mod.XaphanHelper
 
         private static void onLevelEnter(Session session, bool fromSaveData)
         {
+            fixedAchievements = false;
             CheckStatsFlagsController(AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset)].Mode[0].MapData);
             if (useStatsFlagsController)
             {
@@ -161,6 +164,14 @@ namespace Celeste.Mod.XaphanHelper
                 GetAlreadyCollectedStrawberries(MapData);
                 CurrentSubAreaStrawberries[i] = getSubAreaStrawberries(Prefix, i);
                 TotalSubAreaStrawberries[i] = getSubAreaStrawberries(Prefix, i, true);
+                for (int j = 0; j <= 2; j++)
+                {
+                    if (AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + i - (!hasInterlude ? 1 : 0))].HasMode((AreaMode)j))
+                    {
+                        MapData ModeMapData = AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + i - (!hasInterlude ? 1 : 0))].Mode[j].MapData;
+                        GetGoldenBerries(i, ModeMapData, j);
+                    }
+                }
                 GetCurrentItems(i, MapData);
             }
         }
@@ -185,6 +196,24 @@ namespace Celeste.Mod.XaphanHelper
             CurrentTiles = null;
             TotalTiles = null;
             initialized = false;
+        }
+
+        public static void RemoveCompletedAchievementsIfNoLongerComplete(Session session)
+        {
+            fixedAchievements = true;
+            List<AchievementData> achievements = Achievements.GenerateAchievementsList(session);
+            HashSet<string> IDsToRemove = new();
+            foreach (AchievementData achievement in achievements)
+            {
+                if (XaphanModule.ModSaveData.Achievements.Contains(achievement.AchievementID) && !session.GetFlag(achievement.Flag))
+                {
+                    IDsToRemove.Add(achievement.AchievementID);
+                }
+            }
+            foreach (string id in IDsToRemove)
+            {
+                XaphanModule.ModSaveData.Achievements.Remove(id);
+            }
         }
 
         private static void onLevelUpdate(On.Celeste.Level.orig_Update orig, Level self)
@@ -302,6 +331,10 @@ namespace Celeste.Mod.XaphanHelper
                             self.Session.SetFlag("XaphanHelper_StatFlag_BossCMCh" + i);
                         }
                     }
+                }
+                if (self.Session.Area.Mode == 0 && self.Session.Area.LevelSet == "Xaphan/0" && !fixedAchievements)
+                {
+                    RemoveCompletedAchievementsIfNoLongerComplete(self.Session);
                 }
             }
         }
@@ -455,6 +488,25 @@ namespace Celeste.Mod.XaphanHelper
             }
         }
 
+        private static void GetGoldenBerries(int chapterIndex, MapData MapData, int Mode)
+        {
+            string Prefix = SaveData.Instance.GetLevelSetStats().Name;
+            foreach (AreaStats item in SaveData.Instance.Areas_Safe)
+            {
+                if (item.GetLevelSet() == Prefix && item.ID == SaveData.Instance.GetLevelSetStats().AreaOffset + chapterIndex - (!hasInterlude ? 1 : 0))
+                {
+                    foreach (EntityData goldenberry in MapData.Goldenberries)
+                    {
+                        EntityID goldenID = new(goldenberry.Level.Name, goldenberry.ID);
+                        if (SaveData.Instance.Areas_Safe[item.ID].Modes[Mode].Strawberries.Contains(goldenID))
+                        {
+                            GoldensBerries[chapterIndex, Mode] = true;
+                        }
+                    }
+                }
+            }
+        }
+
         private static void GetCurrentItems(int chapterIndex, MapData MapData)
         {
             string Prefix = SaveData.Instance.GetLevelSetStats().Name;
@@ -462,17 +514,6 @@ namespace Celeste.Mod.XaphanHelper
             {
                 if (item.GetLevelSet() == Prefix && item.ID == SaveData.Instance.GetLevelSetStats().AreaOffset + chapterIndex - (!hasInterlude ? 1 : 0))
                 {
-                    for (int i = 0; i <= 2; i++)
-                    {
-                        foreach (EntityData goldenberry in MapData.Goldenberries)
-                        {
-                            EntityID goldenID = new(goldenberry.Level.Name, goldenberry.ID);
-                            if (SaveData.Instance.Areas_Safe[item.ID].Modes[i].Strawberries.Contains(goldenID))
-                            {
-                                GoldensBerries[chapterIndex, i] = true;
-                            }
-                        }
-                    }
                     int strawberryCount = 0;
                     if (item.Modes[0].TotalStrawberries > 0 || item.TotalStrawberries > 0)
                     {

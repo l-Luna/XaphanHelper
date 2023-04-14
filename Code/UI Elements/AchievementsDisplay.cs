@@ -98,7 +98,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     Selected = true;
                     if (AchievementsScreen.prompt == null)
                     {
-                        if (Input.MenuConfirm.Pressed)
+                        if (Input.MenuConfirm.Pressed && !Locked)
                         {
                             Audio.Play("event:/ui/main/message_confirm");
                         }
@@ -195,7 +195,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         if (Input.MenuConfirm.Pressed)
                         {
-                            Audio.Play("event:/ui/main/message_confirm");
+                            Audio.Play("event:/ui/main/button_back");
                         }
                     }
                     if (alphaStatus == 0 || (alphaStatus == 1 && selectedAlpha != 0.9f))
@@ -277,7 +277,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 ActiveFont.DrawOutline(description, Position + new Vector2(width / 2, height / 2 + 200f), new Vector2(0.5f), Vector2.One * 0.8f, Color.Gray, 2f, Color.Black);
             }
         }
-
 
         private Level level;
         

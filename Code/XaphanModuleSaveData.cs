@@ -211,6 +211,10 @@ namespace Celeste.Mod.XaphanHelper
 
         public HashSet<string> Checkpoints = new();
 
+        // Achievements
+
+        public HashSet<string> Achievements = new();
+
         // Others
 
         public string CurrentSubArea = "";
