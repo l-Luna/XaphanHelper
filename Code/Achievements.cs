@@ -68,6 +68,7 @@ namespace Celeste.Mod.XaphanHelper
 
                 // Area 5
                 list.Add(new AchievementData("strwb5", 5, "StrawberriesInTheTerminal", "achievements/Xaphan/Strawberries", "XaphanHelper_StatFlag_StrawberriesCh5", StatsFlags.CurrentStrawberries[5], StatsFlags.TotalStrawberries[5], 20));
+                list.Add(new AchievementData("nrj5", 5, "EnergyInTheTerminal", "achievements/Xaphan/EnergyTanks", "XaphanHelper_StatFlag_EnergyTanksCh5", StatsFlags.CurrentEnergyTanks[5], StatsFlags.TotalEnergyTanks[5], 20, reqID: "upg2"));
                 list.Add(new AchievementData("map5", 5, "TerminalExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh5", StatsFlags.CurrentTiles[5], StatsFlags.TotalTiles[5], 25));
             }
 

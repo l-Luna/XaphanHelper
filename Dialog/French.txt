@@ -266,6 +266,8 @@
 	XaphanHelper_UI_Achievements_Locked_Description= Continuez votre aventure{n}pour devérouiller cette catégorie
 	XaphanHelper_UI_Completed= Terminés
 	XaphanHelper_UI_Hidden= caché(s)
+	XaphanHelper_UI_LockedAchievementDesc= Ce succès est actuellement vérouillé
+	XaphanHelper_UI_AchievementToUnlock= Succès requis pour devérouiller:
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= SOUHAITEZ-VOUS SAUVEGARDER ?

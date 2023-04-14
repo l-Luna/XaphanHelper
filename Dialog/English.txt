@@ -266,6 +266,8 @@
 	XaphanHelper_UI_Achievements_Locked_Description= Continue your adventure{n}to unlock this category
 	XaphanHelper_UI_Completed= Completed
 	XaphanHelper_UI_Hidden= Hidden
+	XaphanHelper_UI_LockedAchievementDesc= This achievement is currently locked
+	XaphanHelper_UI_AchievementToUnlock= Achievement required to unlock:
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?

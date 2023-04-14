@@ -191,22 +191,37 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public bool Selected;
 
+            public bool Locked;
+
             private float selectedAlpha = 0;
 
             private int alphaStatus = 0;
 
-            public AchievementDisplay(Level level, Vector2 position, int id, AchievementData data) : base(position)
+            public AchievementDisplay(Level level, Vector2 position, int id, AchievementData data, List<AchievementData> achievements) : base(position)
             {
                 Tag = Tags.HUD;
                 AchievementsScreen = level.Tracker.GetEntity<AchievementsScreen>();
                 ID = id;
-                icon = GFX.Gui[data.Icon];
-                medalIcon = GFX.Gui["achievements/medal"];
+                if (data.ReqID != null && !XaphanModule.ModSaveData.Achievements.Contains(data.ReqID))
+                {
+                    Locked = true;
+                }
                 name = Dialog.Clean(data.Name);
-                description = Dialog.Clean(data.Description);
-                medals = data.Medals.ToString();
-                completionPercent = data.CurrentValue * 100 / data.MaxValue;
-                completion = $"{Dialog.Clean("XaphanHelper_UI_Objective")} {data.CurrentValue} / {data.MaxValue} ({completionPercent}%)";
+                if (!Locked)
+                {
+                    icon = GFX.Gui[data.Icon];
+                    medalIcon = GFX.Gui["achievements/medal"];
+                    description = Dialog.Clean(data.Description);
+                    medals = data.Medals.ToString();
+                    completionPercent = data.CurrentValue * 100 / data.MaxValue;
+                    completion = $"{Dialog.Clean("XaphanHelper_UI_Objective")} {data.CurrentValue} / {data.MaxValue} ({completionPercent}%)";
+                }
+                else
+                {
+                    icon = GFX.Gui["achievements/lockIcon"];
+                    description = Dialog.Clean("XaphanHelper_UI_LockedAchievementDesc");
+                    completion = $"{Dialog.Clean("XaphanHelper_UI_AchievementToUnlock")} {Dialog.Clean(achievements.Find(achievement => achievement.AchievementID == data.ReqID).Name)}";
+                }
                 Depth = -10001;
             }
 
@@ -266,9 +281,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     ActiveFont.DrawOutline(name, Position + new Vector2(167f + lenght / 2 - 10, 60f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One, completionPercent == 100 ? Color.Gold : Color.White, 2f, Color.Black);
                     ActiveFont.DrawOutline(description, Position + new Vector2(160f, 80f - descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
                     ActiveFont.DrawOutline(completion, Position + new Vector2(160f, 80f + descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
-                    medalIcon.Draw(Position + new Vector2(width - 125f, 9f));
-                    lenght = ActiveFont.Measure(medals).X;
-                    ActiveFont.DrawOutline(medals, Position + new Vector2(width - 82.5f - lenght / 2, 105f), new Vector2(0f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
+                    if (medalIcon != null)
+                    {
+                        medalIcon.Draw(Position + new Vector2(width - 125f, 9f));
+                        lenght = ActiveFont.Measure(medals).X;
+                        ActiveFont.DrawOutline(medals, Position + new Vector2(width - 82.5f - lenght / 2, 105f), new Vector2(0f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
+                    }
                 }
             }
         }
@@ -305,7 +323,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private Level level;
         
-        private List<AchievementData> AchievementsData;
+        public List<AchievementData> AchievementsData;
 
         private MedalsDisplay medalDisplay;
 
@@ -371,7 +389,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     if (achievement.CategoryID == categoryID && (achievement.Hidden ? achievement.CurrentValue > 0 : true))
                     {
-                        Scene.Add(new AchievementDisplay(level, new Vector2(755f, 245f + YPos), ID, achievement));
+                        Scene.Add(new AchievementDisplay(level, new Vector2(755f, 245f + YPos), ID, achievement, AchievementsData));
                         YPos += 147;
                         ID++;
                     }
