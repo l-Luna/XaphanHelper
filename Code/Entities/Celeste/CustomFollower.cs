@@ -104,7 +104,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
             public override void Update()
             {
-
                 Level level = Scene as Level;
                 if (level.Frozen)
                 {
@@ -138,6 +137,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                     }
                 }
+
             }
         }
 
@@ -407,6 +407,32 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         }
                         break;
                     }
+            }
+            if (chapterIndex >= 1)
+            {
+                switch (type)
+                {
+                    case "energyTank":
+                        {
+                            StatsFlags.CurrentEnergyTanks[chapterIndex]++;
+                            break;
+                        }
+                    case "missile":
+                        {
+                            // ToDo
+                            break;
+                        }
+                    case "superMissile":
+                        {
+                            // ToDo
+                            break;
+                        }
+                    case "fireRateModule":
+                        {
+                            // ToDo
+                            break;
+                        }
+                }
             }
             RemoveSelf();
         }

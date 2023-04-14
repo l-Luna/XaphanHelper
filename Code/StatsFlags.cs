@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Data;
+using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.XaphanHelper
 {
@@ -36,6 +38,10 @@ namespace Celeste.Mod.XaphanHelper
         public static Dictionary<int, int>[] CurrentSubAreaTiles;
 
         public static Dictionary<int, int>[] TotalSubAreaTiles;
+
+        public static int[] CurrentEnergyTanks;
+
+        public static int[] TotalEnergyTanks;
 
         public static int[] CurrentStrawberries;
 
@@ -139,6 +145,8 @@ namespace Celeste.Mod.XaphanHelper
             TotalTiles = new int[maxChapters];
             CurrentSubAreaTiles = new Dictionary<int, int>[maxChapters];
             TotalSubAreaTiles = new Dictionary<int, int>[maxChapters];
+            CurrentEnergyTanks = new int[maxChapters];
+            TotalEnergyTanks = new int[maxChapters];
             BSideHearts = new bool[maxChapters];
             CurrentStrawberries = new int[maxChapters];
             TotalStrawberries = new int[maxChapters];
@@ -153,13 +161,17 @@ namespace Celeste.Mod.XaphanHelper
                 MapData MapData = AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + i - (!hasInterlude ? 1 : 0))].Mode[0].MapData;
                 RoomControllerData.Clear();
                 TilesControllerData.Clear();
+                EntitiesData.Clear();
                 Strawberries.Clear();
                 GetRoomsControllers(MapData);
                 GetTilesControllers(MapData);
+                GetEntities(MapData);
                 CurrentTiles[i] = getCurrentMapTiles(Prefix, i);
                 TotalTiles[i] = getTotalMapTiles();
                 CurrentSubAreaTiles[i] = getSubAreaTiles(Prefix, i);
                 TotalSubAreaTiles[i] = getSubAreaTiles(Prefix, i, true);
+                CurrentEnergyTanks[i] = getCurrentEnergyTanks(Prefix, i);
+                TotalEnergyTanks[i] = getTotalEnergyTanks();
                 GetStrawberries(MapData);
                 GetAlreadyCollectedStrawberries(MapData);
                 CurrentSubAreaStrawberries[i] = getSubAreaStrawberries(Prefix, i);
@@ -193,6 +205,7 @@ namespace Celeste.Mod.XaphanHelper
             cassetteCount = 0;
             RoomControllerData.Clear();
             TilesControllerData.Clear();
+            EntitiesData.Clear();
             CurrentTiles = null;
             TotalTiles = null;
             initialized = false;
@@ -253,6 +266,16 @@ namespace Celeste.Mod.XaphanHelper
                             {
                                 self.Session.SetFlag("XaphanHelper_StatFlag_MapCh" + i + "-" + subAreIndex + "-Visited");
                             }
+                        }
+                    }
+                }
+                if (CurrentEnergyTanks != null && TotalEnergyTanks != null)
+                {
+                    for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
+                    {
+                        if (CurrentEnergyTanks[i] == TotalEnergyTanks[i])
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTanksCh" + i);
                         }
                     }
                 }
@@ -460,6 +483,22 @@ namespace Celeste.Mod.XaphanHelper
             }
         }
 
+        private static void GetEntities(MapData MapData)
+        {
+            foreach (LevelData level in MapData.Levels)
+            {
+                foreach (EntityData entity in level.Entities)
+                {
+                    if (entity.Name == "XaphanHelper/CustomFollower")
+                    {
+                        string str = entity.Attr("type").Replace(" ", "");
+                        string type = (char.ToLower(str[0]) + str.Substring(1));
+                        EntitiesData.Add(new InGameMapEntitiesData(0, level.Name, level, type, new Vector2(entity.Position.X, entity.Position.Y), Vector2.Zero, MapData.Area, entity.ID));
+                    }
+                }
+            }
+        }
+
         private static void GetStrawberries(MapData MapData)
         {
             foreach (LevelData level in MapData.Levels)
@@ -586,6 +625,36 @@ namespace Celeste.Mod.XaphanHelper
             }
             return totalTiles;
         }
+
+        public static int getCurrentEnergyTanks(string prefix, int chapterIndex)
+        {
+            int currentEnergyTanks = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "energyTank")
+                {
+                    if (XaphanModule.ModSaveData.StaminaUpgrades.Contains(prefix + "_Ch" + chapterIndex + "_" + entityData.Room + ":" + entityData.ID))
+                    {
+                        currentEnergyTanks++;
+                    }
+                }
+            }
+            return currentEnergyTanks;
+        }
+
+        public static int getTotalEnergyTanks()
+        {
+            int totalEnergyTanks = 0;
+            foreach (InGameMapEntitiesData entityData in EntitiesData)
+            {
+                if (entityData.Type == "energyTank")
+                {
+                    totalEnergyTanks++;
+                }
+            }
+            return totalEnergyTanks;
+        }
+
 
         public static Dictionary<int, int> getSubAreaTiles(string prefix, int chapterIndex, bool total = false)
         {
