@@ -475,7 +475,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
-                if (Input.Pause.Check && XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level) && switchTimer <= 0)
+                if (Input.Pause.Check && switchTimer <= 0)
                 {
                     if (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0")
                     {
@@ -484,7 +484,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             Scene.Add(prompt = new SwitchUIPrompt(Vector2.Zero, 0));
                         }
                     }
-                    else
+                    else if (XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level))
                     {
                         Add(new Coroutine(TransitionToMapScreen()));
                     }

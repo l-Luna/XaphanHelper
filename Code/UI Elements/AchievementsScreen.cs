@@ -309,7 +309,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
-                if (Input.Pause.Check && XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level) && switchTimer <= 0)
+                if (Input.Pause.Check && switchTimer <= 0)
                 {
                     if (prompt == null)
                     {
