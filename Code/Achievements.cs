@@ -39,6 +39,15 @@ namespace Celeste.Mod.XaphanHelper
                 list.Add(new AchievementData("upgOpt2", 0, "UnnaturalObserver", "achievements/Xaphan/UnnaturalObserver", "Upgrade_PulseRadar", session.GetFlag("Upgrade_PulseRadar") ? 1 : 0, 1, 5, true));
             }
 
+            list.Add(new AchievementData("strwb0", 0, "Tasty", "achievements/Xaphan/Tasty", "XaphanHelper_StatFlag_Strawberry", session.GetFlag("XaphanHelper_StatFlag_Strawberry") ? 1 : 0, 1, 10));
+
+            if (SoCMVersion() >= new Version(3, 0, 0))
+            {
+                list.Add(new AchievementData("nrj0", 0, "Revitalizing", "achievements/Xaphan/Revitalizing", "XaphanHelper_StatFlag_EnergyTank", session.GetFlag("XaphanHelper_StatFlag_EnergyTank") ? 1 : 0, 1, 10, reqID: "upg2"));
+                list.Add(new AchievementData("dfrm0", 0, "MyFirstChip", "achievements/Xaphan/MyFirstChip", "XaphanHelper_StatFlag_FireRateModule", session.GetFlag("XaphanHelper_StatFlag_FireRateModule") ? 1 : 0, 1, 10, reqID: "upg7"));
+                list.Add(new AchievementData("dmiss0", 0, "NeverEnoughAmmo", "achievements/Xaphan/NeverEnoughAmmo", "XaphanHelper_StatFlag_Missile", session.GetFlag("XaphanHelper_StatFlag_Missile") ? 1 : 0, 1, 10, reqID: "upg7"));
+            }
+
             list.Add(new AchievementData("map0", 0, "MysteriousExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh0", StatsFlags.CurrentTiles[0], StatsFlags.TotalTiles[0], 10));
             list.Add(new AchievementData("cass", 0, "ItIsTimeForARemix", "achievements/Xaphan/ItIsTimeForARemix", "XaphanHelper_StatFlag_Cassettes", StatsFlags.cassetteCount, SaveData.Instance.GetLevelSetStatsFor(SaveData.Instance.GetLevelSet()).MaxCassettes, 15));
             list.Add(new AchievementData("hearts", 0, "MasterOfSecrets", "achievements/Xaphan/MasterOfSecrets", "XaphanHelper_StatFlag_Hearts", StatsFlags.heartCount, StatsFlags.TotalASideHearts, 25));
@@ -69,6 +78,7 @@ namespace Celeste.Mod.XaphanHelper
                 // Area 5
                 list.Add(new AchievementData("strwb5", 5, "StrawberriesInTheTerminal", "achievements/Xaphan/Strawberries", "XaphanHelper_StatFlag_StrawberriesCh5", StatsFlags.CurrentStrawberries[5], StatsFlags.TotalStrawberries[5], 20));
                 list.Add(new AchievementData("nrj5", 5, "EnergyInTheTerminal", "achievements/Xaphan/EnergyTanks", "XaphanHelper_StatFlag_EnergyTanksCh5", StatsFlags.CurrentEnergyTanks[5], StatsFlags.TotalEnergyTanks[5], 20, reqID: "upg2"));
+                list.Add(new AchievementData("dfrm5", 5, "ChipsInTheTerminal", "achievements/Xaphan/FireRateModules", "XaphanHelper_StatFlag_FireRateModulesCh5", StatsFlags.CurrentFireRateModules[5], StatsFlags.TotalFireRateModules[5], 20, reqID: "upg7"));
                 list.Add(new AchievementData("map5", 5, "TerminalExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh5", StatsFlags.CurrentTiles[5], StatsFlags.TotalTiles[5], 25));
             }
 
