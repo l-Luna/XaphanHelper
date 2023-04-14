@@ -312,10 +312,18 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         if (Input.MenuLeft.Pressed && prompt.Selection > 0)
                         {
                             prompt.Selection--;
+                            if ((!XaphanModule.useIngameMap || !XaphanModule.CanOpenMap(level)) && prompt.Selection == 1)
+                            {
+                                prompt.Selection--;
+                            }
                         }
                         if (Input.MenuRight.Pressed && prompt.Selection < 2)
                         {
                             prompt.Selection++;
+                            if ((!XaphanModule.useIngameMap || !XaphanModule.CanOpenMap(level)) && prompt.Selection == 1)
+                            {
+                                prompt.Selection++;
+                            }
                         }
                         if ((Input.MenuConfirm.Pressed || Input.Pause.Pressed) && prompt.drawContent && !promptChoice)
                         {
@@ -577,7 +585,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     float num2 = ButtonUI.Width(label2, Input.Pause);
                     Vector2 position = new(1830f, 1055f);
                     ButtonUI.Render(position, label, Input.MenuCancel, scale, 1f, closeWiggle.Value * 0.05f);
-                    if (XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level))
+                    if (SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" || (XaphanModule.useIngameMap && XaphanModule.CanOpenMap(level)))
                     {
                         position.X -= num / 2 + 32;
                         ButtonUI.Render(position, label2, Input.Pause, scale, 1f, mapWiggle.Value * 0.05f);

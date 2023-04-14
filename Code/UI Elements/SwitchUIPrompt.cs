@@ -151,11 +151,23 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public void AddSelections()
         {
-            for (int i = 0; i <= 2; i++)
+            if (XaphanModule.useIngameMap && XaphanModule.CanOpenMap(SceneAs<Level>()))
             {
-                ScreenSelect select = new ScreenSelect(PromptPos + new Vector2(150f + 250f * i, 101f), i, this);
-                ScreenSelects.Add(select);
-                SceneAs<Level>().Add(select);
+                for (int i = 0; i <= 2; i++)
+                {
+                    ScreenSelect select = new ScreenSelect(PromptPos + new Vector2(150f + 250f * i, 101f), i, this);
+                    ScreenSelects.Add(select);
+                    SceneAs<Level>().Add(select);
+                }
+            }
+            else
+            {
+                for (int i = 0; i <= 1; i ++)
+                {
+                    ScreenSelect select = new ScreenSelect(PromptPos + new Vector2(275f + 250f * i, 101f), i == 0 ? 0 : i + 1, this);
+                    ScreenSelects.Add(select);
+                    SceneAs<Level>().Add(select);
+                }
             }
         }
 
