@@ -40,7 +40,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public int categorySelection;
 
-        public int previousCategorySelection;
+        public int previousCategorySelection = -1;
 
         public int achievementSelection = -1;
 

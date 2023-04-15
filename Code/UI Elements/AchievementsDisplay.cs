@@ -3,6 +3,7 @@ using Celeste.Mod.XaphanHelper.Data;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Monocle;
+using System;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -76,7 +77,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
             public bool Selected;
 
+            private bool ShowArrow;
+
             public bool Locked;
+
+            private bool AllAchievements;
 
             private float selectedAlpha = 0;
 
@@ -107,6 +112,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 }
                 string HiddenAchievements = $" (+{hiddenAchievements} {Dialog.Clean("XaphanHelper_UI_Hidden")})";
                 Completed = $"{completedAchievements} / {totalAchievements} {Dialog.Clean("XaphanHelper_UI_Completed")}" + (hiddenAchievements > 0 ? HiddenAchievements : "");
+                AllAchievements = completedAchievements == (totalAchievements + hiddenAchievements);
                 Locked = Name == "???";
                 Depth = -10001;
             }
@@ -117,6 +123,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (AchievementsScreen.categorySelection == ID)
                 {
                     Selected = true;
+                    ShowArrow = false;
                     if (AchievementsScreen.prompt == null)
                     {
                         if (Input.MenuConfirm.Pressed && !Locked)
@@ -145,21 +152,34 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 else
                 {
                     Selected = false;
+                    if (AchievementsScreen.previousCategorySelection == ID)
+                    {
+                        ShowArrow = true;
+                    }
                 }
             }
 
             public override void Render()
             {
                 base.Render();
+                MTexture mTexture = GFX.Gui["towerarrow"];
                 float lenght = ActiveFont.Measure(Name).X * 0.8f;
                 if (Selected)
                 {
                     Draw.Rect(Position, width, height, Color.Yellow * selectedAlpha);
                 }
-                ActiveFont.DrawOutline(Name, Position + new Vector2(60 + lenght / 2 - 10, Locked ? height / 2 : 26f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Name != "???" ? Color.White : Color.Gray, 2f, Color.Black);
+                else if (AchievementsScreen.previousCategorySelection == ID)
+                {
+                    Draw.Rect(Position, width, height, Color.DarkGreen * 0.7f);
+                }
+                ActiveFont.DrawOutline(Name, Position + new Vector2(20f + lenght / 2f, Locked ? height / 2 : 26f), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Name != "???" ? (AllAchievements ? Color.Gold : Color.White) : Color.Gray, 2f, Color.Black);
                 if (!Locked)
                 {
-                    ActiveFont.DrawOutline(Completed, Position + new Vector2(50f, 45f), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
+                    ActiveFont.DrawOutline(Completed, Position + new Vector2(20f, 45f), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
+                }
+                if ((ShowArrow || Selected) && !Locked)
+                {
+                    mTexture.DrawCentered(Position + new Vector2(width - 35f, height / 2f), AllAchievements ? Color.Gold : Color.White, 0.8f, (float)Math.PI);
                 }
             }
         }
