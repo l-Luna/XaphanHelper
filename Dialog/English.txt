@@ -268,6 +268,8 @@
 	XaphanHelper_UI_Hidden= Hidden
 	XaphanHelper_UI_LockedAchievementDesc= This achievement is currently locked
 	XaphanHelper_UI_AchievementToUnlock= Achievement required to unlock:
+	XaphanHelper_UI_selectCategory= Select Category
+	XaphanHelper_UI_back= Back
 
 #Metroid UI
 	XaphanHelper_UI_Save_Game= WOULD YOU LIKE TO SAVE ?
