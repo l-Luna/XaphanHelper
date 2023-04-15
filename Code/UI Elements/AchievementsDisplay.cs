@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Monocle;
 using System;
+using System.Linq;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -405,6 +406,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if (!locked)
             {
+                AchievementsData = AchievementsData.OrderByDescending(achievement => !(!string.IsNullOrEmpty(achievement.ReqID) && !XaphanModule.ModSaveData.Achievements.Contains(achievement.ReqID))).ToList();
                 foreach (AchievementData achievement in AchievementsData)
                 {
                     if (achievement.CategoryID == categoryID && (achievement.Hidden ? achievement.CurrentValue > 0 : true))
