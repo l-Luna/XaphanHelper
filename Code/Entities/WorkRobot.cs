@@ -5,7 +5,6 @@ using Celeste.Mod.Entities;
 using Celeste.Mod.XaphanHelper.Colliders;
 using Microsoft.Xna.Framework;
 using Monocle;
-using static Celeste.GaussianBlur;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
@@ -13,6 +12,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [CustomEntity("XaphanHelper/WorkRobot")]
     public class WorkRobot : Solid
     {
+        private static MethodInfo Spring_BounceAnimate = typeof(Spring).GetMethod("BounceAnimate", BindingFlags.Instance | BindingFlags.NonPublic);
+
         Sprite sprite;
 
         private bool goLeft;
@@ -44,6 +45,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private float SpeedV;
 
         private float cancelYPos = 0f;
+
+        private int conveyorSpeed;
+
+        private int conveyorDir;
 
         public WorkRobot(EntityData data, Vector2 offset) : base(data.Position + offset, 10f, 17f, false)
         {
@@ -121,9 +126,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 active = true;
             }
         }
-
-        private int conveyorSpeed;
-        private int conveyorDir;
 
         public override void Update()
         {
@@ -237,8 +239,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Push(new Vector2(200, -180), -Vector2.UnitX);
             }
         }
-
-        private static MethodInfo Spring_BounceAnimate = typeof(Spring).GetMethod("BounceAnimate", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private IEnumerator TurnAround()
         {
