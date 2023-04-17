@@ -24,12 +24,20 @@
 
         public string ReqID;
 
-        public AchievementData(string achievementID, int categoryID, string name, string icon, string flag, int currentValue, int maxValue, int medals, bool hidden = false, string reqID = null)
+        public AchievementData(string achievementID, int categoryID, string icon, string flag, int currentValue, int maxValue, int medals, bool hidden = false, string reqID = null)
         {
             AchievementID = achievementID;
             CategoryID = categoryID;
-            Name = "Achievement_" + name + "_Name";
-            Description = "Achievement_" + name + "_Description";
+
+            string subStr = "";
+            if (AchievementID.Length > 1)
+            {
+                subStr = AchievementID.Substring(1);
+            }
+            string convertedID = char.ToUpper(AchievementID[0]) + subStr;
+
+            Name = "Achievement_" + convertedID + "_Name";
+            Description = "Achievement_" + convertedID + "_Description";
             Icon = icon;
             Flag = flag;
             CurrentValue = currentValue;

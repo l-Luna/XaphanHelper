@@ -4,85 +4,743 @@ using Celeste.Mod.XaphanHelper.Data;
 
 namespace Celeste.Mod.XaphanHelper
 {
-    static class Achievements
-    {
-        static Version SoCMVersion()
-        {
-            foreach (EverestModule module in Everest.Modules)
-            {
-                if (module.Metadata.Name == "TheSecretOfCelesteMountain")
-                {
-                    return module.Metadata.Version;
-                }
+	static class Achievements
+	{
+		static Version SoCMVersion()
+		{
+			foreach (EverestModule module in Everest.Modules)
+			{
+				if (module.Metadata.Name == "TheSecretOfCelesteMountain")
+				{
+					return module.Metadata.Version;
+				}
+			}
+			return null;
+		}
+
+		public static List<AchievementData> GenerateAchievementsList(Session session)
+		{
+			StatsFlags.GetStats(session);
+			List<AchievementData> list = new();
+
+			// General
+			list.Add(new AchievementData(
+				achievementID: "upg1",
+				categoryID: 0,
+				icon: "achievements/Xaphan/Upgrade1",
+				flag: "Upgrade_DashBoots",
+				currentValue: session.GetFlag("Upgrade_DashBoots") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+			list.Add(new AchievementData(
+				achievementID: "upg2",
+				categoryID: 0,
+				icon: "achievements/Xaphan/Upgrade2",
+				flag: "Upgrade_PowerGrip",
+				currentValue: session.GetFlag("Upgrade_PowerGrip") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+			list.Add(new AchievementData(
+				achievementID: "upg3",
+				categoryID: 0,
+				icon: "achievements/Xaphan/Upgrade3",
+				flag: "Upgrade_ClimbingKit",
+				currentValue: session.GetFlag("Upgrade_ClimbingKit") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+			list.Add(new AchievementData(
+				achievementID: "upg4",
+				categoryID: 0,
+				icon: "achievements/Xaphan/Upgrade4",
+				flag: "Upgrade_SpaceJump",
+				currentValue: session.GetFlag("Upgrade_SpaceJump") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+			list.Add(new AchievementData(
+				achievementID: "upg5",
+				categoryID: 0,
+				icon: "achievements/Xaphan/Upgrade5",
+				flag: "Upgrade_Bombs",
+				currentValue: session.GetFlag("Upgrade_Bombs") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+
+			if (SoCMVersion() >= new Version(3, 0, 0))
+			{
+				list.Add(new AchievementData(
+					achievementID: "upg6",
+					categoryID: 0,
+					icon: "achievements/Xaphan/Upgrade6",
+					flag: "Upgrade_SpiderMagnet",
+					currentValue: session.GetFlag("Upgrade_SpiderMagnet") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+				list.Add(new AchievementData(
+					achievementID: "upg7",
+					categoryID: 0,
+					icon: "achievements/Xaphan/Upgrade7",
+					flag: "Upgrade_RemoteDrone",
+					currentValue: session.GetFlag("Upgrade_RemoteDrone") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+				list.Add(new AchievementData(
+					achievementID: "upg8",
+					categoryID: 0,
+					icon: "achievements/Xaphan/Upgrade8",
+					flag: "Upgrade_MissilesModule",
+					currentValue: session.GetFlag("Upgrade_MissilesModule") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+				list.Add(new AchievementData(
+					achievementID: "upgOpt1",
+					categoryID: 0,
+					icon: "achievements/Xaphan/UpgradeOptional1",
+					flag: "Upgrade_Binoculars",
+					currentValue: session.GetFlag("Upgrade_Binoculars") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+				list.Add(new AchievementData(
+					achievementID: "upgOpt2",
+					categoryID: 0,
+					icon: "achievements/Xaphan/UpgradeOptional2",
+					flag: "Upgrade_PulseRadar",
+					currentValue: session.GetFlag("Upgrade_PulseRadar") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+			}
+
+            list.Add(new AchievementData(
+				achievementID: "map0",
+				categoryID: 0,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh0",
+				currentValue: StatsFlags.CurrentTiles[0],
+				maxValue: StatsFlags.TotalTiles[0],
+				medals: 10
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb0",
+				categoryID: 0,
+				icon: "achievements/Xaphan/StrawberryBronze",
+				flag: "XaphanHelper_StatFlag_Strawberry",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_Strawberry") ? 1 : 0,
+				maxValue: 1,
+				medals: 10
+			));
+
+			if (SoCMVersion() >= new Version(3, 0, 0))
+			{
+				list.Add(new AchievementData(
+					achievementID: "tank0",
+					categoryID: 0,
+					icon: "achievements/Xaphan/EnergyTankBronze",
+					flag: "XaphanHelper_StatFlag_EnergyTank",
+					currentValue: session.GetFlag("XaphanHelper_StatFlag_EnergyTank") ? 1 : 0,
+					maxValue: 1,
+					medals: 10,
+					reqID: "upg2"
+				));
+				list.Add(new AchievementData(
+					achievementID: "dfrm0",
+					categoryID: 0,
+					icon: "achievements/Xaphan/FireRateModuleBronze",
+					flag: "XaphanHelper_StatFlag_FireRateModule",
+					currentValue: session.GetFlag("XaphanHelper_StatFlag_FireRateModule") ? 1 : 0,
+					maxValue: 1,
+					medals: 10,
+					reqID: "upg7"
+				));
+				list.Add(new AchievementData(
+					achievementID: "dmiss0",
+					categoryID: 0,
+					icon: "achievements/Xaphan/MissileBronze",
+					flag: "XaphanHelper_StatFlag_Missile",
+					currentValue: session.GetFlag("XaphanHelper_StatFlag_Missile") ? 1 : 0,
+					maxValue: 1,
+					medals: 10,
+					reqID: "upg7"
+				));
             }
-            return null;
-        }
 
-        public static List<AchievementData> GenerateAchievementsList(Session session)
-        {
-            StatsFlags.GetStats(session);
-            List<AchievementData> list = new();
+			int currentTotalStrawberries = StatsFlags.CurrentStrawberries[1] + StatsFlags.CurrentStrawberries[2] + StatsFlags.CurrentStrawberries[3] + StatsFlags.CurrentStrawberries[4] + StatsFlags.CurrentStrawberries[5];
+			int currentTotalEnergyTanks = StatsFlags.CurrentEnergyTanks[1] + StatsFlags.CurrentEnergyTanks[2] + StatsFlags.CurrentEnergyTanks[3] + StatsFlags.CurrentEnergyTanks[4] + StatsFlags.CurrentEnergyTanks[5];
+            int currentTotalFireRateModules = StatsFlags.CurrentFireRateModules[1] + StatsFlags.CurrentFireRateModules[2] + StatsFlags.CurrentFireRateModules[3] + StatsFlags.CurrentFireRateModules[4] + StatsFlags.CurrentFireRateModules[5];
+            int currentTotalMissiles = StatsFlags.CurrentMissiles[1] + StatsFlags.CurrentMissiles[2] + StatsFlags.CurrentMissiles[3] + StatsFlags.CurrentMissiles[4] + StatsFlags.CurrentMissiles[5];
+            int currentTotalSuperMissiles = StatsFlags.CurrentSuperMissiles[1] + StatsFlags.CurrentSuperMissiles[2] + StatsFlags.CurrentSuperMissiles[3] + StatsFlags.CurrentSuperMissiles[4] + StatsFlags.CurrentSuperMissiles[5];
+            int currentTotalCassettes = StatsFlags.cassetteCount;
+			int currentTotalASideHearts = StatsFlags.heartCount;
 
-            // General
-            list.Add(new AchievementData("upg1", 0, "321Dash", "achievements/Xaphan/321Dash", "Upgrade_DashBoots", session.GetFlag("Upgrade_DashBoots") ? 1 : 0, 1, 5, true));
-            list.Add(new AchievementData("upg2", 0, "FirmlyGraspIt", "achievements/Xaphan/FirmlyGraspIt", "Upgrade_PowerGrip", session.GetFlag("Upgrade_PowerGrip") ? 1 : 0, 1, 5, true));
-            list.Add(new AchievementData("upg3", 0, "TimeToAscend", "achievements/Xaphan/TimeToAscend", "Upgrade_ClimbingKit", session.GetFlag("Upgrade_ClimbingKit") ? 1 : 0, 1, 5, true));
-            list.Add(new AchievementData("upg4", 0, "FeelingSpacey", "achievements/Xaphan/FeelingSpacey", "Upgrade_SpaceJump", session.GetFlag("Upgrade_SpaceJump") ? 1 : 0, 1, 5, true));
-            list.Add(new AchievementData("upg5", 0, "WheresTheKaboom", "achievements/Xaphan/WheresTheKaboom", "Upgrade_Bombs", session.GetFlag("Upgrade_Bombs") ? 1 : 0, 1, 5, true));
+            int maxTotalStrawberries = StatsFlags.TotalStrawberries[1] + StatsFlags.TotalStrawberries[2] + StatsFlags.TotalStrawberries[3] + StatsFlags.TotalStrawberries[4] + StatsFlags.TotalStrawberries[5];
+            int maxTotalEnergyTanks = StatsFlags.TotalEnergyTanks[1] + StatsFlags.TotalEnergyTanks[2] + StatsFlags.TotalEnergyTanks[3] + StatsFlags.TotalEnergyTanks[4] + StatsFlags.TotalEnergyTanks[5];
+            int maxTotalFireRateModules = StatsFlags.TotalFireRateModules[1] + StatsFlags.TotalFireRateModules[2] + StatsFlags.TotalFireRateModules[3] + StatsFlags.TotalFireRateModules[4] + StatsFlags.TotalFireRateModules[5];
+            int maxTotalMissiles = StatsFlags.TotalMissiles[1] + StatsFlags.TotalMissiles[2] + StatsFlags.TotalMissiles[3] + StatsFlags.TotalMissiles[4] + StatsFlags.TotalMissiles[5];
+            int maxTotalSuperMissiles = StatsFlags.TotalSuperMissiles[1] + StatsFlags.TotalSuperMissiles[2] + StatsFlags.TotalSuperMissiles[3] + StatsFlags.TotalSuperMissiles[4] + StatsFlags.TotalSuperMissiles[5];
+            int maxTotalCassettes = SaveData.Instance.GetLevelSetStatsFor(SaveData.Instance.GetLevelSet()).MaxCassettes;
+			int maxTotalASideHearts = StatsFlags.TotalASideHearts;
+
+            list.Add(new AchievementData(
+				achievementID: "strwb",
+				categoryID: 0,
+				icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_Strawberries",
+				currentValue: currentTotalStrawberries,
+				maxValue: maxTotalStrawberries,
+				medals: 25
+			));
 
             if (SoCMVersion() >= new Version(3, 0, 0))
-            {
-                list.Add(new AchievementData("upg6", 0, "ImALittleSpider", "achievements/Xaphan/ImALittleSpider", "Upgrade_SpiderMagnet", session.GetFlag("Upgrade_SpiderMagnet") ? 1 : 0, 1, 5, true));
-                list.Add(new AchievementData("upg7", 0, "Robopede", "achievements/Xaphan/Robopede", "Upgrade_RemoteDrone", session.GetFlag("Upgrade_RemoteDrone") ? 1 : 0, 1, 5, true));
-                list.Add(new AchievementData("upg8", 0, "PackingAPunch", "achievements/Xaphan/PackingAPunch", "Upgrade_MissilesModule", session.GetFlag("Upgrade_MissilesModule") ? 1 : 0, 1, 5, true));
-                list.Add(new AchievementData("upgOpt1", 0, "PlanningAhead", "achievements/Xaphan/PlanningAhead", "Upgrade_Binoculars", session.GetFlag("Upgrade_Binoculars") ? 1 : 0, 1, 5, true));
-                list.Add(new AchievementData("upgOpt2", 0, "UnnaturalObserver", "achievements/Xaphan/UnnaturalObserver", "Upgrade_PulseRadar", session.GetFlag("Upgrade_PulseRadar") ? 1 : 0, 1, 5, true));
+			{
+                list.Add(new AchievementData(
+					achievementID: "tank",
+					categoryID: 0,
+					icon: "achievements/Xaphan/EnergyTankCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_EnergyTanks",
+					currentValue: currentTotalEnergyTanks,
+					maxValue: maxTotalEnergyTanks,
+					medals: 25,
+                    reqID: "upg2"
+                ));
+                list.Add(new AchievementData(
+                    achievementID: "dfrm",
+                    categoryID: 0,
+                    icon: "achievements/Xaphan/FireRateModuleCheckmarkSilver",
+                    flag: "XaphanHelper_StatFlag_FireRateModules",
+                    currentValue: currentTotalFireRateModules,
+                    maxValue: maxTotalFireRateModules,
+                    medals: 25,
+                    reqID: "upg7"
+                ));
             }
 
-            list.Add(new AchievementData("strwb0", 0, "Tasty", "achievements/Xaphan/Tasty", "XaphanHelper_StatFlag_Strawberry", session.GetFlag("XaphanHelper_StatFlag_Strawberry") ? 1 : 0, 1, 10));
+            list.Add(new AchievementData(
+				achievementID: "cass",
+				categoryID: 0,
+				icon: "achievements/Xaphan/CassetteCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_Cassettes",
+				currentValue: currentTotalCassettes,
+				maxValue: maxTotalCassettes,
+				medals: 25
+			));
+			list.Add(new AchievementData(
+				achievementID: "heart",
+				categoryID: 0,
+				icon: "achievements/Xaphan/HeartCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_Hearts",
+				currentValue: currentTotalASideHearts,
+				maxValue: maxTotalASideHearts,
+				medals: 25
+			));
 
             if (SoCMVersion() >= new Version(3, 0, 0))
-            {
-                list.Add(new AchievementData("nrj0", 0, "Revitalizing", "achievements/Xaphan/Revitalizing", "XaphanHelper_StatFlag_EnergyTank", session.GetFlag("XaphanHelper_StatFlag_EnergyTank") ? 1 : 0, 1, 10, reqID: "upg2"));
-                list.Add(new AchievementData("dfrm0", 0, "MyFirstChip", "achievements/Xaphan/MyFirstChip", "XaphanHelper_StatFlag_FireRateModule", session.GetFlag("XaphanHelper_StatFlag_FireRateModule") ? 1 : 0, 1, 10, reqID: "upg7"));
-                list.Add(new AchievementData("dmiss0", 0, "NeverEnoughAmmo", "achievements/Xaphan/NeverEnoughAmmo", "XaphanHelper_StatFlag_Missile", session.GetFlag("XaphanHelper_StatFlag_Missile") ? 1 : 0, 1, 10, reqID: "upg7"));
+			{
+                list.Add(new AchievementData(
+					achievementID: "map",
+					categoryID: 0,
+					icon: "achievements/Xaphan/MapCheckmarkGold",
+					flag: "XaphanHelper_StatFlag_Map",
+					currentValue: StatsFlags.CurrentTiles[0] + StatsFlags.CurrentTiles[1] + StatsFlags.CurrentTiles[2] + StatsFlags.CurrentTiles[3] + StatsFlags.CurrentTiles[4] + StatsFlags.CurrentTiles[5],
+					maxValue: StatsFlags.TotalTiles[0] + StatsFlags.TotalTiles[1] + StatsFlags.TotalTiles[2] + StatsFlags.TotalTiles[3] + StatsFlags.TotalTiles[4] + StatsFlags.TotalTiles[5],
+					medals: 50
+					));
+                list.Add(new AchievementData(
+                   achievementID: "items",
+                   categoryID: 0,
+                   icon: "achievements/Xaphan/ItemsCheckmarkGold",
+                   flag: "XaphanHelper_StatFlag_Items",
+                   currentValue: currentTotalStrawberries + currentTotalEnergyTanks + currentTotalFireRateModules + currentTotalMissiles + currentTotalSuperMissiles + currentTotalCassettes + currentTotalASideHearts,
+                   maxValue: maxTotalStrawberries + maxTotalEnergyTanks + maxTotalFireRateModules + maxTotalMissiles + maxTotalSuperMissiles + maxTotalCassettes + maxTotalASideHearts,
+                   medals: 50
+                ));
             }
-
-            list.Add(new AchievementData("map0", 0, "MysteriousExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh0", StatsFlags.CurrentTiles[0], StatsFlags.TotalTiles[0], 10));
-            list.Add(new AchievementData("cass", 0, "ItIsTimeForARemix", "achievements/Xaphan/ItIsTimeForARemix", "XaphanHelper_StatFlag_Cassettes", StatsFlags.cassetteCount, SaveData.Instance.GetLevelSetStatsFor(SaveData.Instance.GetLevelSet()).MaxCassettes, 15));
-            list.Add(new AchievementData("hearts", 0, "MasterOfSecrets", "achievements/Xaphan/MasterOfSecrets", "XaphanHelper_StatFlag_Hearts", StatsFlags.heartCount, StatsFlags.TotalASideHearts, 25));
 
             // Area 1
-            list.Add(new AchievementData("gem1-1", 1, "Reunited", "achievements/Xaphan/Reunited", "XaphanHelper_StatFlag_GemCh1", session.GetFlag("XaphanHelper_StatFlag_GemCh1") ? 1 : 0, 1, 10));
-            list.Add(new AchievementData("strwb1", 1, "StrawberriesInTheRuins", "achievements/Xaphan/Strawberries", "XaphanHelper_StatFlag_StrawberriesCh1", StatsFlags.CurrentStrawberries[1], StatsFlags.TotalStrawberries[1], 20));
-            list.Add(new AchievementData("map1", 1, "RuinsExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh1", StatsFlags.CurrentTiles[1], StatsFlags.TotalTiles[1], 25));
-            list.Add(new AchievementData("bside1", 1, "Inferno", "achievements/Xaphan/BSide", "XaphanHelper_StatFlag_BSideCh1", session.GetFlag("XaphanHelper_StatFlag_BSideCh1") ? 1 : 0, 1, 25));
-            list.Add(new AchievementData("golden1", 1, "SurvivorOfTheRuins", "achievements/Xaphan/Survivor", "XaphanHelper_StatFlag_GoldenCh1-0", session.GetFlag("XaphanHelper_StatFlag_GoldenCh1-0") ? 1 : 0, 1, 50));
-            list.Add(new AchievementData("golden1-b", 1, "LegendOfTheRuins", "achievements/Xaphan/Survivor", "XaphanHelper_StatFlag_GoldenCh1-1", session.GetFlag("XaphanHelper_StatFlag_GoldenCh1-1") ? 1 : 0, 1, 50));
+            list.Add(new AchievementData(
+				achievementID: "gem1-1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/Gem1",
+				flag: "XaphanHelper_StatFlag_GemCh1",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_GemCh1") ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+            list.Add(new AchievementData(
+				achievementID: "map1-0s",
+				categoryID: 1,
+				icon: "achievements/Xaphan/MapBronze",
+				flag: "XaphanHelper_StatFlag_MapCh1-0-Visited",
+				currentValue: StatsFlags.CurrentSubAreaTiles[1][0] > 0 ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+            list.Add(new AchievementData(
+				achievementID: "map1-1s",
+				categoryID: 1,
+				icon: "achievements/Xaphan/MapBronze",
+				flag: "XaphanHelper_StatFlag_MapCh1-1-Visited",
+				currentValue: StatsFlags.CurrentSubAreaTiles[1][1] > 0 ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+            list.Add(new AchievementData(
+				achievementID: "map1-0",
+				categoryID: 1,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh1-0",
+				currentValue: StatsFlags.CurrentSubAreaTiles[1][0],
+				maxValue: StatsFlags.TotalSubAreaTiles[1][0],
+				medals: 10,
+				reqID: "map1-0s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "map1-1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh1-1",
+				currentValue: StatsFlags.CurrentSubAreaTiles[1][1],
+				maxValue: StatsFlags.TotalSubAreaTiles[1][1],
+				medals: 10,
+				reqID: "map1-1s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb1-0",
+				categoryID: 1,
+				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh1-0",
+				currentValue: StatsFlags.CurrentSubAreaStrawberries[1][0],
+				maxValue: StatsFlags.TotalSubAreaStrawberries[1][0],
+				medals: 10,
+				reqID: "map1-0s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb1-1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh1-0",
+				currentValue: StatsFlags.CurrentSubAreaStrawberries[1][1],
+				maxValue: StatsFlags.TotalSubAreaStrawberries[1][1],
+				medals: 10,
+				reqID: "map1-1s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "map1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/MapCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_MapCh1",
+				currentValue: StatsFlags.CurrentTiles[1],
+				maxValue: StatsFlags.TotalTiles[1],
+				medals: 15
+			));
+			list.Add(new AchievementData(
+				achievementID: "strwb1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh1",
+				currentValue: StatsFlags.CurrentStrawberries[1],
+				maxValue: StatsFlags.TotalStrawberries[1],
+				medals: 15
+			));
+            list.Add(new AchievementData(
+				achievementID: "cass1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/CassetteSilver",
+				flag: "XaphanHelper_StatFlag_CassetteCh1",
+				currentValue: StatsFlags.Cassettes[1] ? 1 : 0,
+				maxValue: 1,
+				medals: 20
+			));
+            list.Add(new AchievementData(
+				achievementID: "heart1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/HeartSilver",
+				flag: "XaphanHelper_StatFlag_HeartCh1",
+				currentValue: StatsFlags.ASideHearts[1] ? 1 : 0,
+				maxValue: 1,
+				medals: 20
+			));
+            list.Add(new AchievementData(
+				achievementID: "bside1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/BSide",
+				flag: "XaphanHelper_StatFlag_BSideCh1",
+				currentValue: StatsFlags.BSideHearts[1] ? 1 : 0,
+				maxValue: 1,
+				medals: 25,
+				reqID: "cass1"
+            ));
+			list.Add(new AchievementData(
+				achievementID: "golden1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/Golden",
+				flag: "XaphanHelper_StatFlag_GoldenCh1-0",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_GoldenCh1-0") ? 1 : 0,
+				maxValue: 1,
+				medals: 50
+			));
+			list.Add(new AchievementData(
+				achievementID: "golden1-b",
+				categoryID: 1,
+				icon: "achievements/Xaphan/Golden",
+				flag: "XaphanHelper_StatFlag_GoldenCh1-1",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_GoldenCh1-1") ? 1 : 0,
+				maxValue: 1,
+				medals: 50,
+                reqID: "bside1"
+			));
 
             // Area 2
-            list.Add(new AchievementData("gem2-1", 2, "FreeAtLeast", "achievements/Xaphan/FreeAtLeast", "XaphanHelper_StatFlag_GemCh2", session.GetFlag("XaphanHelper_StatFlag_GemCh2") ? 1 : 0, 1, 10));
-            list.Add(new AchievementData("strwb2", 2, "StrawberriesInTheAbysses", "achievements/Xaphan/Strawberries", "XaphanHelper_StatFlag_StrawberriesCh2", StatsFlags.CurrentStrawberries[2], StatsFlags.TotalStrawberries[2], 20));
-            list.Add(new AchievementData("map2", 2, "AbyssExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh2", StatsFlags.CurrentTiles[2], StatsFlags.TotalTiles[2], 25));
-            list.Add(new AchievementData("boss2-1", 2, "NotAsLonelyAsIThought", "achievements/Xaphan/Boss", "XaphanHelper_StatFlag_BossCh2", session.GetFlag("XaphanHelper_StatFlag_BossCh2") ? 1 : 0, 1, 25));
-            list.Add(new AchievementData("boss2-1-cm", 2, "BringBackTheLight", "achievements/Xaphan/BossCM", "XaphanHelper_StatFlag_BossCMCh2", session.GetFlag("XaphanHelper_StatFlag_BossCMCh2") ? 1 : 0, 1, 50));
-            list.Add(new AchievementData("golden2", 2, "SurvivorOfTheAbysses", "achievements/Xaphan/Survivor", "XaphanHelper_StatFlag_GoldenCh2-0", session.GetFlag("XaphanHelper_StatFlag_GoldenCh2-0") ? 1 : 0, 1, 50));
+            list.Add(new AchievementData(
+				achievementID: "gem2-1",
+				categoryID: 2,
+				icon: "achievements/Xaphan/Gem2",
+				flag: "XaphanHelper_StatFlag_GemCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_GemCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+            list.Add(new AchievementData(
+				achievementID: "map2-0s",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-0-Visited",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][0] > 0 ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+			list.Add(new AchievementData(
+				achievementID: "map2-1s",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-1-Visited",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][1] > 0 ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+			list.Add(new AchievementData(
+				achievementID: "map2-2s",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-2-Visited",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][2] > 0 ? 1 : 0,
+				maxValue: 1,
+				medals: 5
+			));
+			list.Add(new AchievementData(
+				achievementID: "map2-0",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-0",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][0],
+				maxValue: StatsFlags.TotalSubAreaTiles[2][0],
+				medals: 10,
+				reqID: "map2-0s"
+			));
+			list.Add(new AchievementData(
+				achievementID: "map2-1",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-1",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][1],
+				maxValue: StatsFlags.TotalSubAreaTiles[2][1],
+				medals: 10,
+				reqID: "map2-1s"
+			));
+			list.Add(new AchievementData(
+				achievementID: "map2-2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_MapCh2-2",
+				currentValue: StatsFlags.CurrentSubAreaTiles[2][2],
+				maxValue: StatsFlags.TotalSubAreaTiles[2][2],
+				medals: 10,
+				reqID: "map2-2s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb2-0",
+				categoryID: 2,
+				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh2-0",
+				currentValue: StatsFlags.CurrentSubAreaStrawberries[2][0],
+				maxValue: StatsFlags.TotalSubAreaStrawberries[2][0],
+				medals: 10,
+				reqID: "map2-0s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb2-1",
+				categoryID: 2,
+				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh2-1",
+				currentValue: StatsFlags.CurrentSubAreaStrawberries[2][1],
+				maxValue: StatsFlags.TotalSubAreaStrawberries[2][1],
+				medals: 10,
+				reqID: "map2-1s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb2-2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh2-2",
+				currentValue: StatsFlags.CurrentSubAreaStrawberries[2][2],
+				maxValue: StatsFlags.TotalSubAreaStrawberries[2][2],
+				medals: 10,
+				reqID: "map2-2s"
+			));
+            list.Add(new AchievementData(
+				achievementID: "map2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/MapCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_MapCh2",
+				currentValue: StatsFlags.CurrentTiles[2],
+				maxValue: StatsFlags.TotalTiles[2],
+				medals: 15
+			));
+            list.Add(new AchievementData(
+				achievementID: "strwb2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_StrawberriesCh2",
+				currentValue: StatsFlags.CurrentStrawberries[2],
+				maxValue: StatsFlags.TotalStrawberries[2],
+				medals: 15
+			));
+            list.Add(new AchievementData(
+				achievementID: "cass2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/CassetteSilver",
+				flag: "XaphanHelper_StatFlag_CassetteCh2",
+				currentValue: StatsFlags.Cassettes[2] ? 1 : 0,
+				maxValue: 1,
+				medals: 20
+			));
+            list.Add(new AchievementData(
+                achievementID: "heart2",
+                categoryID: 2,
+                icon: "achievements/Xaphan/HeartSilver",
+                flag: "XaphanHelper_StatFlag_HeartCh2",
+                currentValue: StatsFlags.ASideHearts[2] ? 1 : 0,
+                maxValue: 1,
+                medals: 20
+            ));
+            list.Add(new AchievementData(
+				achievementID: "boss2-1",
+				categoryID: 2,
+				icon: "achievements/Xaphan/Boss",
+				flag: "XaphanHelper_StatFlag_BossCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_BossCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 25
+			));
+			list.Add(new AchievementData(
+				achievementID: "boss2-1cm",
+				categoryID: 2,
+				icon: "achievements/Xaphan/BossCM",
+				flag: "XaphanHelper_StatFlag_BossCMCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_BossCMCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 50,
+				reqID: "boss2-1"
+			));
+			list.Add(new AchievementData(
+				achievementID: "golden2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/Golden",
+				flag: "XaphanHelper_StatFlag_GoldenCh2-0",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_GoldenCh2-0") ? 1 : 0,
+				maxValue: 1,
+				medals: 50
+			));
 
-            if (SoCMVersion() >= new Version(3, 0, 0))
-            {
-                // Area 3
+			if (SoCMVersion() >= new Version(3, 0, 0))
+			{
+				// Area 3
 
-                // Area 4
-                list.Add(new AchievementData("map4", 4, "BasinExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh4", StatsFlags.CurrentTiles[4], StatsFlags.TotalTiles[4], 25));
+				// Area 4
+				list.Add(new AchievementData(
+					achievementID: "map4",
+					categoryID: 4,
+					icon: "achievements/Xaphan/MapCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_MapCh4",
+					currentValue: StatsFlags.CurrentTiles[4],
+					maxValue: StatsFlags.TotalTiles[4],
+					medals: 15
+				));
 
                 // Area 5
-                list.Add(new AchievementData("strwb5", 5, "StrawberriesInTheTerminal", "achievements/Xaphan/Strawberries", "XaphanHelper_StatFlag_StrawberriesCh5", StatsFlags.CurrentStrawberries[5], StatsFlags.TotalStrawberries[5], 20));
-                list.Add(new AchievementData("nrj5", 5, "EnergyInTheTerminal", "achievements/Xaphan/EnergyTanks", "XaphanHelper_StatFlag_EnergyTanksCh5", StatsFlags.CurrentEnergyTanks[5], StatsFlags.TotalEnergyTanks[5], 20, reqID: "upg2"));
-                list.Add(new AchievementData("dfrm5", 5, "ChipsInTheTerminal", "achievements/Xaphan/FireRateModules", "XaphanHelper_StatFlag_FireRateModulesCh5", StatsFlags.CurrentFireRateModules[5], StatsFlags.TotalFireRateModules[5], 20, reqID: "upg7"));
-                list.Add(new AchievementData("map5", 5, "TerminalExplorer", "achievements/Xaphan/Explorer", "XaphanHelper_StatFlag_MapCh5", StatsFlags.CurrentTiles[5], StatsFlags.TotalTiles[5], 25));
-            }
+                list.Add(new AchievementData(
+                    achievementID: "escp5",
+                    categoryID: 5,
+                    icon: "achievements/Xaphan/Escape",
+                    flag: "Ch4_Escape_Complete",
+                    currentValue: XaphanModule.ModSaveData.GlobalFlags.Contains("Xaphan/0_Ch4_Escape_Complete") ? 1 : 0,
+                    maxValue: 1,
+                    medals: 5
+                ));
+                list.Add(new AchievementData(
+					achievementID: "map5-0s",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-0-Visited",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][0] > 0 ? 1 : 0,
+					maxValue: 1,
+					medals: 5
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-1s",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-1-Visited",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][1] > 0 ? 1 : 0,
+					maxValue: 1,
+					medals: 5
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-2s",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-2-Visited",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][2] > 0 ? 1 : 0,
+					maxValue: 1,
+					medals: 5
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-3s",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-3-Visited",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][3] > 0 ? 1 : 0,
+					maxValue: 1,
+					medals: 5
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-0",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-0",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][0],
+					maxValue: StatsFlags.TotalSubAreaTiles[5][0],
+					medals: 10,
+					reqID: "map5-0s"
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-1",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-1",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][1],
+					maxValue: StatsFlags.TotalSubAreaTiles[5][1],
+					medals: 10,
+					reqID: "map5-1s"
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-2",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-2",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][2],
+					maxValue: StatsFlags.TotalSubAreaTiles[5][2],
+					medals: 10,
+					reqID: "map5-2s"
+				));
+				list.Add(new AchievementData(
+					achievementID: "map5-3",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_MapCh5-3",
+					currentValue: StatsFlags.CurrentSubAreaTiles[5][3],
+					maxValue: StatsFlags.TotalSubAreaTiles[5][3],
+					medals: 10,
+					reqID: "map5-3s"
+				));
+                list.Add(new AchievementData(
+					achievementID: "strwb5-0",
+					categoryID: 5,
+					icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_StrawberriesCh5-0",
+					currentValue: StatsFlags.CurrentSubAreaStrawberries[5][0],
+					maxValue: StatsFlags.TotalSubAreaStrawberries[5][0],
+					medals: 10,
+					reqID: "map5-0s"
+				));
+                list.Add(new AchievementData(
+					achievementID: "strwb5-1",
+					categoryID: 5,
+					icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_StrawberriesCh5-1",
+					currentValue: StatsFlags.CurrentSubAreaStrawberries[5][1],
+					maxValue: StatsFlags.TotalSubAreaStrawberries[5][1],
+					medals: 10,
+					reqID: "map5-1s"
+				));
+				list.Add(new AchievementData(
+					achievementID: "strwb5-3",
+					categoryID: 5,
+					icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
+					flag: "XaphanHelper_StatFlag_StrawberriesCh5-3",
+					currentValue: StatsFlags.CurrentSubAreaStrawberries[5][3],
+					maxValue: StatsFlags.TotalSubAreaStrawberries[5][3],
+					medals: 10,
+					reqID: "map5-3s"
+				));
+                list.Add(new AchievementData(
+					achievementID: "map5",
+					categoryID: 5,
+					icon: "achievements/Xaphan/MapCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_MapCh5",
+					currentValue: StatsFlags.CurrentTiles[5],
+					maxValue: StatsFlags.TotalTiles[5],
+					medals: 15
+				));
+                list.Add(new AchievementData(
+					achievementID: "strwb5",
+					categoryID: 5,
+					icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_StrawberriesCh5",
+					currentValue: StatsFlags.CurrentStrawberries[5],
+					maxValue: StatsFlags.TotalStrawberries[5],
+					medals: 15
+				));
+				list.Add(new AchievementData(
+					achievementID: "tank5",
+					categoryID: 5,
+					icon: "achievements/Xaphan/EnergyTankCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_EnergyTanksCh5",
+					currentValue: StatsFlags.CurrentEnergyTanks[5],
+					maxValue: StatsFlags.TotalEnergyTanks[5],
+					medals: 15,
+					reqID: "upg2"
+				));
+				list.Add(new AchievementData(
+					achievementID: "dfrm5",
+					categoryID: 5,
+					icon: "achievements/Xaphan/FireRateModuleCheckmarkSilver",
+					flag: "XaphanHelper_StatFlag_FireRateModulesCh5",
+					currentValue: StatsFlags.CurrentFireRateModules[5],
+					maxValue: StatsFlags.TotalFireRateModules[5],
+					medals: 15,
+					reqID: "upg7"
+				));
+			}
 
-            return list;
-        }
-    }
+			return list;
+		}
+	}
 }

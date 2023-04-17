@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Data;
 using Microsoft.Xna.Framework;
@@ -73,7 +72,11 @@ namespace Celeste.Mod.XaphanHelper
 
         public static int heartCount;
 
+        public static bool[] ASideHearts;
+
         public static bool[] BSideHearts;
+
+        public static bool[] Cassettes;
 
         public static int cassetteCount;
 
@@ -165,7 +168,9 @@ namespace Celeste.Mod.XaphanHelper
             TotalMissiles = new int[maxChapters];
             CurrentSuperMissiles = new int[maxChapters];
             TotalSuperMissiles = new int[maxChapters];
+            ASideHearts = new bool[maxChapters];
             BSideHearts = new bool[maxChapters];
+            Cassettes = new bool[maxChapters];
             CurrentStrawberries = new int[maxChapters];
             TotalStrawberries = new int[maxChapters];
             GoldensBerries = new bool[maxChapters, 3];
@@ -221,7 +226,9 @@ namespace Celeste.Mod.XaphanHelper
                 CurrentTiles = null;
                 TotalTiles = null;
             }
+            ASideHearts = null;
             BSideHearts = null;
+            Cassettes = null;
             CurrentStrawberries = null;
             TotalStrawberries = null;
             GoldensBerries = null;
@@ -261,12 +268,18 @@ namespace Celeste.Mod.XaphanHelper
                 string Prefix = self.Session.Area.GetLevelSet();
                 if (CurrentTiles != null && TotalTiles != null && XaphanModule.useIngameMap)
                 {
+                    int chaptersFullyExplored = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentTiles[i] == TotalTiles[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_MapCh" + i);
+                            chaptersFullyExplored++;
                         }
+                    }
+                    if (chaptersFullyExplored == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_Map");
                     }
                 }
                 if (CurrentSubAreaTiles != null && TotalSubAreaTiles != null && XaphanModule.useIngameMap)
@@ -292,72 +305,103 @@ namespace Celeste.Mod.XaphanHelper
                 }
                 if (CurrentEnergyTanks != null && TotalEnergyTanks != null)
                 {
+                    int ChaptersAllEnergyTanks = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentEnergyTanks[i] == TotalEnergyTanks[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTanksCh" + i);
+                            ChaptersAllEnergyTanks++;
                         }
                         if (CurrentEnergyTanks[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTank");
                         }
                     }
+                    if (ChaptersAllEnergyTanks == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_EnergyTanks");
+                    }
+
                 }
                 if (CurrentFireRateModules != null && TotalFireRateModules != null)
                 {
+                    int ChaptersAllFireRateModules = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentFireRateModules[i] == TotalFireRateModules[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_FireRateModulesCh" + i);
+                            ChaptersAllFireRateModules++;
                         }
                         if (CurrentFireRateModules[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_FireRateModule");
                         }
                     }
+                    if (ChaptersAllFireRateModules == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_FireRateModules");
+                    }
                 }
                 if (CurrentMissiles != null && TotalMissiles != null)
                 {
+                    int ChaptersAllMissiles = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentMissiles[i] == TotalMissiles[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_MissilesCh" + i);
+                            ChaptersAllMissiles++;
                         }
                         if (CurrentMissiles[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_Missile");
                         }
                     }
+                    if (ChaptersAllMissiles == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_Missiles");
+                    }
                 }
                 if (CurrentSuperMissiles != null && TotalSuperMissiles != null)
                 {
+                    int ChaptersAllSuperMissiles = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentSuperMissiles[i] == TotalSuperMissiles[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_SuperMissilesCh" + i);
+                            ChaptersAllSuperMissiles++;
                         }
                         if (CurrentSuperMissiles[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_SuperMissile");
                         }
                     }
+                    if (ChaptersAllSuperMissiles == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_SuperMissiles");
+                    }
                 }
                 if (CurrentStrawberries != null && TotalStrawberries != null)
                 {
+                    int ChaptersAllStrawberies = 0;
                     for (int i = !hasInterlude ? 1 : 0; i < maxChapters; i++)
                     {
                         if (CurrentStrawberries[i] == TotalStrawberries[i])
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_StrawberriesCh" + i);
+                            ChaptersAllStrawberies++;
                         }
                         if (CurrentStrawberries[i] > 0)
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_Strawberry");
                         }
+                    }
+                    if (ChaptersAllStrawberies == (!hasInterlude ? maxChapters - 1 : maxChapters))
+                    {
+                        self.Session.SetFlag("XaphanHelper_StatFlag_Strawberries");
                     }
                 }
                 if (CurrentSubAreaStrawberries != null && TotalSubAreaStrawberries != null && XaphanModule.useIngameMap)
@@ -388,6 +432,20 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     // Other flags
 
+                    if (Cassettes != null)
+                    {
+                        if (Cassettes[i] == true)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_CassetteCh" + i);
+                        }
+                    }
+                    if (ASideHearts != null)
+                    {
+                        if (ASideHearts[i] == true)
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_HeartCh" + i);
+                        }
+                    }
                     if (BSideHearts != null)
                     {
                         if (BSideHearts[i] == true)
@@ -493,23 +551,38 @@ namespace Celeste.Mod.XaphanHelper
 
         private static IEnumerator onHeartGemCollectRoutine(On.Celeste.HeartGem.orig_CollectRoutine orig, HeartGem self, Player player)
         {
-            if (useStatsFlagsController && self.SceneAs<Level>().Session.Area.Mode == 0 && !SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Modes[0].HeartGem)
-            {
-                heartCount += 1;
-            }
-            if (useStatsFlagsController && (int)self.SceneAs<Level>().Session.Area.Mode == 1 && BSideHearts != null)
+            if (useStatsFlagsController)
             {
                 int chapterIndex = self.SceneAs<Level>().Session.Area.ChapterIndex;
-                BSideHearts[chapterIndex] = true;
+                if (self.SceneAs<Level>().Session.Area.Mode == 0 && !SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Modes[0].HeartGem)
+                {
+                    heartCount += 1;
+                }
+                if (self.SceneAs<Level>().Session.Area.Mode == 0 && ASideHearts != null)
+                {
+                    ASideHearts[chapterIndex] = true;
+                }
+                if ((int)self.SceneAs<Level>().Session.Area.Mode == 1 && BSideHearts != null)
+                {
+                    BSideHearts[chapterIndex] = true;
+                }
             }
             yield return new SwapImmediately(orig(self, player));
         }
 
         private static IEnumerator OnCassetteCollectRoutine(On.Celeste.Cassette.orig_CollectRoutine orig, Cassette self, Player player)
         {
-            if (useStatsFlagsController && !SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Cassette)
+            if (useStatsFlagsController)
             {
-                cassetteCount += 1;
+                int chapterIndex = self.SceneAs<Level>().Session.Area.ChapterIndex;
+                if (!SaveData.Instance.Areas_Safe[self.SceneAs<Level>().Session.Area.ID].Cassette)
+                {
+                    cassetteCount += 1;
+                }
+                if (Cassettes != null)
+                {
+                    Cassettes[chapterIndex] = true;
+                }
             }
             yield return new SwapImmediately(orig(self, player));
 
@@ -636,6 +709,7 @@ namespace Celeste.Mod.XaphanHelper
                     if (item.Modes[0].HeartGem)
                     {
                         heartCount += 1;
+                        ASideHearts[chapterIndex] = true;
                     }
                     AreaData area = AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + chapterIndex - (!hasInterlude ? 1 : 0))];
                     if (area.HasMode(AreaMode.BSide))
@@ -653,6 +727,7 @@ namespace Celeste.Mod.XaphanHelper
                     if (item.Cassette)
                     {
                         cassetteCount += 1;
+                        Cassettes[chapterIndex] = true;
                     }
                 }
             }
