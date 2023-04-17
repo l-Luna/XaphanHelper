@@ -28,7 +28,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public AchievementPopup()
         {
             Tag = (Tags.HUD | Tags.Persistent | Tags.PauseUpdate | Tags.TransitionUpdate);
-            Position = new Vector2(Engine.Width - 720f, Engine.Height - 149f);
+            Position = new Vector2(0f, Engine.Height - 149f);
             MedalIcon = GFX.Gui["achievements/medal"];
             Visible = false;
             Depth = -1000000;
@@ -85,17 +85,17 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Render()
         {
             base.Render();
-            Draw.Rect(Position, 720f, 149f, Color.Black * alpha);
-            Draw.Rect(Position, 720f, 5f, Color.Gold * alpha);
+            Draw.Rect(Position, 750f, 149f, Color.Black * alpha);
+            Draw.Rect(Position, 750f, 5f, Color.Gold * alpha);
             Draw.Rect(Position + Vector2.UnitY * 5f, 5f, 139f, Color.Gold * alpha);
-            Draw.Rect(Position + new Vector2(715f, 5f), 5f, 139f, Color.Gold * alpha);
-            Draw.Rect(Position + Vector2.UnitY * 144f, 720f, 5f, Color.Gold * alpha);
+            Draw.Rect(Position + new Vector2(745f, 5f), 5f, 139f, Color.Gold * alpha);
+            Draw.Rect(Position + Vector2.UnitY * 144f, 750f, 5f, Color.Gold * alpha);
             Icon.Draw(Position + Vector2.One * 7f, Vector2.Zero, Color.White * alpha, 0.9f);
-            float lenght = ActiveFont.Measure(Name).X * 0.8f;
+            float lenght = ActiveFont.Measure(Name).X * 0.6f;
             float descHeight = ActiveFont.Measure(Description).Y * 0.4f;
-            ActiveFont.DrawOutline(Name, Position + new Vector2(167f + lenght / 2 - 10, 50f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One * 0.8f, Color.White * alpha, 2f, Color.Black * alpha);
-            ActiveFont.DrawOutline(Description, Position + new Vector2(159f, 70f - descHeight / 2), Vector2.Zero, Vector2.One * 0.4f, Color.Gray * alpha, 2f, Color.Black * alpha);
-            ActiveFont.DrawOutline(MedalsValue, Position + new Vector2(159f, 70f + descHeight / 2 + 5f), Vector2.Zero, Vector2.One * 0.5f, Color.Gold * alpha, 2f, Color.Black * alpha);
+            ActiveFont.DrawOutline(Name, Position + new Vector2(167f + lenght / 2 - 10, 50f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One * 0.6f, Color.White * alpha, 2f, Color.Black * alpha);
+            ActiveFont.DrawOutline(Description, Position + new Vector2(158f, 70f - descHeight / 2), Vector2.Zero, Vector2.One * 0.4f, Color.Gray * alpha, 2f, Color.Black * alpha);
+            ActiveFont.DrawOutline(MedalsValue, Position + new Vector2(158f, 70f + descHeight / 2 + 5f), Vector2.Zero, Vector2.One * 0.5f, Color.Gold * alpha, 2f, Color.Black * alpha);
             lenght = ActiveFont.Measure(MedalsValue).X * 0.5f;
             MedalIcon.Draw(Position + new Vector2(159f + lenght + 10f, 70f + descHeight / 2), Vector2.Zero, Color.White * alpha, 0.35f);
         }

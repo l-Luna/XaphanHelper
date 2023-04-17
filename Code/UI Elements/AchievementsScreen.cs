@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Microsoft.Xna.Framework;
 using Monocle;
-using static Celeste.Mod.XaphanHelper.UI_Elements.AchievementsDisplay;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -77,7 +76,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     player.StateMachine.State = Player.StDummy;
                     player.DummyAutoAnimate = false;
                 }
-                foreach (CategoryDisplay categoryDisplay in level.Tracker.GetEntities<CategoryDisplay>())
+                foreach (AchievementsDisplay.CategoryDisplay categoryDisplay in level.Tracker.GetEntities<AchievementsDisplay.CategoryDisplay>())
                 {
                     if (categoryDisplay.Selected)
                     {

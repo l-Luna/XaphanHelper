@@ -297,16 +297,16 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         Draw.Rect(Position + new Vector2(width - 5f, 5f), 5f, height - 10f, Color.Yellow * selectedAlpha);
                     }
                     icon.Draw(Position + Vector2.One * 6, Vector2.Zero, Color.White, 0.9f);
-                    float lenght = ActiveFont.Measure(name).X;
+                    float lenght = ActiveFont.Measure(name).X * 0.75f;
                     float descHeight = ActiveFont.Measure(description).Y * 0.5f;
-                    ActiveFont.DrawOutline(name, Position + new Vector2(167f + lenght / 2 - 10, 60f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One, completionPercent == 100 ? Color.Gold : Color.White, 2f, Color.Black);
-                    ActiveFont.DrawOutline(description, Position + new Vector2(160f, 80f - descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
-                    ActiveFont.DrawOutline(completion, Position + new Vector2(160f, 80f + descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
+                    ActiveFont.DrawOutline(name, Position + new Vector2(167f + lenght / 2 - 10, 55f - descHeight / 2), new Vector2(0.5f, 0.5f), Vector2.One * 0.75f, completionPercent == 100 ? Color.Gold : Color.White, 2f, Color.Black);
+                    ActiveFont.DrawOutline(description, Position + new Vector2(158f, 75f - descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
+                    ActiveFont.DrawOutline(completion, Position + new Vector2(158f, 75f + descHeight / 2), Vector2.Zero, Vector2.One * 0.5f, Color.Gray, 2f, Color.Black);
                     if (medalIcon != null)
                     {
-                        medalIcon.Draw(Position + new Vector2(width - 125f, 9f));
+                        medalIcon.Draw(Position + new Vector2(width - 115f, 9f));
                         lenght = ActiveFont.Measure(medals).X;
-                        ActiveFont.DrawOutline(medals, Position + new Vector2(width - 82.5f - lenght / 2, 105f), new Vector2(0f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
+                        ActiveFont.DrawOutline(medals, Position + new Vector2(width - 72.5f - lenght / 2, 106f), new Vector2(0f, 0.5f), Vector2.One, Color.White, 2f, Color.Black);
                     }
                 }
             }

@@ -267,7 +267,7 @@
 	XaphanHelper_UI_Completed= Terminés
 	XaphanHelper_UI_Hidden= caché(s)
 	XaphanHelper_UI_LockedAchievementDesc= Ce succès est actuellement vérouillé
-	XaphanHelper_UI_AchievementToUnlock= Succès requis pour devérouiller:
+	XaphanHelper_UI_AchievementToUnlock= Succès requis pour devérouiller :
 	XaphanHelper_UI_selectCategory= Seléctionner catégorie
 	XaphanHelper_UI_back= Retour
 
