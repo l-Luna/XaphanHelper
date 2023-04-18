@@ -231,7 +231,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Spring_BounceAnimate.Invoke(spring, null);
                 Bottom = spring.Top;
-                Push(new Vector2(active ? (goLeft ? -100 : 100) : 0, -240), goLeft ? -Vector2.UnitX : Vector2.UnitX);
+                Push(new Vector2(active ? 100 : 0, -240), goLeft ? -Vector2.UnitX : Vector2.UnitX);
             }
             else if (spring.Orientation == Spring.Orientations.WallLeft)
             {
