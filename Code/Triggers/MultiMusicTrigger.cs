@@ -18,6 +18,8 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         public string trackBoth;
 
+        public bool removeWhenOutside;
+
         public MultiMusicTrigger(EntityData data, Vector2 offset) : base(data, offset)
         {
             flagA = data.Attr("flagA", "");
@@ -26,6 +28,16 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             trackA = data.Attr("trackA", "");
             trackB = data.Attr("trackB", "");
             trackBoth = data.Attr("trackBoth", "");
+            removeWhenOutside = data.Bool("removeWhenOutside");
+        }
+
+        public override void Update()
+        {
+            Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+            if (player != null && !CollideCheck(player) && removeWhenOutside)
+            {
+                RemoveSelf();
+            }
         }
 
         public override void OnStay(Player player)

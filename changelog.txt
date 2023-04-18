@@ -2,6 +2,7 @@ Version 1.0.55 :
 - Added "Tutorial" attribute to Drone Switches
 - Added "Only Need One Flag" attribute to Bubble Doors
 - Added "Inverted" attribute to Reset Flags Trigger
+- Added "Remove When Outside" attribute to Multi Music Trigger
 - Added "Camera Lock" and "Draw Projectiles Outline" attributes to Custom Badeline Boss
 - Added "Render Method" attribute to Slopes
 - Increased the size of Drone Switches to make it easier to aim at them

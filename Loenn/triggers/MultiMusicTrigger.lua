@@ -2,7 +2,7 @@ local MultiMusicTrigger = {}
 
 MultiMusicTrigger.name = "XaphanHelper/MultiMusicTrigger"
 MultiMusicTrigger.fieldOrder = {
-    "x", "y", "width", "height", "flagA", "flagB", "trackNone", "trackA", "trackB", "trackBoth"
+    "x", "y", "width", "height", "flagA", "flagB", "trackNone", "trackA", "trackB", "trackBoth", "removeWhenOutside"
 }
 MultiMusicTrigger.placements = {
     name = "MultiMusicTrigger",
@@ -12,7 +12,8 @@ MultiMusicTrigger.placements = {
         trackNone = "",
         trackA = "",
         trackB= "",
-        trackBoth = ""
+        trackBoth = "",
+        removeWhenOutside = false
     }
 }
 

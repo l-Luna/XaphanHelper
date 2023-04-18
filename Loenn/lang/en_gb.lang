@@ -661,6 +661,7 @@ triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackA=The music 
 triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackB=The music event that play when the player enter this trigger and ONLY the flag in Flag B is set.
 triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackBoth=The music event that play when the player enter this trigger and both flags in Flag A AND Flag B are set.
 triggers.XaphanHelper/MultiMusicTrigger.attributes.description.trackNone=The music event that play when the player enter this trigger and both flags in Flag A AND Flag B are NOT set.
+triggers.XaphanHelper/MultiMusicTrigger.attributes.description.removeWhenOutside=If true, the trigger is removed if the player spawn or move outside of it.
 
 # ResetFlagsTrigger
 triggers.XaphanHelper/ResetFlagsTrigger.placements.name.ResetFlagsTrigger=Reset Flags
