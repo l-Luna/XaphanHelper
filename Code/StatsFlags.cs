@@ -480,6 +480,25 @@ namespace Celeste.Mod.XaphanHelper
                         {
                             self.Session.SetFlag("XaphanHelper_StatFlag_BossCMCh" + i);
                         }
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Bubbledoor_Red"))
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_LockRedCh" + i);
+                        }
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Bubbledoor_Green"))
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_LockGreenCh" + i);
+                        }
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + i + "_Bubbledoor_Yellow"))
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_LockYellowCh" + i);
+                        }
+
+                        // Chapter Specific
+
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch2_Temple_Activated"))
+                        {
+                            self.Session.SetFlag("XaphanHelper_StatFlag_TempleCh2");
+                        }
                     }
                 }
                 if (self.Session.Area.Mode == 0 && self.Session.Area.LevelSet == "Xaphan/0" && !fixedAchievements)

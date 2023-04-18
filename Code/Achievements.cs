@@ -178,8 +178,8 @@ namespace Celeste.Mod.XaphanHelper
 					currentValue: session.GetFlag("XaphanHelper_StatFlag_Missile") ? 1 : 0,
 					maxValue: 1,
 					medals: 10,
-					reqID: "upg7"
-				));
+					reqID: "upg8"
+                ));
             }
 
 			int currentTotalStrawberries = StatsFlags.CurrentStrawberries[1] + StatsFlags.CurrentStrawberries[2] + StatsFlags.CurrentStrawberries[3] + StatsFlags.CurrentStrawberries[4] + StatsFlags.CurrentStrawberries[5];
@@ -281,8 +281,9 @@ namespace Celeste.Mod.XaphanHelper
 				flag: "XaphanHelper_StatFlag_GemCh1",
 				currentValue: session.GetFlag("XaphanHelper_StatFlag_GemCh1") ? 1 : 0,
 				maxValue: 1,
-				medals: 5
-			));
+				medals: 5,
+                hidden: true
+            ));
             list.Add(new AchievementData(
 				achievementID: "map1-0s",
 				categoryID: 1,
@@ -415,7 +416,48 @@ namespace Celeste.Mod.XaphanHelper
 				flag: "XaphanHelper_StatFlag_GemCh2",
 				currentValue: session.GetFlag("XaphanHelper_StatFlag_GemCh2") ? 1 : 0,
 				maxValue: 1,
-				medals: 5
+				medals: 5,
+                hidden: true
+            ));
+            list.Add(new AchievementData(
+				achievementID: "lock2-0",
+				categoryID: 2,
+				icon: "achievements/Xaphan/LockTemple",
+				flag: "XaphanHelper_StatFlag_TempleCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_TempleCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+            list.Add(new AchievementData(
+				achievementID: "lock2-1",
+				categoryID: 2,
+				icon: "achievements/Xaphan/LockRed",
+				flag: "XaphanHelper_StatFlag_LockRedCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_LockRedCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+            list.Add(new AchievementData(
+				achievementID: "lock2-2",
+				categoryID: 2,
+				icon: "achievements/Xaphan/LockGreen",
+				flag: "XaphanHelper_StatFlag_LockGreenCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_LockGreenCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
+			));
+            list.Add(new AchievementData(
+				achievementID: "lock2-3",
+				categoryID: 2,
+				icon: "achievements/Xaphan/LockYellow",
+				flag: "XaphanHelper_StatFlag_LockYellowCh2",
+				currentValue: session.GetFlag("XaphanHelper_StatFlag_LockYellowCh2") ? 1 : 0,
+				maxValue: 1,
+				medals: 5,
+				hidden: true
 			));
             list.Add(new AchievementData(
 				achievementID: "map2-0s",
@@ -586,13 +628,24 @@ namespace Celeste.Mod.XaphanHelper
 
                 // Area 5
                 list.Add(new AchievementData(
+					achievementID: "gem5-1",
+					categoryID: 5,
+					icon: "achievements/Xaphan/Gem5",
+					flag: "XaphanHelper_StatFlag_GemCh5",
+					currentValue: session.GetFlag("XaphanHelper_StatFlag_GemCh5") ? 1 : 0,
+					maxValue: 1,
+					medals: 5,
+					hidden: true
+				));
+                list.Add(new AchievementData(
                     achievementID: "escp5",
                     categoryID: 5,
                     icon: "achievements/Xaphan/Escape",
                     flag: "Ch4_Escape_Complete",
                     currentValue: XaphanModule.ModSaveData.GlobalFlags.Contains("Xaphan/0_Ch4_Escape_Complete") ? 1 : 0,
                     maxValue: 1,
-                    medals: 5
+                    medals: 5,
+                    hidden: true
                 ));
                 list.Add(new AchievementData(
 					achievementID: "map5-0s",

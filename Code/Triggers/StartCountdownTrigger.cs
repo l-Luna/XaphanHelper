@@ -46,7 +46,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
 
         public bool Canceled;
 
-        private Vector2 SpawnPosition;
+        public Vector2 SpawnPosition;
 
         public StartCountdownTrigger(EntityData data, Vector2 offset, EntityID ID) : base(data, offset)
         {

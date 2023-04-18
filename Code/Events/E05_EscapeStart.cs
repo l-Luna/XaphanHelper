@@ -13,6 +13,8 @@ namespace Celeste.Mod.XaphanHelper.Events
     {
         private Player player;
 
+        private bool playerHasMoved;
+
         public EventInstance alarmSfx;
 
         public E05_EscapeStart(Player player, Level level)
@@ -32,8 +34,12 @@ namespace Celeste.Mod.XaphanHelper.Events
         {
             if (!level.Session.GetFlag("Ch4_Escape_Complete"))
             {
-                while (!level.Session.GetFlag("Gem_Collected"))
+                while (!level.Session.GetFlag("Gem_Collected") || !playerHasMoved)
                 {
+                    if (player != null && player.Speed != Vector2.Zero)
+                    {
+                        playerHasMoved = true;
+                    }
                     yield return null;
                 }
                 if (!level.Session.GetFlag("Lab_Escape"))
@@ -41,8 +47,11 @@ namespace Celeste.Mod.XaphanHelper.Events
                     alarmSfx = Audio.Play("event:/game/xaphan/alarm");
                     StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
                     Vector2 triggerStartPosition = trigger.Position;
-                    trigger.Position = player.Position - Vector2.UnitY * 16;
+                    trigger.SpawnPosition = level.Session.GetSpawnPoint(player.Position);
+                    level.Session.RespawnPoint = trigger.SpawnPosition;
+                    trigger.Position = player.Position - new Vector2(trigger.Width / 2, trigger.Height / 2);
                     yield return 0.01f;
+                    XaphanModule.ModSaveData.SavedSpawn[level.Session.Area.LevelSet] = (Vector2)level.Session.RespawnPoint - new Vector2(level.Bounds.Left, level.Bounds.Top);
                     level.Session.SetFlag("Lab_Escape", true);
                     trigger.Position = triggerStartPosition;
                     float timer = 2f;
