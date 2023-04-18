@@ -141,11 +141,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X + 18, (int)Position.Y + 24, 1, 1);
             foreach (Conveyor conveyor in SceneAs<Level>().Tracker.GetEntities<Conveyor>())
             {
-                if (CollideCheck(conveyor, BottomCenter))
+                if (Scene.CollideCheck(BottomHit, conveyor))
                 {
                     conveyorSpeed = conveyor.conveyorSpeed;
                     conveyorDir = conveyor.direction;
                     break;
+                }
+                else
+                {
+                    conveyorSpeed = 0;
+                    conveyorDir = 0;
                 }
             }
             int conveyorSpeedAdjust = conveyorSpeed * conveyorDir;
