@@ -92,12 +92,17 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             base.Update();
             if (message != null && (SceneAs<Level>().Session.Level != startRoom))
             {
-                message.RemoveSelf();
+                message.Show = false;
                 if (!Canceled)
                 {
                     DisplayTimer(true);
                 }
             }
+        }
+
+        public void ChangeSpawnPosition(Vector2 position)
+        {
+            SpawnPosition = position;
         }
 
         public override void OnStay(Player player)
@@ -185,7 +190,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
             }
             if (message != null)
             {
-                message.RemoveSelf();
+                message.Show = false;
             }
         }
     }

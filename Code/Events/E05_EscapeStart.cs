@@ -40,6 +40,10 @@ namespace Celeste.Mod.XaphanHelper.Events
                     {
                         playerHasMoved = true;
                     }
+                    if (!level.Session.GetFlag("Lab_Escape"))
+                    {
+                        level.Session.SetFlag("Lab_Escape_Music", false);
+                    }
                     yield return null;
                 }
                 if (!level.Session.GetFlag("Lab_Escape"))
@@ -47,9 +51,9 @@ namespace Celeste.Mod.XaphanHelper.Events
                     alarmSfx = Audio.Play("event:/game/xaphan/alarm");
                     StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
                     Vector2 triggerStartPosition = trigger.Position;
-                    trigger.SpawnPosition = level.Session.GetSpawnPoint(player.Position);
-                    level.Session.RespawnPoint = trigger.SpawnPosition;
                     trigger.Position = player.Position - new Vector2(trigger.Width / 2, trigger.Height / 2);
+                    trigger.ChangeSpawnPosition(new Vector2(92f, 152f));
+                    level.Session.RespawnPoint = level.Session.GetSpawnPoint(trigger.Center);
                     yield return 0.01f;
                     XaphanModule.ModSaveData.SavedSpawn[level.Session.Area.LevelSet] = (Vector2)level.Session.RespawnPoint - new Vector2(level.Bounds.Left, level.Bounds.Top);
                     level.Session.SetFlag("Lab_Escape", true);
@@ -65,6 +69,7 @@ namespace Celeste.Mod.XaphanHelper.Events
                             countdownStarted = true;
                         }
                     }
+                    level.Session.SetFlag("Lab_Escape_Music", true);
                     level.Session.Audio.Music.Event = SFX.EventnameByHandle("event:/music/xaphan/lvl_0_escape");
                     level.Session.Audio.Apply(forceSixteenthNoteHack: false);
                     CountdownDisplay display = null;

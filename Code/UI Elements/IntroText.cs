@@ -183,7 +183,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                     else
                     {
-                        ActiveFont.DrawOutline(c.ToString(), value + new Vector2(x2 * Scale, (num4 + num6) * 2), new Vector2(0.5f, 0.5f), new Vector2(x, Scale), Color * num, 2f, Color.Black);
+                        ActiveFont.DrawOutline(c.ToString(), value + new Vector2(x2 * Scale, (num4 + num6) * 2), new Vector2(0.5f, 0.5f), new Vector2(x, Scale), Color * num, 2f, Color.Black * num);
                     }
                     num3++;
                 }
