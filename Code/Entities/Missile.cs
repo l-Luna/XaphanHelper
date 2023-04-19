@@ -352,7 +352,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 if (CollideCheck(workRobot, Position + dir))
                 {
-                    workRobot.Push(new Vector2(SuperMissile ? 150 : 75, SuperMissile ? -75 : -35.5f), dir);
+                    if (!SuperMissile)
+                    {
+                        workRobot.Push(new Vector2(150, -75), dir);
+                    }
+                    else
+                    {
+                        // To Do : Destroy the Robot
+                    }
                 }
             }
             if (XaphanModule.useMetroidGameplay)

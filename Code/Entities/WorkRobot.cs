@@ -118,7 +118,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 else
                 {
-                    Add(ActiveRoutine = new Coroutine(DeActivate(true)));
+                    sprite.Play("idle");
+                    int value = size == "Small" ? 2 : size == "Medium" ? 3 : 4;
+                    Collider.Height -= value;
+                    sprite.Position.Y -= value;
+                    MoveV(value, 0);
                 }
             }
             else
@@ -136,7 +140,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 SpeedH = 0;
             }
-            Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + 24 - (active ? 0 : 2), width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + 24 - (active ? 0 : 3), width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + 24 - (active ? 0 : 4), width - 2, 1);
+            Rectangle BottomSlideHit = size == "Small" ? new Rectangle((int)Position.X + 5, (int)Position.Y + (int)Collider.Height + 7, width - 4, 1) : size == "Medium" ? new Rectangle((int)Position.X + 2, (int)Position.Y + (int)Collider.Height - 2, width - 4, 1) : new Rectangle((int)Position.X, (int)Position.Y + (int)Collider.Height - 11, width - 4, 1);
+            Rectangle BottomRightHit = size == "Small" ? new Rectangle((int)Position.X + 3, (int)Position.Y + (int)Collider.Height + 7, 2, 1) : size == "Medium" ? new Rectangle((int)Position.X, (int)Position.Y + (int)Collider.Height - 2, 2, 1) : new Rectangle((int)Position.X - 2, (int)Position.Y + (int)Collider.Height - 11, 2, 1);
+            Rectangle BottomLeftHit = size == "Small" ? new Rectangle((int)Position.X + 1 + width, (int)Position.Y + (int)Collider.Height + 7, 2, 1) : size == "Medium" ? new Rectangle((int)Position.X - 2 + width, (int)Position.Y + (int)Collider.Height - 2, 2, 1) : new Rectangle((int)Position.X - 4 + width, (int)Position.Y + (int)Collider.Height - 11, 2, 1);
+            if (!(Scene.CollideCheck<Solid>(BottomSlideHit) || Scene.CollideCheck<JumpThru>(BottomSlideHit)) && (Scene.CollideCheck<Solid>(BottomRightHit) || Scene.CollideCheck<JumpThru>(BottomRightHit)))
+            {
+                MoveHCollideSolids(1, false);
+            }
+            if (!(Scene.CollideCheck<Solid>(BottomSlideHit) || Scene.CollideCheck<JumpThru>(BottomSlideHit)) && (Scene.CollideCheck<Solid>(BottomLeftHit) || Scene.CollideCheck<JumpThru>(BottomLeftHit)))
+            {
+                MoveHCollideSolids(-1, false);
+            }
+            Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + (int)Collider.Height + 7, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + (int)Collider.Height - 2, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + (int)Collider.Height - 11, width - 2, 1);
             Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 2, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X - 3, (int)Position.Y + 24, 1, 1);
             Rectangle RightHit = size == "Small" ? new Rectangle((int)Position.X + 13, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X + 15, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X + 18, (int)Position.Y + 24, 1, 1);
             foreach (Conveyor conveyor in SceneAs<Level>().Tracker.GetEntities<Conveyor>())
@@ -180,9 +195,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             if (!string.IsNullOrEmpty(flag) && !TurnAroundRoutine.Active && !ActiveRoutine.Active)
             {
-                if ((!pushed || (pushed && sprite.CurrentAnimationID == "stun")) && (Scene.CollideCheck<Solid>(BottomHit) || Scene.CollideCheck<JumpThru>(BottomHit)))
+                if ((!pushed || (pushed && sprite.CurrentAnimationID == "stun")) && (Scene.CollideCheck<Solid>(BottomHit) || Scene.CollideCheck<JumpThru>(BottomHit)) && !active)
                 {
-                    if ((goLeft && (Scene.CollideCheck<Solid>(LeftHit) || Scene.CollideCheck<JumpThru>(LeftHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f)) || (!goLeft && (Scene.CollideCheck<Solid>(RightHit) || Scene.CollideCheck<JumpThru>(RightHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f)))
+                    if ((goLeft && (Scene.CollideCheck<Solid>(LeftHit) || Scene.CollideCheck<JumpThru>(LeftHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * -1f)) || (!goLeft && (Scene.CollideCheck<Solid>(RightHit) || Scene.CollideCheck<JumpThru>(RightHit)) && !CollideCheck<Solid>(Position + Vector2.UnitX * 1f)) || Scene.CollideCheck<Conveyor>(BottomHit))
                     {
                         SpeedH = conveyorSpeedAdjust;
                     }
@@ -300,19 +315,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private IEnumerator DeActivate(bool immediate = false)
         {
             sprite.Play("deactivate");
-            int value = size == "Small" ? 2 : size == "Medium" ? 3 : 4;
-            if (immediate)
+            while (sprite.CurrentAnimationFrame <= sprite.CurrentAnimationTotalFrames - 1)
             {
-                Collider.Height -= value;
-                sprite.Position.Y -= value;
-                MoveV(value, 0);
-            }
-            else
-            {
-                while (sprite.CurrentAnimationFrame <= sprite.CurrentAnimationTotalFrames - 1)
-                {
-                    yield return null;
-                }
+                yield return null;
             }
             active = false;
             sprite.Play("idle");
