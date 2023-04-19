@@ -143,13 +143,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Rectangle BottomSlideHit = size == "Small" ? new Rectangle((int)Position.X + 5, (int)Position.Y + (int)Collider.Height + 7, width - 4, 1) : size == "Medium" ? new Rectangle((int)Position.X + 2, (int)Position.Y + (int)Collider.Height - 2, width - 4, 1) : new Rectangle((int)Position.X, (int)Position.Y + (int)Collider.Height - 11, width - 4, 1);
             Rectangle BottomRightHit = size == "Small" ? new Rectangle((int)Position.X + 3, (int)Position.Y + (int)Collider.Height + 7, 2, 1) : size == "Medium" ? new Rectangle((int)Position.X, (int)Position.Y + (int)Collider.Height - 2, 2, 1) : new Rectangle((int)Position.X - 2, (int)Position.Y + (int)Collider.Height - 11, 2, 1);
             Rectangle BottomLeftHit = size == "Small" ? new Rectangle((int)Position.X + 1 + width, (int)Position.Y + (int)Collider.Height + 7, 2, 1) : size == "Medium" ? new Rectangle((int)Position.X - 2 + width, (int)Position.Y + (int)Collider.Height - 2, 2, 1) : new Rectangle((int)Position.X - 4 + width, (int)Position.Y + (int)Collider.Height - 11, 2, 1);
-            if (!(Scene.CollideCheck<Solid>(BottomSlideHit) || Scene.CollideCheck<JumpThru>(BottomSlideHit)) && (Scene.CollideCheck<Solid>(BottomRightHit) || Scene.CollideCheck<JumpThru>(BottomRightHit)))
+            if (!(Scene.CollideCheck<Solid>(BottomSlideHit) || Scene.CollideCheck<JumpThru>(BottomSlideHit)))
             {
-                MoveHCollideSolids(1, false);
-            }
-            if (!(Scene.CollideCheck<Solid>(BottomSlideHit) || Scene.CollideCheck<JumpThru>(BottomSlideHit)) && (Scene.CollideCheck<Solid>(BottomLeftHit) || Scene.CollideCheck<JumpThru>(BottomLeftHit)))
-            {
-                MoveHCollideSolids(-1, false);
+                if (Scene.CollideCheck<Solid>(BottomRightHit) || Scene.CollideCheck<JumpThru>(BottomRightHit))
+                {
+                    MoveHCollideSolids(1, false);
+                }
+                else if (Scene.CollideCheck<Solid>(BottomLeftHit) || Scene.CollideCheck<JumpThru>(BottomLeftHit))
+                {
+                    MoveHCollideSolids(-1, false);
+                }
             }
             Rectangle BottomHit = size == "Small" ? new Rectangle((int)Position.X + 4, (int)Position.Y + (int)Collider.Height + 7, width - 2, 1) : size == "Medium" ? new Rectangle((int)Position.X + 1, (int)Position.Y + (int)Collider.Height - 2, width - 2, 1) : new Rectangle((int)Position.X - 1, (int)Position.Y + (int)Collider.Height - 11, width - 2, 1);
             Rectangle LeftHit = size == "Small" ? new Rectangle((int)Position.X + 2, (int)Position.Y + 24, 1, 1) : size == "Medium" ? new Rectangle((int)Position.X - 1, (int)Position.Y + 24, 1, 1) : new Rectangle((int)Position.X - 3, (int)Position.Y + 24, 1, 1);
