@@ -1,12 +1,12 @@
 local InGameMapTilesController = {}
-local tilesList = {"None", "Middle", "TopEdge", "BottomEdge", "LeftsideEdge", "RightsideEdge", "SingleHorizontalLeftEdge", "SingleHorizontalRightEdge", "SingleHorizontalMiddle", "SingleVerticalTopEdge", "SingleVerticalBottomEdge", "SingleVerticalMiddle", "AllWalls", "UpperLeftCorner", "UpperRightCorner", "LowerLeftCorner", "LowerRightCorner", "UpperLeftSlopeCorner", "UpperRightSlopeCorner", "LowerLeftSlopeCorner", "LowerRightSlopeCorner", "UpperLeftSlightSlopeCornerStart", "UpperLeftSlightSlopeCornerEnd", "UpperRightSlightSlopeCornerStart", "UpperRightSlightSlopeCornerEnd", "LowerLeftSlightSlopeCornerStart", "LowerLeftSlightSlopeCornerEnd", "LowerRightSlightSlopeCornerStart", "LowerRightSlightSlopeCornerEnd", "UpperLeftHalfSlopeCorner", "UpperRightHalfSlopeCorner", "LowerLeftHalfSlopeCorner", "LowerRightHalfSlopeCorner", "ElevatorShaft", "ElevatorUpAllWalls", "ElevatorDownAllWalls", "ElevatorUpSingleHorizontalLeftEdge", "ElevatorUpSingleHorizontalRightEdge", "ElevatorDownSingleHorizontalLeftEdge", "ElevatorDownSingleHorizontalRightEdge", "UpArrow", "DownArrow", "LeftArrow", "RightArrow"}
+local tilesList = {"None", "Middle", "TopEdge", "BottomEdge", "LeftsideEdge", "RightsideEdge", "SingleHorizontalLeftEdge", "SingleHorizontalRightEdge", "SingleHorizontalMiddle", "SingleVerticalTopEdge", "SingleVerticalBottomEdge", "SingleVerticalMiddle", "AllWalls", "UpperLeftCorner", "UpperRightCorner", "LowerLeftCorner", "LowerRightCorner", "UpperLeftSlopeCorner", "UpperRightSlopeCorner", "LowerLeftSlopeCorner", "LowerRightSlopeCorner", "UpperLeftSlightSlopeCornerStart", "UpperLeftSlightSlopeCornerEnd", "UpperRightSlightSlopeCornerStart", "UpperRightSlightSlopeCornerEnd", "LowerLeftSlightSlopeCornerStart", "LowerLeftSlightSlopeCornerEnd", "LowerRightSlightSlopeCornerStart", "LowerRightSlightSlopeCornerEnd", "UpperLeftHalfSlopeCorner", "UpperRightHalfSlopeCorner", "LowerLeftHalfSlopeCorner", "LowerRightHalfSlopeCorner", "ElevatorShaft", "ElevatorUpAllWalls", "ElevatorDownAllWalls", "ElevatorUpSingleHorizontalLeftEdge", "ElevatorUpSingleHorizontalRightEdge", "ElevatorDownSingleHorizontalLeftEdge", "ElevatorDownSingleHorizontalRightEdge", "UpArrow", "DownArrow", "LeftArrow", "RightArrow", "HorizontalAreaConnection", "VerticalAreaConnection"}
 
 InGameMapTilesController.name = "XaphanHelper/InGameMapTilesController"
 InGameMapTilesController.depth = -100000
 InGameMapTilesController.fieldOrder = {
     "x", "y", "tile0Cords", "tile0", "tile1Cords", "tile1", "tile2Cords", "tile2", "tile3Cords", "tile3",
     "tile4Cords", "tile4", "tile5Cords", "tile5", "tile6Cords", "tile6", "tile7Cords", "tile7",
-    "tile8Cords", "tile8", "tile9Cords", "tile9"
+    "tile8Cords", "tile8", "tile9Cords", "tile9", "display"
 }
 InGameMapTilesController.fieldInformation = {
     tile0 = {
@@ -48,6 +48,10 @@ InGameMapTilesController.fieldInformation = {
     tile9 = {
         options = tilesList,
         editable = false
+    },
+    display = {
+        options = {"Always", "Area map only", "World map only"},
+        editable = false
     }
 }
 InGameMapTilesController.placements = {
@@ -72,7 +76,8 @@ InGameMapTilesController.placements = {
         tile8Cords = "0-0",
         tile8 = "None",
         tile9Cords = "0-0",
-        tile9 = "None"
+        tile9 = "None",
+        display = "Always"
     }
 }
 

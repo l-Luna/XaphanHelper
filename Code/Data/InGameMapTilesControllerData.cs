@@ -46,7 +46,9 @@
 
         public string Tile9;
 
-        public InGameMapTilesControllerData(int chapterIndex, string room, string tile0Cords, string tile0, string tile1Cords, string tile1, string tile2Cords, string tile2, string tile3Cords, string tile3, string tile4Cords, string tile4, string tile5Cords, string tile5, string tile6Cords, string tile6, string tile7Cords, string tile7, string tile8Cords, string tile8, string tile9Cords, string tile9)
+        public string Display;
+
+        public InGameMapTilesControllerData(int chapterIndex, string room, string tile0Cords, string tile0, string tile1Cords, string tile1, string tile2Cords, string tile2, string tile3Cords, string tile3, string tile4Cords, string tile4, string tile5Cords, string tile5, string tile6Cords, string tile6, string tile7Cords, string tile7, string tile8Cords, string tile8, string tile9Cords, string tile9, string display)
         {
             ChapterIndex = chapterIndex;
             Room = room;
@@ -70,6 +72,7 @@
             Tile8 = tile8;
             Tile9Cords = tile9Cords;
             Tile9 = tile9;
+            Display = display;
         }
 
         public string GetTileCords(int tile)

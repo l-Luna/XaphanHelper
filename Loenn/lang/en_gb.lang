@@ -417,6 +417,7 @@ entities.XaphanHelper/InGameMapTilesController.attributes.description.tile8=Tile
 entities.XaphanHelper/InGameMapTilesController.attributes.description.tile8Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
 entities.XaphanHelper/InGameMapTilesController.attributes.description.tile9=Tile to draw. None =No tile.
 entities.XaphanHelper/InGameMapTilesController.attributes.description.tile9Cords=Coordinates of where the tile will be drawn.\n(Format: X-Y. (0-0 is top left tile))
+entities.XaphanHelper/InGameMapTilesController.attributes.description.display=Determine where to draw the tiles defined in this controller.\nAlways: Draw the tiles on the area map and the world map.\nArea map only: Draw the tiles on the area map only.\nWorld map only: Draw the tiles on the world map only.
 
 # JumpBlock
 entities.XaphanHelper/JumpBlock.placements.name.JumpBlock=Jump Block

@@ -3198,7 +3198,7 @@ namespace Celeste.Mod.XaphanHelper
                 InGameMapTilesController controller = tileController as InGameMapTilesController;
                 TilesControllerData.Add(new InGameMapTilesControllerData(0, room, controller.Data.Attr("tile0Cords"), controller.Data.Attr("tile0"), controller.Data.Attr("tile1Cords"), controller.Data.Attr("tile1"), controller.Data.Attr("tile2Cords"), controller.Data.Attr("tile2"),
                                             controller.Data.Attr("tile3Cords"), controller.Data.Attr("tile3"), controller.Data.Attr("tile4Cords"), controller.Data.Attr("tile4"), controller.Data.Attr("tile5Cords"), controller.Data.Attr("tile5"), controller.Data.Attr("tile6Cords"), controller.Data.Attr("tile6"),
-                                            controller.Data.Attr("tile7Cords"), controller.Data.Attr("tile7"), controller.Data.Attr("tile8Cords"), controller.Data.Attr("tile8"), controller.Data.Attr("tile9Cords"), controller.Data.Attr("tile9")));
+                                            controller.Data.Attr("tile7Cords"), controller.Data.Attr("tile7"), controller.Data.Attr("tile8Cords"), controller.Data.Attr("tile8"), controller.Data.Attr("tile9Cords"), controller.Data.Attr("tile9"), controller.Data.Attr("display")));
             }
             foreach (InGameMapTilesControllerData tileControllerData in TilesControllerData)
             {
@@ -3208,7 +3208,7 @@ namespace Celeste.Mod.XaphanHelper
                     if (tileCords == (playerPosition.X + "-" + playerPosition.Y))
                     {
                         string tile = tileControllerData.GetTile(i);
-                        if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                        if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                         {
                             isValid = true;
                             break;

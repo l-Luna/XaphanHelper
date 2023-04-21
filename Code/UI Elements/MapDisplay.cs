@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Celeste.Mod.XaphanHelper.Data;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
@@ -488,10 +489,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         TilesControllerData.Add(new InGameMapTilesControllerData(chapterIndex, level.Name, entity.Attr("tile0Cords"), entity.Attr("tile0"), entity.Attr("tile1Cords"), entity.Attr("tile1"), entity.Attr("tile2Cords"), entity.Attr("tile2"),
                             entity.Attr("tile3Cords"), entity.Attr("tile3"), entity.Attr("tile4Cords"), entity.Attr("tile4"), entity.Attr("tile5Cords"), entity.Attr("tile5"), entity.Attr("tile6Cords"), entity.Attr("tile6"),
-                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9")));
+                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9"), entity.Attr("display")));
                         OldTilesControllerData.Add(new InGameMapTilesControllerData(chapterIndex, level.Name, entity.Attr("tile0Cords"), entity.Attr("tile0"), entity.Attr("tile1Cords"), entity.Attr("tile1"), entity.Attr("tile2Cords"), entity.Attr("tile2"),
                             entity.Attr("tile3Cords"), entity.Attr("tile3"), entity.Attr("tile4Cords"), entity.Attr("tile4"), entity.Attr("tile5Cords"), entity.Attr("tile5"), entity.Attr("tile6Cords"), entity.Attr("tile6"),
-                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9")));
+                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9"), entity.Attr("display")));
                     }
                 }
             }
@@ -1230,6 +1231,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public void GenerateTiles()
         {
             TilesImage.Clear();
+            List<InGameMapTilesData> ConnectionTiles = new();
             List<int> mapShards = GetUnlockedMapShards();
             foreach (LevelData level in MapData.Levels)
             {
@@ -1325,7 +1327,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 Elevator_BG = "Elevator";
                                 Elevator_Color = ElevatorColor;
                             }
-                            else if (TilesTypes[i] == "UpArrow" || TilesTypes[i] == "DownArrow" || TilesTypes[i] == "LeftArrow" || TilesTypes[i] == "RightArrow")
+                            else if (TilesTypes[i] == "UpArrow" || TilesTypes[i] == "DownArrow" || TilesTypes[i] == "LeftArrow" || TilesTypes[i] == "RightArrow" || TilesTypes[i] == "HorizontalAreaConnection" || TilesTypes[i] == "VerticalAreaConnection")
                             {
                                 BG_Pattern = null;
                                 BG_Color = Color.Transparent;
@@ -1375,7 +1377,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 TilesImage.Remove(tile);
                             }
-                            if (!TilesImage.Contains(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color)))
+                            if (TilesTypes.Contains("HorizontalAreaConnection") || TilesTypes.Contains("VerticalAreaConnection"))
+                            {
+                                ConnectionTiles.Add(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color));
+                            }
+                            else if (!TilesImage.Contains(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color)))
                             {
                                 TilesImage.Add(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color));
                             }
@@ -1471,7 +1477,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                     Elevator_BG = "Elevator";
                                     Elevator_Color = ElevatorColor;
                                 }
-                                else if (TilesTypes[i] == "UpArrow" || TilesTypes[i] == "DownArrow" || TilesTypes[i] == "LeftArrow" || TilesTypes[i] == "RightArrow")
+                                else if (TilesTypes[i] == "UpArrow" || TilesTypes[i] == "DownArrow" || TilesTypes[i] == "LeftArrow" || TilesTypes[i] == "RightArrow" || TilesTypes[i] == "HorizontalAreaConnection" || TilesTypes[i] == "VerticalAreaConnection")
                                 {
                                     BG_Pattern = null;
                                     BG_Color = Color.Transparent;
@@ -1521,7 +1527,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 {
                                     TilesImage.Remove(tile);
                                 }
-                                if (!TilesImage.Contains(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color)))
+                                if (TilesTypes.Contains("HorizontalAreaConnection") || TilesTypes.Contains("VerticalAreaConnection"))
+                                {
+                                    ConnectionTiles.Add(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color));
+                                }
+                                else if (!TilesImage.Contains(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color)))
                                 {
                                     TilesImage.Add(new InGameMapTilesData(level.Name, TilesTypes[i] == "Middle" ? null : new Image(GFX.Gui["maps/tiles/borders/" + TilesTypes[i] + Entrance]), Vector2.One + TilesPosition[i] * 40, RoomBorderColor, BG_Pattern, BG_Color, Elevator_BG, Elevator_Color));
                                 }
@@ -1530,6 +1540,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     }
                 }
             }
+            ConnectionTiles.AddRange(TilesImage);
+            TilesImage = ConnectionTiles;
         }
 
         public void GenerateEntrances() // Only if not using a TilesController
@@ -2249,7 +2261,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int totalEntities = 0;
             foreach (InGameMapTilesControllerData tilesControllerData in TilesControllerData)
             {
-                if (tilesControllerData.Room == room)
+                if (tilesControllerData.Room == room && (NoGrid ? tilesControllerData.Display != "Area map only" : tilesControllerData.Display != "World map only"))
                 {
                     for (int i = 0; i <= 9; i++)
                     {
@@ -2269,7 +2281,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             int totalEntities = 0;
             foreach (InGameMapTilesControllerData tilesControllerData in TilesControllerData)
             {
-                if (tilesControllerData.Room == room)
+                if (tilesControllerData.Room == room && (NoGrid ? tilesControllerData.Display != "Area map only" : tilesControllerData.Display != "World map only"))
                 {
                     for (int i = 0; i <= 9; i++)
                     {

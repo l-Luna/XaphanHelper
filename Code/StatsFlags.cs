@@ -638,7 +638,7 @@ namespace Celeste.Mod.XaphanHelper
                     {
                         TilesControllerData.Add(new InGameMapTilesControllerData(0, level.Name, entity.Attr("tile0Cords"), entity.Attr("tile0"), entity.Attr("tile1Cords"), entity.Attr("tile1"), entity.Attr("tile2Cords"), entity.Attr("tile2"),
                             entity.Attr("tile3Cords"), entity.Attr("tile3"), entity.Attr("tile4Cords"), entity.Attr("tile4"), entity.Attr("tile5Cords"), entity.Attr("tile5"), entity.Attr("tile6Cords"), entity.Attr("tile6"),
-                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9")));
+                            entity.Attr("tile7Cords"), entity.Attr("tile7"), entity.Attr("tile8Cords"), entity.Attr("tile8"), entity.Attr("tile9Cords"), entity.Attr("tile9"), entity.Attr("display")));
                     }
                 }
             }
@@ -760,7 +760,7 @@ namespace Celeste.Mod.XaphanHelper
                 for (int i = 0; i <= 9; i++)
                 {
                     string tile = tilesControllerData.GetTile(i);
-                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                     {
                         if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                         {
@@ -780,7 +780,7 @@ namespace Celeste.Mod.XaphanHelper
                 for (int i = 0; i <= 9; i++)
                 {
                     string tile = tilesControllerData.GetTile(i);
-                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                     {
                         totalTiles++;
                     }
@@ -918,7 +918,7 @@ namespace Celeste.Mod.XaphanHelper
                         for (int i = 0; i <= 9; i++)
                         {
                             string tile = tilesControllerData.GetTile(i);
-                            if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                            if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                             {
                                 if (total)
                                 {

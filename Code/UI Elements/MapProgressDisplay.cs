@@ -208,7 +208,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         for (int i = 0; i <= 9; i++)
                         {
                             string tile = tilesControllerData.GetTile(i);
-                            if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                            if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                             {
                                 if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                 {
@@ -230,7 +230,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 for (int i = 0; i <= 9; i++)
                                 {
                                     string tile = tilesControllerData.GetTile(i);
-                                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                                    if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                                     {
                                         if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                         {
@@ -254,7 +254,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             for (int i = 0; i <= 9; i++)
                             {
                                 string tile = tilesControllerData.GetTile(i);
-                                if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                                if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                                 {
                                     if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapter + "/" + tilesControllerData.Room + "-" + tilesControllerData.GetTileCords(i)))
                                     {
@@ -280,7 +280,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     for (int i = 0; i <= 9; i++)
                     {
                         string tile = tilesControllerData.GetTile(i);
-                        if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                        if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                         {
                             totalTiles++;
                         }
@@ -299,7 +299,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             for (int i = 0; i <= 9; i++)
                             {
                                 string tile = tilesControllerData.GetTile(i);
-                                if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow"))
+                                if (tile != "None" && tile != "ElevatorShaft" && !tile.Contains("Arrow") && !tile.Contains("Connection"))
                                 {
                                     totalTiles++;
                                 }
