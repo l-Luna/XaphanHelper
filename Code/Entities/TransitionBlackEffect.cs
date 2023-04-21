@@ -47,7 +47,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static IEnumerator OnLevelTransitionRoutine(On.Celeste.Level.orig_TransitionRoutine orig, Level self, LevelData next, Vector2 direction)
         {
-            if (self.Session.Area.LevelSet == "Xaphan/0")
+            if (self.Session.Area.LevelSet == "Xaphan/0" && XaphanModule.SoCMVersion >= new Version(3, 0, 0))
             {
                 self.Add(new TransitionBlackEffect());
                 yield return 0.5f;
@@ -63,12 +63,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private static void OnTalkComponentTalkComponentUICtor(On.Celeste.TalkComponent.TalkComponentUI.orig_ctor orig, TalkComponent.TalkComponentUI self, TalkComponent handler)
         {
             orig(self, handler);
-            self.AddTag(Tags.TransitionUpdate);
+            if (SaveData.Instance.CurrentSession_Safe.Area.LevelSet == "Xaphan/0" && XaphanModule.SoCMVersion >= new Version(3, 0, 0))
+            {
+                self.AddTag(Tags.TransitionUpdate);
+            }
         }
 
         private static void OnTalkComponentTalkComponentUIUpdate(On.Celeste.TalkComponent.TalkComponentUI.orig_Update orig, TalkComponent.TalkComponentUI self)
         {
-            if (self.SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0")
+            if (self.SceneAs<Level>().Session.Area.LevelSet == "Xaphan/0" && XaphanModule.SoCMVersion >= new Version(3, 0, 0))
             {
                 if (self.SceneAs<Level>().Tracker.GetEntities<TransitionBlackEffect>().Count() != 0)
                 {

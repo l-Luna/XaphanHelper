@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -61,6 +62,8 @@ namespace Celeste.Mod.XaphanHelper
         private bool hasOldExtendedVariants = false;
 
         private bool displayedOldExtVariantsPostcard = false;
+
+        public static Version SoCMVersion;
 
         public static bool startedAnyChapter = false;
 
@@ -1118,6 +1121,13 @@ namespace Celeste.Mod.XaphanHelper
         {
             base.Initialize();
             hasOldExtendedVariants = Everest.Modules.Any(module => module.Metadata.Name == "ExtendedVariantMode" && module.Metadata.Version < new Version(0, 15, 9));
+            foreach (EverestModule module in Everest.Modules)
+            {
+                if (module.Metadata.Name == "TheSecretOfCelesteMountain")
+                {
+                    SoCMVersion = module.Metadata.Version;
+                }
+            }
         }
 
         private void onLevelPause(On.Celeste.Level.orig_Pause orig, Level self, int startIndex, bool minimal, bool quickReset)

@@ -6,18 +6,6 @@ namespace Celeste.Mod.XaphanHelper
 {
 	static class Achievements
 	{
-		static Version SoCMVersion()
-		{
-			foreach (EverestModule module in Everest.Modules)
-			{
-				if (module.Metadata.Name == "TheSecretOfCelesteMountain")
-				{
-					return module.Metadata.Version;
-				}
-			}
-			return null;
-		}
-
 		public static List<AchievementData> GenerateAchievementsList(Session session)
 		{
 			StatsFlags.GetStats(session);
@@ -75,7 +63,7 @@ namespace Celeste.Mod.XaphanHelper
 				hidden: true
 			));
 
-			if (SoCMVersion() >= new Version(3, 0, 0))
+			if (XaphanModule.SoCMVersion >= new Version(3, 0, 0))
 			{
 				list.Add(new AchievementData(
 					achievementID: "upg6",
@@ -148,7 +136,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 10
 			));
 
-			if (SoCMVersion() >= new Version(3, 0, 0))
+			if (XaphanModule.SoCMVersion >= new Version(3, 0, 0))
 			{
 				list.Add(new AchievementData(
 					achievementID: "tank0",
@@ -208,7 +196,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 25
 			));
 
-            if (SoCMVersion() >= new Version(3, 0, 0))
+            if (XaphanModule.SoCMVersion >= new Version(3, 0, 0))
 			{
                 list.Add(new AchievementData(
 					achievementID: "tank",
@@ -251,7 +239,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 25
 			));
 
-            if (SoCMVersion() >= new Version(3, 0, 0))
+            if (XaphanModule.SoCMVersion >= new Version(3, 0, 0))
 			{
                 list.Add(new AchievementData(
 					achievementID: "map",
@@ -611,7 +599,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 50
 			));
 
-			if (SoCMVersion() >= new Version(3, 0, 0))
+			if (XaphanModule.SoCMVersion >= new Version(3, 0, 0))
 			{
 				// Area 3
 
