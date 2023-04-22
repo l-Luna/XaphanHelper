@@ -145,16 +145,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 alpha = Math.Min(1f, alpha);
                 foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
                 {
-                    if (backdrop.Visible)
+                    if (backdrop is HeatParticles)
                     {
-                        if (backdrop is HeatParticles)
-                        {
-                            backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
-                        }
-                        else
-                        {
-                            backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
-                        }
+                        backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
+                    }
+                    else
+                    {
+                        backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
                     }
                 }
                 yield return null;
@@ -168,16 +165,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 alpha = Math.Max(0f, alpha);
                 foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
                 {
-                    if (backdrop.Visible)
+                    if (backdrop is HeatParticles)
                     {
-                        if (backdrop is HeatParticles)
-                        {
-                            backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
-                        }
-                        else
-                        {
-                            backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
-                        }
+                        backdrop.Color.A = (byte)((Math.Max(0, 1 - alpha)) * 255);
+                    }
+                    else
+                    {
+                        backdrop.FadeAlphaMultiplier = (Math.Max(0, 1 - alpha));
                     }
                 }
                 yield return null;
