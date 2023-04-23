@@ -693,6 +693,10 @@ triggers.XaphanHelper/StopAdjustInGameMapTrigger.placements.name.StopAdjustInGam
 # StopCountdownTrigger
 triggers.XaphanHelper/StopCountdownTrigger.placements.name.StopCountdownTrigger=Stop Countdown
 
+# StopEntityRespawnTrigger
+triggers.XaphanHelper/StopEntityRespawnTrigger.placements.name.StopEntityRespawnTrigger=Stop Entity Respawn
+triggers.XaphanHelper/StopEntityRespawnTrigger.attributes.description.room=Entities waiting to not respawn in this room will no longer spawn once the player enter the trigger.\nCompatible entities: Break Block
+
 # SubAreaNameTrigger
 triggers.XaphanHelper/SubAreaNameTrigger.placements.name.SubAreaNameTrigger=Sub-Area Name
 triggers.XaphanHelper/SubAreaNameTrigger.attributes.description.dialogID=Dialog ID used to display the name of the area.

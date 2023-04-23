@@ -637,6 +637,7 @@ namespace Celeste.Mod.XaphanHelper
             DroneSwitch.Load();
             TransitionBlackEffect.Load();
             WorkRobot.Load();
+            BreakBlock.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -722,6 +723,7 @@ namespace Celeste.Mod.XaphanHelper
             DroneSwitch.Unload();
             TransitionBlackEffect.Unload();
             WorkRobot.Unload();
+            BreakBlock.Unload();
         }
 
         // Custom States

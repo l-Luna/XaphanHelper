@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Managers;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -42,6 +43,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public string type;
 
+        private string respawn;
+
         private bool permanent;
 
         private string flag;
@@ -60,10 +63,45 @@ namespace Celeste.Mod.XaphanHelper.Entities
             fillTile = data.Char("tiletype", '3');
             flagFillTile = data.Char("flagTiletype", '3');
             permanent = data.Bool("permanent", true);
+            respawn = data.Attr("respawn");
+            if (string.IsNullOrEmpty(respawn) && permanent)
+            {
+                respawn = "Never";
+            }
             Collider = new Hitbox(data.Width, data.Height);
             Depth = -13000;
             Add(cutout = new EffectCutout());
             Add(new LightOcclude(0.5f));
+        }
+
+        public static void Load()
+        {
+            On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
+        }
+
+        public static void Unload()
+        {
+            On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
+        }
+
+        private static void onChangeRespawnTriggerOnEnter(On.Celeste.ChangeRespawnTrigger.orig_OnEnter orig, ChangeRespawnTrigger self, Player player)
+        {
+            bool onSolid = true;
+            Vector2 point = self.Target + Vector2.UnitY * -4f;
+            Session session = self.SceneAs<Level>().Session;
+            if (self.Scene.CollideCheck<Solid>(point))
+            {
+                onSolid = self.Scene.CollideCheck<FloatySpaceBlock>(point);
+            }
+            if (onSolid && (!session.RespawnPoint.HasValue || session.RespawnPoint.Value != self.Target))
+            {
+                foreach (EntityID entity in XaphanModule.ModSession.NoRespawnIds)
+                {
+                    session.DoNotLoad.Add(entity);
+                }
+                XaphanModule.ModSession.NoRespawnIds.Clear();
+            }
+            orig(self, player);
         }
 
         private DashCollisionResults OnDashed(Player player, Vector2 direction)
@@ -246,6 +284,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             Collidable = false;
+            if (respawn == "Never")
+            {
+                level.Session.DoNotLoad.Add(eid);
+            }
+            else if (respawn == "Until checkpoint")
+            {
+                XaphanModule.ModSession.NoRespawnIds.Add(eid);
+            }
             foreach (BreakBlockIndicator indicator in SceneAs<Level>().Tracker.GetEntities<BreakBlockIndicator>())
             {
                 if (indicator.block == this)
@@ -254,10 +300,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             RemoveSelf();
-            if (permanent)
-            {
-                level.Session.DoNotLoad.Add(eid);
-            }
         }
 
 

@@ -158,6 +158,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 drone.CurrentSpawn = Position;
                             }
                         }
+                        foreach (EntityID entity in XaphanModule.ModSession.NoRespawnIds)
+                        {
+                            SceneAs<Level>().Session.DoNotLoad.Add(entity);
+                        }
+                        XaphanModule.ModSession.NoRespawnIds.Clear();
                         foreach (CustomCheckpoint customCheckpoint in SceneAs<Level>().Tracker.GetEntities<CustomCheckpoint>())
                         {
                             if (customCheckpoint != this)

@@ -1,4 +1,5 @@
 Version 1.0.55 :
+- Added Stop Entity Respawn Trigger
 - Added "Tutorial" attribute to Drone Switches
 - Added "Only Need One Flag" attribute to Bubble Doors
 - Added "Inverted" attribute to Reset Flags Trigger
@@ -6,6 +7,8 @@ Version 1.0.55 :
 - Added "Camera Lock" and "Draw Projectiles Outline" attributes to Custom Badeline Boss
 - Added "Render Method" attribute to Slopes
 - Added "Display" attribute to In Game Map Tiles Controllers
+- Added "Respawn" attribute to Break Blocks.
+- Removed "Permanent" attributefrom Break Blocks. Existing blocks are still compatible with this change.
 - Updated InGameMapTilesController with 2 new tiles : "HorizontalAreaConnection" and "VerticalAreaConnection"
 - Rooms containing the 2 new tiles are now always drawn first on the map, allowing other rooms to overlap them as they are discovered
 - Increased the size of Drone Switches to make it easier to aim at them

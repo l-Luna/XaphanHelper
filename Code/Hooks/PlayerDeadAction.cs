@@ -21,6 +21,7 @@ namespace Celeste.Mod.XaphanHelper.Hooks
             {
                 self.DeathAction = DeathAction;
             }
+            XaphanModule.ModSession.NoRespawnIds.Clear();
             orig(self);
         }
 

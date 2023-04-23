@@ -1,4 +1,6 @@
-﻿namespace Celeste.Mod.XaphanHelper
+﻿using System.Collections.Generic;
+
+namespace Celeste.Mod.XaphanHelper
 {
     public class XaphanModuleSession : EverestModuleSession
     {
@@ -9,5 +11,9 @@
         public int CurrentDroneSuperMissile = 0;
 
         public int CurrentAmmoSelected = 0;
+
+        // Entities respawn
+
+        public HashSet<EntityID> NoRespawnIds = new();
     }
 }

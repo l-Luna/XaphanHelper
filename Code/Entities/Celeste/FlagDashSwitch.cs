@@ -275,7 +275,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void onChangeRespawnTriggerOnEnter(On.Celeste.ChangeRespawnTrigger.orig_OnEnter orig, ChangeRespawnTrigger self, Player player)
         {
-            orig(self, player);
             bool onSolid = true;
             Vector2 point = self.Target + Vector2.UnitY * -4f;
             Session session = self.SceneAs<Level>().Session;
@@ -305,34 +304,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
+            orig(self, player);
         }
-
-        public static void DeathAction()
-        {
-            if (Engine.Scene is Level)
-            {
-                Level level = (Level)Engine.Scene;
-                int chapterIndex = level.Session.Area.ChapterIndex;
-                foreach (FlagDashSwitch flagSwitch in level.Tracker.GetEntities<FlagDashSwitch>())
-                {
-                    level.Session.SetFlag("Ch" + chapterIndex + "_" + flagSwitch.flag + "_true", false);
-                    level.Session.SetFlag("Ch" + chapterIndex + "_" + flagSwitch.flag + "_false", false);
-                    if (!flagSwitch.persistent && !flagSwitch.FlagRegiseredInSaveData() && flagSwitch.startSpawnPoint == level.Session.RespawnPoint)
-                    {
-                        if (flagSwitch.flagState)
-                        {
-                            level.Session.SetFlag(flagSwitch.flag, true);
-                        }
-                        else
-                        {
-                            level.Session.SetFlag(flagSwitch.flag, false);
-                        }
-                    }
-                }
-                level.Reload();
-            }
-        }
-
 
         public override void Added(Scene scene)
         {
@@ -401,7 +374,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 DisplacePlayerOnTop();
             }
-            if (SceneAs<Level>().Transitioning && wasPressed)
+            /*if (SceneAs<Level>().Transitioning && wasPressed)
             {
                 flagState = SceneAs<Level>().Session.GetFlag(flag);
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
@@ -415,7 +388,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                     }
                 }
-            }
+            }*/
             if (pressed)
             {
                 Collidable = false;
