@@ -76,54 +76,48 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                 string[] falseFlags = setFalseFlags.Split(',');
                 foreach (string flag in trueFlags)
                 {
-                    if (!SceneAs<Level>().Session.GetFlag(flag))
+                    SceneAs<Level>().Session.SetFlag(flag, true);
+                    if (registerInSaveData)
                     {
-                        SceneAs<Level>().Session.SetFlag(flag, true);
-                        if (registerInSaveData)
+                        if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                         {
-                            if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
-                            {
-                                XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
-                            }
+                            XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                         }
-                        foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
+                    }
+                    foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
+                    {
+                        if (dashSwitch.flag == flag && !dashSwitch.registerInSaveData)
                         {
-                            if (dashSwitch.flag == flag && !dashSwitch.registerInSaveData)
+                            dashSwitch.flagState = true;
+                            if (dashSwitch.mode == "SetFalse" || dashSwitch.mode == "SetInverted")
                             {
-                                dashSwitch.flagState = true;
-                                if (dashSwitch.mode == "SetFalse" || dashSwitch.mode == "SetInverted")
-                                {
-                                    dashSwitch.ResetSwitch();
-                                }
+                                dashSwitch.ResetSwitch();
                             }
                         }
                     }
                 }
                 foreach (string flag in falseFlags)
                 {
-                    if (SceneAs<Level>().Session.GetFlag(flag))
+                    SceneAs<Level>().Session.SetFlag(flag, false);
+                    if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + SceneAs<Level>().Session.Area.ChapterIndex + "_" + flag))
                     {
                         SceneAs<Level>().Session.SetFlag(flag, false);
-                        if (!XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + SceneAs<Level>().Session.Area.ChapterIndex + "_" + flag))
+                    }
+                    if (registerInSaveData)
+                    {
+                        if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
                         {
-                            SceneAs<Level>().Session.SetFlag(flag, false);
+                            XaphanModule.ModSaveData.SavedFlags.Remove(Prefix + "_Ch" + chapterIndex + "_" + flag);
                         }
-                        if (registerInSaveData)
+                    }
+                    foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
+                    {
+                        if (dashSwitch.flag == flag && !dashSwitch.registerInSaveData)
                         {
-                            if (XaphanModule.ModSaveData.SavedFlags.Contains(Prefix + "_Ch" + chapterIndex + "_" + flag))
+                            dashSwitch.flagState = false;
+                            if (dashSwitch.mode == "SetTrue" || dashSwitch.mode == "SetInverted")
                             {
-                                XaphanModule.ModSaveData.SavedFlags.Remove(Prefix + "_Ch" + chapterIndex + "_" + flag);
-                            }
-                        }
-                        foreach (FlagDashSwitch dashSwitch in SceneAs<Level>().Tracker.GetEntities<FlagDashSwitch>())
-                        {
-                            if (dashSwitch.flag == flag && !dashSwitch.registerInSaveData)
-                            {
-                                dashSwitch.flagState = false;
-                                if (dashSwitch.mode == "SetTrue" || dashSwitch.mode == "SetInverted")
-                                {
-                                    dashSwitch.ResetSwitch();
-                                }
+                                dashSwitch.ResetSwitch();
                             }
                         }
                     }

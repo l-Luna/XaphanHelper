@@ -23,6 +23,7 @@ Version 1.0.55 :
 - Fixed a bug respawning the player in the wrong room when dying with a golden strawberry in a room containing Flag Dash Switches or Drone Switches
 - Fixed a bug respawning the player at the wrong position after spawning the remote drone, entering an other room, dying with it then destroying it and dying in the starting room while playing as Madeline
 - Fixed a bug respawning the player at the wrong position after spawning the remote drone and entering a Change Respawn Trigger
+- Fixed a bug preventing Reset Flags Trigger to work when trying to set a flag already set or unsetting a flag already not set
 - Lowered the Remote Drone beam and other projectiles vertical offset when shooting horizontaly by 1 pixel
 
 Version 1.0.54 :
