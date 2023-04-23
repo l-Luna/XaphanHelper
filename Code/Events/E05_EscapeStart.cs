@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections;
+using System.Collections.Generic;
 using Celeste.Mod.XaphanHelper.Triggers;
 using Celeste.Mod.XaphanHelper.UI_Elements;
 using FMOD.Studio;
@@ -48,6 +49,30 @@ namespace Celeste.Mod.XaphanHelper.Events
                 }
                 if (!level.Session.GetFlag("Lab_Escape"))
                 {
+                    List<EntityID> IDs = new();
+                    List<EntityID> IDsToRemove = new();
+                    IDs.Add(new EntityID("B-32", 2611));
+                    IDs.Add(new EntityID("B-32", 2610));
+                    IDs.Add(new EntityID("B-32", 2612));
+                    IDs.Add(new EntityID("B-32", 2538));
+                    IDs.Add(new EntityID("B-34", 95));
+                    IDs.Add(new EntityID("B-37", 4787));
+                    IDs.Add(new EntityID("B-38", 4977));
+                    IDs.Add(new EntityID("B-38", 4983));
+                    foreach (EntityID entity in level.Session.DoNotLoad)
+                    {
+                        foreach (EntityID id in IDs)
+                        {
+                            if (entity.Level == id.Level && entity.ID == id.ID)
+                            {
+                                IDsToRemove.Add(entity);
+                            }
+                        }
+                    }
+                    foreach (EntityID id in IDsToRemove)
+                    {
+                        level.Session.DoNotLoad.Remove(id);
+                    }
                     alarmSfx = Audio.Play("event:/game/xaphan/alarm");
                     StartCountdownTrigger trigger = level.Tracker.GetEntity<StartCountdownTrigger>();
                     Vector2 triggerStartPosition = trigger.Position;
