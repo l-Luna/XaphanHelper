@@ -101,6 +101,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static FieldInfo PlayerOnGround = typeof(Player).GetField("onGround", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private static FieldInfo LevelExitSession = typeof(LevelExit).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic);
+
         public Drone(Vector2 position, Player player) : base(position)
         {
             Tag = Tags.Persistent;
@@ -146,8 +148,20 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Jump += OnPlayerjump;
             On.Celeste.Player.Throw += OnPlayerThrow;
             On.Celeste.Level.LoadLevel += OnLevelLoadLevel;
+            On.Celeste.LevelExit.Begin += OnLevelExitBegin;
             On.Celeste.ChangeRespawnTrigger.OnEnter += onChangeRespawnTriggerOnEnter;
             On.Celeste.CameraTargetTrigger.OnLeave += onCameratargetTriggerOnLeave;
+        }
+
+        private static void OnLevelExitBegin(On.Celeste.LevelExit.orig_Begin orig, LevelExit self)
+        {
+            if (XaphanModule.PlayerIsControllingRemoteDrone())
+            {
+                Session session = (Session)LevelExitSession.GetValue(self);
+                session.RespawnPoint = XaphanModule.droneStartSpawn;
+                LevelExitSession.SetValue(self, session);
+            }
+            orig(self);
         }
 
         private static void OnLevelLoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -245,6 +259,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             On.Celeste.Player.Die -= OnCelestePlayerDie;
             On.Celeste.Player.Jump -= OnPlayerjump;
             On.Celeste.Player.Throw -= OnPlayerThrow;
+            On.Celeste.Level.LoadLevel -= OnLevelLoadLevel;
+            On.Celeste.LevelExit.Begin -= OnLevelExitBegin;
             On.Celeste.ChangeRespawnTrigger.OnEnter -= onChangeRespawnTriggerOnEnter;
             On.Celeste.CameraTargetTrigger.OnLeave -= onCameratargetTriggerOnLeave;
         }
@@ -441,6 +457,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 duckPlayerHurtbox.Left = -3f;
                 duckPlayerHurtbox.Top = -6f;
                 CurrentSpawn = SceneAs<Level>().Session.RespawnPoint;
+                XaphanModule.droneStartSpawn = CurrentSpawn;
                 XaphanModule.droneCurrentSpawn = CurrentSpawn;
                 cameraPosition = new Vector2(SceneAs<Level>().Camera.Position.X - SceneAs<Level>().Bounds.Left, SceneAs<Level>().Camera.Position.Y - SceneAs<Level>().Bounds.Top);
                 released = true;

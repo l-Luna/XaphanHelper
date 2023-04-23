@@ -451,6 +451,8 @@ namespace Celeste.Mod.XaphanHelper
 
         public static string droneStartRoom;
 
+        public static Vector2? droneStartSpawn;
+
         public static Vector2? droneCurrentSpawn;
 
         public static Facings fakePlayerFacing;

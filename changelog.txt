@@ -24,6 +24,7 @@ Version 1.0.55 :
 - Fixed a bug respawning the player at the wrong position after spawning the remote drone, entering an other room, dying with it then destroying it and dying in the starting room while playing as Madeline
 - Fixed a bug respawning the player at the wrong position after spawning the remote drone and entering a Change Respawn Trigger
 - Fixed a bug preventing Reset Flags Trigger to work when trying to set a flag already set or unsetting a flag already not set
+- Fixed a bug respawing the player in the wrong room while using the remote drone when using the Save and Exit option from the Pause menu after dying in a room that is not the one the drone was spawned initially
 - Lowered the Remote Drone beam and other projectiles vertical offset when shooting horizontaly by 1 pixel
 
 Version 1.0.54 :
