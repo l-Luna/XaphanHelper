@@ -631,6 +631,7 @@ namespace Celeste.Mod.XaphanHelper
             Binocular.Load();
             EtherealBlock.Load();
             TilesetsSwap.Load();
+            SpikesTextureSwap.Load();
             UpgradesDisplay.Load();
             LaserDetectorManager.Load();
             PushBlock.Load();
@@ -717,6 +718,7 @@ namespace Celeste.Mod.XaphanHelper
             Binocular.Unload();
             EtherealBlock.Unload();
             TilesetsSwap.Unload();
+            SpikesTextureSwap.Unload();
             UpgradesDisplay.Unload();
             LaserDetectorManager.Unload();
             PushBlock.Unload();
