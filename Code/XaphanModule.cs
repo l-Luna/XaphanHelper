@@ -18,6 +18,7 @@ using Celeste.Mod.XaphanHelper.UI_Elements;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Monocle;
 using MonoMod.Utils;
 
@@ -541,14 +542,14 @@ namespace Celeste.Mod.XaphanHelper
         // Load runs before Celeste itself has initialized properly.
         public override void Load()
         {
-            DecalRegistry.AddPropertyHandler("BGdepth", delegate (Decal decal, XmlAttributeCollection attrs)
+            DecalRegistry.AddPropertyHandler("XaphanHelper_BGdepth", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["value"] != null && decal.Depth == 9000)
                 {
                     decal.Depth = int.Parse(attrs["value"].Value);
                 }
             });
-            DecalRegistry.AddPropertyHandler("flagsHide", delegate (Decal decal, XmlAttributeCollection attrs)
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagsHide", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["flags"] != null)
                 {
@@ -560,6 +561,52 @@ namespace Celeste.Mod.XaphanHelper
                             decal.Visible = false;
                             break;
                         }
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapOffset", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
+                {
+                    if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
+                    {
+                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
+                        float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
+                        float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
+                        decal.Position += new Vector2(X, Y);
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagLight", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null)
+                {
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
+                    if (inverted ? !decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) : decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
+                    {
+                        float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
+                        float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
+                        Color color = attrs["color"] != null ? Calc.HexToColor(attrs["color"].Value) : Color.White;
+                        float alpha = attrs["alpha"] != null ? float.Parse(attrs["alpha"].Value) : 1f;
+                        int startFade = attrs["startFade"] != null ? int.Parse(attrs["startFade"].Value) : 16;
+                        int endFade = attrs["endFade"] != null ? int.Parse(attrs["endFade"].Value) : 24;
+                        decal.Add(new VertexLight(new Vector2(X, Y), color, alpha, startFade, endFade));
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagLightOcclude", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null)
+                {
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
+                    if (inverted ? !decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) : decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
+                    {
+                        int X = attrs["x"] != null ? int.Parse(attrs["x"].Value) : 0;
+                        int Y = attrs["y"] != null ? int.Parse(attrs["y"].Value) : 0;
+                        int width = attrs["width"] != null ? int.Parse(attrs["width"].Value) : 16;
+                        int height = attrs["height"] != null ? int.Parse(attrs["height"].Value) : 16;
+                        float alpha = attrs["alpha"] != null ? float.Parse(attrs["alpha"].Value) : 1f;
+                        decal.Add(new LightOcclude(new Rectangle(X, Y, width, height), alpha));
                     }
                 }
             });
