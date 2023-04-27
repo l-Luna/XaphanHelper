@@ -560,6 +560,21 @@ namespace Celeste.Mod.XaphanHelper
                     }
                 }
             });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagsHideRoom", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flags"] != null)
+                {
+                    string[] flags = attrs["flags"].Value.Split(',');
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
+                    if (decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
+                    {
+                        foreach (string flag in flags)
+                        {
+                            decal.Visible = inverted ? decal.SceneAs<Level>().Session.GetFlag(flag) : !decal.SceneAs<Level>().Session.GetFlag(flag);
+                        }
+                    }
+                }
+            });
             DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapOffset", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
@@ -570,6 +585,16 @@ namespace Celeste.Mod.XaphanHelper
                         float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
                         float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
                         decal.Position += new Vector2(decal.Scale.X == 1 ? X : -X, decal.Scale.Y == 1 ? Y : -Y);
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapRoom", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
+                {
+                    if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) && decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
+                    {
+                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
                     }
                 }
             });
@@ -616,16 +641,6 @@ namespace Celeste.Mod.XaphanHelper
                     if (inverted ? !decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) : decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
                     {
                         decal.Scale *= new Vector2(flipX ? (Calc.Random.Next(1, 3) == 2 ? -1 : 1) : 1, flipY ? (Calc.Random.Next(1, 3) == 2 ? -1 : 1) : 1);
-                    }
-                }
-            });
-            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapRoom", delegate (Decal decal, XmlAttributeCollection attrs)
-            {
-                if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
-                {
-                    if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) && decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
-                    {
-                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
                     }
                 }
             });

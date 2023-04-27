@@ -32,9 +32,10 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                 DecalRegistry.DecalInfo decalInfo = DecalRegistry.RegisteredDecals[text];
                 foreach (KeyValuePair<string, XmlAttributeCollection> item in decalInfo.CustomProperties)
                 {
-                    if (item.Key == "XaphanHelper_flagsHide")
+                    if (item.Key == "XaphanHelper_flagsHide" || item.Key == "XaphanHelper_flagsHideRoom")
                     {
                         string flag = "";
+                        string room = "";
                         bool inverted = false;
                         foreach (XmlAttribute attribute in item.Value)
                         {
@@ -46,8 +47,15 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                             {
                                 inverted = bool.Parse(attribute.Value);
                             }
+                            if (item.Key == "XaphanHelper_flagsHideRoom" && attribute.Name == "room")
+                            {
+                                room = attribute.Value;
+                            }
                         }
-                        self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                        if (item.Key == "XaphanHelper_flagsHideRoom" ? self.SceneAs<Level>().Session.Level == room : true)
+                        {
+                            self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                        }
                     }
                 }
             }
@@ -81,6 +89,31 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                             }
                         }
                         self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                    }
+                    if (item.Key == "XaphanHelper_flagsHideRoom")
+                    {
+                        string flag = "";
+                        string room = "";
+                        bool inverted = false;
+                        foreach (XmlAttribute attribute in item.Value)
+                        {
+                            if (attribute.Name == "flag")
+                            {
+                                flag = attribute.Value;
+                            }
+                            if (attribute.Name == "inverted")
+                            {
+                                inverted = bool.Parse(attribute.Value);
+                            }
+                            if (attribute.Name == "room")
+                            {
+                                room = attribute.Value;
+                            }
+                        }
+                        if (self.SceneAs<Level>().Session.Level == room)
+                        {
+                            self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                        }
                     }
                     if (item.Key == "XaphanHelper_flagSwapOffset")
                     {
