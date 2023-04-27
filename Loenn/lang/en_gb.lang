@@ -645,6 +645,12 @@ entities.XaphanHelper/WarpStation.attributes.description.noBeam=If true, the bea
 
 # -- Triggers -- 
 
+# FlagOnInteractTrigger
+triggers.XaphanHelper/FlagOnInteractTrigger.placements.name.FlagOnInteractTrigger=Flag On Interact
+triggers.XaphanHelper/FlagOnInteractTrigger.attributes.description.reqFlags=The flags that must already be set to allow the player to interact with this trigger, separated by a comma (,).
+triggers.XaphanHelper/FlagOnInteractTrigger.attributes.description.setFlag=The flag that will be affected when the player interact with this trigger.
+triggers.XaphanHelper/FlagOnInteractTrigger.attributes.description.state=If true, the flag will be set when the player interact with this trigger, else the flag will be unset instead.
+
 # GlobalFlagTrigger
 triggers.XaphanHelper/GlobalFlagTrigger.placements.name.GlobalFlagTrigger=Global Flag
 triggers.XaphanHelper/GlobalFlagTrigger.attributes.description.flag=The flag affected when the player enter this trigger.\nThis flag will be automatically prefixed by 'Ch[chapterIndex]_' where [chapterIndex] is the chapter index of the chapter this trigger is in.\nIf the chapter is set as an Interlude, [chapterIndex] will be 0.\nExample: If you type 'Flag' here and this trigger is in the first chapter of this campaign, the flag 'Ch1_Flag' will be set for all chapters of this campaign.
