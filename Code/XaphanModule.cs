@@ -573,7 +573,7 @@ namespace Celeste.Mod.XaphanHelper
                         decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
                         float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
                         float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
-                        decal.Position += new Vector2(X, Y);
+                        decal.Position += new Vector2(decal.Scale.X == 1 ? X : -X, decal.Scale.Y == 1 ? Y : -Y);
                     }
                 }
             });
@@ -607,6 +607,29 @@ namespace Celeste.Mod.XaphanHelper
                         int height = attrs["height"] != null ? int.Parse(attrs["height"].Value) : 16;
                         float alpha = attrs["alpha"] != null ? float.Parse(attrs["alpha"].Value) : 1f;
                         decal.Add(new LightOcclude(new Rectangle(X, Y, width, height), alpha));
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagRandomFlip", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null)
+                {
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
+                    bool flipX = attrs["flipX"] != null ? bool.Parse(attrs["flipX"].Value) : false;
+                    bool flipY = attrs["flipY"] != null ? bool.Parse(attrs["flipY"].Value) : false;
+                    if (inverted ? !decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) : decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
+                    {
+                        decal.Scale *= new Vector2(flipX ? (Calc.Random.Next(1, 3) == 2 ? -1 : 1) : 1, flipY ? (Calc.Random.Next(1, 3) == 2 ? -1 : 1) : 1);
+                    }
+                }
+            });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapRoom", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
+                {
+                    if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) && decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
+                    {
+                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
                     }
                 }
             });
