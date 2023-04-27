@@ -62,6 +62,7 @@ entities.XaphanHelper/CellLock.attributes.description.keepCell=If true, the Cell
 entities.XaphanHelper/CellLock.attributes.description.slotSound=The sound event that play when the player place a Cell into the lock.
 entities.XaphanHelper/CellLock.attributes.description.instant=If true, the flag will be set as soon as a cell is sloted without requiring the player to interact first.
 entities.XaphanHelper/CellLock.attributes.description.type=Determine the sprite that will be used from the directory set in the Sprite field. Aviable types : "Normal", "Floating".
+entities.XaphanHelper/CellLock.attributes.description.onlyCellVisible=If true, the entity will be invisible in game, and only the cell sprites will appear when a cell is sloted in.
 
 # CollectableDoor
 entities.XaphanHelper/CollectableDoor.placements.name.CollectableDoor=Collectable Door

@@ -5,7 +5,7 @@ local CellLock = {}
 CellLock.name = "XaphanHelper/CellLock"
 CellLock.depth = 8999
 CellLock.fieldOrder = {
-    "x", "y", "sprite", "color", "type", "flag", "sound", "slotSound", "instant", "cellInside", "keepCell", "registerInSaveData"
+    "x", "y", "sprite", "color", "type", "flag", "sound", "slotSound", "instant", "cellInside", "keepCell", "registerInSaveData", "onlyCellVisible"
 }
 CellLock.fieldInformation = {
     type = {
@@ -29,7 +29,8 @@ CellLock.placements = {
         keepCell = false,
         slotSound = "event:/game/05_mirror_temple/button_activate",
         instant = false,
-        type = "Normal"
+        type = "Normal",
+        onlyCellVisible = false
     }
 }
 

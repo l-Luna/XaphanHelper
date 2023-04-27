@@ -32,6 +32,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool keepCell;
 
+        private bool onlyCellVisible;
+
         private bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -71,18 +73,22 @@ namespace Celeste.Mod.XaphanHelper.Entities
             registerInSaveData = data.Bool("registerInSaveData");
             cellInside = data.Bool("cellInside");
             keepCell = data.Bool("keepCell");
+            onlyCellVisible = data.Bool("onlyCellVisible");
             if (string.IsNullOrEmpty(sprite))
             {
                 sprite = "objects/XaphanHelper/CellLock";
             }
-            Add(bgSprite = new Sprite(GFX.Game, sprite + "/"));
-            bgSprite.AddLoop("bgSprite", type, 0.08f);
-            bgSprite.CenterOrigin();
-            bgSprite.Play("bgSprite");
-            Add(colorSprite = new Sprite(GFX.Game, sprite + "/"));
-            colorSprite.AddLoop("colorSprite", color, 0.08f);
-            colorSprite.CenterOrigin();
-            colorSprite.Play("colorSprite");
+            if (!onlyCellVisible)
+            {
+                Add(bgSprite = new Sprite(GFX.Game, sprite + "/"));
+                bgSprite.AddLoop("bgSprite", type, 0.08f);
+                bgSprite.CenterOrigin();
+                bgSprite.Play("bgSprite");
+                Add(colorSprite = new Sprite(GFX.Game, sprite + "/"));
+                colorSprite.AddLoop("colorSprite", color, 0.08f);
+                colorSprite.CenterOrigin();
+                colorSprite.Play("colorSprite");
+            }
             Add(new CellCollider(OnCell, new Circle(17f, 0f, 5f)));
             Add(new CellCollider(OnSlot, new Hitbox(8f, 8f, -4f, 1f)));
             Add(cellSprite = new Sprite(GFX.Game, sprite + "/"));
