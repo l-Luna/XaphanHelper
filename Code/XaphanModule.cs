@@ -18,7 +18,6 @@ using Celeste.Mod.XaphanHelper.UI_Elements;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Monocle;
 using MonoMod.Utils;
 
@@ -554,13 +553,10 @@ namespace Celeste.Mod.XaphanHelper
                 if (attrs["flags"] != null)
                 {
                     string[] flags = attrs["flags"].Value.Split(',');
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
                     foreach (string flag in flags)
                     {
-                        if (decal.SceneAs<Level>().Session.GetFlag(flag))
-                        {
-                            decal.Visible = false;
-                            break;
-                        }
+                        decal.Visible = inverted ? decal.SceneAs<Level>().Session.GetFlag(flag) : !decal.SceneAs<Level>().Session.GetFlag(flag);
                     }
                 }
             });
@@ -711,6 +707,7 @@ namespace Celeste.Mod.XaphanHelper
             TransitionBlackEffect.Load();
             WorkRobot.Load();
             BreakBlock.Load();
+            DecalsRegisteryUpdate.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -798,6 +795,7 @@ namespace Celeste.Mod.XaphanHelper
             TransitionBlackEffect.Unload();
             WorkRobot.Unload();
             BreakBlock.Unload();
+            DecalsRegisteryUpdate.Unload();
         }
 
         // Custom States
