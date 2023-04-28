@@ -644,6 +644,19 @@ namespace Celeste.Mod.XaphanHelper
                     }
                 }
             });
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSparks", delegate (Decal decal, XmlAttributeCollection attrs)
+            {
+                if (attrs["flag"] != null)
+                {
+                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
+                    float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
+                    float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
+                    if (inverted ? !decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) : decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
+                    {
+                        decal.SceneAs<Level>().Add(new SparkGenerator(decal.Position + new Vector2(decal.Scale.X < 0 ? X : -X, Y)));
+                    }
+                }
+            });
             foreach (Upgrades upgrade in UpgradeHandlers.Keys)
             {
                 UpgradeHandlers[upgrade].Load();

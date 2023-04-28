@@ -531,6 +531,7 @@
 {025fa448-8ff1-4344-a584-f7d5f1b1e005} event:/game/xaphan/shinespark_end
 {83579cdd-6c26-4a00-abde-d1328fea5ef1} event:/game/xaphan/shinespark_loop
 {0a1f8882-aa2b-481e-9d45-595a93362d8f} event:/game/xaphan/shinespark_start
+{1f00e2b0-d2df-423a-906e-d70074eebdc9} event:/game/xaphan/shutter
 {470327aa-74d9-44df-a871-cdf8ea93d369} event:/game/xaphan/space_jump
 {c193822c-bffe-485b-bb14-29d4a4420b94} event:/game/xaphan/spazer_beam_fire
 {547b0737-191c-4576-b2cf-705535dc5467} event:/game/xaphan/spin_jump
@@ -543,7 +544,7 @@
 {9ff88ba6-9e26-4644-8ff4-f990704e2fae} event:/game/xaphan/wave_beam_fire
 {15ee171d-a571-4f88-ac1a-2210a9cc4940} event:/game/xaphan/zip_mover_end
 {ed2dc90f-5028-4598-9cf0-a30c99795626} event:/game/xaphan/zip_mover_start
-{1f00e2b0-d2df-423a-906e-d70074eebdc9} event:/game/xaphan/shutter
+{df136689-c413-4f45-9b61-1b7f63e50dbd} event:/game/xaphan/spark
 {51873fdd-604e-4810-9db1-8c6e5a6049b5} event:/music/cassette/01_forsaken_city
 {e44a2aa5-f96e-4d75-8018-8bee278017ad} event:/music/cassette/02_old_site
 {bb2ac8fc-6353-4127-bc7b-7439262508da} event:/music/cassette/03_resort
