@@ -16,6 +16,7 @@ entities.XaphanHelper/BreakBlock.attributes.description.startRevealed=If true, t
 entities.XaphanHelper/BreakBlock.attributes.description.directory=The directory from which the sprites are taken for the indicators, relative to Atlases/Gameplay/.
 entities.XaphanHelper/BreakBlock.attributes.description.flag=If this flag is set, the block will use the tileset set in Flag Tiletype when entering the room.
 entities.XaphanHelper/BreakBlock.attributes.description.flagTiletype=Change the visual apparence of the block if the flag is set.
+entities.XaphanHelper/BreakBlock.attributes.description.respawn=Determine the way the block can respawn.\n Always: The block always respawn when re-entering the room or if the player die.\n Until checkpoint: The block respawn if the player die or leave the room. If the player activate a Custom Checkpoint, enter a Stop Entity Respawn Trigger or a Change Respawn Trigger, the block will no longer respawn.\n Never: The block never respawn once destroyed, even if the player leave the room or die.
 
 # BubbleDoor
 entities.XaphanHelper/BubbleDoor.placements.name.BubbleDoor=Bubble Door
