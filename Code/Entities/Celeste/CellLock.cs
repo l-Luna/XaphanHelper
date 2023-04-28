@@ -115,7 +115,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 SceneAs<Level>().Session.SetFlag(flag + "_sloted", true);
                 cellSprite.Play("cellSprite");
                 leverSprite.Play("leverIdle");
-                Add(new VertexLight(cellSprite.Center, Color.White, 1f, 32, 64));
+                Add(new VertexLight(cellSprite.Center - Vector2.UnitY, Color.White, 1f, 32, 64));
                 if (!instant)
                 {
                     Add(talk = new TalkComponent(new Rectangle(-20, 12, 40, 8), new Vector2(-0.5f, -20f), Interact));
@@ -144,7 +144,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 cellSprite.Play("cellSprite");
                 lightningSprite.Play("lightningSprite");
                 leverSprite.Play("leverIdle");
-                Add(new VertexLight(lightningSprite.Center, Color.White, 1f, 32, 64));
+                Add(new VertexLight(lightningSprite.Center - Vector2.UnitY, Color.White, 1f, 32, 64));
             }
             else if (!cellInside && !FlagRegiseredInSaveData())
             {
@@ -253,7 +253,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Audio.Play(string.IsNullOrEmpty(slotSound) ? "event:/game/05_mirror_temple/button_activate" : slotSound, Position);
             }
             cellSprite.Play("cellSprite");
-            Add(new VertexLight(cellSprite.Center, Color.White, 1f, 32, 64));
+            Add(new VertexLight(cellSprite.Center - Vector2.UnitY, Color.White, 1f, 32, 64));
             leverSprite.Play("leverIdle");
             if (!instant)
             {
@@ -264,7 +264,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 SceneAs<Level>().Session.SetFlag(flag, true);
                 lightningSprite.Play("lightningSprite");
-                Add(new VertexLight(lightningSprite.Center, Color.White, 1f, 32, 64));
+                Add(new VertexLight(lightningSprite.Center - Vector2.UnitY, Color.White, 1f, 32, 64));
                 if (registerInSaveData)
                 {
                     string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
