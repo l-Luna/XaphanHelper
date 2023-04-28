@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using Monocle;
 
@@ -34,6 +33,7 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                 {
                     if (item.Key == "XaphanHelper_flagsHide" || item.Key == "XaphanHelper_flagsHideRoom")
                     {
+                        self.AddTag(Tags.TransitionUpdate);
                         string flag = "";
                         string room = "";
                         bool inverted = false;
