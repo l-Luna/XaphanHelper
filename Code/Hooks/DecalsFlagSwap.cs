@@ -143,6 +143,7 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                         }
                         if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath) && self.SceneAs<Level>().Session.GetFlag(flag))
                         {
+                            self.Remove(self.Image);
                             self.MakeFlagSwap(flag, offPath, onPath);
                         }
                     }
@@ -174,6 +175,7 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                         }
                         if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath) && self.SceneAs<Level>().Session.GetFlag(flag) && self.SceneAs<Level>().Session.Level == room)
                         {
+                            self.Remove(self.Image);
                             self.MakeFlagSwap(flag, offPath, onPath);
                         }
                     }
