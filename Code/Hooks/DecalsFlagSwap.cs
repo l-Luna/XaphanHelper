@@ -75,31 +75,34 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                 {
                     if (item.Key == "XaphanHelper_flagsHide")
                     {
-                        string flag = "";
+                        string flags = "";
                         bool inverted = false;
                         foreach (XmlAttribute attribute in item.Value)
                         {
-                            if (attribute.Name == "flag")
+                            if (attribute.Name == "flags")
                             {
-                                flag = attribute.Value;
+                                flags = attribute.Value;
                             }
                             if (attribute.Name == "inverted")
                             {
                                 inverted = bool.Parse(attribute.Value);
                             }
                         }
-                        self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                        foreach (string flag in flags.Split(','))
+                        {
+                            self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                        }
                     }
                     if (item.Key == "XaphanHelper_flagsHideRoom")
                     {
-                        string flag = "";
+                        string flags = "";
                         string room = "";
                         bool inverted = false;
                         foreach (XmlAttribute attribute in item.Value)
                         {
-                            if (attribute.Name == "flag")
+                            if (attribute.Name == "flags")
                             {
-                                flag = attribute.Value;
+                                flags = attribute.Value;
                             }
                             if (attribute.Name == "inverted")
                             {
@@ -112,7 +115,10 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                         }
                         if (self.SceneAs<Level>().Session.Level == room)
                         {
-                            self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                            foreach (string flag in flags.Split(','))
+                            {
+                                self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
+                            }
                         }
                     }
                     if (item.Key == "XaphanHelper_flagSwapOffset")
