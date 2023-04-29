@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Monocle;
+using static Celeste.Mod.XaphanHelper.UI_Elements.StatusDisplay;
 
 namespace Celeste.Mod.XaphanHelper.UI_Elements
 {
@@ -39,7 +41,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         private float switchTimer;
 
-        public int Selection;
+        public int SelectedCol;
+
+        public int SelectedRow;
+
+        public int SelectedSide;
 
         public StatusScreen(Level level, bool fromMap)
         {
@@ -50,7 +56,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Add(mapWiggle = Wiggler.Create(0.4f, 4f));
             Add(closeWiggle = Wiggler.Create(0.4f, 4f));
             Add(actionWiggle = Wiggler.Create(0.4f, 4f));
-            Selection = 0;
+            SelectedSide = -1;
             Depth = -10001;
         }
 
@@ -231,72 +237,47 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Scene.Add(BigTitle = new BigTitle(Title, new Vector2(960, 80), true));
             Scene.Add(statusDisplay = new StatusDisplay(level, XaphanModule.useIngameMap));
             yield return statusDisplay.GennerateUpgradesDisplay();
-            int firstLeftUpgradeIndex = 110;
-            int firstRightUpgradeIndex = 220;
-            int lastLeftUpgradeIndex = 10;
-            int lastRightUpgradeIndex = 120;
-            int lastBeamIndex = 70;
-            int lastAmmoIndex = 80;
-            foreach (int upgradeIndex in statusDisplay.LeftDisplays)
+            int TopLeftDisplayRow = 11;
+            int TopRightDisplayRow = 11;
+            int BottomLeftDisplayRow = 0;
+            int BottomRightDisplayRow = 0;
+            foreach (UpgradeDisplay display in statusDisplay.LeftDisplays)
             {
-                if (upgradeIndex < firstLeftUpgradeIndex)
+                if (display.row < TopLeftDisplayRow)
                 {
-                    firstLeftUpgradeIndex = upgradeIndex;
+                    TopLeftDisplayRow = display.row;
                 }
-                if (upgradeIndex > lastLeftUpgradeIndex)
+                if (display.row > BottomLeftDisplayRow)
                 {
-                    lastLeftUpgradeIndex = upgradeIndex;
-                }
-                if (upgradeIndex > 70 && upgradeIndex < 80 && upgradeIndex > lastBeamIndex)
-                {
-                    lastBeamIndex = upgradeIndex;
-                }
-                if (upgradeIndex > 80 && upgradeIndex < 90 && upgradeIndex > lastAmmoIndex)
-                {
-                    lastAmmoIndex = upgradeIndex;
+                    BottomLeftDisplayRow = display.row;
                 }
             }
-            foreach (int upgradeIndex in statusDisplay.RightDisplays)
+            foreach (UpgradeDisplay display in statusDisplay.RightDisplays)
             {
-                if (upgradeIndex < firstRightUpgradeIndex)
+                if (display.row < TopRightDisplayRow)
                 {
-                    firstRightUpgradeIndex = upgradeIndex;
+                    TopRightDisplayRow = display.row;
                 }
-                if (upgradeIndex > lastRightUpgradeIndex)
+                if (display.row > BottomRightDisplayRow)
                 {
-                    lastRightUpgradeIndex = upgradeIndex;
+                    BottomRightDisplayRow = display.row;
                 }
             }
             if (statusDisplay.LeftDisplays.Count > 0)
             {
-                Selection = firstLeftUpgradeIndex;
+                SelectedSide = 0;
+                SelectedCol = statusDisplay.LeftDisplays[0].col;
+                SelectedRow = statusDisplay.LeftDisplays[0].row;
             }
             else if (statusDisplay.RightDisplays.Count > 0)
             {
-                Selection = firstRightUpgradeIndex;
+                SelectedSide = 1;
+                SelectedCol = statusDisplay.RightDisplays[0].col;
+                SelectedRow = statusDisplay.RightDisplays[0].row;
             }
             while (switchTimer > 0)
             {
                 yield return null;
-            }
-            string Prefix = SceneAs<Level>().Session.Area.GetLevelSet();
-            bool HasStaminaUpgrades = false;
-            bool HasFireRateUpgrades = false;
-            foreach (string staminaUpgrade in XaphanModule.ModSaveData.StaminaUpgrades)
-            {
-                if (staminaUpgrade.Contains(Prefix))
-                {
-                    HasStaminaUpgrades = true;
-                    break;
-                }
-            }
-            foreach (string fireRateUpgrade in XaphanModule.ModSaveData.DroneFireRateUpgrades)
-            {
-                if (fireRateUpgrade.Contains(Prefix))
-                {
-                    HasFireRateUpgrades = true;
-                    break;
-                }
             }
             while (!Input.ESC.Pressed && !Input.MenuCancel.Pressed && !XaphanSettings.OpenMap.Pressed && player != null)
             {
@@ -340,146 +321,97 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         }
                     }
                 }
-                else if (Selection > 0)
+                else if (SelectedSide != -1)
                 {
-                    if (Selection <= 110)
+                    if (Input.MenuLeft.Pressed)
                     {
-                        if (Input.MenuUp.Pressed && Selection > firstLeftUpgradeIndex)
+                        int firstDisplayCol = 9;
+                        foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
                         {
-                            if (!statusDisplay.LeftDisplays.Contains(Selection - 10))
+                            if (display.row == SelectedRow && display.col < firstDisplayCol)
                             {
-                                Selection -= (Selection % 10);
+                                firstDisplayCol = display.col;
                             }
-                            while (!statusDisplay.LeftDisplays.Contains(Selection - 10))
-                            {
-                                Selection -= 10;
-                            }
-                            Selection -= 10;
-                            Audio.Play("event:/ui/main/rollover_up");
                         }
-                        else if (Input.MenuDown.Pressed && Selection < lastLeftUpgradeIndex)
+                        if (SelectedCol > firstDisplayCol)
                         {
-                            if (!statusDisplay.LeftDisplays.Contains(Selection + 10))
-                            {
-                                Selection -= (Selection % 10);
-                            }
-                            while (!statusDisplay.LeftDisplays.Contains(Selection + 10))
-                            {
-                                Selection += 10;
-                            }
-                            Selection += 10;
-                            Audio.Play("event:/ui/main/rollover_down");
+                            SelectedCol--;
                         }
-                        else
+                        else if (SelectedCol == firstDisplayCol && SelectedSide == 1 && statusDisplay.LeftDisplays.Count > 0)
                         {
-                            if (Input.MenuRight.Pressed && ((Selection == 10 && HasStaminaUpgrades) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
+                            SelectedSide = 0;
+                            if (SelectedRow <= TopLeftDisplayRow)
                             {
-                                while (!statusDisplay.LeftDisplays.Contains(Selection + 1) && ((Selection == 10 && HasStaminaUpgrades) || (Selection >= 70 && Selection < lastBeamIndex) || ((Selection >= 80 && Selection < lastAmmoIndex))))
-                                {
-                                    Selection++;
-                                }
-                                Selection++;
-                                Audio.Play("event:/ui/main/rollover_up");
-
+                                SelectedRow = TopLeftDisplayRow;
                             }
-                            else if ((Selection > lastBeamIndex && Selection < 80) || (Selection > lastAmmoIndex && Selection < 90))
+                            else if (SelectedRow >= BottomLeftDisplayRow)
                             {
-                                SelectRightDisplay(false);
+                                SelectedRow = BottomLeftDisplayRow;
                             }
-                            else if (Input.MenuLeft.Pressed && ((Selection == 11) || (Selection > 70 && Selection <= lastBeamIndex) || ((Selection > 80 && Selection <= lastAmmoIndex))))
+                            else
                             {
-                                while (!statusDisplay.LeftDisplays.Contains(Selection - 1))
-                                {
-                                    Selection--;
-                                }
-                                Selection--;
-                                Audio.Play("event:/ui/main/rollover_down");
+                                SelectedRow = GetRowPosition(BottomLeftDisplayRow);
                             }
-                            else if (Input.MenuRight.Pressed && statusDisplay.RightDisplays.Count > 0)
-                            {
-                                SelectRightDisplay();
-                            }
+                            SelectedCol = 9;
+                            SelectedCol = GetColPosition();
                         }
                     }
-                    else
+                    if (Input.MenuRight.Pressed)
                     {
-                        if (Input.MenuUp.Pressed && Selection > firstRightUpgradeIndex)
+                        int lastDisplayCol = 0;
+                        foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
                         {
-                            if (!statusDisplay.RightDisplays.Contains(Selection - 10))
+                            if (display.row == SelectedRow && display.col > lastDisplayCol)
                             {
-                                Selection -= (Selection % 10);
+                                lastDisplayCol = display.col;
                             }
-                            while (!statusDisplay.RightDisplays.Contains(Selection - 10))
-                            {
-                                Selection -= 10;
-                            }
-                            Selection -= 10;
-                            Audio.Play("event:/ui/main/rollover_up");
                         }
-                        else if (Input.MenuDown.Pressed && Selection < lastRightUpgradeIndex)
+                        if (SelectedCol < lastDisplayCol)
                         {
-                            if (!statusDisplay.RightDisplays.Contains(Selection + 10))
-                            {
-                                Selection -= (Selection % 10);
-                            }
-                            while (!statusDisplay.RightDisplays.Contains(Selection + 10))
-                            {
-                                Selection += 10;
-                            }
-                            Selection += 10;
-                            Audio.Play("event:/ui/main/rollover_down");
+                            SelectedCol++;
                         }
-                        else
+                        else if (SelectedCol == lastDisplayCol && SelectedSide == 0 && statusDisplay.RightDisplays.Count > 0)
                         {
-                            if (Input.MenuLeft.Pressed && statusDisplay.LeftDisplays.Count > 0)
+                            SelectedSide = 1;
+                            if (SelectedRow <= TopRightDisplayRow)
                             {
-                                if (Selection == 120 && HasStaminaUpgrades)
-                                {
-                                    Selection = 11;
-                                }
-                                else if (Selection == 161)
-                                {
-                                    Selection = 160;
-                                }
-                                else if (Selection == 180)
-                                {
-                                    Selection = lastBeamIndex;
-                                }
-                                else if (Selection == 190)
-                                {
-                                    Selection = lastAmmoIndex;
-                                }
-                                else
-                                {
-                                    Selection -= 110;
-                                    if (Selection == 10)
-                                    {
-                                        while (!statusDisplay.LeftDisplays.Contains(Selection))
-                                        {
-                                            Selection -= 10;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        while (!statusDisplay.LeftDisplays.Contains(Selection))
-                                        {
-                                            if (Selection == 110)
-                                            {
-                                                Selection = statusDisplay.LeftDisplays.Count * 10;
-                                            }
-                                            else
-                                            {
-                                                Selection += 10;
-                                            }
-                                        }
-                                    }
-                                }
-                                Audio.Play("event:/ui/main/rollover_up");
+                                SelectedRow = TopRightDisplayRow;
                             }
-                            else if (Input.MenuRight.Pressed && Selection == 160 && HasFireRateUpgrades)
+                            else if (SelectedRow >= BottomRightDisplayRow)
                             {
-                                Selection = 161;
+                                SelectedRow = BottomRightDisplayRow;
                             }
+                            else
+                            {
+                                SelectedRow = GetRowPosition(BottomRightDisplayRow);
+                            }
+                            SelectedCol = 0;
+                        }
+                    }
+                    if (Input.MenuUp.Pressed)
+                    {
+                        if (SelectedRow > (SelectedSide == 0 ? TopLeftDisplayRow : TopRightDisplayRow))
+                        {
+                            bool foundDisplay = false;
+                            while (SelectedRow > (SelectedSide == 0 ? TopLeftDisplayRow : TopRightDisplayRow) && !foundDisplay)
+                            {
+                                SelectedRow--;
+                                foundDisplay = GetDisplay();
+                            }
+                            SelectedCol = GetColPosition();
+                        }
+                    }
+                    if (Input.MenuDown.Pressed)
+                    {
+                        if (SelectedRow < (SelectedSide == 0 ? BottomLeftDisplayRow : BottomRightDisplayRow))
+                        {
+                            bool foundDisplay = false;
+                            while (SelectedRow < (SelectedSide == 0 ? BottomLeftDisplayRow : BottomRightDisplayRow) && !foundDisplay)
+                            {
+                                SelectedRow++;
+                                foundDisplay = GetDisplay();
+                            }
+                            SelectedCol = GetColPosition();
                         }
                     }
                 }
@@ -503,38 +435,109 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             Add(new Coroutine(TransitionToGame()));
         }
 
-        private void SelectRightDisplay(bool playSound = true)
+        private bool GetDisplay()
         {
-            Selection += 110;
-            if (Selection % 10 != 0)
+            foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
             {
-                Selection -= (Selection % 10);
-            }
-            if (Selection == 120)
-            {
-                while (!statusDisplay.RightDisplays.Contains(Selection))
+                if (display.row == SelectedRow)
                 {
-                    Selection += 10;
+                    return true;
                 }
             }
-            else
+            return false;
+        }
+
+        private int GetColPosition()
+        {
+            int Col = -1;
+            foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
             {
-                while (!statusDisplay.RightDisplays.Contains(Selection))
+                if (display.row == SelectedRow && display.col == SelectedCol)
                 {
-                    if (Selection == 220)
-                    {
-                        Selection = statusDisplay.RightDisplays.Count * 10;
-                    }
-                    else
-                    {
-                        Selection += 10;
-                    }
+                    Col = display.col;
+                    break;
                 }
             }
-            if (playSound)
+            if (Col == -1)
             {
-                Audio.Play("event:/ui/main/rollover_up");
+                for (int i = SelectedCol - 1; i >= 0; i--)
+                {
+                    if (i > 0)
+                    {
+                        foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
+                        {
+                            if (display.row == SelectedRow && display.col == i)
+                            {
+                                Col = i;
+                                break;
+                            }
+                        }
+                    }
+                    if (Col != -1)
+                    {
+                        break;
+                    }
+                }
+                if (Col == -1)
+                {
+                    int firstDisplayCol = 9;
+                    foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
+                    {
+                        if (display.row == SelectedRow && display.col < firstDisplayCol)
+                        {
+                            firstDisplayCol = display.col;
+                        }
+                    }
+                    Col = firstDisplayCol;
+                }
             }
+            return Col;
+        }
+
+        private int GetRowPosition(int BottomDisplayRow)
+        {
+            int Row = -1;
+            foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
+            {
+                if (display.row == SelectedRow)
+                {
+                    Row = display.row;
+                    break;
+                }
+            }
+            if (Row == -1)
+            {
+                int ClosestAbove = 11;
+                int ClosestBelow = 11;
+                for (int i = 1; i <= SelectedRow; i++)
+                {
+                    if (i < BottomDisplayRow)
+                    {
+                        foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
+                        {
+                            if (display.row == SelectedRow - i && ClosestAbove > i)
+                            {
+                                ClosestAbove = i;
+                            }
+                        }
+                    }
+                }
+                for (int i = 1; i <= BottomDisplayRow; i++)
+                {
+                    if (i < BottomDisplayRow)
+                    {
+                        foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
+                        {
+                            if (display.row == SelectedRow + i && ClosestBelow > i)
+                            {
+                                ClosestBelow = i;
+                            }
+                        }
+                    }
+                }
+                Row = ClosestAbove < ClosestBelow ? SelectedRow - ClosestAbove : SelectedRow + ClosestBelow;
+            }
+            return Row;
         }
 
         private IEnumerator CloseStatus(bool switchtoMap)
@@ -590,7 +593,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         position.X -= num / 2 + 32;
                         ButtonUI.Render(position, label2, Input.Pause, scale, 1f, mapWiggle.Value * 0.05f);
                     }
-                    if (Selection != 0 && statusDisplay.SelectedDisplay != null)
+                    if (SelectedSide != -1 && statusDisplay.SelectedDisplay != null)
                     {
                         position.X -= num2 / 2 + 32;
                         ButtonUI.Render(position, statusDisplay.SelectedDisplay.InactiveList.Contains(level.Session.Area.GetLevelSet()) ? label3 : label4, Input.MenuConfirm, scale, 1f, actionWiggle.Value * 0.05f);
