@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using Microsoft.Xna.Framework;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Hooks
 {
-    internal class DecalsRegisteryUpdate
+    internal static class DecalsRegisteryUpdate
     {
+        public static List<Decal> SwapedDecals = new();
+
         public static void Load()
         {
             On.Celeste.Decal.Added += onDecalAdded;
@@ -56,6 +59,10 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                         {
                             self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
                         }
+                    }
+                    else if (item.Key == "XaphanHelper_flagSwapOffset" || item.Key == "XaphanHelper_flagSwapRoom")
+                    {
+                        self.AddTag(Tags.TransitionUpdate);
                     }
                 }
             }
@@ -141,13 +148,32 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                                 onPath = attribute.Value;
                             }
                         }
-                        if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath) && self.SceneAs<Level>().Session.GetFlag(flag))
+                        string[] onPaths = onPath.Split(',');
+                        if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath))
                         {
-                            self.Remove(self.Image);
-                            self.MakeFlagSwap(flag, offPath, onPath);
+                            if (self.SceneAs<Level>().Session.GetFlag(flag) && !SwapedDecals.Contains(self))
+                            {
+                                SwapedDecals.Add(self);
+                                self.Remove(self.Image);
+                                int textures = onPaths.Length;
+                                if (textures > 1)
+                                {
+                                    int texture = Calc.Random.Next(textures);
+                                    self.MakeFlagSwap(flag, offPath, onPaths[texture]);
+                                }
+                                else
+                                {
+                                    self.MakeFlagSwap(flag, offPath, onPath);
+                                }
+                            }
+                            else if (!self.SceneAs<Level>().Session.GetFlag(flag) && SwapedDecals.Contains(self))
+                            {
+                                SwapedDecals.Remove(self);
+                                self.Remove(self.Image);
+                                self.MakeFlagSwap(flag, offPath, onPath);
+                            }
                         }
                     }
-
                     if (item.Key == "XaphanHelper_flagSwapRoom")
                     {
                         string flag = "";
@@ -173,10 +199,30 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                                 room = attribute.Value;
                             }
                         }
-                        if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath) && self.SceneAs<Level>().Session.GetFlag(flag) && self.SceneAs<Level>().Session.Level == room)
+                        string[] onPaths = onPath.Split(',');
+                        if (!string.IsNullOrEmpty(flag) && !string.IsNullOrEmpty(offPath) && !string.IsNullOrEmpty(onPath) && self.SceneAs<Level>().Session.Level == room)
                         {
-                            self.Remove(self.Image);
-                            self.MakeFlagSwap(flag, offPath, onPath);
+                            if (self.SceneAs<Level>().Session.GetFlag(flag) && !SwapedDecals.Contains(self))
+                            {
+                                SwapedDecals.Add(self);
+                                self.Remove(self.Image);
+                                int textures = onPaths.Length;
+                                if (textures > 1)
+                                {
+                                    int texture = Calc.Random.Next(textures);
+                                    self.MakeFlagSwap(flag, offPath, onPaths[texture]);
+                                }
+                                else
+                                {
+                                    self.MakeFlagSwap(flag, offPath, onPath);
+                                }
+                            }
+                            else if (!self.SceneAs<Level>().Session.GetFlag(flag) && SwapedDecals.Contains(self))
+                            {
+                                SwapedDecals.Remove(self);
+                                self.Remove(self.Image);
+                                self.MakeFlagSwap(flag, offPath, onPath);
+                            }
                         }
                     }
                 }

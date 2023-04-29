@@ -581,7 +581,7 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value))
                     {
-                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
+                        // Image swap is done in DecalsFlagSwap.cs
                         float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
                         float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
                         decal.Position += new Vector2(decal.Scale.X == 1 ? X : -X, decal.Scale.Y == 1 ? Y : -Y);
@@ -590,13 +590,7 @@ namespace Celeste.Mod.XaphanHelper
             });
             DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapRoom", delegate (Decal decal, XmlAttributeCollection attrs)
             {
-                if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
-                {
-                    if (decal.SceneAs<Level>().Session.GetFlag(attrs["flag"].Value) && decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
-                    {
-                        decal.MakeFlagSwap(attrs["flag"].Value, attrs["offPath"].Value, attrs["onPath"].Value);
-                    }
-                }
+                // Done in DecalsFlagSwap.cs - this is just so Everest register the custom property
             });
             DecalRegistry.AddPropertyHandler("XaphanHelper_flagLight", delegate (Decal decal, XmlAttributeCollection attrs)
             {
