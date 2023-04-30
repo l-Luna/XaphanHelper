@@ -200,6 +200,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
 
             warpMenu.Visible = true;
+            warpMenu.center = !usingMap;
 
             SceneAs<Level>().FormationBackdrop.Display = !usingMap;
         }

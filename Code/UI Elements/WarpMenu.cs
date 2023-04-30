@@ -15,6 +15,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public string WipeType = "Fade";
         public float WipeDuration = 0.75f;
         public new float Height;
+        public bool center;
 
         public WarpMenu()
         {
@@ -27,7 +28,10 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
-            Position = new Vector2(Celeste.TargetWidth - 445f, Celeste.TargetHeight / 2f + 38f);
+            if (!center)
+            {
+                Position = new Vector2(Celeste.TargetWidth - 445f, Celeste.TargetHeight / 2f + 38f);
+            }
             FormationBackdrop formationBackdrop = SceneAs<Level>().FormationBackdrop;
             Alpha = SceneAs<Level>().FormationBackdrop.Display ? (float)DynamicData.For(formationBackdrop).Get("fade") : 1f;
             if (IndexOf(Current) <= 5)
