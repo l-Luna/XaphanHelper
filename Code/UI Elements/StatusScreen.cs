@@ -352,8 +352,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             {
                                 SelectedRow = GetRowPosition(BottomLeftDisplayRow);
                             }
-                            SelectedCol = 9;
-                            SelectedCol = GetColPosition();
+                            SelectedCol = GetColPosition(9);
                         }
                     }
                     if (Input.MenuRight.Pressed)
@@ -398,7 +397,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 SelectedRow--;
                                 foundDisplay = GetDisplay();
                             }
-                            SelectedCol = GetColPosition();
+                            SelectedCol = GetColPosition(SelectedCol);
                         }
                     }
                     if (Input.MenuDown.Pressed)
@@ -411,7 +410,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 SelectedRow++;
                                 foundDisplay = GetDisplay();
                             }
-                            SelectedCol = GetColPosition();
+                            SelectedCol = GetColPosition(SelectedCol);
                         }
                     }
                 }
@@ -447,12 +446,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return false;
         }
 
-        private int GetColPosition()
+        private int GetColPosition(int current)
         {
             int Col = -1;
             foreach (UpgradeDisplay display in (SelectedSide == 0 ? statusDisplay.LeftDisplays : statusDisplay.RightDisplays))
             {
-                if (display.row == SelectedRow && display.col == SelectedCol)
+                if (display.row == SelectedRow && display.col == current)
                 {
                     Col = display.col;
                     break;
@@ -460,7 +459,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if (Col == -1)
             {
-                for (int i = SelectedCol - 1; i >= 0; i--)
+                for (int i = current - 1; i >= 0; i--)
                 {
                     if (i > 0)
                     {
