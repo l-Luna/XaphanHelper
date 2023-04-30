@@ -554,19 +554,8 @@ namespace Celeste.Mod.XaphanHelper
                 {
                     string[] flags = attrs["flags"].Value.Split(',');
                     bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
-                    foreach (string flag in flags)
-                    {
-                        decal.Visible = inverted ? decal.SceneAs<Level>().Session.GetFlag(flag) : !decal.SceneAs<Level>().Session.GetFlag(flag);
-                    }
-                }
-            });
-            DecalRegistry.AddPropertyHandler("XaphanHelper_flagsHideRoom", delegate (Decal decal, XmlAttributeCollection attrs)
-            {
-                if (attrs["flags"] != null)
-                {
-                    string[] flags = attrs["flags"].Value.Split(',');
-                    bool inverted = attrs["inverted"] != null ? bool.Parse(attrs["inverted"].Value) : false;
-                    if (decal.SceneAs<Level>().Session.Level == attrs["room"].Value)
+                    string room = attrs["room"] != null ? attrs["room"].Value : "";
+                    if (!string.IsNullOrEmpty(room) ? decal.SceneAs<Level>().Session.Level == room : true)
                     {
                         foreach (string flag in flags)
                         {
@@ -575,7 +564,7 @@ namespace Celeste.Mod.XaphanHelper
                     }
                 }
             });
-            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapOffset", delegate (Decal decal, XmlAttributeCollection attrs)
+            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwap", delegate (Decal decal, XmlAttributeCollection attrs)
             {
                 if (attrs["flag"] != null && attrs["offPath"] != null && attrs["onPath"] != null)
                 {
@@ -587,10 +576,6 @@ namespace Celeste.Mod.XaphanHelper
                         decal.Position += new Vector2(decal.Scale.X == 1 ? X : -X, decal.Scale.Y == 1 ? Y : -Y);
                     }
                 }
-            });
-            DecalRegistry.AddPropertyHandler("XaphanHelper_flagSwapRoom", delegate (Decal decal, XmlAttributeCollection attrs)
-            {
-                // Done in DecalsFlagSwap.cs - this is just so Everest register the custom property
             });
             DecalRegistry.AddPropertyHandler("XaphanHelper_flagLight", delegate (Decal decal, XmlAttributeCollection attrs)
             {
