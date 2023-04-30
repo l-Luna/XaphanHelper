@@ -5,7 +5,7 @@ local BreakBlock = {}
 BreakBlock.name = "XaphanHelper/BreakBlock"
 BreakBlock.depth = -13000
 BreakBlock.fieldOrder = {
-    "x", "y", "width", "height", "flag", "mode", "tiletype", "flagTiletype", "directory", "type", "color", "respawn", "startRevealed"
+    "x", "y", "width", "height", "flag", "mode", "tiletype", "flagTiletype", "directory", "type", "color", "respawn", "destroyStaticMovers", "startRevealed"
 }
 function BreakBlock.fieldInformation(entity)
     return {
@@ -47,7 +47,8 @@ BreakBlock.placements = {
         color = "FFFFFF",
         startRevealed = false,
         directory = "objects/XaphanHelper/BreakBlock",
-        respawn = "Always"
+        respawn = "Always",
+        destroyStaticMovers = false
     }
 }
 

@@ -49,6 +49,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string flag;
 
+        private bool destroyStaticMovers;
+
         public BreakBlock(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position, data.Width, data.Height, safe: true)
         {
             OnDashCollide = OnDashed;
@@ -64,6 +66,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             flagFillTile = data.Char("flagTiletype", '3');
             permanent = data.Bool("permanent", true);
             respawn = data.Attr("respawn");
+            destroyStaticMovers = data.Bool("destroyStaticMovers");
             if (string.IsNullOrEmpty(respawn) && permanent)
             {
                 respawn = "Never";
@@ -298,6 +301,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     indicator.RemoveSelf();
                 }
+            }
+            if (destroyStaticMovers)
+            {
+                DestroyStaticMovers();
             }
             RemoveSelf();
         }

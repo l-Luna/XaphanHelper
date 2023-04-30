@@ -8,7 +8,7 @@ Version 1.0.55 :
 - Added "Camera Lock" and "Draw Projectiles Outline" attributes to Custom Badeline Boss
 - Added "Render Method" attribute to Slopes
 - Added "Display" attribute to In Game Map Tiles Controllers
-- Added "Respawn" attribute to Break Blocks
+- Added "Respawn" and "Destroy Static Movers" attributes to Break Blocks
 - Added "Only Cell Visible" attribute to Cell Locks
 - Removed "Permanent" attributefrom Break Blocks. Existing blocks are still compatible with this change
 - Updated InGameMapTilesController with 2 new tiles : "HorizontalAreaConnection" and "VerticalAreaConnection"
