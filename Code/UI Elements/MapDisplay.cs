@@ -673,12 +673,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     float AdjustY = 0;
                     if (roomUseTilesController(room.Room))
                     {
-                        Vector2[] TilesPosition = GetTilesPosition(room.Room);
+                        List<Vector2> TilesPosition = GetTilesPosition(room.Room);
                         float MostLeftTileX = 1000f;
                         float MostTopTileY = 1000f;
                         float MostRightTileX = -1000f;
                         float MostBottomTileY = -1000f;
-                        for (int i = 0; i <= TilesPosition.GetLength(0) - 1; i++)
+                        for (int i = 0; i <= TilesPosition.Count - 1; i++)
                         {
                             if (TilesPosition[i].X < MostLeftTileX)
                             {
@@ -775,12 +775,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         float AdjustY = 0;
                         if (roomUseTilesController(str[3]))
                         {
-                            Vector2[] TilesPosition = GetTilesPosition(str[3]);
+                            List<Vector2> TilesPosition = GetTilesPosition(str[3]);
                             float MostLeftTileX = 1000f;
                             float MostTopTileY = 1000f;
                             float MostRightTileX = -1000f;
                             float MostBottomTileY = -1000f;
-                            for (int i = 0; i <= TilesPosition.GetLength(0) - 1; i++)
+                            for (int i = 0; i <= TilesPosition.Count - 1; i++)
                             {
                                 if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + str[3] + "-" + TilesPosition[i].X + "-" + TilesPosition[i].Y))
                                 {
@@ -875,13 +875,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                                 float AdjustY = 0;
                                 if (roomUseTilesController(str[1]))
                                 {
-                                    Vector2[] TilesPosition = GetTilesPosition(str[1]);
+                                    List<Vector2> TilesPosition = GetTilesPosition(str[1]);
                                     float MostLeftTileX = 1000f;
                                     float MostTopTileY = 1000f;
                                     float MostRightTileX = -1000f;
                                     float MostBottomTileY = -1000f;
                                     bool skipTile = false;
-                                    for (int i = 0; i <= TilesPosition.GetLength(0) - 1; i++)
+                                    for (int i = 0; i <= TilesPosition.Count - 1; i++)
                                     {
                                         string[] tiles = null;
                                         if (roomHasAdjustController(str[1]))
@@ -1008,13 +1008,13 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                             float AdjustY = 0;
                             if (roomUseTilesController(str[1]))
                             {
-                                Vector2[] TilesPosition = GetTilesPosition(str[1]);
+                                List<Vector2> TilesPosition = GetTilesPosition(str[1]);
                                 float MostLeftTileX = 1000f;
                                 float MostTopTileY = 1000f;
                                 float MostRightTileX = -1000f;
                                 float MostBottomTileY = -1000f;
                                 bool skipTile = false;
-                                for (int i = 0; i <= TilesPosition.GetLength(0) - 1; i++)
+                                for (int i = 0; i <= TilesPosition.Count - 1; i++)
                                 {
                                     string[] tiles = null;
                                     if (roomHasAdjustController(str[1]))
@@ -1239,12 +1239,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 if (XaphanModule.ModSaveData.VisitedRooms.Contains(Prefix + "/Ch" + chapterIndex + "/" + level.Name) || (ExtraUnexploredRooms.Contains("Ch" + chapterIndex + "/" + level.Name)) || ForceRevealUnexploredRooms)
                 {
                     List<InGameMapTilesData> ToDelete = new();
-                    string[] TilesTypes = GetTilesType(level.Name);
-                    Vector2[] TilesPosition = GetTilesPosition(level.Name);
+                    List<string> TilesTypes = GetTilesType(level.Name);
+                    List<Vector2> TilesPosition = GetTilesPosition(level.Name);
                     string[] EntrancesTypes = GetEntrancesType(level.Name);
                     Vector2[] EntrancesPosition = GetEntrancesPosition(level.Name);
                     Color color = Color.Transparent;
-                    for (int i = 0; i <= TilesTypes.GetLength(0) - 1; i++)
+                    for (int i = 0; i <= TilesTypes.Count - 1; i++)
                     {
                         if (XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + level.Name + "-" + TilesPosition[i].X + "-" + TilesPosition[i].Y) || ForceRevealUnexploredRooms)
                         {
@@ -1393,12 +1393,12 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     if ((UnexploredRooms.Contains("Ch" + chapterIndex + "/" + level.Name + ":" + mapShard) && (MapCollected || RevealUnexploredRooms())))
                     {
                         List<InGameMapTilesData> ToDelete = new();
-                        string[] TilesTypes = GetTilesType(level.Name);
-                        Vector2[] TilesPosition = GetTilesPosition(level.Name);
+                        List<string> TilesTypes = GetTilesType(level.Name);
+                        List<Vector2> TilesPosition = GetTilesPosition(level.Name);
                         string[] EntrancesTypes = GetEntrancesType(level.Name);
                         Vector2[] EntrancesPosition = GetEntrancesPosition(level.Name);
                         Color color = Color.Transparent;
-                        for (int i = 0; i <= TilesTypes.GetLength(0) - 1; i++)
+                        for (int i = 0; i <= TilesTypes.Count - 1; i++)
                         {
                             if (!XaphanModule.ModSaveData.VisitedRoomsTiles.Contains(Prefix + "/Ch" + chapterIndex + "/" + level.Name + "-" + TilesPosition[i].X + "-" + TilesPosition[i].Y))
                             {
@@ -2255,9 +2255,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return false;
         }
 
-        public Vector2[] GetTilesPosition(string room)
+        public List<Vector2> GetTilesPosition(string room)
         {
-            Vector2[] tilePosition = new Vector2[100];
+            List<Vector2> tilePosition = new();
             int totalEntities = 0;
             foreach (InGameMapTilesControllerData tilesControllerData in TilesControllerData)
             {
@@ -2267,7 +2267,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     {
                         string tileCords = tilesControllerData.GetTileCords(i);
                         string[] str = tileCords.Split('-');
-                        tilePosition[totalEntities * 10 + i] = new Vector2(int.Parse(str[0]), int.Parse(str[1]));
+                        tilePosition.Add(new Vector2(int.Parse(str[0]), int.Parse(str[1])));
                     }
                     totalEntities++;
                 }
@@ -2275,9 +2275,9 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             return tilePosition;
         }
 
-        public string[] GetTilesType(string room)
+        public List<string> GetTilesType(string room)
         {
-            string[] tileType = new string[100];
+            List<string> tileType = new();
             int totalEntities = 0;
             foreach (InGameMapTilesControllerData tilesControllerData in TilesControllerData)
             {
@@ -2285,7 +2285,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                 {
                     for (int i = 0; i <= 9; i++)
                     {
-                        tileType[totalEntities * 10 + i] = tilesControllerData.GetTile(i);
+                        tileType.Add(tilesControllerData.GetTile(i));
                     }
                     totalEntities++;
                 }
