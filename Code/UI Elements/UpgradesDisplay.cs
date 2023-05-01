@@ -284,7 +284,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     SuperMissileSelected = false;
                     XaphanModule.ModSession.CurrentAmmoSelected = 0;
                 }
-                if ((CurrentMissiles > 0 || CurrentSuperMissiles > 0) && XaphanModule.ModSettings.SelectItem.Pressed)
+                if (((HasMissilesUpgrade && CurrentMissiles > 0) || (HasSuperMissilesUpgrade && CurrentSuperMissiles > 0)) && XaphanModule.ModSettings.SelectItem.Pressed)
                 {
                     Audio.Play("event:/game/xaphan/item_select");
                 }
