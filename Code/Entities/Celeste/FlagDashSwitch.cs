@@ -374,7 +374,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 DisplacePlayerOnTop();
             }
-            /*if (SceneAs<Level>().Transitioning && wasPressed)
+            if (SceneAs<Level>().Transitioning && wasPressed)
             {
                 flagState = SceneAs<Level>().Session.GetFlag(flag);
                 int chapterIndex = SceneAs<Level>().Session.Area.ChapterIndex;
@@ -388,7 +388,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         XaphanModule.ModSaveData.SavedFlags.Add(Prefix + "_Ch" + chapterIndex + "_" + flag);
                     }
                 }
-            }*/
+            }
             if (pressed)
             {
                 Collidable = false;
