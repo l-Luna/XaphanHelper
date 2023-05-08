@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.XaphanHelper
@@ -228,5 +229,7 @@ namespace Celeste.Mod.XaphanHelper
         public int BagUIId2 = 0;
 
         public bool LoadedPlayer = false;
+
+        public int SoCMVer = 0;
     }
 }
