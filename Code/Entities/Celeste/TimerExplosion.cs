@@ -12,7 +12,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public TimerExplosion(Vector2 position) : base(position)
         {
             Tag = Tags.TransitionUpdate;
-            Depth = -100000;
+            Depth = -80000;
             Add(explosionSprite = new Sprite(GFX.Game, "countdown/"));
             explosionSprite.AddLoop("explosionA", "explosionA", 0.08f);
             explosionSprite.AddLoop("explosionB", "explosionB", 0.08f);
