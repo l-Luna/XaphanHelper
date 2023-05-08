@@ -25,8 +25,11 @@ namespace Celeste.Mod.XaphanHelper.Hooks
         {
             if (SaveData.Instance.GetLevelSetStats().Name == "Xaphan/0" && XaphanModule.ModSaveData.GlobalFlags.Contains("Xaphan/0_Ch4_Escape_Complete") && SaveData.Instance.CurrentSession.Area.ChapterIndex == 5)
             {
-                string type = (string)SpikesOverrideType.GetValue(self) + "_damaged";
-                SpikesOverrideType.SetValue(self, type);
+                string oldType = (string)SpikesOverrideType.GetValue(self);
+                if (oldType == "Xaphan/terminal")
+                {
+                    SpikesOverrideType.SetValue(self, oldType + "_damaged");
+                }
             }
             orig(self, scene);
         }
