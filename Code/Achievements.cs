@@ -281,7 +281,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: 1,
 				medals: 5
 			));
-            /*list.Add(new AchievementData(
+            list.Add(new AchievementData(
 				achievementID: "map1-1s",
 				categoryID: 1,
 				icon: "achievements/Xaphan/MapBronze",
@@ -289,7 +289,7 @@ namespace Celeste.Mod.XaphanHelper
 				currentValue: StatsFlags.CurrentSubAreaTiles[1][1] > 0 ? 1 : 0,
 				maxValue: 1,
 				medals: 5
-			));*/
+			));
             list.Add(new AchievementData(
 				achievementID: "map1-0",
 				categoryID: 1,
@@ -300,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 10,
 				reqID: "map1-0s"
 			));
-            /*list.Add(new AchievementData(
+            list.Add(new AchievementData(
 				achievementID: "map1-1",
 				categoryID: 1,
 				icon: "achievements/Xaphan/MapCheckmarkBronze",
@@ -309,7 +309,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: StatsFlags.TotalSubAreaTiles[1][1],
 				medals: 10,
 				reqID: "map1-1s"
-			));*/
+			));
             list.Add(new AchievementData(
 				achievementID: "strwb1-0",
 				categoryID: 1,
@@ -320,7 +320,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 10,
 				reqID: "map1-0s"
 			));
-            /*list.Add(new AchievementData(
+            list.Add(new AchievementData(
 				achievementID: "strwb1-1",
 				categoryID: 1,
 				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
@@ -329,7 +329,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: StatsFlags.TotalSubAreaStrawberries[1][1],
 				medals: 10,
 				reqID: "map1-1s"
-			));*/
+			));
             list.Add(new AchievementData(
 				achievementID: "map1",
 				categoryID: 1,
