@@ -170,19 +170,19 @@ namespace Celeste.Mod.XaphanHelper
                 ));
             }
 
-			int currentTotalStrawberries = StatsFlags.CurrentStrawberries[1] + StatsFlags.CurrentStrawberries[2] + StatsFlags.CurrentStrawberries[3] + StatsFlags.CurrentStrawberries[4] + StatsFlags.CurrentStrawberries[5];
-			int currentTotalEnergyTanks = StatsFlags.CurrentEnergyTanks[1] + StatsFlags.CurrentEnergyTanks[2] + StatsFlags.CurrentEnergyTanks[3] + StatsFlags.CurrentEnergyTanks[4] + StatsFlags.CurrentEnergyTanks[5];
-            int currentTotalFireRateModules = StatsFlags.CurrentFireRateModules[1] + StatsFlags.CurrentFireRateModules[2] + StatsFlags.CurrentFireRateModules[3] + StatsFlags.CurrentFireRateModules[4] + StatsFlags.CurrentFireRateModules[5];
-            int currentTotalMissiles = StatsFlags.CurrentMissiles[1] + StatsFlags.CurrentMissiles[2] + StatsFlags.CurrentMissiles[3] + StatsFlags.CurrentMissiles[4] + StatsFlags.CurrentMissiles[5];
-            int currentTotalSuperMissiles = StatsFlags.CurrentSuperMissiles[1] + StatsFlags.CurrentSuperMissiles[2] + StatsFlags.CurrentSuperMissiles[3] + StatsFlags.CurrentSuperMissiles[4] + StatsFlags.CurrentSuperMissiles[5];
+			int currentTotalStrawberries = StatsFlags.CurrentStrawberries[1] + StatsFlags.CurrentStrawberries[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentStrawberries[3] + StatsFlags.CurrentStrawberries[4] + StatsFlags.CurrentStrawberries[5] : 0);
+			int currentTotalEnergyTanks = StatsFlags.CurrentEnergyTanks[1] + StatsFlags.CurrentEnergyTanks[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentEnergyTanks[3] + StatsFlags.CurrentEnergyTanks[4] + StatsFlags.CurrentEnergyTanks[5] : 0);
+            int currentTotalFireRateModules = StatsFlags.CurrentFireRateModules[1] + StatsFlags.CurrentFireRateModules[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentFireRateModules[3] + StatsFlags.CurrentFireRateModules[4] + StatsFlags.CurrentFireRateModules[5] : 0);
+            int currentTotalMissiles = StatsFlags.CurrentMissiles[1] + StatsFlags.CurrentMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentMissiles[3] + StatsFlags.CurrentMissiles[4] + StatsFlags.CurrentMissiles[5] : 0);
+            int currentTotalSuperMissiles = StatsFlags.CurrentSuperMissiles[1] + StatsFlags.CurrentSuperMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentSuperMissiles[3] + StatsFlags.CurrentSuperMissiles[4] + StatsFlags.CurrentSuperMissiles[5] : 0);
             int currentTotalCassettes = StatsFlags.cassetteCount;
 			int currentTotalASideHearts = StatsFlags.heartCount;
 
-            int maxTotalStrawberries = StatsFlags.TotalStrawberries[1] + StatsFlags.TotalStrawberries[2] + StatsFlags.TotalStrawberries[3] + StatsFlags.TotalStrawberries[4] + StatsFlags.TotalStrawberries[5];
-            int maxTotalEnergyTanks = StatsFlags.TotalEnergyTanks[1] + StatsFlags.TotalEnergyTanks[2] + StatsFlags.TotalEnergyTanks[3] + StatsFlags.TotalEnergyTanks[4] + StatsFlags.TotalEnergyTanks[5];
-            int maxTotalFireRateModules = StatsFlags.TotalFireRateModules[1] + StatsFlags.TotalFireRateModules[2] + StatsFlags.TotalFireRateModules[3] + StatsFlags.TotalFireRateModules[4] + StatsFlags.TotalFireRateModules[5];
-            int maxTotalMissiles = StatsFlags.TotalMissiles[1] + StatsFlags.TotalMissiles[2] + StatsFlags.TotalMissiles[3] + StatsFlags.TotalMissiles[4] + StatsFlags.TotalMissiles[5];
-            int maxTotalSuperMissiles = StatsFlags.TotalSuperMissiles[1] + StatsFlags.TotalSuperMissiles[2] + StatsFlags.TotalSuperMissiles[3] + StatsFlags.TotalSuperMissiles[4] + StatsFlags.TotalSuperMissiles[5];
+            int maxTotalStrawberries = StatsFlags.TotalStrawberries[1] + StatsFlags.TotalStrawberries[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalStrawberries[3] + StatsFlags.TotalStrawberries[4] + StatsFlags.TotalStrawberries[5] : 0);
+            int maxTotalEnergyTanks = StatsFlags.TotalEnergyTanks[1] + StatsFlags.TotalEnergyTanks[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalEnergyTanks[3] + StatsFlags.TotalEnergyTanks[4] + StatsFlags.TotalEnergyTanks[5] : 0);
+            int maxTotalFireRateModules = StatsFlags.TotalFireRateModules[1] + StatsFlags.TotalFireRateModules[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalFireRateModules[3] + StatsFlags.TotalFireRateModules[4] + StatsFlags.TotalFireRateModules[5] : 0);
+            int maxTotalMissiles = StatsFlags.TotalMissiles[1] + StatsFlags.TotalMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalMissiles[3] + StatsFlags.TotalMissiles[4] + StatsFlags.TotalMissiles[5] : 0);
+            int maxTotalSuperMissiles = StatsFlags.TotalSuperMissiles[1] + StatsFlags.TotalSuperMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalSuperMissiles[3] + StatsFlags.TotalSuperMissiles[4] + StatsFlags.TotalSuperMissiles[5] : 0);
             int maxTotalCassettes = SaveData.Instance.GetLevelSetStatsFor(SaveData.Instance.GetLevelSet()).MaxCassettes;
 			int maxTotalASideHearts = StatsFlags.TotalASideHearts;
 
@@ -281,7 +281,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: 1,
 				medals: 5
 			));
-            list.Add(new AchievementData(
+            /*list.Add(new AchievementData(
 				achievementID: "map1-1s",
 				categoryID: 1,
 				icon: "achievements/Xaphan/MapBronze",
@@ -289,7 +289,7 @@ namespace Celeste.Mod.XaphanHelper
 				currentValue: StatsFlags.CurrentSubAreaTiles[1][1] > 0 ? 1 : 0,
 				maxValue: 1,
 				medals: 5
-			));
+			));*/
             list.Add(new AchievementData(
 				achievementID: "map1-0",
 				categoryID: 1,
@@ -300,7 +300,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 10,
 				reqID: "map1-0s"
 			));
-            list.Add(new AchievementData(
+            /*list.Add(new AchievementData(
 				achievementID: "map1-1",
 				categoryID: 1,
 				icon: "achievements/Xaphan/MapCheckmarkBronze",
@@ -309,7 +309,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: StatsFlags.TotalSubAreaTiles[1][1],
 				medals: 10,
 				reqID: "map1-1s"
-			));
+			));*/
             list.Add(new AchievementData(
 				achievementID: "strwb1-0",
 				categoryID: 1,
@@ -320,7 +320,7 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 10,
 				reqID: "map1-0s"
 			));
-            list.Add(new AchievementData(
+            /*list.Add(new AchievementData(
 				achievementID: "strwb1-1",
 				categoryID: 1,
 				icon: "achievements/Xaphan/StrawberryCheckmarkBronze",
@@ -329,7 +329,7 @@ namespace Celeste.Mod.XaphanHelper
 				maxValue: StatsFlags.TotalSubAreaStrawberries[1][1],
 				medals: 10,
 				reqID: "map1-1s"
-			));
+			));*/
             list.Add(new AchievementData(
 				achievementID: "map1",
 				categoryID: 1,
