@@ -3041,6 +3041,28 @@ namespace Celeste.Mod.XaphanHelper
                 CanLoadPlayer = true;
                 if (!self.Session.GetFlag("XaphanHelper_Loaded_Player") && !ModSaveData.LoadedPlayer && !self.Paused)
                 {
+                    bool hasInterlude = false;
+                    int maxChapters = SaveData.Instance.GetLevelSetStats().Areas.Count;
+                    for (int i = 0; i < maxChapters; i++)
+                    {
+                        if (AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + i)].Interlude)
+                        {
+                            hasInterlude = true;
+                            break;
+                        }
+                    }
+                    MapData destinationMapData;
+                    bool loadAtStartOfCampaign = false;
+                    if (ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet) && ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet))
+                    {
+                        int chapter = (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : ModSaveData.SavedChapter[self.Session.Area.LevelSet]) - (hasInterlude ? 0 : 1);
+                        destinationMapData = AreaData.Areas[SaveData.Instance.GetLevelSetStats().AreaOffset + chapter].Mode[0].MapData;
+                        Logger.Log(LogLevel.Info, "XH", "Interlude : " + hasInterlude + " - Mapdata from area " + (SaveData.Instance.GetLevelSetStats().AreaOffset + chapter) + " contains room " + ModSaveData.SavedRoom[self.Session.Area.LevelSet] + " : " + (destinationMapData.Get(ModSaveData.SavedRoom[self.Session.Area.LevelSet]) != null));
+                        if (destinationMapData.Get(ModSaveData.SavedRoom[self.Session.Area.LevelSet]) == null)
+                        {
+                            loadAtStartOfCampaign = true;
+                        }
+                    }
                     self.Session.SetFlag("XaphanHelper_Loaded_Player", true);
                     self.Session.SetFlag("XaphanHelper_Changed_Start_Room", true);
                     if (!ModSaveData.SavedRoom.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedChapter.ContainsKey(self.Session.Area.LevelSet)
@@ -3049,7 +3071,8 @@ namespace Celeste.Mod.XaphanHelper
                         || !ModSaveData.SavedMusic.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedAmbience.ContainsKey(self.Session.Area.LevelSet)
                         || !ModSaveData.SavedNoLoadEntities.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet)
                         || !ModSaveData.SavedFromBeginning.ContainsKey(self.Session.Area.LevelSet) || !ModSaveData.SavedSesionFlags.ContainsKey(self.Session.Area.LevelSet)
-                        || !ModSaveData.SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset))
+                        || !ModSaveData.SavedSessionStrawberries.ContainsKey(self.Session.Area.LevelSet) || (MergeChaptersControllerKeepPrologue && self.Session.Area.ID == SaveData.Instance.GetLevelSetStats().AreaOffset)
+                        || loadAtStartOfCampaign)
                     {
                         ModSaveData.LoadedPlayer = true;
                         ModSaveData.CanDisplayAchievementsPopups = true;
@@ -3086,16 +3109,6 @@ namespace Celeste.Mod.XaphanHelper
                     }
                     else
                     {
-                        bool hasInterlude = false;
-                        int maxChapters = SaveData.Instance.GetLevelSetStats().Areas.Count;
-                        for (int i = 0; i < maxChapters; i++)
-                        {
-                            if (AreaData.Areas[(SaveData.Instance.GetLevelSetStats().AreaOffset + i)].Interlude)
-                            {
-                                hasInterlude = true;
-                                break;
-                            }
-                        }
                         LevelEnter.Go(new Session(new AreaKey(SaveData.Instance.GetLevelSetStats().AreaOffset + (ModSaveData.SavedChapter[self.Session.Area.LevelSet] == -1 ? 0 : ModSaveData.SavedChapter[self.Session.Area.LevelSet] - (hasInterlude ? 0 : 1))))
                         {
                             Time = ModSaveData.SavedTime.ContainsKey(self.Session.Area.LevelSet) ? ModSaveData.SavedTime[self.Session.Area.LevelSet] : 0L
