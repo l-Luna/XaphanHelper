@@ -24,54 +24,16 @@ namespace Celeste.Mod.XaphanHelper.Hooks
         private static void onDecalAdded(On.Celeste.Decal.orig_Added orig, Decal self, Scene scene)
         {
             orig(self, scene);
-            string text = self.Name.ToLower();
-            if (text.StartsWith("decals/"))
-            {
-                text = text.Substring(7);
-            }
-            if (DecalRegistry.RegisteredDecals.ContainsKey(text))
-            {
-                DecalRegistry.DecalInfo decalInfo = DecalRegistry.RegisteredDecals[text];
-                foreach (KeyValuePair<string, XmlAttributeCollection> item in decalInfo.CustomProperties)
-                {
-                    if (item.Key == "XaphanHelper_flagsHide")
-                    {
-                        self.AddTag(Tags.TransitionUpdate);
-                        string flags = "";
-                        string room = "";
-                        bool inverted = false;
-                        foreach (XmlAttribute attribute in item.Value)
-                        {
-                            if (attribute.Name == "flags")
-                            {
-                                flags = attribute.Value;
-                            }
-                            if (attribute.Name == "inverted")
-                            {
-                                inverted = bool.Parse(attribute.Value);
-                            }
-                            if (attribute.Name == "room")
-                            {
-                                room = attribute.Value;
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(room) ? self.SceneAs<Level>().Session.Level == room : true)
-                        {
-                            foreach (string flag in flags.Split(','))
-                            {
-                                self.Visible = inverted ? self.SceneAs<Level>().Session.GetFlag(flag) : !self.SceneAs<Level>().Session.GetFlag(flag);
-                            }
-                        }
-                    }
-                    else if (item.Key == "XaphanHelper_flagSwap")
-                    {
-                        self.AddTag(Tags.TransitionUpdate);
-                    }
-                }
-            }
+            UpdateDecal(self);
         }
 
         private static void onDecalUpdate(On.Celeste.Decal.orig_Update orig, Decal self)
+        {
+            UpdateDecal(self);
+            orig(self);
+        }
+
+        private static void UpdateDecal(Decal self)
         {
             string text = self.Name.ToLower();
             if (text.StartsWith("decals/"))
@@ -164,7 +126,6 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                     }
                 }
             }
-            orig(self);
         }
     }
 }
