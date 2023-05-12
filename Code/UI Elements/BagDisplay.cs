@@ -607,6 +607,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             {
                 tutorialGui.RemoveSelf();
             }
+            XaphanModule.UIOpened = false;
         }
     }
 }
