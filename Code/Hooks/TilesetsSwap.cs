@@ -49,6 +49,37 @@ namespace Celeste.Mod.XaphanHelper.Hooks
                         }
                     }
                 }
+                if (self == GFX.BGAutotiler) // Background Tiles
+                {
+                    if (XaphanModule.ModSaveData.GlobalFlags.Contains("Xaphan/0_Ch4_Escape_Complete") && SaveData.Instance.CurrentSession.Area.ChapterIndex == 5) // Change Tilesets in chapter 5 after escape has occured
+                    {
+                        for (int x = 0; x < mapData.Columns; x++)
+                        {
+                            for (int y = 0; y < mapData.Rows; y++)
+                            {
+                                if (mapData[x, y] != '0')
+                                {
+                                    if (mapData[x, y] == 'v')
+                                    {
+                                        mapData[x, y] = 'V';
+                                    }
+                                    else if (mapData[x, y] == 'w')
+                                    {
+                                        mapData[x, y] = 'W';
+                                    }
+                                    else if (mapData[x, y] == 'x')
+                                    {
+                                        mapData[x, y] = 'X';
+                                    }
+                                    else if (mapData[x, y] == 'y')
+                                    {
+                                        mapData[x, y] = 'Y';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return orig(self, mapData, startX, startY, tilesX, tilesY, forceSolid, forceID, behaviour);
         }
