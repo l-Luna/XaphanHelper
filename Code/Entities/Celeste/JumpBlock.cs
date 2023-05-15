@@ -232,16 +232,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 groupOrigin = new Vector2((int)(num + (num2 - num) / 2f), (int)(num3 + (num4 - num3) / 2f));
                 wigglerScaler = new Vector2(Calc.ClampedMap(num2 - num, 32f, 96f, 1f, 0.2f), Calc.ClampedMap(num4 - num3, 32f, 96f, 1f, 0.2f));
                 Add(wiggler = Wiggler.Create(0.3f, 3f));
-                foreach (JumpBlock item2 in group)
+                foreach (JumpBlock jumpBlock in group)
                 {
-                    item2.wiggler = wiggler;
-                    item2.wigglerScaler = wigglerScaler;
-                    item2.groupOrigin = groupOrigin;
+                    jumpBlock.wiggler = wiggler;
+                    jumpBlock.wigglerScaler = wigglerScaler;
+                    jumpBlock.groupOrigin = groupOrigin;
                 }
             }
-            foreach (StaticMover staticMover2 in staticMovers)
+            foreach (StaticMover staticMover in staticMovers)
             {
-                (staticMover2.Entity as Spikes)?.SetOrigins(groupOrigin);
+                (staticMover.Entity as Spikes)?.SetOrigins(groupOrigin);
             }
             for (float num5 = Left; num5 < Right; num5 += 8f)
             {
@@ -251,7 +251,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     bool flag2 = CheckForSame(num5 + 8f, num6);
                     bool flag3 = CheckForSame(num5, num6 - 8f);
                     bool flag4 = CheckForSame(num5, num6 + 8f);
-
                     if (improvedTileset)
                     {
                         if ((flag && flag2) & flag3 & flag4)
@@ -402,15 +401,15 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (onlyOneTileset)
             {
+                black.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
                 solid.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
                 pressed.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
-                black.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
             }
             else
             {
                 List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(directory + "/pressed" + (improvedTileset ? "-impr" : ""));
-                pressed.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
                 black.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
+                pressed.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
                 solid.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
             }
         }
@@ -490,7 +489,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!Collidable)
             {
-                Depth = 8990;
+                if (Depth != 9000)
+                {
+                    Depth = 9000;
+                }
                 if (switchType == "Fade" && alpha > 0.25f && !AlphaRoutine.Active)
                 {
                     setAlpha(false);
@@ -498,14 +500,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                Player entity = Scene.Tracker.GetEntity<Player>();
-                if (entity != null && entity.Top >= Bottom - 1f)
+                if (Depth != -13000)
                 {
-                    Depth = 10;
-                }
-                else
-                {
-                    Depth = -10;
+                    Depth = -13000;
                 }
                 if (switchType == "Fade" && alpha != 1f && !AlphaRoutine.Active)
                 {
@@ -528,13 +525,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
             foreach (Image image in pressed)
             {
                 image.Visible = !Collidable;
+                if (switchType == "Fade")
+                {
+                    image.Color = color * alpha;
+                }
             }
             if (switchType == "Fade")
             {
                 foreach (Image image in black)
                 {
-                    image.Visible = !Collidable;
-                    image.Color = Color.Black * (1 - alpha);
+                    image.Visible = (alpha != 1f);
+                    image.Color = Color.Black;
                 }
             }
             if (groupLeader)
