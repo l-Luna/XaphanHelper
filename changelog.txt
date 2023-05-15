@@ -1,4 +1,5 @@
 Version 1.0.55 :
+- Added Jump Blocks Flip Sound Controller
 - Added Stop Entity Respawn Trigger
 - Added Flag On Interact Trigger
 - Added "Tutorial" attribute to Drone Switches
