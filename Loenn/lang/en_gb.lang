@@ -428,6 +428,9 @@ entities.XaphanHelper/JumpBlock.attributes.description.index=Index of the block.
 entities.XaphanHelper/JumpBlock.attributes.description.color=Hexadecimal code for the color of the block.
 entities.XaphanHelper/JumpBlock.attributes.description.directory=The directory from which the sprites are taken, relative to Atlases/Gameplay/.
 entities.XaphanHelper/JumpBlock.attributes.description.soundIndex=Sound that play when the player grab, land or walk on the block.
+entities.XaphanHelper/JumpBlock.attributes.description.switchType=Wiggle: The block will wiggle a bit when its state change from solid to air and vice versa.\nFade: The block will become darker when changing from solid to air, and lighter again when switching from air to solid.
+entities.XaphanHelper/JumpBlock.attributes.description.improvedTileset=Use a tileset that allow for some randomness in the tiles instead of the default one.
+entities.XaphanHelper/JumpBlock.attributes.description.onlyOneTileset=If true, use only the 'solid' tileset, no matter the state of the block.
 
 # LaserDetector
 entities.XaphanHelper/LaserDetector.placements.name.LaserDetector=Laser Detector

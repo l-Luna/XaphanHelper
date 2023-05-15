@@ -21,6 +21,10 @@ JumpBlock.fieldInformation = {
     soundIndex = {
         options = enums.tileset_sound_ids,
         editable = false
+    },
+    switchType = {
+        options = {"Wiggle", "Fade"},
+        editable = false
     }
 }
 JumpBlock.placements = {
@@ -31,7 +35,10 @@ JumpBlock.placements = {
         index = 0,
         color = "FFFFFF",
         directory = "objects/XaphanHelper/JumpBlock",
-        soundIndex = 35
+        soundIndex = 35,
+        switchType = "Wiggle",
+        improvedTileset = false,
+        onlyOneTileset = false
     }
 }
 
@@ -42,6 +49,7 @@ local function getSearchPredicate(entity)
 end
 
 local function getTileSprite(entity, x, y, frame, color, depth, rectangles)
+    local improvedTileset = entity.improvedTileset or false
     local hasAdjacent = connectedEntities.hasAdjacent
 
     local drawX, drawY = (x - 1) * 8, (y - 1) * 8
@@ -54,48 +62,93 @@ local function getTileSprite(entity, x, y, frame, color, depth, rectangles)
 
     local quadX, quadY = false, false
 
-    if completelyClosed then
-        if not hasAdjacent(entity, drawX + 8, drawY - 8, rectangles) then
-            quadX, quadY = 24, 0
-
-        elseif not hasAdjacent(entity, drawX - 8, drawY - 8, rectangles) then
-            quadX, quadY = 24, 8
-
-        elseif not hasAdjacent(entity, drawX + 8, drawY + 8, rectangles) then
-            quadX, quadY = 24, 16
-
-        elseif not hasAdjacent(entity, drawX - 8, drawY + 8, rectangles) then
-            quadX, quadY = 24, 24
-
+    if improvedTileset then
+        if completelyClosed then
+            if not hasAdjacent(entity, drawX + 8, drawY - 8, rectangles) then
+                quadX, quadY = 0, 64
+    
+            elseif not hasAdjacent(entity, drawX - 8, drawY - 8, rectangles) then
+                quadX, quadY = 8, 64
+    
+            elseif not hasAdjacent(entity, drawX + 8, drawY + 8, rectangles) then
+                quadX, quadY = 16, 64
+    
+            elseif not hasAdjacent(entity, drawX - 8, drawY + 8, rectangles) then
+                quadX, quadY = 24, 64
+    
+            else
+                quadX, quadY = 0, 72
+            end
         else
-            quadX, quadY = 8, 8
+            if closedLeft and closedRight and not closedUp and closedDown then
+                quadX, quadY = 0, 0
+    
+            elseif closedLeft and closedRight and closedUp and not closedDown then
+                quadX, quadY = 0, 8
+    
+            elseif closedLeft and not closedRight and closedUp and closedDown then
+                quadX, quadY = 0, 24
+    
+            elseif not closedLeft and closedRight and closedUp and closedDown then
+                quadX, quadY = 0, 16
+    
+            elseif closedLeft and not closedRight and not closedUp and closedDown then
+                quadX, quadY = 0, 40
+    
+            elseif not closedLeft and closedRight and not closedUp and closedDown then
+                quadX, quadY = 0, 32
+    
+            elseif not closedLeft and closedRight and closedUp and not closedDown then
+                quadX, quadY = 0, 48
+    
+            elseif closedLeft and not closedRight and closedUp and not closedDown then
+                quadX, quadY = 0, 56
+            end
         end
     else
-        if closedLeft and closedRight and not closedUp and closedDown then
-            quadX, quadY = 8, 0
-
-        elseif closedLeft and closedRight and closedUp and not closedDown then
-            quadX, quadY = 8, 16
-
-        elseif closedLeft and not closedRight and closedUp and closedDown then
-            quadX, quadY = 16, 8
-
-        elseif not closedLeft and closedRight and closedUp and closedDown then
-            quadX, quadY = 0, 8
-
-        elseif closedLeft and not closedRight and not closedUp and closedDown then
-            quadX, quadY = 16, 0
-
-        elseif not closedLeft and closedRight and not closedUp and closedDown then
-            quadX, quadY = 0, 0
-
-        elseif not closedLeft and closedRight and closedUp and not closedDown then
-            quadX, quadY = 0, 16
-
-        elseif closedLeft and not closedRight and closedUp and not closedDown then
-            quadX, quadY = 16, 16
+        if completelyClosed then
+            if not hasAdjacent(entity, drawX + 8, drawY - 8, rectangles) then
+                quadX, quadY = 24, 0
+    
+            elseif not hasAdjacent(entity, drawX - 8, drawY - 8, rectangles) then
+                quadX, quadY = 24, 8
+    
+            elseif not hasAdjacent(entity, drawX + 8, drawY + 8, rectangles) then
+                quadX, quadY = 24, 16
+    
+            elseif not hasAdjacent(entity, drawX - 8, drawY + 8, rectangles) then
+                quadX, quadY = 24, 24
+    
+            else
+                quadX, quadY = 8, 8
+            end
+        else
+            if closedLeft and closedRight and not closedUp and closedDown then
+                quadX, quadY = 8, 0
+    
+            elseif closedLeft and closedRight and closedUp and not closedDown then
+                quadX, quadY = 8, 16
+    
+            elseif closedLeft and not closedRight and closedUp and closedDown then
+                quadX, quadY = 16, 8
+    
+            elseif not closedLeft and closedRight and closedUp and closedDown then
+                quadX, quadY = 0, 8
+    
+            elseif closedLeft and not closedRight and not closedUp and closedDown then
+                quadX, quadY = 16, 0
+    
+            elseif not closedLeft and closedRight and not closedUp and closedDown then
+                quadX, quadY = 0, 0
+    
+            elseif not closedLeft and closedRight and closedUp and not closedDown then
+                quadX, quadY = 0, 16
+    
+            elseif closedLeft and not closedRight and closedUp and not closedDown then
+                quadX, quadY = 16, 16
+            end
         end
-    end
+    end  
 
     if quadX and quadY then
         local sprite = drawableSprite.fromTexture(frame, entity)
@@ -111,6 +164,7 @@ local function getTileSprite(entity, x, y, frame, color, depth, rectangles)
 end
 
 function JumpBlock.sprite(room, entity)
+    local improvedTileset = entity.improvedTileset or false
     local relevantBlocks = utils.filter(getSearchPredicate(entity), room.entities)
 
     connectedEntities.appendIfMissing(relevantBlocks, entity)
@@ -125,10 +179,18 @@ function JumpBlock.sprite(room, entity)
     local color = entity.color
 
     local frame
-    if entity.startPressed then
-        frame = entity.directory .. "/pressed00"
+    if improvedTileset then
+        if entity.startPressed then
+            frame = entity.directory .. "/pressed-impr00"
+        else
+            frame = entity.directory .. "/solid-impr"
+        end
     else
-        frame = entity.directory .. "/solid"
+        if entity.startPressed then
+            frame = entity.directory .. "/pressed00"
+        else
+            frame = entity.directory .. "/solid"
+        end
     end
     local depth = 0
 

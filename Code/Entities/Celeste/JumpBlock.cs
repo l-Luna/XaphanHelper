@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq;
 using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
@@ -21,6 +26,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Color color;
 
+        private Color disabledColor;
+
+        private List<Image> black = new();
+
         private List<Image> pressed = new();
 
         private List<Image> solid = new();
@@ -33,6 +42,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Vector2 wigglerScaler;
 
+        public float alpha;
+
+        private string switchType;
+
+        private bool improvedTileset;
+
+        private bool onlyOneTileset;
+
+        private Coroutine AlphaRoutine = new();
+
         public JumpBlock(EntityData data, Vector2 position) : base(data.Position + position, data.Width, data.Height, safe: true)
         {
             Tag = Tags.TransitionUpdate;
@@ -43,8 +62,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 directory = "objects/XaphanHelper/JumpBlock";
             }
-            Collidable = false;
             color = Calc.HexToColor(data.Attr("color"));
+            Collidable = false;
+            switchType = data.Attr("switchType", "Wiggle");
+            improvedTileset = data.Bool("improvedTileset", false);
+            onlyOneTileset = data.Bool("onlyOneTileset", false);
             Add(occluder = new LightOcclude());
         }
 
@@ -69,6 +91,36 @@ namespace Celeste.Mod.XaphanHelper.Entities
         public void setCurrentIndex(int index)
         {
             currentIndex = index;
+        }
+
+        public void setAlpha(bool inverted)
+        {
+            Add(AlphaRoutine = new Coroutine(ChangeAlphaRoutine(inverted)));
+        }
+
+        private IEnumerator ChangeAlphaRoutine(bool inverted)
+        {
+            float timer = 0.15f;
+            if (!inverted)
+            {
+                while (timer > 0)
+                {
+                    alpha -= 5 * Engine.DeltaTime;
+                    timer -= Engine.DeltaTime;
+                    yield return null;
+                }
+                alpha = 0.25f;
+            }
+            else
+            {
+                while (timer > 0)
+                {
+                    alpha += 5 * Engine.DeltaTime;
+                    timer -= Engine.DeltaTime;
+                    yield return null;
+                }
+                alpha = 1f;
+            }
         }
 
         public override void Added(Scene scene)
@@ -101,26 +153,48 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     indexes.Sort();
                     foreach (JumpBlock jumpblock in SceneAs<Level>().Tracker.GetEntities<JumpBlock>())
                     {
-                        jumpblock.setCurrentIndex(indexes[0]);
+                        setCurrentIndex(indexes[0]);
+                    }
+                    if (indexes.Count > 1)
+                    {
+                        alpha = Index == currentIndex ? 1f : 0.25f;
+                    }
+                    else
+                    {
+                        alpha = 1f;
                     }
                 }
             }
+            Color colorMask = Calc.HexToColor("667da5");
+            disabledColor = new(colorMask.R / 255f * (color.R / 255f), colorMask.G / 255f * (color.G / 255f), colorMask.B / 255f * (color.B / 255f), alpha);
         }
 
         public override void Awake(Scene scene)
         {
             base.Awake(scene);
-            Color color = Calc.HexToColor("667da5");
-            Color disabledColor = new(color.R / 255f * (this.color.R / 255f), color.G / 255f * (this.color.G / 255f), color.B / 255f * (this.color.B / 255f), 1f);
             foreach (StaticMover staticMover in staticMovers)
             {
                 Spikes spikes = staticMover.Entity as Spikes;
                 if (spikes != null)
                 {
-                    spikes.EnabledColor = this.color;
-                    spikes.DisabledColor = disabledColor;
+                    if (switchType == "Fade")
+                    {
+                        spikes.EnabledColor = color * alpha;
+                    }
+                    else
+                    {
+                        spikes.EnabledColor = color;
+                    }
+                    if (switchType == "Fade")
+                    {
+                        spikes.DisabledColor = disabledColor * alpha;
+                    }
+                    else
+                    {
+                        spikes.DisabledColor = disabledColor;
+                    }
                     spikes.VisibleWhenDisabled = true;
-                    spikes.SetSpikeColor(this.color);
+                    spikes.SetSpikeColor(color);
                 }
                 Spring spring = staticMover.Entity as Spring;
                 if (spring != null)
@@ -139,26 +213,26 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 float num2 = float.MinValue;
                 float num3 = float.MaxValue;
                 float num4 = float.MinValue;
-                foreach (JumpBlock item in group)
+                foreach (JumpBlock jumpBlock in group)
                 {
-                    if (item.Left < num)
+                    if (jumpBlock.Left < num)
                     {
-                        num = item.Left;
+                        num = jumpBlock.Left;
                     }
-                    if (item.Right > num2)
+                    if (jumpBlock.Right > num2)
                     {
-                        num2 = item.Right;
+                        num2 = jumpBlock.Right;
                     }
-                    if (item.Bottom > num4)
+                    if (jumpBlock.Bottom > num4)
                     {
-                        num4 = item.Bottom;
+                        num4 = jumpBlock.Bottom;
                     }
-                    if (item.Top < num3)
+                    if (jumpBlock.Top < num3)
                     {
-                        num3 = item.Top;
+                        num3 = jumpBlock.Top;
                     }
                 }
-                groupOrigin = new Vector2((int)(num + (num2 - num) / 2f), (int)num4);
+                groupOrigin = new Vector2((int)(num + (num2 - num) / 2f), (int)(num3 + (num4 - num3) / 2f));
                 wigglerScaler = new Vector2(Calc.ClampedMap(num2 - num, 32f, 96f, 1f, 0.2f), Calc.ClampedMap(num4 - num3, 32f, 96f, 1f, 0.2f));
                 Add(wiggler = Wiggler.Create(0.3f, 3f));
                 foreach (JumpBlock item2 in group)
@@ -180,60 +254,122 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     bool flag2 = CheckForSame(num5 + 8f, num6);
                     bool flag3 = CheckForSame(num5, num6 - 8f);
                     bool flag4 = CheckForSame(num5, num6 + 8f);
-                    if ((flag && flag2) & flag3 & flag4)
+
+                    if (improvedTileset)
                     {
-                        if (!CheckForSame(num5 + 8f, num6 - 8f))
+                        if ((flag && flag2) & flag3 & flag4)
                         {
-                            SetImage(num5, num6, 3, 0);
+                            if (!CheckForSame(num5 + 8f, num6 - 8f))
+                            {
+                                SetImage(num5, num6, 0, 8);
+                            }
+                            else if (!CheckForSame(num5 - 8f, num6 - 8f))
+                            {
+                                SetImage(num5, num6, 1, 8);
+                            }
+                            else if (!CheckForSame(num5 + 8f, num6 + 8f))
+                            {
+                                SetImage(num5, num6, 2, 8);
+                            }
+                            else if (!CheckForSame(num5 - 8f, num6 + 8f))
+                            {
+                                SetImage(num5, num6, 3, 8);
+                            }
+                            else
+                            {
+                                SetImage(num5, num6, 0 + Calc.Random.Next(4), 9);
+                            }
                         }
-                        else if (!CheckForSame(num5 - 8f, num6 - 8f))
+                        else if ((flag && flag2 && !flag3) & flag4)
                         {
-                            SetImage(num5, num6, 3, 1);
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 0);
                         }
-                        else if (!CheckForSame(num5 + 8f, num6 + 8f))
+                        else if (((flag && flag2) & flag3) && !flag4)
                         {
-                            SetImage(num5, num6, 3, 2);
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 1);
                         }
-                        else if (!CheckForSame(num5 - 8f, num6 + 8f))
+                        else if ((flag && !flag2) & flag3 & flag4)
                         {
-                            SetImage(num5, num6, 3, 3);
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 3);
                         }
-                        else
+                        else if ((!flag && flag2) & flag3 & flag4)
                         {
-                            SetImage(num5, num6, 1, 1);
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 2);
+                        }
+                        else if ((flag && !flag2 && !flag3) & flag4)
+                        {
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 5);
+                        }
+                        else if ((!flag && flag2 && !flag3) & flag4)
+                        {
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 4);
+                        }
+                        else if (((flag && !flag2) & flag3) && !flag4)
+                        {
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 7);
+                        }
+                        else if (((!flag && flag2) & flag3) && !flag4)
+                        {
+                            SetImage(num5, num6, 0 + Calc.Random.Next(4), 6);
                         }
                     }
-                    else if ((flag && flag2 && !flag3) & flag4)
+                    else
                     {
-                        SetImage(num5, num6, 1, 0);
-                    }
-                    else if (((flag && flag2) & flag3) && !flag4)
-                    {
-                        SetImage(num5, num6, 1, 2);
-                    }
-                    else if ((flag && !flag2) & flag3 & flag4)
-                    {
-                        SetImage(num5, num6, 2, 1);
-                    }
-                    else if ((!flag && flag2) & flag3 & flag4)
-                    {
-                        SetImage(num5, num6, 0, 1);
-                    }
-                    else if ((flag && !flag2 && !flag3) & flag4)
-                    {
-                        SetImage(num5, num6, 2, 0);
-                    }
-                    else if ((!flag && flag2 && !flag3) & flag4)
-                    {
-                        SetImage(num5, num6, 0, 0);
-                    }
-                    else if (((flag && !flag2) & flag3) && !flag4)
-                    {
-                        SetImage(num5, num6, 2, 2);
-                    }
-                    else if (((!flag && flag2) & flag3) && !flag4)
-                    {
-                        SetImage(num5, num6, 0, 2);
+                        if ((flag && flag2) & flag3 & flag4)
+                        {
+                            if (!CheckForSame(num5 + 8f, num6 - 8f))
+                            {
+                                SetImage(num5, num6, 3, 0);
+                            }
+                            else if (!CheckForSame(num5 - 8f, num6 - 8f))
+                            {
+                                SetImage(num5, num6, 3, 1);
+                            }
+                            else if (!CheckForSame(num5 + 8f, num6 + 8f))
+                            {
+                                SetImage(num5, num6, 3, 2);
+                            }
+                            else if (!CheckForSame(num5 - 8f, num6 + 8f))
+                            {
+                                SetImage(num5, num6, 3, 3);
+                            }
+                            else
+                            {
+                                SetImage(num5, num6, 1, 1);
+                            }
+                        }
+                        else if ((flag && flag2 && !flag3) & flag4)
+                        {
+                            SetImage(num5, num6, 1, 0);
+                        }
+                        else if (((flag && flag2) & flag3) && !flag4)
+                        {
+                            SetImage(num5, num6, 1, 2);
+                        }
+                        else if ((flag && !flag2) & flag3 & flag4)
+                        {
+                            SetImage(num5, num6, 2, 1);
+                        }
+                        else if ((!flag && flag2) & flag3 & flag4)
+                        {
+                            SetImage(num5, num6, 0, 1);
+                        }
+                        else if ((flag && !flag2 && !flag3) & flag4)
+                        {
+                            SetImage(num5, num6, 2, 0);
+                        }
+                        else if ((!flag && flag2 && !flag3) & flag4)
+                        {
+                            SetImage(num5, num6, 0, 0);
+                        }
+                        else if (((flag && !flag2) & flag3) && !flag4)
+                        {
+                            SetImage(num5, num6, 2, 2);
+                        }
+                        else if (((!flag && flag2) & flag3) && !flag4)
+                        {
+                            SetImage(num5, num6, 0, 2);
+                        }
                     }
                 }
             }
@@ -242,7 +378,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void FindInGroup(JumpBlock block)
         {
-            foreach (JumpBlock entity in base.Scene.Tracker.GetEntities<JumpBlock>())
+            foreach (JumpBlock entity in Scene.Tracker.GetEntities<JumpBlock>())
             {
                 if (entity != this && entity != block && entity.Index == Index && (entity.CollideRect(new Rectangle((int)block.X - 1, (int)block.Y, (int)block.Width + 2, (int)block.Height)) || entity.CollideRect(new Rectangle((int)block.X, (int)block.Y - 1, (int)block.Width, (int)block.Height + 2))) && !group.Contains(entity))
                 {
@@ -267,9 +403,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void SetImage(float x, float y, int tx, int ty)
         {
-            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(directory + "/pressed");
-            pressed.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
-            solid.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid"]));
+            if (onlyOneTileset)
+            {
+                solid.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
+                pressed.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
+                black.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
+            }
+            else
+            {
+                List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(directory + "/pressed" + (improvedTileset ? "-impr" : ""));
+                pressed.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
+                black.Add(CreateImage(x, y, tx, ty, atlasSubtextures[Index % 2 != 0 ? 0 : 1]));
+                solid.Add(CreateImage(x, y, tx, ty, GFX.Game[directory + "/solid" + (improvedTileset ? "-impr" : "")]));
+            }
         }
 
         private Image CreateImage(float x, float y, int tx, int ty, MTexture tex)
@@ -299,9 +445,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (groupLeader && currentIndex == Index && !Collidable)
             {
                 bool flag = false;
-                foreach (JumpBlock item in group)
+                foreach (JumpBlock block in group)
                 {
-                    if (item.BlockedCheck())
+                    if (block.BlockedCheck())
                     {
                         flag = true;
                         break;
@@ -309,10 +455,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
                 if (!flag)
                 {
-                    foreach (JumpBlock item2 in group)
+                    foreach (JumpBlock block in group)
                     {
-                        item2.Collidable = true;
-                        item2.EnableStaticMovers();
+                        block.Collidable = true;
+                        block.EnableStaticMovers();
                     }
                     if (!SceneAs<Level>().Transitioning)
                     {
@@ -348,6 +494,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (!Collidable)
             {
                 Depth = 8990;
+                if (switchType == "Fade" && alpha > 0.25f && !AlphaRoutine.Active)
+                {
+                    setAlpha(false);
+                }
             }
             else
             {
@@ -360,32 +510,57 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 {
                     Depth = -10;
                 }
+                if (switchType == "Fade" && alpha != 1f && !AlphaRoutine.Active)
+                {
+                    setAlpha(true);
+                }
             }
             foreach (StaticMover staticMover in staticMovers)
             {
                 staticMover.Entity.Depth = Depth + 1;
             }
             occluder.Visible = Collidable;
-            foreach (Image item in solid)
+            foreach (Image image in solid)
             {
-                item.Visible = Collidable;
+                image.Visible = Collidable;
+                if (switchType == "Fade")
+                {
+                    image.Color = color * alpha;
+                }
             }
-            foreach (Image item2 in pressed)
+            foreach (Image image in pressed)
             {
-                item2.Visible = !Collidable;
+                image.Visible = !Collidable;
+            }
+            if (switchType == "Fade")
+            {
+                foreach (Image image in black)
+                {
+                    image.Visible = !Collidable;
+                    image.Color = Color.Black * (1 - alpha);
+                }
             }
             if (groupLeader)
             {
-                Vector2 scale = new(1f + wiggler.Value * 0.05f * wigglerScaler.X, 1f + wiggler.Value * 0.15f * wigglerScaler.Y);
-                foreach (JumpBlock item3 in group)
+                Vector2 scale = new();
+                if (switchType == "Wiggle")
                 {
-                    foreach (Image item4 in item3.all)
+                    scale = new(1f + wiggler.Value * 0.05f * wigglerScaler.X, 1f + wiggler.Value * 0.15f * wigglerScaler.Y);
+                }
+                else if (switchType == "Fade")
+                {
+                    scale = new(1f);
+                }
+                foreach (JumpBlock jumpBlock in group)
+                {
+                    jumpBlock.alpha = alpha;
+                    foreach (Image image in jumpBlock.all)
                     {
-                        item4.Scale = scale;
+                        image.Scale = scale;
                     }
-                    foreach (StaticMover staticMover2 in item3.staticMovers)
+                    foreach (StaticMover staticMover in jumpBlock.staticMovers)
                     {
-                        Spikes spikes = staticMover2.Entity as Spikes;
+                        Spikes spikes = staticMover.Entity as Spikes;
                         if (spikes != null)
                         {
                             foreach (Component component in spikes.Components)
