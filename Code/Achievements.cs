@@ -170,21 +170,35 @@ namespace Celeste.Mod.XaphanHelper
                 ));
             }
 
-			int currentTotalStrawberries = StatsFlags.CurrentStrawberries[1] + StatsFlags.CurrentStrawberries[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentStrawberries[3] + StatsFlags.CurrentStrawberries[4] + StatsFlags.CurrentStrawberries[5] : 0);
-			int currentTotalEnergyTanks = StatsFlags.CurrentEnergyTanks[1] + StatsFlags.CurrentEnergyTanks[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentEnergyTanks[3] + StatsFlags.CurrentEnergyTanks[4] + StatsFlags.CurrentEnergyTanks[5] : 0);
-            int currentTotalFireRateModules = StatsFlags.CurrentFireRateModules[1] + StatsFlags.CurrentFireRateModules[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentFireRateModules[3] + StatsFlags.CurrentFireRateModules[4] + StatsFlags.CurrentFireRateModules[5] : 0);
-            int currentTotalMissiles = StatsFlags.CurrentMissiles[1] + StatsFlags.CurrentMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentMissiles[3] + StatsFlags.CurrentMissiles[4] + StatsFlags.CurrentMissiles[5] : 0);
-            int currentTotalSuperMissiles = StatsFlags.CurrentSuperMissiles[1] + StatsFlags.CurrentSuperMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.CurrentSuperMissiles[3] + StatsFlags.CurrentSuperMissiles[4] + StatsFlags.CurrentSuperMissiles[5] : 0);
-            int currentTotalCassettes = StatsFlags.cassetteCount;
-			int currentTotalASideHearts = StatsFlags.heartCount;
+			int currentTotalStrawberries = 0;
+            int currentTotalEnergyTanks = 0;
+            int currentTotalFireRateModules = 0;
+            int currentTotalMissiles = 0;
+            int currentTotalSuperMissiles = 0;
+            int maxTotalStrawberries = 0;
+            int maxTotalEnergyTanks = 0;
+            int maxTotalFireRateModules = 0;
+            int maxTotalMissiles = 0;
+			int maxTotalSuperMissiles = 0;
 
-            int maxTotalStrawberries = StatsFlags.TotalStrawberries[1] + StatsFlags.TotalStrawberries[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalStrawberries[3] + StatsFlags.TotalStrawberries[4] + StatsFlags.TotalStrawberries[5] : 0);
-            int maxTotalEnergyTanks = StatsFlags.TotalEnergyTanks[1] + StatsFlags.TotalEnergyTanks[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalEnergyTanks[3] + StatsFlags.TotalEnergyTanks[4] + StatsFlags.TotalEnergyTanks[5] : 0);
-            int maxTotalFireRateModules = StatsFlags.TotalFireRateModules[1] + StatsFlags.TotalFireRateModules[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalFireRateModules[3] + StatsFlags.TotalFireRateModules[4] + StatsFlags.TotalFireRateModules[5] : 0);
-            int maxTotalMissiles = StatsFlags.TotalMissiles[1] + StatsFlags.TotalMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalMissiles[3] + StatsFlags.TotalMissiles[4] + StatsFlags.TotalMissiles[5] : 0);
-            int maxTotalSuperMissiles = StatsFlags.TotalSuperMissiles[1] + StatsFlags.TotalSuperMissiles[2] + (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? StatsFlags.TotalSuperMissiles[3] + StatsFlags.TotalSuperMissiles[4] + StatsFlags.TotalSuperMissiles[5] : 0);
+            for (int i = 1; i <= (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? 5 : 2); i++)
+			{
+				currentTotalStrawberries += StatsFlags.CurrentStrawberries[i];
+				currentTotalEnergyTanks += StatsFlags.CurrentEnergyTanks[i];
+				currentTotalFireRateModules += StatsFlags.CurrentFireRateModules[i];
+				currentTotalMissiles += StatsFlags.CurrentMissiles[i];
+				currentTotalSuperMissiles += StatsFlags.CurrentSuperMissiles[i];
+				maxTotalStrawberries += StatsFlags.TotalStrawberries[i];
+				maxTotalEnergyTanks += StatsFlags.TotalEnergyTanks[i];
+				maxTotalFireRateModules += StatsFlags.TotalFireRateModules[i];
+				maxTotalMissiles += StatsFlags.TotalMissiles[i];
+				maxTotalSuperMissiles += StatsFlags.TotalSuperMissiles[i];
+            }
+
+            int currentTotalCassettes = StatsFlags.cassetteCount;
+            int currentTotalASideHearts = StatsFlags.heartCount;
             int maxTotalCassettes = SaveData.Instance.GetLevelSetStatsFor(SaveData.Instance.GetLevelSet()).MaxCassettes;
-			int maxTotalASideHearts = StatsFlags.TotalASideHearts;
+            int maxTotalASideHearts = StatsFlags.TotalASideHearts;
 
             list.Add(new AchievementData(
 				achievementID: "strwb",
