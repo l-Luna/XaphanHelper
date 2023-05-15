@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
 using Celeste.Mod.Entities;
+using Celeste.Mod.XaphanHelper.Controllers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
@@ -608,6 +605,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static void jumpCheck(Player player)
         {
+            string jumpOnSound = "event:/game/general/cassette_block_switch_1";
+            string jumpOffSound = "event:/game/general/cassette_block_switch_2";
+            if (player.SceneAs<Level>().Tracker.GetEntities<JumpBlocksFlipSoundController>().Count > 0)
+            {
+                JumpBlocksFlipSoundController controller = player.SceneAs<Level>().Tracker.GetEntity<JumpBlocksFlipSoundController>();
+                jumpOnSound = controller.onSound;
+                jumpOffSound = controller.offSound;
+            }
             if (player.SceneAs<Level>().Tracker.GetEntities<JumpBlock>().Count > 0)
             {
                 List<int> indexes = new();
@@ -623,7 +628,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 indexes.Sort();
                 if (indexes.Count == 1)
                 {
-                    int soundID = 0;
+                    int soundID = 1;
                     foreach (JumpBlock jumpblock in player.SceneAs<Level>().Tracker.GetEntities<JumpBlock>())
                     {
                         if (jumpblock.currentIndex == -1)
@@ -637,7 +642,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                             soundID = 1;
                         }
                     }
-                    Audio.Play("event:/game/general/cassette_block_switch_" + soundID);
+                    _ = soundID == 1 ? Audio.Play(jumpOnSound) : Audio.Play(jumpOffSound);
                 }
                 else
                 {
@@ -646,14 +651,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     {
                         listindex = -1;
                     }
-                    if (listindex % 2 != 0)
-                    {
-                        Audio.Play("event:/game/general/cassette_block_switch_1");
-                    }
-                    else
-                    {
-                        Audio.Play("event:/game/general/cassette_block_switch_2");
-                    }
+                    _ = (listindex % 2 != 0) ? Audio.Play(jumpOnSound) : Audio.Play(jumpOffSound);
                     foreach (JumpBlock jumpblock in player.SceneAs<Level>().Tracker.GetEntities<JumpBlock>())
                     {
                         jumpblock.setCurrentIndex(indexes[listindex + 1]);

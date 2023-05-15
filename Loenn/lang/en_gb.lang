@@ -432,6 +432,11 @@ entities.XaphanHelper/JumpBlock.attributes.description.switchType=Wiggle: The bl
 entities.XaphanHelper/JumpBlock.attributes.description.improvedTileset=Use a tileset that allow for some randomness in the tiles instead of the default one.
 entities.XaphanHelper/JumpBlock.attributes.description.onlyOneTileset=If true, use only the 'solid' tileset, no matter the state of the block.
 
+# JumpBlocksFlipSoundController
+entities.XaphanHelper/JumpBlocksFlipSoundController.placements.name.JumpBlocksFlipSoundController=Jump Block Flip Sound Controller
+entities.XaphanHelper/JumpBlocksFlipSoundController.attributes.description.onSound=Sound event that play when the blocks switches from solid to air.
+entities.XaphanHelper/JumpBlocksFlipSoundController.attributes.description.offSound=Sound event that play when the blocks switches from air to solid.
+
 # LaserDetector
 entities.XaphanHelper/LaserDetector.placements.name.LaserDetector=Laser Detector
 entities.XaphanHelper/LaserDetector.attributes.description.flag=The flag that will be set as long as a laser beam collide with this detector.
