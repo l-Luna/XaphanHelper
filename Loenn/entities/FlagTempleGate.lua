@@ -6,10 +6,15 @@ local FlagTempleGate = {}
 FlagTempleGate.name = "XaphanHelper/FlagTempleGate"
 FlagTempleGate.depth = -9000
 FlagTempleGate.fieldOrder = {
-    "x", "y", "spriteName", "openOnHeartCollection", "horizontal", "attachRight", "flag", "startOpen", 
+    "x", "y", "flag", "spriteName", "horizontal", "attachRight", "startOpen", "openOnHeartCollection"
 }
 FlagTempleGate.ignoredFields = {
     "_name", "_id", "width", "height"
+}
+FlagTempleGate.fieldInformation = {
+    spriteName = {
+        options = {"default", "mirror", "theo"}
+    }
 }
 FlagTempleGate.canResize = {false, false}
 FlagTempleGate.placements = {
@@ -29,13 +34,13 @@ FlagTempleGate.placements = {
 function FlagTempleGate.sprite(room, entity)
     local horizontal = entity.horizontal or false
     local attachRight = entity.attachRight or false
-    local spriteName = entity.spriteName or "default"
     local directory = {}
     directory["default"] = "objects/door/TempleDoor00"
     directory["mirror"] = "objects/door/TempleDoorB00"
     directory["theo"] = "objects/door/TempleDoorC00"
+    local texture = directory[entity.spriteName] or directory["mirror"]
     
-    local sprite = drawableSprite.fromTexture(directory[spriteName], entity)
+    local sprite = drawableSprite.fromTexture(texture, entity)
 
     if horizontal then
         if attachRight then

@@ -12,6 +12,9 @@ FlagDashSwitch.fieldInformation = {
         options = {"Left", "Right", "Up", "Down"},
         editable = false
     },
+    spriteName = {
+        options = {"default", "mirror"}
+    },
     mode = {
         options = {"SetTrue", "SetFalse", "SetInverted"},
         editable = false;
@@ -44,7 +47,7 @@ function FlagDashSwitch.sprite(room, entity)
     local sprites = {}
     sprites["default"] = "objects/temple/dashButton00"
     sprites["mirror"] = "objects/temple/dashButtonMirror00"
-    local texture = entity.spriteName == "default" and sprites["default"] or sprites["mirror"]
+    local texture = sprites[entity.spriteName] or sprites["mirror"]
     local sprite = drawableSprite.fromTexture(texture, entity)
     local side = entity.side
     local inWall = entity.inWall or false
