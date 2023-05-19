@@ -2,6 +2,7 @@ Version 1.0.55 :
 - Added Jump Blocks Flip Sound Controller
 - Added Stop Entity Respawn Trigger
 - Added Flag On Interact Trigger
+- Added Unlock Warp Trigger
 - Added "Tutorial" attribute to Drone Switches
 - Added "Only Need One Flag" attribute to Bubble Doors
 - Added "Inverted" attribute to Reset Flags Trigger
