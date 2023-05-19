@@ -38,10 +38,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
+            Logger.Log(LogLevel.Info, "XH", "indicator visible : " + Visible);
             Level level = SceneAs<Level>();
             Player player = Scene.Tracker.GetEntity<Player>();
             HeatController controller = level.Tracker.GetEntity<HeatController>();
-            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible) || XaphanModule.ShowUI || !XaphanModule.CanOpenMap(level) || level.Session.GetFlag(inactiveFlag))
+            if (level != null && (level.FrozenOrPaused || level.RetryPlayerCorpse != null || level.SkippingCutscene || level.InCutscene) || (player != null && !player.Sprite.Visible) || XaphanModule.ShowUI || level.Session.GetFlag(inactiveFlag))
             {
                 Visible = false;
             }

@@ -38,6 +38,7 @@ Version 1.0.55 :
 - Fixed a bug respawning the player at the wrong position after spawning the remote drone and entering a Change Respawn Trigger
 - Fixed a bug preventing Reset Flags Trigger to work when trying to set a flag already set or unsetting a flag already not set
 - Fixed a bug hardlocking the game on the Status screen
+- Fixed a bug preventing the Heat indicator in heated rooms to be displayed if the player cannot open the In-Game Map
 
 Version 1.0.54 :
 - Added "Type" attribute to Drone Switches
