@@ -38,7 +38,6 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
         public override void Update()
         {
             base.Update();
-            Logger.Log(LogLevel.Info, "XH", "indicator visible : " + Visible);
             Level level = SceneAs<Level>();
             Player player = Scene.Tracker.GetEntity<Player>();
             HeatController controller = level.Tracker.GetEntity<HeatController>();
