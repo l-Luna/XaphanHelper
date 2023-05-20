@@ -628,12 +628,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
             sprite.Play("push");
         }
 
-        public void ResetSwitch()
+        public void ResetSwitch(bool silent = false)
         {
             Collidable = true;
             pressed = false;
             sprite.Play("idle");
-            if (!SceneAs<Level>().Transitioning)
+            if (!SceneAs<Level>().Transitioning && !silent)
             {
                 Audio.Play("event:/game/05_mirror_temple/button_return", Position);
             }

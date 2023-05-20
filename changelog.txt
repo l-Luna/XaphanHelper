@@ -24,6 +24,8 @@ Version 1.0.55 :
 - Bubble doors no longer close when the player is going away from them with the Remote Drone if Madeline is close enough to the door
 - Lowered the Remote Drone beam and other projectiles vertical offset when shooting horizontaly by 1 pixel
 - Removed the limit of 10 In-GameMapTilesControllers per room
+- The "Show World Map" option no longer appear on the In-game map screen if the campaign only use the In-Game map in a single chapter
+- Fixed an issue playing the 'button return' sound effect when a Reset Flags Trigger updated a flag used by a Flag Dash switch in the same room
 - Campaigns using a Merge Chapters Controller should no longer crash when entering them if the player saved in a room that no longer exist. Instead, the player will be loaded at the start of the campaign
 - Fixed a crash happening when the player throw a Bomb or a Mega Bomb at the same frame it would explode
 - Fixed a crash happening when the Remote Drone was destroyed or died inside of a Camera Target Trigger

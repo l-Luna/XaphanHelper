@@ -91,7 +91,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                             dashSwitch.flagState = true;
                             if (dashSwitch.mode == "SetFalse" || dashSwitch.mode == "SetInverted")
                             {
-                                dashSwitch.ResetSwitch();
+                                dashSwitch.ResetSwitch(true);
                             }
                         }
                     }
@@ -117,7 +117,7 @@ namespace Celeste.Mod.XaphanHelper.Triggers
                             dashSwitch.flagState = false;
                             if (dashSwitch.mode == "SetTrue" || dashSwitch.mode == "SetInverted")
                             {
-                                dashSwitch.ResetSwitch();
+                                dashSwitch.ResetSwitch(true);
                             }
                         }
                     }
