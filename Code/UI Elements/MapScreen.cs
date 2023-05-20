@@ -84,6 +84,8 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
 
         public MapProgressDisplay WorldMapProgressDisplay;
 
+        public bool HasWorldMap;
+
         public MapScreen(Level level, bool fromStatus)
         {
             this.level = level;
@@ -124,7 +126,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             }
             if (prompt == null)
             {
-                if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && mapDisplay != null)
+                if (XaphanSettings.MapScreenShowMapOrWorldMap.Pressed && mapDisplay != null && HasWorldMap)
                 {
                     if (mode == "map")
                     {
@@ -620,147 +622,151 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                     worldMapMapDisplays.Add(new MapDisplay(level, "map", chapter, true, chapter == currentChapter ? false : true) { Visible = false });
                 }
             }
-            foreach (MapDisplay display in worldMapMapDisplays)
+            if (worldMapMapDisplays.Count > 1)
             {
-                Scene.Add(display);
-                yield return display.GenerateMap();
-            }
-            Vector2 ProgressPosition = new(worldMapMapDisplays[0].Grid.X + 18f, worldMapMapDisplays[0].Grid.Y);
-            List<InGameMapControllerData> InGameMapControllerDatas = new();
-            foreach (MapDisplay display in worldMapMapDisplays)
-            {
-                InGameMapControllerDatas.Add(display.InGameMapControllerData);
-            }
-            string WorldMapShowProgress = "Always";
-            bool WorldMapHideMapProgress = false;
-            bool WorldMapHideStrawberryProgress = false;
-            bool WorldMapHideMoonberryProgress = false;
-            bool WorldMapHideUpgradeProgress = false;
-            bool WorldMapHideHeartProgress = false;
-            bool WorldMapHideCassetteProgress = false;
-            string WorldMapCustomCollectablesProgress = "";
-            string WorldMapSecretsCustomCollectablesProgress = "";
-            foreach (InGameMapControllerData data in InGameMapControllerDatas)
-            {
-                if (data.ShowProgress != "Always")
+                HasWorldMap = true;
+                foreach (MapDisplay display in worldMapMapDisplays)
                 {
-                    if (data.ShowProgress == "AfterChapterComplete" || data.ShowProgress == "AfterCampaignComplete")
+                    Scene.Add(display);
+                    yield return display.GenerateMap();
+                }
+                Vector2 ProgressPosition = new(worldMapMapDisplays[0].Grid.X + 18f, worldMapMapDisplays[0].Grid.Y);
+                List<InGameMapControllerData> InGameMapControllerDatas = new();
+                foreach (MapDisplay display in worldMapMapDisplays)
+                {
+                    InGameMapControllerDatas.Add(display.InGameMapControllerData);
+                }
+                string WorldMapShowProgress = "Always";
+                bool WorldMapHideMapProgress = false;
+                bool WorldMapHideStrawberryProgress = false;
+                bool WorldMapHideMoonberryProgress = false;
+                bool WorldMapHideUpgradeProgress = false;
+                bool WorldMapHideHeartProgress = false;
+                bool WorldMapHideCassetteProgress = false;
+                string WorldMapCustomCollectablesProgress = "";
+                string WorldMapSecretsCustomCollectablesProgress = "";
+                foreach (InGameMapControllerData data in InGameMapControllerDatas)
+                {
+                    if (data.ShowProgress != "Always")
                     {
-                        WorldMapShowProgress = "AfterCampaignComplete";
+                        if (data.ShowProgress == "AfterChapterComplete" || data.ShowProgress == "AfterCampaignComplete")
+                        {
+                            WorldMapShowProgress = "AfterCampaignComplete";
+                        }
+                        else
+                        {
+                            WorldMapShowProgress = "Never";
+                        }
                     }
-                    else
+                    if (data.HideMapProgress == true)
                     {
-                        WorldMapShowProgress = "Never";
+                        WorldMapHideMapProgress = true;
                     }
-                }
-                if (data.HideMapProgress == true)
-                {
-                    WorldMapHideMapProgress = true;
-                }
-                if (data.HideStrawberryProgress == true)
-                {
-                    WorldMapHideStrawberryProgress = true;
-                }
-                if (data.HideMoonberryProgress == true)
-                {
-                    WorldMapHideMoonberryProgress = true;
-                }
-                if (data.HideUpgradeProgress == true)
-                {
-                    WorldMapHideUpgradeProgress = true;
-                }
-                if (data.HideHeartProgress == true)
-                {
-                    WorldMapHideHeartProgress = true;
-                }
-                if (data.HideCassetteProgress == true)
-                {
-                    WorldMapHideCassetteProgress = true;
-                }
-                if (!string.IsNullOrEmpty(data.CustomCollectablesProgress))
-                {
-                    WorldMapCustomCollectablesProgress += "," + data.CustomCollectablesProgress;
-                }
-                if (!string.IsNullOrEmpty(data.SecretsCustomCollectablesProgress))
-                {
-                    WorldMapSecretsCustomCollectablesProgress += "," + data.SecretsCustomCollectablesProgress;
-                }
-            }
-            InGameMapControllerData WorldMapInGameMapControllerData = new("FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", false, false,
-                WorldMapShowProgress, WorldMapHideMapProgress, WorldMapHideStrawberryProgress, WorldMapHideMoonberryProgress, WorldMapHideUpgradeProgress, WorldMapHideHeartProgress, WorldMapHideCassetteProgress,
-                WorldMapCustomCollectablesProgress, WorldMapSecretsCustomCollectablesProgress, 0, 0);
-            List<InGameMapSubAreaControllerData> WorldMapInGameMapSubAreaControllerData = new();
-            List<InGameMapRoomControllerData> WorldMapInGameMapRoomControllerData = new();
-            List<InGameMapTilesControllerData> WorldMapInGameMapTilesControllerData = new();
-            List<InGameMapEntitiesData> WorldMapInGameMapEntitiesData = new();
-            foreach (MapDisplay display in worldMapMapDisplays)
-            {
-                WorldMapInGameMapSubAreaControllerData.AddRange(display.SubAreaControllerData);
-                WorldMapInGameMapRoomControllerData.AddRange(display.RoomControllerData);
-                WorldMapInGameMapTilesControllerData.AddRange(display.TilesControllerData);
-                WorldMapInGameMapEntitiesData.AddRange(display.EntitiesData);
-            }
-            WorldMapInGameMapSubAreaControllerData.Distinct().ToList();
-            WorldMapInGameMapRoomControllerData.Distinct().ToList();
-            WorldMapInGameMapTilesControllerData.Distinct().ToList();
-            WorldMapInGameMapEntitiesData.Distinct().ToList();
-            if (WorldMapInGameMapControllerData.ShowProgress != "Never")
-            {
-                if (WorldMapProgressDisplay != null)
-                {
-                    WorldMapProgressDisplay.RemoveSelf();
-                }
-                level.Add(WorldMapProgressDisplay = new MapProgressDisplay(ProgressPosition, level, WorldMapInGameMapControllerData, WorldMapInGameMapSubAreaControllerData, WorldMapInGameMapRoomControllerData, WorldMapInGameMapTilesControllerData, WorldMapInGameMapEntitiesData, -1, worldMapMapDisplays[0].currentRoom) { Visible = false });
-            }
-            float MostLeftDisplay = 1000000f;
-            float MostTopDisplay = 1000000f;
-            float MostRightDisplay = -1000000f;
-            float MostBottomDisplay = -1000000f;
-            foreach (MapDisplay display in worldMapMapDisplays)
-            {
-                if (display.MapLeft < MostLeftDisplay)
-                {
-                    MostLeftDisplay = display.MapLeft;
-                }
-                if (display.MapTop < MostTopDisplay)
-                {
-                    MostTopDisplay = display.MapTop;
-                }
-                if (display.MapLeft + display.MapWidth / 320 * 40 > MostRightDisplay)
-                {
-                    MostRightDisplay = display.MapLeft + display.MapWidth / 320 * 40;
-                }
-                if (display.MapTop + display.MapHeight / 184 * 40 > MostBottomDisplay)
-                {
-                    MostBottomDisplay = display.MapTop + display.MapHeight / 184 * 40;
-                }
-            }
-            worldMapWidth = MostRightDisplay - MostLeftDisplay;
-            worldMapHeight = MostBottomDisplay - MostTopDisplay;
-            Vector2 displaysCenter = new(worldMapWidth / 2, worldMapHeight / 2);
-            displaysCenter += new Vector2(MostLeftDisplay, MostTopDisplay);
-            while (mapDisplay == null)
-            {
-                yield return null;
-            }
-            Vector2 displayJustify = new(mapDisplay.MapPosition.X - displaysCenter.X, mapDisplay.MapPosition.Y - displaysCenter.Y);
-            foreach (MapDisplay display in level.Tracker.GetEntities<MapDisplay>())
-            {
-                if (display.NoGrid)
-                {
-                    display.MapPosition += displayJustify;
-                    Vector2 displayAdjust = Vector2.Zero;
-                    display.MapPosition.X = (float)Math.Ceiling(display.MapPosition.X / 40) * 40;
-                    if ((display.MapPosition.X - 100) / 40 % 2 != 0)
+                    if (data.HideStrawberryProgress == true)
                     {
-                        displayAdjust.X = -20f;
+                        WorldMapHideStrawberryProgress = true;
                     }
-                    display.MapPosition.Y = (float)Math.Floor(display.MapPosition.Y / 40) * 40;
-                    if ((display.MapPosition.Y - 180) / 40 % 2 != 0)
+                    if (data.HideMoonberryProgress == true)
                     {
-                        displayAdjust.Y = 20f;
+                        WorldMapHideMoonberryProgress = true;
                     }
-                    display.MapPosition += displayAdjust;
+                    if (data.HideUpgradeProgress == true)
+                    {
+                        WorldMapHideUpgradeProgress = true;
+                    }
+                    if (data.HideHeartProgress == true)
+                    {
+                        WorldMapHideHeartProgress = true;
+                    }
+                    if (data.HideCassetteProgress == true)
+                    {
+                        WorldMapHideCassetteProgress = true;
+                    }
+                    if (!string.IsNullOrEmpty(data.CustomCollectablesProgress))
+                    {
+                        WorldMapCustomCollectablesProgress += "," + data.CustomCollectablesProgress;
+                    }
+                    if (!string.IsNullOrEmpty(data.SecretsCustomCollectablesProgress))
+                    {
+                        WorldMapSecretsCustomCollectablesProgress += "," + data.SecretsCustomCollectablesProgress;
+                    }
+                }
+                InGameMapControllerData WorldMapInGameMapControllerData = new("FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", false, false,
+                    WorldMapShowProgress, WorldMapHideMapProgress, WorldMapHideStrawberryProgress, WorldMapHideMoonberryProgress, WorldMapHideUpgradeProgress, WorldMapHideHeartProgress, WorldMapHideCassetteProgress,
+                    WorldMapCustomCollectablesProgress, WorldMapSecretsCustomCollectablesProgress, 0, 0);
+                List<InGameMapSubAreaControllerData> WorldMapInGameMapSubAreaControllerData = new();
+                List<InGameMapRoomControllerData> WorldMapInGameMapRoomControllerData = new();
+                List<InGameMapTilesControllerData> WorldMapInGameMapTilesControllerData = new();
+                List<InGameMapEntitiesData> WorldMapInGameMapEntitiesData = new();
+                foreach (MapDisplay display in worldMapMapDisplays)
+                {
+                    WorldMapInGameMapSubAreaControllerData.AddRange(display.SubAreaControllerData);
+                    WorldMapInGameMapRoomControllerData.AddRange(display.RoomControllerData);
+                    WorldMapInGameMapTilesControllerData.AddRange(display.TilesControllerData);
+                    WorldMapInGameMapEntitiesData.AddRange(display.EntitiesData);
+                }
+                WorldMapInGameMapSubAreaControllerData.Distinct().ToList();
+                WorldMapInGameMapRoomControllerData.Distinct().ToList();
+                WorldMapInGameMapTilesControllerData.Distinct().ToList();
+                WorldMapInGameMapEntitiesData.Distinct().ToList();
+                if (WorldMapInGameMapControllerData.ShowProgress != "Never")
+                {
+                    if (WorldMapProgressDisplay != null)
+                    {
+                        WorldMapProgressDisplay.RemoveSelf();
+                    }
+                    level.Add(WorldMapProgressDisplay = new MapProgressDisplay(ProgressPosition, level, WorldMapInGameMapControllerData, WorldMapInGameMapSubAreaControllerData, WorldMapInGameMapRoomControllerData, WorldMapInGameMapTilesControllerData, WorldMapInGameMapEntitiesData, -1, worldMapMapDisplays[0].currentRoom) { Visible = false });
+                }
+                float MostLeftDisplay = 1000000f;
+                float MostTopDisplay = 1000000f;
+                float MostRightDisplay = -1000000f;
+                float MostBottomDisplay = -1000000f;
+                foreach (MapDisplay display in worldMapMapDisplays)
+                {
+                    if (display.MapLeft < MostLeftDisplay)
+                    {
+                        MostLeftDisplay = display.MapLeft;
+                    }
+                    if (display.MapTop < MostTopDisplay)
+                    {
+                        MostTopDisplay = display.MapTop;
+                    }
+                    if (display.MapLeft + display.MapWidth / 320 * 40 > MostRightDisplay)
+                    {
+                        MostRightDisplay = display.MapLeft + display.MapWidth / 320 * 40;
+                    }
+                    if (display.MapTop + display.MapHeight / 184 * 40 > MostBottomDisplay)
+                    {
+                        MostBottomDisplay = display.MapTop + display.MapHeight / 184 * 40;
+                    }
+                }
+                worldMapWidth = MostRightDisplay - MostLeftDisplay;
+                worldMapHeight = MostBottomDisplay - MostTopDisplay;
+                Vector2 displaysCenter = new(worldMapWidth / 2, worldMapHeight / 2);
+                displaysCenter += new Vector2(MostLeftDisplay, MostTopDisplay);
+                while (mapDisplay == null)
+                {
+                    yield return null;
+                }
+                Vector2 displayJustify = new(mapDisplay.MapPosition.X - displaysCenter.X, mapDisplay.MapPosition.Y - displaysCenter.Y);
+                foreach (MapDisplay display in level.Tracker.GetEntities<MapDisplay>())
+                {
+                    if (display.NoGrid)
+                    {
+                        display.MapPosition += displayJustify;
+                        Vector2 displayAdjust = Vector2.Zero;
+                        display.MapPosition.X = (float)Math.Ceiling(display.MapPosition.X / 40) * 40;
+                        if ((display.MapPosition.X - 100) / 40 % 2 != 0)
+                        {
+                            displayAdjust.X = -20f;
+                        }
+                        display.MapPosition.Y = (float)Math.Floor(display.MapPosition.Y / 40) * 40;
+                        if ((display.MapPosition.Y - 180) / 40 % 2 != 0)
+                        {
+                            displayAdjust.Y = 20f;
+                        }
+                        display.MapPosition += displayAdjust;
+                    }
                 }
             }
         }
@@ -1064,8 +1070,11 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
                         ButtonBindingButtonUI.Render(position, !mapDisplay.ShowHints ? label3 : label4, XaphanSettings.MapScreenShowHints, scale, 1f, hintWiggle.Value * 0.05f);
                         position.X -= (!mapDisplay.ShowHints ? num3 : num4) / 2 + 32;
                     }
-                    ButtonBindingButtonUI.Render(position, mode == "map" ? label11 : label12, XaphanSettings.MapScreenShowMapOrWorldMap, scale, 1f, worldMapWiggle.Value * 0.05f);
-                    position.X -= num5 / 2 + 32;
+                    if (HasWorldMap)
+                    {
+                        ButtonBindingButtonUI.Render(position, mode == "map" ? label11 : label12, XaphanSettings.MapScreenShowMapOrWorldMap, scale, 1f, worldMapWiggle.Value * 0.05f);
+                        position.X -= num5 / 2 + 32;
+                    }
                     if (MapProgressDisplay != null && MapProgressDisplay.Visible && !MapProgressDisplay.Hidden)
                     {
                         string progressDisplayStatus = MapProgressDisplay.mode == 0 ? (MapProgressDisplay.getSubAreaIndex() == -1 || MapProgressDisplay.SubAreaControllerData.Count == 1 ? label9 : label8) : MapProgressDisplay.mode == 1 ? label9 : label7;
