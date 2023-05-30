@@ -26,78 +26,170 @@ namespace Celeste.Mod.XaphanHelper
                         // Get list of new room names
 
                         RoomsNamesConversion.Clear();
-                        if (i == SaveData.Instance.GetLevelSetStats().AreaOffset + 1) // Ancient Ruins
+                        if (i == SaveData.Instance.GetLevelSetStats().AreaOffset) // Prologue
                         {
-                            RoomsNamesConversion.Add("A-02", "A-15");
-                            RoomsNamesConversion.Add("A-03", "A-07");
-                            RoomsNamesConversion.Add("A-04", "A-08");
-                            RoomsNamesConversion.Add("A-05", "A-16");
-                            RoomsNamesConversion.Add("A-06", "A-10");
-                            RoomsNamesConversion.Add("A-07", "A-11");
-                            RoomsNamesConversion.Add("B-00", "A-12");
-                            RoomsNamesConversion.Add("B-01", "A-13");
-                            RoomsNamesConversion.Add("B-02", "A-14");
-                            RoomsNamesConversion.Add("B-03", "A-03");
-                            RoomsNamesConversion.Add("B-04", "A-18");
-                            RoomsNamesConversion.Add("B-05", "A-19");
-                            RoomsNamesConversion.Add("B-06", "A-20");
-                            RoomsNamesConversion.Add("B-07", "A-21");
-                            RoomsNamesConversion.Add("B-08", "A-22");
-                            RoomsNamesConversion.Add("B-09", "A-23");
-                            RoomsNamesConversion.Add("B-10", "A-24");
-                            RoomsNamesConversion.Add("B-11", "A-25");
-                            RoomsNamesConversion.Add("B-12", "A-26");
-                            RoomsNamesConversion.Add("B-W0", "A-W2");
-                            RoomsNamesConversion.Add("C-00", "A-27");
-                            RoomsNamesConversion.Add("C-01", "A-28");
-                            RoomsNamesConversion.Add("C-02", "A-29");
-                            RoomsNamesConversion.Add("C-03", "A-30");
-                            RoomsNamesConversion.Add("C-04", "A-35");
-                            RoomsNamesConversion.Add("C-05", "A-39");
-                            RoomsNamesConversion.Add("C-06", "A-38");
-                            RoomsNamesConversion.Add("C-07", "A-32");
-                            RoomsNamesConversion.Add("C-08", "A-33");
-                            RoomsNamesConversion.Add("C-09", "A-34");
-                            RoomsNamesConversion.Add("C-10", "A-37");
-                            RoomsNamesConversion.Add("C-11", "A-43");
-                            RoomsNamesConversion.Add("C-12", "A-44");
-                            RoomsNamesConversion.Add("C-13", "A-45");
-                            RoomsNamesConversion.Add("C-W0", "A-W3");
-                            RoomsNamesConversion.Add("C-W1", "A-W4");
+                            RoomsNamesConversion.Add("A-00", "A-01");
+                            RoomsNamesConversion.Add("A-01", "A-02");
+                            RoomsNamesConversion.Add("A-02", "A-03");
+                            RoomsNamesConversion.Add("A-03", "A-04");
+                            RoomsNamesConversion.Add("A-04", "A-05");
+                            RoomsNamesConversion.Add("A-05", "A-06");
+                            RoomsNamesConversion.Add("A-06", "A-07");
+                            RoomsNamesConversion.Add("A-07", "A-08");
+                            RoomsNamesConversion.Add("A-08", "A-09");
+                            RoomsNamesConversion.Add("A-09", "A-10");
+                            RoomsNamesConversion.Add("A-10", "A-11");
+                            RoomsNamesConversion.Add("N-Ch1-0", "A-Ch1-0");
+                            RoomsNamesConversion.Add("N-Ch1-0-Arrow", "A-Ch1-0-Arrow");
+                            RoomsNamesConversion.Add("N-Ch5-0", "A-Ch5-0");
+                            RoomsNamesConversion.Add("N-Ch5-0-Arrow", "A-Ch5-0-Arrow");
+                            RoomsNamesConversion.Add("S-Begin", "A-00");
+                            RoomsNamesConversion.Add("S-End", "A-12");
+                            RoomsNamesConversion.Add("U-00", "A-U0");
+                        }
+                        else if (i == SaveData.Instance.GetLevelSetStats().AreaOffset + 1) // Ancient Ruins
+                        {
+                            RoomsNamesConversion.Add("A-00", "B-01");
+                            RoomsNamesConversion.Add("A-01", "B-02");
+                            RoomsNamesConversion.Add("A-02", "B-15");
+                            RoomsNamesConversion.Add("A-03", "B-08");
+                            RoomsNamesConversion.Add("A-04", "B-09");
+                            RoomsNamesConversion.Add("A-05", "B-16");
+                            RoomsNamesConversion.Add("A-06", "B-10");
+                            RoomsNamesConversion.Add("A-07", "B-11");
+                            RoomsNamesConversion.Add("A-W0", "B-W0");
+                            RoomsNamesConversion.Add("A-W1", "B-W1");
+                            RoomsNamesConversion.Add("B-00", "B-12");
+                            RoomsNamesConversion.Add("B-01", "B-13");
+                            RoomsNamesConversion.Add("B-02", "B-14");
+                            RoomsNamesConversion.Add("B-03", "B-04");
+                            RoomsNamesConversion.Add("B-04", "B-18");
+                            RoomsNamesConversion.Add("B-05", "B-19");
+                            RoomsNamesConversion.Add("B-06", "B-20");
+                            RoomsNamesConversion.Add("B-07", "B-21");
+                            RoomsNamesConversion.Add("B-08", "B-22");
+                            RoomsNamesConversion.Add("B-09", "B-23");
+                            RoomsNamesConversion.Add("B-10", "B-24");
+                            RoomsNamesConversion.Add("B-11", "B-25");
+                            RoomsNamesConversion.Add("B-12", "B-26");
+                            RoomsNamesConversion.Add("B-W0", "B-W2");
+                            RoomsNamesConversion.Add("C-00", "B-27");
+                            RoomsNamesConversion.Add("C-01", "B-28");
+                            RoomsNamesConversion.Add("C-02", "B-29");
+                            RoomsNamesConversion.Add("C-03", "B-30");
+                            RoomsNamesConversion.Add("C-04", "B-35");
+                            RoomsNamesConversion.Add("C-05", "B-39");
+                            RoomsNamesConversion.Add("C-06", "B-38");
+                            RoomsNamesConversion.Add("C-07", "B-32");
+                            RoomsNamesConversion.Add("C-08", "B-33");
+                            RoomsNamesConversion.Add("C-09", "B-34");
+                            RoomsNamesConversion.Add("C-10", "B-37");
+                            RoomsNamesConversion.Add("C-11", "B-43");
+                            RoomsNamesConversion.Add("C-12", "B-44");
+                            RoomsNamesConversion.Add("C-13", "B-45");
+                            RoomsNamesConversion.Add("C-W0", "B-W3");
+                            RoomsNamesConversion.Add("C-W1", "B-W4");
+                            RoomsNamesConversion.Add("N-Ch0-0", "B-Ch0-0");
+                            RoomsNamesConversion.Add("N-Ch0-0-Arrow", "B-Ch0-0-Arrow");
+                            RoomsNamesConversion.Add("N-Ch2-0", "B-Ch2-0");
+                            RoomsNamesConversion.Add("N-Ch2-0-Arrow", "B-Ch2-0-Arrow");
+                            RoomsNamesConversion.Add("S-Begin", "B-00");
+                            RoomsNamesConversion.Add("S-End", "B-46");
+                            RoomsNamesConversion.Add("U-00", "B-U0");
+                            RoomsNamesConversion.Add("U-01", "B-U1");
                         }
                         else if (i == SaveData.Instance.GetLevelSetStats().AreaOffset + 2) // Forgotten Abysses
                         {
-                            RoomsNamesConversion.Add("D-00", "C-18");
-                            RoomsNamesConversion.Add("D-01", "C-19");
-                            RoomsNamesConversion.Add("D-02", "C-20");
-                            RoomsNamesConversion.Add("D-03", "C-21");
-                            RoomsNamesConversion.Add("D-04", "C-22");
-                            RoomsNamesConversion.Add("D-05", "C-23");
-                            RoomsNamesConversion.Add("D-06", "C-24");
-                            RoomsNamesConversion.Add("D-07", "C-25");
-                            RoomsNamesConversion.Add("D-08", "C-26");
-                            RoomsNamesConversion.Add("D-09", "C-27");
-                            RoomsNamesConversion.Add("D-10", "C-28");
-                            RoomsNamesConversion.Add("D-11", "C-29");
-                            RoomsNamesConversion.Add("D-12", "C-30");
-                            RoomsNamesConversion.Add("D-13", "C-31");
-                            RoomsNamesConversion.Add("D-14", "C-32");
-                            RoomsNamesConversion.Add("D-15", "C-33");
-                            RoomsNamesConversion.Add("D-16", "C-34");
-                            RoomsNamesConversion.Add("D-17", "C-35");
-                            RoomsNamesConversion.Add("D-18", "C-36");
-                            RoomsNamesConversion.Add("D-19", "C-37");
-                            RoomsNamesConversion.Add("D-20", "C-38");
-                            RoomsNamesConversion.Add("D-21", "C-39");
-                            RoomsNamesConversion.Add("D-W0", "C-W2");
-                            RoomsNamesConversion.Add("D-W1", "C-W3");
-                            RoomsNamesConversion.Add("D-W2", "C-W4");
+                            RoomsNamesConversion.Add("A-00", "G-01");
+                            RoomsNamesConversion.Add("A-01", "G-02");
+                            RoomsNamesConversion.Add("A-02", "G-03");
+                            RoomsNamesConversion.Add("A-03", "G-04");
+                            RoomsNamesConversion.Add("A-04", "G-05");
+                            RoomsNamesConversion.Add("A-05", "G-06");
+                            RoomsNamesConversion.Add("A-06", "G-07");
+                            RoomsNamesConversion.Add("A-07", "G-08");
+                            RoomsNamesConversion.Add("A-08", "G-09");
+                            RoomsNamesConversion.Add("A-09", "G-10");
+                            RoomsNamesConversion.Add("A-10", "G-11");
+                            RoomsNamesConversion.Add("A-11", "G-12");
+                            RoomsNamesConversion.Add("B-00", "H-00");
+                            RoomsNamesConversion.Add("B-01-L", "H-01-L");
+                            RoomsNamesConversion.Add("B-01-R", "H-01-R");
+                            RoomsNamesConversion.Add("B-02-L", "H-02-L");
+                            RoomsNamesConversion.Add("B-02-R", "H-02-R");
+                            RoomsNamesConversion.Add("B-03-L", "H-03-L");
+                            RoomsNamesConversion.Add("B-03-R", "H-03-R");
+                            RoomsNamesConversion.Add("B-04-L", "H-04-L");
+                            RoomsNamesConversion.Add("B-04-R", "H-04-R");
+                            RoomsNamesConversion.Add("B-05-L", "H-05-L");
+                            RoomsNamesConversion.Add("B-05-R", "H-05-R");
+                            RoomsNamesConversion.Add("B-06", "H-06");
+                            RoomsNamesConversion.Add("B-07", "H-07");
+                            RoomsNamesConversion.Add("B-08", "H-08");
+                            RoomsNamesConversion.Add("B-09", "H-09");
+                            RoomsNamesConversion.Add("B-10", "H-10");
+                            RoomsNamesConversion.Add("B-11", "H-11");
+                            RoomsNamesConversion.Add("B-W0", "H-W0");
+                            RoomsNamesConversion.Add("B-W1", "H-W1");
+                            RoomsNamesConversion.Add("D-00", "I-18");
+                            RoomsNamesConversion.Add("D-01", "I-19");
+                            RoomsNamesConversion.Add("D-02", "I-20");
+                            RoomsNamesConversion.Add("D-03", "I-21");
+                            RoomsNamesConversion.Add("D-04", "I-22");
+                            RoomsNamesConversion.Add("D-05", "I-23");
+                            RoomsNamesConversion.Add("D-06", "I-24");
+                            RoomsNamesConversion.Add("D-07", "I-25");
+                            RoomsNamesConversion.Add("D-08", "I-26");
+                            RoomsNamesConversion.Add("D-09", "I-27");
+                            RoomsNamesConversion.Add("D-10", "I-28");
+                            RoomsNamesConversion.Add("D-11", "I-29");
+                            RoomsNamesConversion.Add("D-12", "I-30");
+                            RoomsNamesConversion.Add("D-13", "I-31");
+                            RoomsNamesConversion.Add("D-14", "I-32");
+                            RoomsNamesConversion.Add("D-15", "I-33");
+                            RoomsNamesConversion.Add("D-16", "I-34");
+                            RoomsNamesConversion.Add("D-17", "I-35");
+                            RoomsNamesConversion.Add("D-18", "I-36");
+                            RoomsNamesConversion.Add("D-19", "I-37");
+                            RoomsNamesConversion.Add("D-20", "I-38");
+                            RoomsNamesConversion.Add("D-21", "I-39");
+                            RoomsNamesConversion.Add("D-W0", "I-W2");
+                            RoomsNamesConversion.Add("D-W1", "I-W3");
+                            RoomsNamesConversion.Add("D-W2", "I-W4");
+                            RoomsNamesConversion.Add("N-Ch1-0", "G-Ch1-0");
+                            RoomsNamesConversion.Add("N-Ch1-0-Arrow", "G-Ch1-0-Arrow");
+                            RoomsNamesConversion.Add("N-Ch2-0-Shaft", "I-Ch2-0-Shaft");
+                            RoomsNamesConversion.Add("N-Ch5-0", "I-Ch5-0");
+                            RoomsNamesConversion.Add("N-Ch5-0-Arrow", "I-Ch5-0-Arrow");
+                            RoomsNamesConversion.Add("S-Begin", "G-00");
+                            RoomsNamesConversion.Add("S-End", "I-40");
+                            RoomsNamesConversion.Add("U-00", "G-U0");
+                            RoomsNamesConversion.Add("U-01", "I-U0");
                         }
 
                         // Adjust collected strawberries
 
                         HashSet<EntityID> oldStrawberries = new();
                         HashSet<EntityID> newStrawberries = new();
+                        HashSet<EntityID> deletedStrawberries = new();
+                        foreach (EntityID strawberry in SaveData.Instance.Areas_Safe[i].Modes[0].Strawberries)
+                        {
+                            if (strawberry.Level == "A-06")
+                            {
+                                deletedStrawberries.Add(strawberry);
+                            }
+                        }
+                        if (deletedStrawberries.Count > 0)
+                        {
+                            foreach (EntityID strawberry in deletedStrawberries)
+                            {
+                                SaveData.Instance.Areas_Safe[i].Modes[0].Strawberries.Remove(strawberry);
+                                AreaModeStats areaModeStats = SaveData.Instance.Areas_Safe[i].Modes[0];
+                                areaModeStats.Strawberries.Remove(strawberry);
+                                areaModeStats.TotalStrawberries--;
+                                SaveData.Instance.TotalStrawberries_Safe--;
+                            }
+                        }
                         foreach (EntityID strawberry in SaveData.Instance.Areas_Safe[i].Modes[0].Strawberries)
                         {
                             foreach (KeyValuePair<string, string> oldRoom in RoomsNamesConversion)
