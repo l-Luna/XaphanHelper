@@ -13,7 +13,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public Color Color;
 
-        private EntityID eid;
+        private EntityID eid = new();
 
         private bool lit;
 
@@ -41,14 +41,13 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string sound;
 
-        public CustomTorch(EntityData data, Vector2 position, EntityID ID) : base(data.Position + position)
+        public CustomTorch(Vector2 position, Vector2 offset, string color, bool playLitSound, bool startLit, string sprite, string flag, float alpha, int startFade, int endFade, string sound) : base(position + offset)
         {
-            eid = ID;
-            playLitSound = data.Bool("playLitSound");
-            startLit = data.Bool("startLit");
-            flag = data.Attr("flag");
-            sprite = data.Attr("sprite");
-            alpha = data.Float("alpha", 1f);
+            this.playLitSound = playLitSound;
+            this.startLit = startLit;
+            this.flag = flag;
+            this.sprite = sprite;
+            this.alpha = alpha;
             if (alpha < 0)
             {
                 alpha = 0;
@@ -57,21 +56,21 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 alpha = 1;
             }
-            startFade = data.Int("startFade", 48);
-            endFade = data.Int("endFade", 64);
+            this.startFade = startFade;
+            this.endFade = endFade;
             if (endFade < startFade)
             {
                 endFade = startFade;
             }
-            sound = data.Attr("sound", "event:/game/05_mirror_temple/torch_activate");
+            this.sound = sound;
             if (string.IsNullOrEmpty(sound))
             {
                 sound = "event:/game/05_mirror_temple/torch_activate";
             }
-            Color = Color.Lerp(Color.White, Calc.HexToColor(data.Attr("color", "ffa500")), 0.5f);
+            Color = Color.Lerp(Color.White, Calc.HexToColor(color), 0.5f);
             P_OnLight = new ParticleType
             {
-                Color = Calc.HexToColor(data.Attr("color", "ffa500")),
+                Color = Calc.HexToColor(color),
                 Color2 = Color.White,
                 ColorMode = ParticleType.ColorModes.Blink,
                 FadeMode = ParticleType.FadeModes.Late,
@@ -109,9 +108,19 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
+        public CustomTorch(EntityData data, Vector2 position, EntityID ID) : this(data.Position, position, data.Attr("color", "ffa500"), data.Bool("playLitSound"), data.Bool("startLit"), data.Attr("sprite"),
+            data.Attr("flag"), data.Float("alpha", 1f), data.Int("startFade", 48), data.Int("endFade", 64), data.Attr("sound", "event:/game/05_mirror_temple/torch_activate"))
+        {
+            eid = ID;
+        }
+
         public override void Added(Scene scene)
         {
             base.Added(scene);
+            if (string.IsNullOrEmpty(eid.Key))
+            {
+                eid = new EntityID(SceneAs<Level>().Session.Level, 0);
+            }
             if (startLit || SceneAs<Level>().Session.GetFlag(FlagName) || SceneAs<Level>().Session.GetFlag(flag))
             {
                 bloom.Visible = (light.Visible = true);
