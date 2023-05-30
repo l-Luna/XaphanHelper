@@ -6,8 +6,9 @@ InGameMapSubAreaController.fieldOrder = {
     "x", "y", "subAreaIndex", "subAreaName", "exploredRoomColor", "unexploredRoomColor", "secretRoomColor", "heatedRoomColor", "roomBorderColor", "elevatorColor"
 }
 InGameMapSubAreaController.fieldInformation = {
-    roomIndicatorColor = {
-        subAreaIndex = "integer"
+    subAreaIndex = {
+        fieldType = "integer",
+        minimumValue = 0
     },
     exploredRoomColor = {
         fieldType = "color"
