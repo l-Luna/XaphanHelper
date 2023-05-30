@@ -374,7 +374,7 @@ namespace Celeste.Mod.XaphanHelper.UI_Elements
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch3_0");
             Scene.Add(new CategoryDisplay(level, new Vector2(155f, 725f), 3, visitedChapter ? "Xaphan_0_3_ExoticUndergrowdth" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 3), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch4_0");
-            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 810f), 4, visitedChapter ? "Xaphan_0_4_DevilBasin": "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 4), visitedChapter ? false : true));
+            Scene.Add(new CategoryDisplay(level, new Vector2(155f, 810f), 4, visitedChapter ? "Xaphan_0_4_BlazingGorge" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 4), visitedChapter ? false : true));
             visitedChapter = XaphanModule.ModSaveData.VisitedChapters.Contains("Xaphan/0_Ch5_0");
             Scene.Add(new CategoryDisplay(level, new Vector2(155f, 895f), 5, visitedChapter ? "Xaphan_0_5_SubterraneanTerminal" : "???", AchievementsData.FindAll(achievement => achievement.CategoryID == 5), visitedChapter ? false : true));
 
