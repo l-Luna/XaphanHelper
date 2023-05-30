@@ -174,22 +174,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 Spikes spikes = staticMover.Entity as Spikes;
                 if (spikes != null)
                 {
-                    if (switchType == "Fade")
-                    {
-                        spikes.EnabledColor = color * alpha;
-                    }
-                    else
-                    {
-                        spikes.EnabledColor = color;
-                    }
-                    if (switchType == "Fade")
-                    {
-                        spikes.DisabledColor = disabledColor * alpha;
-                    }
-                    else
-                    {
-                        spikes.DisabledColor = disabledColor;
-                    }
+                    spikes.EnabledColor = color;
+                    spikes.DisabledColor = disabledColor;
                     spikes.VisibleWhenDisabled = true;
                     spikes.SetSpikeColor(color);
                 }
@@ -489,9 +475,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!Collidable)
             {
-                if (Depth != 9000)
+                if (Depth != 8000)
                 {
-                    Depth = 9000;
+                    Depth = 8000;
                 }
                 if (switchType == "Fade" && alpha > 0.25f && !AlphaRoutine.Active)
                 {
@@ -500,9 +486,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
             else
             {
-                if (Depth != -13000)
+                if (Depth != -8000)
                 {
-                    Depth = -13000;
+                    Depth = -8000;
                 }
                 if (switchType == "Fade" && alpha != 1f && !AlphaRoutine.Active)
                 {
