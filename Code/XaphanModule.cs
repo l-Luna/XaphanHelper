@@ -721,6 +721,7 @@ namespace Celeste.Mod.XaphanHelper
             WorkRobot.Load();
             BreakBlock.Load();
             DecalsRegisteryUpdate.Load();
+            CustomRefill.Load();
         }
 
         // Optional, do anything requiring either the Celeste or mod content here.
@@ -809,6 +810,7 @@ namespace Celeste.Mod.XaphanHelper
             WorkRobot.Unload();
             BreakBlock.Unload();
             DecalsRegisteryUpdate.Unload();
+            CustomRefill.Unload();
         }
 
         // Custom States

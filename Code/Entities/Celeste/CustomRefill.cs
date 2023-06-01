@@ -7,6 +7,7 @@ using Monocle;
 
 namespace Celeste.Mod.XaphanHelper.Entities
 {
+    [Tracked(true)]
     [CustomEntity("XaphanHelper/CustomRefill")]
     public class CustomRefill : Entity
     {
@@ -53,6 +54,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 string spriteStr = "";
                 switch (type)
                 {
+                    case "Max Jumps":
+                        spriteStr = "Jumps";
+                        break;
                     case "Two Dashes":
                         spriteStr = "Two";
                         break;
@@ -83,6 +87,9 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 p_glow = Refill.P_Glow;
                 switch (type)
                 {
+                    case "Max Jumps":
+                        spriteStr = "Jumps";
+                        break;
                     case "Two Dashes":
                         spriteStr = "Two";
                         p_shatter = Refill.P_ShatterTwo;
@@ -159,9 +166,28 @@ namespace Celeste.Mod.XaphanHelper.Entities
             Depth = -100;
         }
 
-        public CustomRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Attr("type"), data.Bool("oneUse"), data.Float("respawnTime"))
+        public CustomRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Attr("type", "Max Dashes"), data.Bool("oneUse"), data.Float("respawnTime"))
         {
 
+        }
+
+        public static void Load()
+        {
+            On.Celeste.Player.UseRefill += modUseRefill;
+        }
+
+        public static void Unload()
+        {
+            On.Celeste.Player.UseRefill -= modUseRefill;
+        }
+
+        private static bool modUseRefill(On.Celeste.Player.orig_UseRefill orig, Player self, bool twoDashes)
+        {
+            if (self.CollideCheck<CustomRefill>())
+            {
+                return false;
+            }
+            return orig(self, twoDashes);
         }
 
         public override void Added(Scene scene)
@@ -229,6 +255,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private void OnPlayer(Player player)
         {
+            Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
             int maxMissileCount = 10;
             int maxSuperMissileCount = 5;
             if (type.Contains("Missiles"))
@@ -249,8 +276,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            Drone drone = SceneAs<Level>().Tracker.GetEntity<Drone>();
-            if ((drone != null && ((type == "Missiles" && drone.CurrentMissiles < maxMissileCount && MissilesModule.Active(SceneAs<Level>())) || (type == "Super Missiles" && drone.CurrentSuperMissiles < maxSuperMissileCount && SuperMissilesModule.Active(SceneAs<Level>()))) && XaphanModule.PlayerIsControllingRemoteDrone()) || (player.UseRefill(type == "Two Dashes") && (type == "" || type.Contains("Dashes")) && !XaphanModule.PlayerIsControllingRemoteDrone()))
+            if (((type.Contains("Dashes") && player.Dashes < (type == "Two Dashes" ? 2 : player.MaxDashes)) || (type.Contains("Jumps") && SpaceJump.GetJumpBuffer() == 0)) && drone == null || (type.Contains("Missiles") && drone != null))
             {
                 Audio.Play(type == "Two Dashes" ? "event:/new_content/game/10_farewell/pinkdiamond_touch" : "event:/game/general/diamond_touch", Position);
                 Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
@@ -272,11 +298,28 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 outline.Play("idle");
             }
             Depth = 8999;
-            yield return 0.05f;
             float num = player.Speed.Angle();
             level.ParticlesFG.Emit(p_shatter, 5, Position, Vector2.One * 4f, num - (float)Math.PI / 2f);
             level.ParticlesFG.Emit(p_shatter, 5, Position, Vector2.One * 4f, num + (float)Math.PI / 2f);
-            if (type.Contains("Missiles") && drone != null)
+            if (type.Contains("Dashes"))
+            {
+                if (type == "Two Dashes")
+                {
+                    player.Dashes = 2;
+                }
+                else
+                {
+                    player.Dashes = player.MaxDashes;
+                }
+                SpaceJump.SetJumpBuffer(XaphanModule.ModSettings.SpaceJump - 1);
+                player.RefillStamina();
+            }
+            else if (type.Contains("Jumps"))
+            {
+                SpaceJump.SetJumpBuffer(XaphanModule.ModSettings.SpaceJump - 1);
+                player.RefillStamina();
+            }
+            else if (type.Contains("Missiles"))
             {
                 if (type == "Missiles")
                 {
