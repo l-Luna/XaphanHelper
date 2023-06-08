@@ -49,6 +49,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         public CustomMoveBlock attachedMoveBlock;
 
+        public Color EnabledColor = Color.White;
+
+        public Color DisabledColor = Color.White;
+
+        public bool VisibleWhenDisabled;
+
         public MagneticCeiling(EntityData data, Vector2 offset, EntityID eid) : base(data.Position + offset)
         {
             Tag = Tags.TransitionUpdate;
@@ -387,20 +393,38 @@ namespace Celeste.Mod.XaphanHelper.Entities
             return CollideCheck(jumpThru, Position - Vector2.UnitY);
         }
 
+        public void SetCeilingColor(Color color)
+        {
+            foreach (Component component in Components)
+            {
+                if (component is Sprite sprite)
+                {
+                    sprite.Color = color;
+                }
+            }
+        }
+
         private void OnEnable()
         {
-            Active = (Visible = (Collidable = true));
+            Visible = (Collidable = true);
+            SetCeilingColor(EnabledColor);
         }
 
         private void OnDisable()
         {
-            Active = (Visible = (Collidable = false));
+            Collidable = false;
             Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
             if (player != null && SceneAs<Level>().Session.GetFlag("Xaphan_Helper_Ceiling"))
             {
                 DetachPlayer(player);
             }
             JumpGracePeriod = false;
+            if (VisibleWhenDisabled)
+            {
+                SetCeilingColor(DisabledColor);
+                return;
+            }
+            Visible = false;
         }
 
         private void OnMove(Vector2 amount)

@@ -199,6 +199,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     flagSwitch.DisabledColor = disabledColor;
                     flagSwitch.VisibleWhenDisabled = true;
                 }
+                MagneticCeiling ceiling = staticMover.Entity as MagneticCeiling;
+                if (ceiling != null)
+                {
+                    ceiling.DisabledColor = Calc.HexToColor("667da5");
+                    ceiling.VisibleWhenDisabled = true;
+                }
             }
             if (group == null)
             {
@@ -591,6 +597,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
                         if (flagSwitch != null)
                         {
                             foreach (Component component in flagSwitch.Components)
+                            {
+                                Sprite sprite = component as Sprite;
+                                if (sprite != null)
+                                {
+                                    sprite.Scale = scale;
+                                }
+                            }
+                        }
+                        MagneticCeiling ceiling = staticMover.Entity as MagneticCeiling;
+                        if (ceiling != null)
+                        {
+                            foreach (Component component in ceiling.Components)
                             {
                                 Sprite sprite = component as Sprite;
                                 if (sprite != null)
