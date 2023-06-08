@@ -179,6 +179,14 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     spikes.VisibleWhenDisabled = true;
                     spikes.SetSpikeColor(color);
                 }
+                SpikeTrap trap = staticMover.Entity as SpikeTrap;
+                if (trap != null)
+                {
+                    trap.EnabledColor = color;
+                    trap.DisabledColor = disabledColor;
+                    trap.VisibleWhenDisabled = true;
+                    trap.SetSpikeColor(color);
+                }
                 Spring spring = staticMover.Entity as Spring;
                 if (spring != null)
                 {
@@ -504,6 +512,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             foreach (StaticMover staticMover in staticMovers)
             {
                 staticMover.Entity.Depth = Depth + 1;
+                SpikeTrap trap = staticMover.Entity as SpikeTrap;
+                if (trap != null)
+                {
+                    trap.Depth = Depth - 1;
+                }
             }
             occluder.Visible = Collidable;
             foreach (Image image in solid)
@@ -559,6 +572,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 if (image != null)
                                 {
                                     image.Scale = scale;
+                                }
+                            }
+                        }
+                        SpikeTrap trap = staticMover.Entity as SpikeTrap;
+                        if (trap != null)
+                        {
+                            foreach (Component component in trap.Components)
+                            {
+                                Sprite sprite = component as Sprite;
+                                if (sprite != null)
+                                {
+                                    sprite.Scale = scale;
                                 }
                             }
                         }
