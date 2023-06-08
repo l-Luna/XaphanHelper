@@ -95,7 +95,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             On.Celeste.TotalStrawberriesDisplay.Render += onTotalStrawberriesDisplayRender;
             IL.Celeste.Player.Jump += ilPlayerJump;
             IL.Celeste.Player.NormalUpdate += ilPlayerNormalUpdate;
-            IL.Celeste.Player.Render += ilPlayerRender;
+            //IL.Celeste.Player.Render += ilPlayerRender;
         }
 
         public static void Unload()
@@ -115,7 +115,7 @@ namespace Celeste.Mod.XaphanHelper.Controllers
             On.Celeste.TotalStrawberriesDisplay.Render -= onTotalStrawberriesDisplayRender;
             IL.Celeste.Player.Jump -= ilPlayerJump;
             IL.Celeste.Player.NormalUpdate -= ilPlayerNormalUpdate;
-            IL.Celeste.Player.Render -= ilPlayerRender;
+            //IL.Celeste.Player.Render -= ilPlayerRender;
         }
 
         private static void onLevelLoad(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
