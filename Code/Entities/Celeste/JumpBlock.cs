@@ -185,6 +185,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     spring.DisabledColor = disabledColor;
                     spring.VisibleWhenDisabled = true;
                 }
+                FlagDashSwitch flagSwitch = staticMover.Entity as FlagDashSwitch;
+                if (flagSwitch != null)
+                {
+                    flagSwitch.DisabledColor = disabledColor;
+                    flagSwitch.VisibleWhenDisabled = true;
+                }
             }
             if (group == null)
             {
@@ -553,6 +559,18 @@ namespace Celeste.Mod.XaphanHelper.Entities
                                 if (image != null)
                                 {
                                     image.Scale = scale;
+                                }
+                            }
+                        }
+                        FlagDashSwitch flagSwitch = staticMover.Entity as FlagDashSwitch;
+                        if (flagSwitch != null)
+                        {
+                            foreach (Component component in flagSwitch.Components)
+                            {
+                                Sprite sprite = component as Sprite;
+                                if (sprite != null)
+                                {
+                                    sprite.Scale = scale;
                                 }
                             }
                         }

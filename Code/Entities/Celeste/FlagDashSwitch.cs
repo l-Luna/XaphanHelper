@@ -72,6 +72,12 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private bool haveGolden;
 
+        public Color EnabledColor = Color.White;
+
+        public Color DisabledColor = Color.White;
+
+        public bool VisibleWhenDisabled;
+
         public bool FlagRegiseredInSaveData()
         {
             Session session = SceneAs<Level>().Session;
@@ -214,6 +220,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Depth = p.Depth + 1;
             };
+            staticMover.OnEnable = onEnable;
+            staticMover.OnDisable = onDisable;
             staticMover.OnShake = onShake;
             staticMover.OnMove = onMove;
             Add(staticMover);
@@ -637,6 +645,34 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 Audio.Play("event:/game/05_mirror_temple/button_return", Position);
             }
+        }
+
+        public void SetSwitchColor(Color color)
+        {
+            foreach (Component component in Components)
+            {
+                if (component is Sprite sprite)
+                {
+                    sprite.Color = color;
+                }
+            }
+        }
+
+        private void onEnable()
+        {
+            Visible = (Collidable = true);
+            SetSwitchColor(EnabledColor);
+        }
+
+        private void onDisable()
+        {
+            Collidable = false;
+            if (VisibleWhenDisabled)
+            {
+                SetSwitchColor(DisabledColor);
+                return;
+            }
+            Visible = false;
         }
 
         private void onShake(Vector2 amount)
