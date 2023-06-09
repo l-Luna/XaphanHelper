@@ -215,14 +215,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
             }
         }
 
-        public override void Update()
-        {
-            base.Update();
-        }
-
         public override void Render()
         {
-            base.Render();
             switch (Direction)
             {
                 case Directions.Up:
@@ -254,6 +248,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                     break;
             }
+            base.Render();
         }
     }
 }

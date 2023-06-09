@@ -150,7 +150,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     indexes.Sort();
                     foreach (JumpBlock jumpblock in SceneAs<Level>().Tracker.GetEntities<JumpBlock>())
                     {
-                        setCurrentIndex(indexes[0]);
+                        jumpblock.setCurrentIndex(indexes[0]);
                     }
                     if (indexes.Count > 1)
                     {
@@ -163,7 +163,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 }
             }
             Color colorMask = Calc.HexToColor("667da5");
-            disabledColor = new(colorMask.R / 255f * (color.R / 255f), colorMask.G / 255f * (color.G / 255f), colorMask.B / 255f * (color.B / 255f), alpha);
+            disabledColor = new(colorMask.R / 255f * (color.R / 255f), colorMask.G / 255f * (color.G / 255f), colorMask.B / 255f * (color.B / 255f), 1f);
         }
 
         public override void Awake(Scene scene)
@@ -177,7 +177,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     spikes.EnabledColor = color;
                     spikes.DisabledColor = disabledColor;
                     spikes.VisibleWhenDisabled = true;
-                    spikes.SetSpikeColor(color);
                 }
                 SpikeTrap trap = staticMover.Entity as SpikeTrap;
                 if (trap != null)
@@ -185,18 +184,17 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     trap.EnabledColor = color;
                     trap.DisabledColor = disabledColor;
                     trap.VisibleWhenDisabled = true;
-                    trap.SetSpikeColor(color);
                 }
                 Spring spring = staticMover.Entity as Spring;
                 if (spring != null)
                 {
-                    spring.DisabledColor = disabledColor;
+                    spring.DisabledColor = Calc.HexToColor("667da5");
                     spring.VisibleWhenDisabled = true;
                 }
                 FlagDashSwitch flagSwitch = staticMover.Entity as FlagDashSwitch;
                 if (flagSwitch != null)
                 {
-                    flagSwitch.DisabledColor = disabledColor;
+                    flagSwitch.DisabledColor = Calc.HexToColor("667da5");
                     flagSwitch.VisibleWhenDisabled = true;
                 }
                 MagneticCeiling ceiling = staticMover.Entity as MagneticCeiling;
