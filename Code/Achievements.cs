@@ -363,6 +363,16 @@ namespace Celeste.Mod.XaphanHelper
 				medals: 15
 			));
             list.Add(new AchievementData(
+				achievementID: "tank1",
+				categoryID: 1,
+				icon: "achievements/Xaphan/EnergyTankCheckmarkSilver",
+				flag: "XaphanHelper_StatFlag_EnergyTanksCh1",
+				currentValue: StatsFlags.CurrentEnergyTanks[1],
+				maxValue: StatsFlags.TotalEnergyTanks[1],
+				medals: 15,
+				reqID: "upg2"
+			));
+            list.Add(new AchievementData(
 				achievementID: "cass1",
 				categoryID: 1,
 				icon: "achievements/Xaphan/CassetteSilver",
