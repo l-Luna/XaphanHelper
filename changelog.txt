@@ -13,6 +13,7 @@ Version 1.0.55 :
 - Added "Respawn" and "Destroy Static Movers" attributes to Break Blocks
 - Added "Only Cell Visible" attribute to Cell Locks
 - Added "Switch Type", "Improved Tileset" and "Only One Tileset" attributes to Jump Blocks
+- Added "No Particles" attribute to Custom Torches
 - Removed "Permanent" attributefrom Break Blocks. Existing blocks are still compatible with this change
 - Re-ordered attributes of Flag Temple Gates
 - Flag Temple Gates now display the mirror sprite in the editor when using a non-vanilla sprite instead of a red rectangle

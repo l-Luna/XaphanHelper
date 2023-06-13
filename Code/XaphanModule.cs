@@ -640,7 +640,7 @@ namespace Celeste.Mod.XaphanHelper
             {
                 float X = attrs["offsetX"] != null ? float.Parse(attrs["offsetX"].Value) : 0f;
                 float Y = attrs["offsetY"] != null ? float.Parse(attrs["offsetY"].Value) : 0f;
-                decal.SceneAs<Level>().Add(new CustomTorch(decal.Position - new Vector2(8f), new Vector2(decal.Scale.X < 0 ? X : -X, Y), "FFA500", false, true, "objects/Xaphan/CustomTorch/flame", "", 1, 48, 64, "event:/game/05_mirror_temple/torch_activate"));
+                decal.SceneAs<Level>().Add(new CustomTorch(decal.Position - new Vector2(8f), new Vector2(decal.Scale.X < 0 ? X : -X, Y), "FFA500", false, true, "objects/Xaphan/CustomTorch/flame", "", 1, 48, 64, "event:/game/05_mirror_temple/torch_activate", false));
             });
             foreach (Upgrades upgrade in UpgradeHandlers.Keys)
             {

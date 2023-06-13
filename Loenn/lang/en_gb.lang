@@ -208,12 +208,13 @@ entities.XaphanHelper/CustomTorch.placements.name.CustomTorch=Custom Torch
 entities.XaphanHelper/CustomTorch.attributes.description.playLitSound=If true, play a sound when the torch is activated.
 entities.XaphanHelper/CustomTorch.attributes.description.startLit=Change wether the light will start lit, or have the player's touch activate it.
 entities.XaphanHelper/CustomTorch.attributes.description.flag=The flag that must be set to activate the torch.
-entities.XaphanHelper/CustomTorch.attributes.description.color=Hexadecimal code for the color of the light and particles emmited when the torch is activated.
+entities.XaphanHelper/CustomTorch.attributes.description.color=Hexadecimal code for the color of the light and particles emited when the torch is activated.
 entities.XaphanHelper/CustomTorch.attributes.description.sprite=The full path to the sprite, relative to Atlases/Gameplay/.
 entities.XaphanHelper/CustomTorch.attributes.description.alpha=Strenght of the light. (minimum 0 (invisible), maximum 1)
 entities.XaphanHelper/CustomTorch.attributes.description.startFade=Radius value where the light will start to fade.
 entities.XaphanHelper/CustomTorch.attributes.description.endFade=Radius value where the light will end.
 entities.XaphanHelper/CustomTorch.attributes.description.sound=Sound event that play when the torch is activated (if Play Lit Sound is set).
+entities.XaphanHelper/CustomTorch.attributes.description.noParticles=If true, no particles will be emited when the torch is activated or deactivated.
 
 # DroneGate
 entities.XaphanHelper/DroneGate.placements.name.DroneGate=Drone Gate

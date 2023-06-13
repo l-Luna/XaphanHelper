@@ -41,13 +41,16 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private string sound;
 
-        public CustomTorch(Vector2 position, Vector2 offset, string color, bool playLitSound, bool startLit, string sprite, string flag, float alpha, int startFade, int endFade, string sound) : base(position + offset)
+        private bool noParticles;
+
+        public CustomTorch(Vector2 position, Vector2 offset, string color, bool playLitSound, bool startLit, string sprite, string flag, float alpha, int startFade, int endFade, string sound, bool noParticles) : base(position + offset)
         {
             this.playLitSound = playLitSound;
             this.startLit = startLit;
             this.flag = flag;
             this.sprite = sprite;
             this.alpha = alpha;
+            this.noParticles = noParticles;
             if (alpha < 0)
             {
                 alpha = 0;
@@ -109,7 +112,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
         }
 
         public CustomTorch(EntityData data, Vector2 position, EntityID ID) : this(data.Position, position, data.Attr("color", "ffa500"), data.Bool("playLitSound"), data.Bool("startLit"), data.Attr("sprite"),
-            data.Attr("flag"), data.Float("alpha", 1f), data.Int("startFade", 48), data.Int("endFade", 64), data.Attr("sound", "event:/game/05_mirror_temple/torch_activate"))
+            data.Attr("flag"), data.Float("alpha", 1f), data.Int("startFade", 48), data.Int("endFade", 64), data.Attr("sound", "event:/game/05_mirror_temple/torch_activate"), data.Bool("noParticles"))
         {
             eid = ID;
         }
@@ -168,7 +171,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     };
                     Add(tween);
                     SceneAs<Level>().Session.SetFlag(FlagName);
-                    SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                    if (!noParticles)
+                    {
+                        SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                    }
                 }
             }
             else if (lit && !string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag))
@@ -177,7 +183,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 bloom.Visible = false;
                 light.Visible = false;
                 SceneAs<Level>().Session.SetFlag(FlagName, false);
-                SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                if (!noParticles)
+                {
+                    SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                }
                 TorchSprite.Play("off");
             }
         }
@@ -214,7 +223,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 };
                 Add(tween);
                 SceneAs<Level>().Session.SetFlag(FlagName);
-                SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                if (!noParticles)
+                {
+                    SceneAs<Level>().ParticlesFG.Emit(P_OnLight, 12, Position + new Vector2(8, 8), new Vector2(3f, 3f));
+                }
             }
         }
     }
