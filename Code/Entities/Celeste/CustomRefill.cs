@@ -276,7 +276,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                     }
                 }
             }
-            if (((type.Contains("Dashes") && player.Dashes < (type == "Two Dashes" ? 2 : player.MaxDashes)) || (type.Contains("Jumps") && SpaceJump.GetJumpBuffer() == 0)) && drone == null || (type.Contains("Missiles") && drone != null))
+            if (((type.Contains("Dashes") && player.Dashes < (type == "Two Dashes" ? 2 : player.MaxDashes)) || (type.Contains("Jumps") && SpaceJump.GetJumpBuffer() == 0)) && drone == null || (type.Contains("Missiles") && drone != null) || player.Stamina <= 20)
             {
                 Audio.Play(type == "Two Dashes" ? "event:/new_content/game/10_farewell/pinkdiamond_touch" : "event:/game/general/diamond_touch", Position);
                 Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
