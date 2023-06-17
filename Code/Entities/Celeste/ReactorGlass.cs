@@ -210,10 +210,10 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             Sprite.Play("broken");
             Collidable = false;
-            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(-21f, -31f), 'u', 3f, 14f, false, false, new EntityID()));
-            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(17f, -31f), 'u', 3f, 14f, false, false, new EntityID()));
-            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(-21f, 17f), 'u', 3f, 14f, false, false, new EntityID()));
-            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(17f, 17f), 'u', 3f, 14f, false, false, new EntityID()));
+            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(-21f, -31f), '0', 3f, 14f, false, false, new EntityID()));
+            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(17f, -31f), '0', 3f, 14f, false, false, new EntityID()));
+            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(-21f, 17f), '0', 3f, 14f, false, false, new EntityID()));
+            SceneAs<Level>().Add(new CrumbleWallOnRumble(Position + new Vector2(17f, 17f), '0', 3f, 14f, false, false, new EntityID()));
         }
     }
 }
