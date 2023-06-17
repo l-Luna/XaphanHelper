@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Celeste.Mod.XaphanHelper.Colliders;
 using Celeste.Mod.XaphanHelper.Upgrades;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -11,7 +12,6 @@ namespace Celeste.Mod.XaphanHelper.Entities
     [Tracked(true)]
     public class Bomb : Actor
     {
-
         private FieldInfo HoldableCannotHoldTimer = typeof(Holdable).GetField("cannotHoldTimer", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private Sprite bombSprite;
@@ -22,7 +22,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private Vector2 prevLiftSpeed;
 
-        private bool explode;
+        public bool explode;
 
         private Player player;
 
@@ -37,6 +37,8 @@ namespace Celeste.Mod.XaphanHelper.Entities
         private float swatTimer;
 
         private bool shouldExplodeImmediately;
+
+        public bool sloted;
 
         public Bomb(Vector2 position, Player player) : base(position)
         {
@@ -250,94 +252,101 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 hitSeeker = null;
             }
-            if (!explode && !Hold.IsHeld)
+            if (!sloted)
             {
-                if (OnGround())
+                if (!explode && !Hold.IsHeld)
                 {
-                    float target = (!OnGround(Position + Vector2.UnitX * 3f)) ? 20f : (OnGround(Position - Vector2.UnitX * 3f) ? 0f : (-20f));
-                    Speed.X = Calc.Approach(Speed.X, target, 800f * Engine.DeltaTime);
-                    Vector2 liftSpeed = LiftSpeed;
-                    if (liftSpeed == Vector2.Zero && prevLiftSpeed != Vector2.Zero)
+                    if (OnGround())
                     {
-                        Speed = prevLiftSpeed;
-                        prevLiftSpeed = Vector2.Zero;
-                        Speed.Y = Math.Min(Speed.Y * 0.6f, 0f);
-                        if (Speed.X != 0f && Speed.Y == 0f)
+                        float target = (!OnGround(Position + Vector2.UnitX * 3f)) ? 20f : (OnGround(Position - Vector2.UnitX * 3f) ? 0f : (-20f));
+                        Speed.X = Calc.Approach(Speed.X, target, 800f * Engine.DeltaTime);
+                        Vector2 liftSpeed = LiftSpeed;
+                        if (liftSpeed == Vector2.Zero && prevLiftSpeed != Vector2.Zero)
                         {
-                            Speed.Y = -60f;
+                            Speed = prevLiftSpeed;
+                            prevLiftSpeed = Vector2.Zero;
+                            Speed.Y = Math.Min(Speed.Y * 0.6f, 0f);
+                            if (Speed.X != 0f && Speed.Y == 0f)
+                            {
+                                Speed.Y = -60f;
+                            }
+                            if (Speed.Y < 0f)
+                            {
+                                noGravityTimer = 0.15f;
+                            }
                         }
+                        else
+                        {
+                            prevLiftSpeed = liftSpeed;
+                            if (liftSpeed.Y < 0f && Speed.Y < 0f)
+                            {
+                                Speed.Y = 0f;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        float num = 800f;
+                        if (Math.Abs(Speed.Y) <= 30f)
+                        {
+                            num *= 0.5f;
+                        }
+                        float num2 = 350f;
                         if (Speed.Y < 0f)
                         {
-                            noGravityTimer = 0.15f;
+                            num2 *= 0.5f;
+                        }
+                        Speed.X = Calc.Approach(Speed.X, 0f, num2 * Engine.DeltaTime);
+                        if (noGravityTimer > 0f)
+                        {
+                            noGravityTimer -= Engine.DeltaTime;
+                        }
+                        else
+                        {
+                            Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
                         }
                     }
-                    else
+                    MoveH(Speed.X * Engine.DeltaTime, onCollideH);
+                    MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
+                    foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
                     {
-                        prevLiftSpeed = liftSpeed;
-                        if (liftSpeed.Y < 0f && Speed.Y < 0f)
+                        if (entityList.Key == typeof(Liquid))
                         {
-                            Speed.Y = 0f;
-                        }
-                    }
-                }
-                else
-                {
-                    float num = 800f;
-                    if (Math.Abs(Speed.Y) <= 30f)
-                    {
-                        num *= 0.5f;
-                    }
-                    float num2 = 350f;
-                    if (Speed.Y < 0f)
-                    {
-                        num2 *= 0.5f;
-                    }
-                    Speed.X = Calc.Approach(Speed.X, 0f, num2 * Engine.DeltaTime);
-                    if (noGravityTimer > 0f)
-                    {
-                        noGravityTimer -= Engine.DeltaTime;
-                    }
-                    else
-                    {
-                        Speed.Y = Calc.Approach(Speed.Y, 200f, num * Engine.DeltaTime);
-                    }
-                }
-                MoveH(Speed.X * Engine.DeltaTime, onCollideH);
-                MoveV(Speed.Y * Engine.DeltaTime, onCollideV);
-                foreach (KeyValuePair<Type, List<Entity>> entityList in Scene.Tracker.Entities)
-                {
-                    if (entityList.Key == typeof(Liquid))
-                    {
-                        foreach (Entity entity in entityList.Value)
-                        {
-                            Liquid liquid = (Liquid)entity;
-                            if (CollideCheck(liquid) && (liquid.liquidType == "lava" || liquid.liquidType.Contains("acid")))
+                            foreach (Entity entity in entityList.Value)
                             {
-                                shouldExplodeImmediately = true;
+                                Liquid liquid = (Liquid)entity;
+                                if (CollideCheck(liquid) && (liquid.liquidType == "lava" || liquid.liquidType.Contains("acid")))
+                                {
+                                    shouldExplodeImmediately = true;
+                                }
                             }
-                        }
 
-                    }
-                    else if (entityList.Key == typeof(LaserBeam))
-                    {
-                        foreach (Entity entity in entityList.Value)
+                        }
+                        else if (entityList.Key == typeof(LaserBeam))
                         {
-                            LaserBeam beam = (LaserBeam)entity;
-                            if (CollideCheck(beam) && (beam.Type == "Kill" || beam.Type == "Must Dash"))
+                            foreach (Entity entity in entityList.Value)
                             {
-                                shouldExplodeImmediately = true;
+                                LaserBeam beam = (LaserBeam)entity;
+                                if (CollideCheck(beam) && (beam.Type == "Kill" || beam.Type == "Must Dash"))
+                                {
+                                    shouldExplodeImmediately = true;
+                                }
                             }
                         }
                     }
+                    if (Left > SceneAs<Level>().Bounds.Right || Right < SceneAs<Level>().Bounds.Left || Top > SceneAs<Level>().Bounds.Bottom)
+                    {
+                        RemoveSelf();
+                    }
                 }
-                if (Left > SceneAs<Level>().Bounds.Right || Right < SceneAs<Level>().Bounds.Left || Top > SceneAs<Level>().Bounds.Bottom)
+                if (!explode)
                 {
-                    RemoveSelf();
+                    foreach (BombCollider bombCollider in Scene.Tracker.GetComponents<BombCollider>())
+                    {
+                        bombCollider.Check(this);
+                    }
+                    Hold.CheckAgainstColliders();
                 }
-            }
-            if (!explode)
-            {
-                Hold.CheckAgainstColliders();
             }
             Slope.SetCollisionAfterUpdate(this);
         }
@@ -372,7 +381,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
             }
             Player player = CollideFirst<Player>();
-            if (player != null && player.StateMachine.State != 11 && !Scene.CollideCheck<Solid>(Position + new Vector2(0, -10f), player.Center))
+            if (player != null && player.StateMachine.State != 11 && !Scene.CollideCheck<Solid>(Position + new Vector2(0, -10f), player.Center) && !sloted)
             {
                 int dirX = 0;
                 int dirY = 0;
