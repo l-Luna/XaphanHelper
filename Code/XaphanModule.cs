@@ -1590,6 +1590,7 @@ namespace Celeste.Mod.XaphanHelper
             allRoomsUseTileController = false;
             useMetroidGameplay = false;
             useUpgrades = false;
+            onSlope = false;
 
             // Checks controllers
 
@@ -2412,6 +2413,7 @@ namespace Celeste.Mod.XaphanHelper
             ModSaveData.CanDisplayAchievementsPopups = false;
             SaveSettings();
 
+            onSlope = false;
             isInLevel = false;
         }
 
