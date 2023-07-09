@@ -96,11 +96,40 @@ namespace Celeste.Mod.XaphanHelper.Entities
         {
             if (!activated)
             {
-                activated = true;
-                Audio.Play("event:/game/03_resort/door_metal_open", Position);
-                Add(new Coroutine(TrapRoutine()));
+                switch (Direction)
+                {
+                    case Directions.Up:
+                        if (player.Speed.Y >= 0f && player.Bottom <= Bottom)
+                        {
+                            activated = true;
+                        }
+                        break;
+                    case Directions.Down:
+                        if (player.Speed.Y <= 0f)
+                        {
+                            activated = true;
+                        }
+                        break;
+                    case Directions.Left:
+                        if (player.Speed.X >= 0f)
+                        {
+                            activated = true;
+                        }
+                        break;
+                    case Directions.Right:
+                        if (player.Speed.X <= 0f)
+                        {
+                            activated = true;
+                        }
+                        break;
+                }
+                if (activated)
+                {
+                    Audio.Play("event:/game/03_resort/door_metal_open", Position);
+                    Add(new Coroutine(TrapRoutine()));
+                }
             }
-            if (triggered)
+            else if (triggered)
             {
                 switch (Direction)
                 {
