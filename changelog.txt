@@ -1,3 +1,6 @@
+Version 1.0.57 :
+- Fixed a bug counting  B-Sides golden strawberies as nrormal strawberries in various "The Secret of Celeste Mountain" achievements
+
 Version 1.0.56 :
 - Fixed a bug preventing Refills in "The Secret of Celeste Mountain" to be collected when the player had low stamina
 - Fixed a bug preventing the player speed to be reset correctly when exiting a map while on a Slope that has the 'affect Player Speed" attribute set to true

@@ -183,7 +183,7 @@ namespace Celeste.Mod.XaphanHelper
 
             for (int i = 1; i <= (XaphanModule.SoCMVersion >= new Version(3, 0, 0) ? 5 : 2); i++)
 			{
-				currentTotalStrawberries += StatsFlags.CurrentStrawberries[i];
+				currentTotalStrawberries += StatsFlags.CurrentStrawberries[i - (session.GetFlag("XaphanHelper_StatFlag_GoldenCh" + i + "-1") ? 1 : 0)];
 				currentTotalEnergyTanks += StatsFlags.CurrentEnergyTanks[i];
 				currentTotalFireRateModules += StatsFlags.CurrentFireRateModules[i];
 				currentTotalMissiles += StatsFlags.CurrentMissiles[i];
@@ -358,7 +358,7 @@ namespace Celeste.Mod.XaphanHelper
 				categoryID: 1,
 				icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
 				flag: "XaphanHelper_StatFlag_StrawberriesCh1",
-				currentValue: StatsFlags.CurrentStrawberries[1],
+				currentValue: StatsFlags.CurrentStrawberries[1] - (session.GetFlag("XaphanHelper_StatFlag_GoldenCh1-1") ? 1 : 0),
 				maxValue: StatsFlags.TotalStrawberries[1],
 				medals: 15
 			));
@@ -577,7 +577,7 @@ namespace Celeste.Mod.XaphanHelper
 				categoryID: 2,
 				icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
 				flag: "XaphanHelper_StatFlag_StrawberriesCh2",
-				currentValue: StatsFlags.CurrentStrawberries[2],
+				currentValue: StatsFlags.CurrentStrawberries[2] - (session.GetFlag("XaphanHelper_StatFlag_GoldenCh2-1") ? 1 : 0),
 				maxValue: StatsFlags.TotalStrawberries[2],
 				medals: 15
 			));
@@ -784,7 +784,7 @@ namespace Celeste.Mod.XaphanHelper
 					categoryID: 5,
 					icon: "achievements/Xaphan/StrawberryCheckmarkSilver",
 					flag: "XaphanHelper_StatFlag_StrawberriesCh5",
-					currentValue: StatsFlags.CurrentStrawberries[5],
+					currentValue: StatsFlags.CurrentStrawberries[5] - (session.GetFlag("XaphanHelper_StatFlag_GoldenCh5-1") ? 1 : 0),
 					maxValue: StatsFlags.TotalStrawberries[5],
 					medals: 15
 				));
