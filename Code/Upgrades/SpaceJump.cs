@@ -257,7 +257,7 @@ namespace Celeste.Mod.XaphanHelper.Upgrades
             {
                 // add the entity showing the jump count
                 self.Add(new SpaceJumpIndicator());
-                self.Entities.UpdateLists();
+                //self.Entities.UpdateLists();
             }
         }
 
