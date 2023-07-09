@@ -48,7 +48,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
             if (self.Session.Area.LevelSet == "Xaphan/0" && XaphanModule.SoCMVersion >= new Version(3, 0, 0))
             {
                 self.Add(new TransitionBlackEffect());
-                yield return 0.5f;
+                yield return 0.35f;
                 yield return new SwapImmediately(orig(self, next, direction));
                 LevelTransition.SetValue(self, new Coroutine(TranstionRoutine(self)));
             }
@@ -111,7 +111,7 @@ namespace Celeste.Mod.XaphanHelper.Entities
 
         private static IEnumerator TranstionRoutine(Level level)
         {
-            yield return 0.5f;
+            yield return 0.35f;
             LevelTransition.SetValue(level, null);
         }
 
@@ -137,11 +137,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
             {
                 drone.Depth = Depth - 1;
             }
-            float fadeTimer = 0.5f;
+            float fadeTimer = 0.35f;
             while (fadeTimer > 0)
             {
                 fadeTimer -= Engine.DeltaTime;
-                alpha += Engine.DeltaTime * 2;
+                alpha += Engine.DeltaTime * 2.86f;
                 alpha = Math.Min(1f, alpha);
                 foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
                 {
@@ -157,11 +157,11 @@ namespace Celeste.Mod.XaphanHelper.Entities
                 yield return null;
             }
             yield return 0.65f;
-            fadeTimer = 0.5f;
+            fadeTimer = 0.35f;
             while (fadeTimer > 0)
             {
                 fadeTimer -= Engine.DeltaTime;
-                alpha -= Engine.DeltaTime * 2;
+                alpha -= Engine.DeltaTime * 2.86f;
                 alpha = Math.Max(0f, alpha);
                 foreach (Backdrop backdrop in SceneAs<Level>().Foreground.Backdrops)
                 {
